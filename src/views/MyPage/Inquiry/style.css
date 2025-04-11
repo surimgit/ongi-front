@@ -1,0 +1,139 @@
+#inquiry-main-wrapper {
+  padding-top: 50px;
+  display: flex;
+  gap:40px;
+  width: 1260px;
+  margin: 0 auto;
+}
+
+#inquiry-main-wrapper .sidebar-container{
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+}
+
+#inquiry-main-wrapper .sidebar-container .button{
+  width: 180px;
+  height: 40px;
+  background-color: rgba(24,50,81,1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--White);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#inquiry-main-wrapper .sidebar-container .categories{
+  display: flex;
+  padding: 29px 22px;
+  flex-direction: column;
+  gap: 18px;
+  letter-spacing: 0.3px;
+}
+
+#inquiry-main-wrapper .sidebar-container .categories .title{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#inquiry-main-wrapper .sidebar-container .categories .sub-title{
+  display: flex;
+  margin-bottom: 2px;
+  
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+}
+
+#inquiry-main-wrapper .contents-wrapper{
+  display: flex;
+  width: 1040px;
+  flex-direction: column;
+}
+
+#inquiry-main-wrapper .contents-wrapper .title-area{
+  display: flex;
+  align-items: center;
+  gap:24px;
+}
+
+#inquiry-main-wrapper .contents-wrapper .title-area .title{
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#inquiry-main-wrapper .contents-wrapper .title-area .current{
+  border-top: 4px solid;
+  padding: 2px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#inquiry-main-wrapper .contents-wrapper .title-area .current.active{
+  border-top: 4px solid var(--Primary);
+  padding: 2px;
+  color: var(--Primary);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.inquriy-hr {
+  height: 2px;           /* 두께 */
+  width: 100%;            /* 길이 (전체의 80%) */
+  background-color: #333; /* 선 색 */
+  border: none;          /* 기본 테두리 제거 */
+  margin: 20px auto;     /* 위아래 여백 + 가운데 정렬 */
+  border-radius: 2px;    /* 선택: 끝을 둥글게 */
+}
+
+#inquiry-main-wrapper .contents-wrapper .inquriy-header{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+
+#inquiry-main-wrapper .contents-wrapper .inquriy-amount{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#inquiry-main-wrapper .contents-wrapper .write-button{
+  margin-right: 27px;
+  color: gray;
+}
+
+#inquiry-main-wrapper .contents-wrapper .inquriy-list{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+#inquiry-main-wrapper .contents-wrapper .inquriy-list .list-box{
+  display: flex;
+  width: 100%;
+}
+
+#inquiry-main-wrapper .contents-wrapper .inquriy-list .list-box.date{
+  width: 176px;
+}
+
+#inquiry-main-wrapper .contents-wrapper .inquriy-list .list-box.category{
+
+}
+
+#inquiry-main-wrapper .contents-wrapper .inquriy-list .list-box.title{
+
+}
+
+#inquiry-main-wrapper .contents-wrapper .inquriy-list .list-box.is_answered{
+
+}
+
+
+
+

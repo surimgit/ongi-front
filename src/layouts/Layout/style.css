@@ -8,10 +8,10 @@
   display: flex;
   justify-content: space-between;
 
-  width: 1080px;
+  width: 1280px;
   margin: 0 auto;
   height: 120px;
-  padding: 10px 20px;
+  padding: 10px 10px;
 
   border-bottom: 2px solid var(--Lightmode-Grey2);
 }
