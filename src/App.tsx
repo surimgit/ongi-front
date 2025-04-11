@@ -2,8 +2,9 @@ import { Routes, Route } from 'react-router';
 import Layout from './layouts/Layout';
 import HomePage from './views/HomePage';
 import './App.css';
-import { GROUP_PURCHASE_PATH } from './constants';
-import GroupPurchaseMain from './views/GroupPurchase';
+import { PRODUCT_PATH, WRITE_PATH } from './constants';
+import ProductWrite from './views/Product/write';
+// import ProductMain from './views/Product';
 
 function App() {
   return (
@@ -11,8 +12,9 @@ function App() {
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
 
-        <Route path={GROUP_PURCHASE_PATH}>
-          <Route index element={<GroupPurchaseMain/>}/>
+        <Route path={PRODUCT_PATH}>
+          {/* <Route index element={<ProductMain/>}/> */}
+          <Route path={WRITE_PATH} element={<ProductWrite/>}/>
         </Route>
       </Route>
     </Routes>
