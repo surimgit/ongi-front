@@ -1,0 +1,69 @@
+#community-layout-wrapper {
+    display: flex;
+    justify-content: space-between;
+
+    width: 1200px;
+    height: auto;
+    
+    margin: 100px auto 0;
+
+    gap: 20px;
+}
+
+#community-layout-wrapper .category-list-container {
+    display: flex;
+    flex-direction: column;
+
+    margin: 100px auto 0;
+
+    gap: 15px;
+}
+
+#community-layout-wrapper .community-post-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 220px;
+    height: 50px;
+
+    border-radius: 3px;
+
+    background-color: var(--Black);
+
+    color: var(--White);
+    font-size: 20px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+#community-layout-wrapper .community-post-button:hover {
+    text-decoration: underline;
+}
+
+#community-layout-wrapper .category-list-container .category-container {
+    color: var(--Lightmode-Grey);
+    font-size: 16px;
+    font-weight: 700;
+
+    padding: 0 10px;
+}
+
+#community-layout-wrapper .category-list-container .divider {
+    border: 1px solid var(--Lightmode-Grey4);
+}
+
+#community-layout-wrapper .category-item {
+    padding: 0px 22px;
+    
+    cursor: pointer;
+}
+
+#community-layout-wrapper .category-item:hover {
+    text-decoration: underline;
+}
+
+#community-layout-wrapper .board-format {
+    margin: 100px auto 0;
+}
