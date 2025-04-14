@@ -5,7 +5,7 @@
     width: 1200px;
     height: auto;
     
-    margin: 100px auto 0;
+    margin: 0 auto;
 
     gap: 20px;
 }
@@ -43,15 +43,24 @@
 }
 
 #community-layout-wrapper .category-list-container .category-container {
+    display: flex;
+    flex-direction: column;
+    
     color: var(--Lightmode-Grey);
     font-size: 16px;
     font-weight: 700;
+
+    gap: 10px;
 
     padding: 0 10px;
 }
 
 #community-layout-wrapper .category-list-container .divider {
     border: 1px solid var(--Lightmode-Grey4);
+}
+
+#community-layout-wrapper .large-category:hover {
+    text-decoration: underline;
 }
 
 #community-layout-wrapper .category-item {
@@ -62,8 +71,4 @@
 
 #community-layout-wrapper .category-item:hover {
     text-decoration: underline;
-}
-
-#community-layout-wrapper .board-format {
-    margin: 100px auto 0;
 }

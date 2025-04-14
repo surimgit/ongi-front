@@ -31,17 +31,16 @@
     display: flex;
     flex-direction: column;
 
-    gap: 24px;
-}
+    border-top: 2px solid var(--Lightmode-Grey);
+    border-bottom: 2px solid var(--Lightmode-Grey);
 
-#info-community-main-wrapper .board-list-table {
-    background-color: var(--White);
+    gap: 24px;
 }
 
 .board-list-table>.tr {
     display: flex;
     box-sizing: border-box;
-    border-bottom: 1px solid var(--Lightmode-Grey3);
+    border-bottom: 1px solid var(--Grey);
     height: 50px;
 }
 
@@ -52,7 +51,6 @@
     align-items: center;
 
     box-sizing: border-box;
-    border-right: 1px solid var(--Lightmode-Grey3);
 
     color: var(--Lightmode-Grey);
     font-size: 16px;
@@ -60,19 +58,34 @@
 }
 
 .board-list-table .th.category,
-.board-list-table .th.nickname {
+.board-list-table .td.category {
     width: 100px;
 }
 
-.board-list-table .th.title {
+.board-list-table .th.title,
+.board-list-table .td.title {
     width: 560px;
 }
 
-.board-list-table .th.liked {
+.board-list-table .td.title {
+    justify-content: left;
+
+    padding: 0 40px;
+
+    cursor: pointer;
+}
+
+.board-list-table .th.nickname,
+.board-list-table .td.nickname {
+    width: 140px;
+}
+
+.board-list-table .th.liked,
+.board-list-table .td.liked {
     width: 80px;
 }
 
-.board-list-table .th.date {
-    width: 120px;
+.board-list-table .th.postDate,
+.board-list-table .td.postDate {
+    width: 80px;
 }
-

@@ -8,9 +8,12 @@ export default function CommunityLayout() {
         <div className='category-list-container'>
             <div className='community-post-button'>커뮤니티 글쓰기</div>
             <div className='divider'></div>
-            <div className='category-container'>🔥인기 게시판</div>
+            <div className='category-container'>
+                <div className='large-category'>🔥인기 게시판</div>
+            </div>
             <div className='divider'></div>
-            <div className='category-container'>💡정보 게시판
+            <div className='category-container'>
+                <div className='large-category'>💡정보 게시판</div>
                 <div className='category-item'>ㄴ공부</div>
                 <div className='category-item'>ㄴ미용</div>
                 <div className='category-item'>ㄴ여행</div>
@@ -22,7 +25,8 @@ export default function CommunityLayout() {
                 <div className='category-item'>ㄴ핫딜</div>
             </div>
             <div className='divider'></div>
-            <div className='category-container'>🏙️ 우리 동네 게시판
+            <div className='category-container'>
+                <div className='large-category'>🏙️ 우리 동네 게시판</div>
                 <div className='category-item'>ㄴ동네 생활</div>
                 <div className='category-item'>ㄴ모임</div>
             </div>

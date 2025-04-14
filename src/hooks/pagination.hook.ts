@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 20;
 const PAGES_PER_SECTION = 10;
 
 const usePagination = <T>() => {
