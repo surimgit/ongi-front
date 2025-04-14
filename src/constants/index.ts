@@ -7,7 +7,8 @@ export const PRODUCT_VIEW_PATH = ':productNumber';
 // variable: 절대 path 상수 //
 export const ROOT_ABSOLUTE_PATH = ROOT_PATH;
 export const PRODUCT_ABSOLUTE_PATH = `${ROOT_PATH}${PRODUCT_PATH}`
-export const PRODUCT_WRITE_PATH = `${ROOT_PATH}${WRITE_PATH}`
+export const PRODUCT_WRITE_PATH = `${ROOT_PATH}${PRODUCT_PATH}/${WRITE_PATH}`
+export const PRODUCT_VIEW_ABSOLUTE_PATH = (sequence: number) => `${ROOT_PATH}${PRODUCT_PATH}/${sequence}`
 
 // variable: access token 속성명 //
 export const ACCESS_TOKEN = 'accessToken';

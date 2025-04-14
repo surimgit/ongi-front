@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useRef, useState } from 'react'
 import TextEditor from 'src/components/TextEditor';
 import "./style.css"
 import { useNavigate } from 'react-router';
@@ -6,7 +6,7 @@ import { useCookies } from 'react-cookie';
 import { ACCESS_TOKEN, PRODUCT_ABSOLUTE_PATH } from 'src/constants';
 import { PostProductRequestDto } from 'src/apis/dto/request/product';
 import Category from 'src/types/aliases/category.alias';
-import { postProductRequest } from 'src/apis';
+import { fileUploadRequest, postProductRequest } from 'src/apis';
 import { ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 
@@ -23,7 +23,7 @@ export default function ProductWrite() {
   // state: 제목 상태 //
   const [name, setName] = useState<string>('');
   // state: 이미지 상태 //
-  const [image, setImage] = useState<string>('dasfsdv');
+  const [image, setImage] = useState<File | null>(null);
   // state: 카테고리 상태 //
   const [category, setCategory] = useState<'' | Category>('');
   // state: 마감일자 상태 //
@@ -34,6 +34,13 @@ export default function ProductWrite() {
   const [productQuantity, setProductQuantity] = useState<number>(0);
   // state: 상품 설명 상태 //
   const [content, setContent] = useState<string>('');
+
+  // state: 파일 인풋 참조 상태 //
+  const fileRef = useRef<HTMLInputElement | null>(null);
+  // state: 제품 이미지 상태 //
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  // state: 제품 이미지 미리보기 상태 //
+  const [previewProduct, setPreviewProduct] = useState<string | null>(null);
 
   // variable: access token //
   const accessToken = cookies[ACCESS_TOKEN];
@@ -92,21 +99,47 @@ export default function ProductWrite() {
     setProductQuantity(value === '' ? 0 : parseInt(value));
   }
 
-  // event handler: 일기작성 취소 이벤트 처리 //
+  // event handler: 이미지 파일 업로드 버튼 이벤트 처리 //
+  const onFileUploadButtonClickHandler = () => {
+    if (!fileRef.current) return;
+    fileRef.current.click();
+  }
+
+  // event handler: 파일 인풋 변경 이벤트 처리 //
+  const onFileChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (!files || !files.length) return;
+
+    const file = files[0];
+    setImageFile(file);
+
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onloadend = () => {
+      setPreviewProduct(fileReader.result as string);
+    };
+  };
+
+  // event handler: 제품작성 취소 이벤트 처리 //
   const onCancelButtonClickHandler = () => {
     navigator(PRODUCT_ABSOLUTE_PATH);
   }
 
   // event handler: 제품작성 이벤트 처리 //
-  const onWriteButtonClickHandler = () => {
-    console.log("버튼 눌림");
-    if(!isActive){
-      console.log("전송 안됨");
-      return;
+  const onWriteButtonClickHandler = async () => {
+    let productImage: string | null = null;
+    if(!isActive) return;
+    
+    if(imageFile){
+      const formData = new FormData();
+      formData.append('file', imageFile);
+      productImage = await fileUploadRequest(formData);
     }
 
+    if(!productImage) return;
+
     const requestBody: PostProductRequestDto = {
-      name, price, category, content, productQuantity, deadline, image
+      name, price, category, content, productQuantity, deadline, image: productImage
     }
 
     postProductRequest(requestBody).then(postProductResponse);
@@ -122,11 +155,15 @@ export default function ProductWrite() {
             <input type='text' value={name} placeholder='제목을 입력해 주세요.' onChange={onTitleChangeHandler}/>
           </div>
           <div className='img-box'>
-            <div className='product-img'></div>
+            <div className='product-img'>
+              {previewProduct && (
+                <img src={previewProduct} alt='미리보기' className='preview-image' style={{width:'100%'}}/>
+              )}
+              </div>
             <div className='product-img-content'>
               <div className='title'>판매 이미지 등록</div>
-              <div className='button'>이미지 선택</div>
-              <input type='text' value={name} onChange={onTitleChangeHandler}/>
+              <div className='button' onClick={onFileUploadButtonClickHandler}>이미지 선택</div>
+              <input ref={fileRef} style={{ display: 'none' }} type='file' accept='image/png, image/jpeg' onChange={onFileChangeHandler} />
             </div>
           </div>
           <div className='input-box'>
