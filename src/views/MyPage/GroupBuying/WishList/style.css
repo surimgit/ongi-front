@@ -1,0 +1,129 @@
+#wish-list-main-wrapper {
+  padding-top: 50px;
+  display: flex;
+  gap:90px;
+  width: 1260px;
+  margin: 0 auto;
+}
+
+#wish-list-main-wrapper .sidebar-container{
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+}
+
+#wish-list-main-wrapper .sidebar-container .button{
+  width: 180px;
+  height: 40px;
+  background-color: rgba(24,50,81,1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--White);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#wish-list-main-wrapper .sidebar-container .categories{
+  display: flex;
+  padding: 29px 22px;
+  flex-direction: column;
+  gap: 18px;
+  letter-spacing: 0.3px;
+}
+
+#wish-list-main-wrapper .sidebar-container .categories .title{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#wish-list-main-wrapper .sidebar-container .categories .sub-title{
+  display: flex;
+  margin-bottom: 2px;
+  
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+}
+
+#wish-list-main-wrapper .sidebar-container .categories .sub-text{
+  margin-left: 10px;
+}
+
+#wish-list-main-wrapper .body{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-right: 70px;
+}
+
+#wish-list-main-wrapper .body .select-bar{
+  display: flex;
+  justify-content: space-around;
+  height: 60px;
+  background-color: grey;
+  border-radius: 12px;
+  margin-bottom: 50px;
+  overflow: hidden;
+}
+
+
+#wish-list-main-wrapper .body .select-bar .content{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 23px;
+}
+
+#wish-list-main-wrapper .body .select-bar .content.active{
+  color: var(--Primary);
+  font-weight: bold;
+  background-color: white;
+}
+
+#wish-list-main-wrapper .body .product-list-table{
+  display: flex;
+  flex-direction: column;
+}
+
+#wish-list-main-wrapper .body .product-list-table .tr{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+}
+
+#wish-list-main-wrapper .body .product-list-table .th{
+  
+  background-color: antiquewhite;
+  padding: 15px 0px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#wish-list-main-wrapper .body .product-list-table .name-box{
+  flex: 6.7;
+}
+
+#wish-list-main-wrapper .body .product-list-table .purchased-people{
+  flex: 1;
+}
+
+#wish-list-main-wrapper .body .product-list-table .quantity{
+  flex: 0.8;
+}
+
+#wish-list-main-wrapper .body .product-list-table .date{
+  flex: 1.3;
+}
+
+#wish-list-main-wrapper .body .product-list-table .td.name-box{
+  display: flex;
+  height: 100px;
+  padding-left: 20px;
+  align-items: center;
+  gap: 20px;
+}

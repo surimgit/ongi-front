@@ -47,6 +47,10 @@
   font-size: 13px;
 }
 
+#mypage-main-wrapper .sidebar-container .categories .sub-text{
+  margin-left: 10px;
+}
+
 #mypage-main-wrapper .contents-wrapper{
   display: flex;
   flex-direction: column;
@@ -65,21 +69,17 @@
   font-weight: bold;
 }
 
-#mypage-main-wrapper .contents-wrapper .title-area .current{
+#my-activity-main-wrapper .contents-wrapper .title-area .current{
   border-top: 4px solid;
   padding: 2px;
-  font-size: 18px;
+  font-size: 25px;
   font-weight: bold;
   cursor: pointer;
 }
 
-#mypage-main-wrapper .contents-wrapper .title-area .current.active{
+#my-activity-main-wrapper .contents-wrapper .title-area .current.active{
   border-top: 4px solid var(--Primary);
-  padding: 2px;
   color: var(--Primary);
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
 }
 
 #mypage-main-wrapper .contents-wrapper .correction-area{

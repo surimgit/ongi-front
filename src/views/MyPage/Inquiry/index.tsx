@@ -46,70 +46,70 @@ export default function Inquiry() {
         </div>
         <div className='inquriy-list'>
           <div className='list-box'>
-            <div className='list-box date'>등록일</div>
-            <div className='list-box category'>카테고리</div>
-            <div className='list-box title'>제목</div>
-            <div className='list-box is_answered'>처리여부</div>
+            <div className='date'>등록일</div>
+            <div className='category'>카테고리</div>
+            <div className='title'>제목</div>
+            <div className='is_answered'>처리여부</div>
           </div>
           <div className='list-box'>
-            <div className='content'>2025-04-10</div>
-            <div className='content'>배송 문의</div>
-            <div className='content'>아직 상품이 도착하지 않았습니다</div>
-            <div className='content'>접수중</div>
+            <div className='date content'>2025-04-10</div>
+            <div className='category content'>배송 문의</div>
+            <div className='title content'>아직 상품이 도착하지 않았습니다</div>
+            <div className='is_answered content'>접수중</div>
           </div>
           <div className='list-box'>
-            <div className='content'>2025-04-15</div>
-            <div className='content'>배송 문의</div>
-            <div className='content'>아직 상품이 도착하지 않았습니다</div>
-            <div className='content'>접수중</div>
+            <div className='date content'>2025-04-10</div>
+            <div className='category content'>배송 문의</div>
+            <div className='title content'>아직 상품이 도착하지 않았습니다</div>
+            <div className='is_answered content'>접수중</div>
           </div>
           <div className='list-box'>
-            <div className='content'>2025-04-10</div>
-            <div className='content'>배송 문의</div>
-            <div className='content'>아직 상품이 도착하지 않았습니다</div>
-            <div className='content'>접수중</div>
+            <div className='date content'>2025-04-10</div>
+            <div className='category content'>배송 문의</div>
+            <div className='title content'>아직 상품이 도착하지 않았습니다</div>
+            <div className='is_answered content'>접수중</div>
           </div>
           <div className='list-box'>
-            <div className='content'>2025-04-10</div>
-            <div className='content'>배송 문의</div>
-            <div className='content'>아직 상품이 도착하지 않았습니다</div>
-            <div className='content'>접수중</div>
+            <div className='date content'>2025-04-10</div>
+            <div className='category content'>배송 문의</div>
+            <div className='title content'>아직 상품이 도착하지 않았습니다</div>
+            <div className='is_answered content'>접수중</div>
           </div>
           <div className='list-box'>
-            <div className='content'>2025-04-10</div>
-            <div className='content'>배송 문의</div>
-            <div className='content'>아직 상품이 도착하지 않았습니다</div>
-            <div className='content'>접수중</div>
+            <div className='date content'>2025-04-10</div>
+            <div className='category content'>배송 문의</div>
+            <div className='title content'>아직 상품이 도착하지 않았습니다</div>
+            <div className='is_answered content'>접수중</div>
           </div>
           <div className='list-box'>
-            <div className='content'>2025-04-15</div>
-            <div className='content'>배송 문의</div>
-            <div className='content'>아직 상품이 도착하지 않았습니다</div>
-            <div className='content'>접수중</div>
+            <div className='date content'>2025-04-10</div>
+            <div className='category content'>배송 문의</div>
+            <div className='title content'>아직 상품이 도착하지 않았습니다</div>
+            <div className='is_answered content'>접수중</div>
           </div>
           <div className='list-box'>
-            <div className='content'>2025-04-10</div>
-            <div className='content'>배송 문의</div>
-            <div className='content'>아직 상품이 도착하지 않았습니다</div>
-            <div className='content'>접수중</div>
+            <div className='date content'>2025-04-10</div>
+            <div className='category content'>배송 문의</div>
+            <div className='title content'>아직 상품이 도착하지 않았습니다</div>
+            <div className='is_answered content'>접수중</div>
           </div>
           <div className='list-box'>
-            <div className='content'>2025-04-10</div>
-            <div className='content'>배송 문의</div>
-            <div className='content'>아직 상품이 도착하지 않았습니다</div>
-            <div className='content'>접수중</div>
+            <div className='date content'>2025-04-10</div>
+            <div className='category content'>배송 문의</div>
+            <div className='title content'>아직 상품이 도착하지 않았습니다</div>
+            <div className='is_answered content'>접수중</div>
           </div>
           <div className='list-box'>
-            <div className='content'>2025-04-10</div>
-            <div className='content'>배송 문의</div>
-            <div className='content'>아직 상품이 도착하지 않았습니다</div>
-            <div className='content'>접수중</div>
+            <div className='date content'>2025-04-10</div>
+            <div className='category content'>배송 문의</div>
+            <div className='title content'>아직 상품이 도착하지 않았습니다</div>
+            <div className='is_answered content'>접수중</div>
           </div>
           <div className='list-box'>
-            <div className='content'>2025-04-10</div>
-            <div className='content'>배송 문의</div>
-            <div className='content'>아직 상품이 도착하지 않았습니다</div>
-            <div className='content'>접수중</div>
+            <div className='date content'>2025-04-10</div>
+            <div className='category content'>배송 문의</div>
+            <div className='title content'>아직 상품이 도착하지 않았습니다</div>
+            <div className='is_answered content'>접수중</div>
           </div>
         </div>
         <div className='pagination'>1 2 3 4 5 6 7 8 9 10 --</div>
