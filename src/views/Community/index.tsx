@@ -85,7 +85,7 @@ function TableItem({ communityPost }: TableItemProps) {
 }
 
 
-// component: 정보 게시판 메인 화면 컴포넌트 //
+// component: 게시판 메인 화면 컴포넌트 //
 export default function InfoCommunityMain() {
 
   // state: cookie 상태 //
@@ -101,7 +101,7 @@ export default function InfoCommunityMain() {
   const [isItem, setItem] = useState<boolean>(false);
 
   // variable: access Token //
-  const accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxd2VyMTIzNCIsImlhdCI6MTc0NDU5ODc2OCwiZXhwIjoxNzQ0NjMxMTY4fQ.E2PN6CFhg78aObYZAzJ9i1VoQyEgZU70uhU5pkrpEQo' //cookies[ACCESS_TOKEN];
+  const accessToken = cookies[ACCESS_TOKEN];
   
   // function: 내비게이터 함수 //
   const navigator = useNavigate();
@@ -132,12 +132,7 @@ export default function InfoCommunityMain() {
   return (
     <div id='info-community-main-wrapper'>
       <div className='board-header-container'>
-        <div className='board-name'>정보 게시판</div>
-        {isItem &&
-          <div>
-            <div className='board-category'>패션</div>
-          </div>
-        }
+        <div className='board-name'>전체 글</div>
       </div>
       <div className='board-list-container'>
         <div className='board-list-table'>
@@ -152,17 +147,26 @@ export default function InfoCommunityMain() {
         </div>
       </div>
       <div className='pagination-container'>
-          {totalSection !== 0 &&
-          <Pagination 
-              currentPage={currentPage}
-              currentSection={currentSection}
-              totalSection={totalSection}
-              pageList={pageList}
-              setCurrentPage={setCurrentPage}
-              setCurrentSection={setCurrentSection}
-          />
-          }
-        </div>
+        {totalSection !== 0 &&
+        <Pagination 
+            currentPage={currentPage}
+            currentSection={currentSection}
+            totalSection={totalSection}
+            pageList={pageList}
+            setCurrentPage={setCurrentPage}
+            setCurrentSection={setCurrentSection}
+        />
+        }
+      </div>
+      <div className='search-container'>
+        <select className='search-category'>
+          <option value="writer">작성자</option>
+          <option value="title">제목</option>
+          <option value="content">내용</option>
+        </select>
+        <input className='search-box' placeholder='검색 키워드를 입력해주세요.'/>
+        <div className='search-button'></div>
+      </div>
     </div>
   )
 }

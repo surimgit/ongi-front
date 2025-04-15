@@ -72,3 +72,8 @@
 #community-layout-wrapper .category-item:hover {
     text-decoration: underline;
 }
+
+#board-format {
+    width: 960px;
+    height: auto;
+}

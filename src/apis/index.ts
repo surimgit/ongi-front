@@ -10,6 +10,7 @@ const COMMUNITY_MODULE_URL = `${API_DOMAIN}/api/v1/community`;
 
 const GET_COMMUNITY_MODULE_URL = `${COMMUNITY_MODULE_URL}`;
 const GET_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
+const DELETE_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` }})
@@ -25,7 +26,7 @@ const responseErrorHandler = (error: AxiosError<ResponseDto>) => {
     if (!error.response) return null;
     const { data } = error.response;
     return data;
-}
+};
 
 // function: get community post API 요청 함수 //
 export const getCommunityPostRequest = async (postSequence:number | string, accessToken: string) => {
@@ -33,7 +34,7 @@ export const getCommunityPostRequest = async (postSequence:number | string, acce
     .then(responseSuccessHandler<GetCommunityPostResponseDto>)
     .catch(responseErrorHandler);
     return responseBody;
-}
+};
 
 // function: get community API 요청 함수 //
 export const getCommunityRequest = async (accessToken: string) => {
@@ -41,4 +42,12 @@ export const getCommunityRequest = async (accessToken: string) => {
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
     return responseBody;
-}
+};
+
+// function: delete community post API 요청 함수 //
+export const deleteCommunityPostRequest = async (postSequence: number | string, accessToken: string) => {
+    const responseBody = await axios.get(DELETE_COMMUNITY_POST_URL(postSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+    return responseBody;
+};
