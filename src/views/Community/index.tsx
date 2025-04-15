@@ -124,8 +124,7 @@ export default function InfoCommunityMain() {
 
   // effect: 컴포넌트 로드 시 실행할 함수 //
   useEffect(() => {
-    if(!accessToken) return;
-    getCommunityRequest(accessToken).then(getCommunityResponse);
+    getCommunityRequest().then(getCommunityResponse);
   }, []);
 
   // render: 정보 게시판 메인 화면 컴포넌트 렌더링 //

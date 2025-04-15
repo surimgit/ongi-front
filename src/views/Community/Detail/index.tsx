@@ -89,13 +89,12 @@ export default function InfoPostDetail() {
 
     // effect: 컴포넌트 로드 시 실행할 함수 //
     useEffect(() => {
-        if (!accessToken) return;
         if (!postSequence) {
             navigator(COMMUNITY_ABSOLUTE_PATH);
             return;
         }
 
-        getCommunityPostRequest(postSequence, accessToken).then(getCommunityPostResponse);
+        getCommunityPostRequest(postSequence).then(getCommunityPostResponse);
     }, []);
 
     // render: 커뮤니티 글 상세 화면 컴포넌트 렌더링 //

@@ -75,7 +75,7 @@
     display: flex;
     justify-content: right;
 
-    gap: 30px;
+    gap: 10px;
 }
 
 .button-box .btn {
@@ -87,17 +87,31 @@
     font-weight: 700;
 
     width: 80px;
-    height: 30px;
+    height: 40px;
 
     border-radius: 5px;
+
+    cursor: pointer;
 }
 
 .button-box .btn.cancel {
     background-color: var(--Lightmode-Grey3);
 }
 
+.button-box .btn.cancel:hover {
+    background-color: var(--Lightmode-Grey5);
+
+    color: var(--White);
+}
+
 .button-box .btn.write {
     background-color: var(--Black);
 
     color: var(--White);
+}
+
+.button-box .btn.write:hover {
+    background-color: var(--Lightmode-Grey5);
+
+    color: var(--Black);
 }
