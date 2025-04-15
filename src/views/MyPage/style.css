@@ -2,14 +2,14 @@
   padding-top: 50px;
   display: flex;
   gap:40px;
-  width: 1100px;
+  width: 1260px;
   margin: 0 auto;
 }
 
 #mypage-main-wrapper .sidebar-container{
   display: flex;
   flex-direction: column;
-  width: 220px;
+  width: 180px;
 }
 
 #mypage-main-wrapper .sidebar-container .button{
@@ -43,16 +43,20 @@
   margin-bottom: 2px;
   
   flex-direction: column;
-  gap: 13px;
+  gap: 7px;
   font-size: 13px;
 }
 
-#mypage-main-wrapper .contents-container{
+#mypage-main-wrapper .sidebar-container .categories .sub-text{
+  margin-left: 10px;
+}
+
+#mypage-main-wrapper .contents-wrapper{
   display: flex;
   flex-direction: column;
 }
 
-#mypage-main-wrapper .contents-container .titie-area{
+#mypage-main-wrapper .contents-wrapper .title-area{
   display: flex;
   align-items: center;
   gap: 47px;
@@ -60,9 +64,196 @@
   height: 40px;
 }
 
-#mypage-main-wrapper .contents-container .titie-area .title{
+#mypage-main-wrapper .contents-wrapper .title-area .title{
   font-size: 35px;
+  font-weight: bold;
 }
+
+#my-activity-main-wrapper .contents-wrapper .title-area .current{
+  border-top: 4px solid;
+  padding: 2px;
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#my-activity-main-wrapper .contents-wrapper .title-area .current.active{
+  border-top: 4px solid var(--Primary);
+  color: var(--Primary);
+}
+
+#mypage-main-wrapper .contents-wrapper .correction-area{
+  display: flex;
+  justify-content: end;
+  margin: 5px 0px;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--Primary);
+  cursor: pointer;
+}
+
+#mypage-main-wrapper .contents-wrapper .body{
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+#mypage-main-wrapper .contents-wrapper .body .profile-container{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  text-align: center;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .profile-container .profile-image{
+  width: 210px;
+  height: 280px;
+  background-color: rgb(123, 123, 168)
+}
+
+#mypage-main-wrapper .contents-wrapper .body .profile-container .name{
+  font-size: 25px;
+  font-weight: bold;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area{
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  gap: 15px;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .outline{
+  border: 2px solid grey;
+  padding: 23px 66px;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  font-size: 18px;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .outline .review-box{
+  display: flex;
+  gap: 10px;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .outline .text{
+  color: var(--Lightmode-Grey);
+  font-weight: bold;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .outline .badge-box{
+  display: flex;
+  gap: 10px;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .outline .achievements-box{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .outline .button-select{
+  border: 2px solid green;
+  padding: 5px 10px;
+  border-radius: 25px;
+  box-sizing: border-box;
+  background-color: aquamarine;
+}
+
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .outline .button-change{
+  border: 1px solid blue;
+  width: 15px;
+  height: 15px;
+  text-align: center;
+  background-color: blue;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .detail{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+  padding: 30px 37px;
+  border: 1px solid black;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .personal-info-box{
+  display: flex;
+  gap: 13px;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .text{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .title-box{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .info-box{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .specialty-box{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .tag-container{
+  display: flex;
+  gap: 150px;
+}
+
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .tag-box{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: blue;
+}
+
+#mypage-main-wrapper .contents-wrapper .introduce-box{
+  padding: 50px 0px
+}
+
+#mypage-main-wrapper .contents-wrapper .introduce-box .introduce-title{
+  width: 110px;
+  height: 30px;
+  border: 1px solid blue;
+  box-sizing: border-box;
+  background-color: blue;
+  color: white;
+  border-radius: 25px 25px 0px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#mypage-main-wrapper .contents-wrapper .introduce-box .introduce-datail{
+  padding: 17px;
+  border: 1px solid grey;
+  background-color: rgb(214, 214, 214);
+  height: 70px;
+}
+
+
+
+
 
 
 

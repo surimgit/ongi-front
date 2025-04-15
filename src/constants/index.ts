@@ -1,5 +1,9 @@
-// variable: 상대 path 상수 //
+// variable: 상대 path 변수 //
 export const ROOT_PATH = '/';
+export const PRODUCT_PATH = 'product';
+export const WRITE_PATH = 'write';
+export const PRODUCT_VIEW_PATH = ':productNumber';
+
 export const COMMUNITY_PATH = 'community';
 export const COMMUNITY_POST_PATH = 'post';
 export const COMMUNITY_WRITE_PATH = 'write';
@@ -11,6 +15,9 @@ export const COMMUNITY_COUNTYBOARD_PATH = 'county';
 
 // variable: 절대 path 상수 //
 export const ROOT_ABSOLUTE_PATH = ROOT_PATH;
+export const PRODUCT_ABSOLUTE_PATH = `${ROOT_PATH}${PRODUCT_PATH}`
+export const PRODUCT_WRITE_PATH = `${ROOT_PATH}${PRODUCT_PATH}/${WRITE_PATH}`
+export const PRODUCT_VIEW_ABSOLUTE_PATH = (sequence: number) => `${ROOT_PATH}${PRODUCT_PATH}/${sequence}`
 
 export const COMMUNITY_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}`;
 export const COMMUNITY_POST_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_POST_PATH}`;
@@ -22,5 +29,6 @@ export const COMMUNITY_INFOBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/
 export const COMMUNITY_HOTBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_HOTBOARD_PATH}`;
 export const COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_COUNTYBOARD_PATH}`;
 
-// variable: access Token 속성명 //
+
+// variable: access token 속성명 //
 export const ACCESS_TOKEN = 'accessToken';

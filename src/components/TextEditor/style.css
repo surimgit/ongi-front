@@ -81,9 +81,10 @@
 
 .tiptap {
     outline: none;
-  
+
+    box-sizing: border-box;
     border-radius: 6px;
     border: 1px solid var(--Lightmode-Grey3);
     padding: 8px 16px;
-    min-height: 320px;
-  }
+    min-height: 264px;
+}
