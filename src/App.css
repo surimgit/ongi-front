@@ -23,11 +23,6 @@ body {
   font-family: 'Pretendard';
 }
 
-.title {
-  font-size: 20px;
-  font-weight: 600;
-}
-
 .button {
   display: flex;
   justify-content: center;
@@ -42,7 +37,7 @@ body {
   line-height: 175%;
 
   cursor: pointer;
-}
+} */
 
 
 .button:hover {
