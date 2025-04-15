@@ -1,0 +1,264 @@
+#others-main-wrapper {
+  padding-top: 50px;
+  display: flex;
+  gap:40px;
+  width: 1260px;
+  margin: 0 auto;
+}
+
+#others-main-wrapper .sidebar-container{
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+}
+
+#others-main-wrapper .sidebar-container .button{
+  width: 180px;
+  height: 40px;
+  background-color: rgba(24,50,81,1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--White);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#others-main-wrapper .sidebar-container .categories{
+  display: flex;
+  padding: 29px 22px;
+  flex-direction: column;
+  letter-spacing: 0.3px;
+}
+
+#others-main-wrapper .sidebar-container .categories .title{
+  font-size: 16px;
+  font-weight: bold;
+  margin: 18px 0px;
+}
+
+#others-main-wrapper .sidebar-container .categories .sub-title{
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+#others-main-wrapper .sidebar-container .categories .sub-title-group{
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+#others-main-wrapper .contents-wrapper{
+  display: flex;
+  flex-direction: column;
+}
+
+#others-main-wrapper .contents-wrapper .summary-box{
+  display: flex;
+  padding: 0px 100px;
+  align-items: center;
+  justify-content: center;
+  gap: 200px;
+  border: 1px solid green;
+  margin-bottom: 30px;
+  height: 80px;
+}
+
+#others-main-wrapper .contents-wrapper .summary-box .content{
+  text-align: center;
+}
+
+#others-main-wrapper .divider {
+  color: #bbb;
+}
+
+#others-main-wrapper .contents-wrapper .summary-box .content .title {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+#others-main-wrapper .contents-wrapper .summary-box .content .buying-sub-box {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+#others-main-wrapper .contents-wrapper .report-box{
+  display: flex;
+  align-self: end;
+  padding: 2.5px 10px;
+  font-weight: bold;
+  border: 1px solid rgb(255, 255, 255);
+  box-sizing: border-box;
+  background-color: rgb(247, 102, 102);
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+#others-main-wrapper .contents-wrapper .body{
+  display: flex;
+  justify-content: space-between;
+}
+
+#others-main-wrapper .contents-wrapper .body .profile-container{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  text-align: center;
+}
+
+#others-main-wrapper .contents-wrapper .body .profile-container .profile-image{
+  width: 210px;
+  height: 280px;
+  background-color: rgb(123, 123, 168)
+}
+
+#others-main-wrapper .contents-wrapper .body .profile-container .name{
+  font-size: 25px;
+  font-weight: bold;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area{
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  gap: 15px;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .outline{
+  border: 2px solid grey;
+  padding: 23px 66px;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  font-size: 18px;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .outline .review-box{
+  display: flex;
+  gap: 10px;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .outline .text{
+  color: var(--Lightmode-Grey);
+  font-weight: bold;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .outline .badge-box{
+  display: flex;
+  gap: 10px;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .outline .achievements-box{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .outline .button-select{
+  border: 2px solid green;
+  padding: 5px 10px;
+  border-radius: 25px;
+  box-sizing: border-box;
+  background-color: aquamarine;
+}
+
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .outline .button-change{
+  border: 1px solid blue;
+  width: 15px;
+  height: 15px;
+  text-align: center;
+  background-color: blue;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .detail{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+  padding: 30px 37px;
+  border: 1px solid black;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .personal-info-box{
+  display: flex;
+  gap: 13px;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .text{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .title-box{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .info-box{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .specialty-box{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .tag-container{
+  display: flex;
+  gap: 150px;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .tag-box{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: blue;
+}
+
+#others-main-wrapper .contents-wrapper .introduce-box{
+  padding: 50px 0px
+}
+
+#others-main-wrapper .contents-wrapper .introduce-box .introduce-title{
+  width: 110px;
+  height: 30px;
+  border: 1px solid blue;
+  box-sizing: border-box;
+  background-color: blue;
+  color: white;
+  border-radius: 25px 25px 0px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#others-main-wrapper .contents-wrapper .introduce-box .introduce-datail{
+  padding: 17px;
+  border: 1px solid grey;
+  background-color: rgb(214, 214, 214);
+  height: 70px;
+}
+
+
+
+
+
+
+

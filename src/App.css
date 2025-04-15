@@ -38,7 +38,7 @@ body {
   line-height: 175%;
 
   cursor: pointer;
-}
+} */
 
 
 .button:hover {
@@ -134,13 +134,27 @@ body {
 
 .my-content-chat {
   width: 33px;
-  height: 33px;
+  height: 33px;;
   background-image: url(src/assets/images/comment.png);
+  background-size: cover;        /* ← 이미지 꽉 채우기 (비율 유지) */
+  background-position: center;   /* ← 가운데 정렬 */
+  background-repeat: no-repeat;  /* ← 반복 제거 */
 }
 
 .my-content-alert {
   width: 33px;
   height: 33px;
   background-image: url(src/assets/images/alarm.png);
+  background-size: cover;        /* ← 이미지 꽉 채우기 (비율 유지) */
+  background-position: center;   /* ← 가운데 정렬 */
+  background-repeat: no-repeat;  /* ← 반복 제거 */
 }
 
+.my-content-shopping-cart{
+  width: 33px;
+  height: 33px;
+  background-image: url(src/assets/images/shopping-cart.png);
+  background-size: cover;        /* ← 이미지 꽉 채우기 (비율 유지) */
+  background-position: center;   /* ← 가운데 정렬 */
+  background-repeat: no-repeat;  /* ← 반복 제거 */
+}

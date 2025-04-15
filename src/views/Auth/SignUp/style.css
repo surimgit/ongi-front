@@ -1,0 +1,77 @@
+#auth-sign-up-container {
+    min-width: 1440px;
+    min-height: 1080px;
+
+    font-family: 'Pretendard';
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 auto;
+    width: 400px;
+}
+
+.logo {
+    background-image: url(src/assets/images/logo.png);
+    background-size: 100% 100%;
+    width: 80px;
+    height: 110px;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 auto;
+    width: 400px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 auto;
+    width: 400px;
+}
+
+
+/* .gender-select {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .gender-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  
+  input[type="radio"]:checked + .gender-btn {
+    background-color: black;
+    color: white;
+    border-color: black;
+  }
+   */
+
+.submit-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 auto;
+    width: 400px;
+}
