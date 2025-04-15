@@ -49,23 +49,16 @@ const responseErrorHandler = (error: AxiosError<ResponseDto>) => {
 };
 
 // function: get product category list API 요청 함수 //
-export const getProductCategoryRequest = async (category:Category, name: string) => {
-  const responseBody = await axios.get(GET_PRODUCT_CATEGORY_NAME_URL(category, name),{
-    headers: {
-      Authorization: `Bearer ${FAKE_TOKEN}`,
-    }
-  }
+export const getProductCategoryRequest = async (category:Category, name: string, accessToken:string) => {
+  const responseBody = await axios.get(GET_PRODUCT_CATEGORY_NAME_URL(category, name), bearerAuthorization(accessToken)
   ).then(responseSuccessHandler<GetProductResponseDto>)
    .catch(responseErrorHandler);
   return responseBody;
 }
 
 // function: get product detail API 요청 함수 //
-export const getProductDetailRequest = async (sequence: number | string) => {
-  const responseBody = await axios.get(GET_PRODUCT_DETAIL_URL(sequence), {headers: {
-    Authorization: `Bearer ${FAKE_TOKEN}`,
-  }
-})
+export const getProductDetailRequest = async (sequence: number | string, accessToken:string) => {
+  const responseBody = await axios.get(GET_PRODUCT_DETAIL_URL(sequence), bearerAuthorization(accessToken))
   .then(responseSuccessHandler<GetProductDetailResponseDto>)
   .catch(responseErrorHandler);
 return responseBody;
@@ -86,11 +79,8 @@ export const getSignInUserRequest = async (accessToken: string) => {
   return responseBody;
 }
 // function: get product list API 요청 함수 //
-export const getProductRequest = async () => {
-  const responseBody = await axios.get(PRODUCT_MODULE_URL, {headers: {
-    Authorization: `Bearer ${FAKE_TOKEN}`,
-    }
-  })
+export const getProductRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(PRODUCT_MODULE_URL, bearerAuthorization(accessToken))
     .then(responseSuccessHandler<GetProductDetailResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
@@ -98,12 +88,9 @@ export const getProductRequest = async () => {
     
 
 // function: write product API 요청 함수 //
-export const postProductRequest = async (requestBody: PostProductRequestDto) => {
-  const responseBody = await axios.post(POST_PRODUCT_URL, requestBody,{
-    headers: {
-      Authorization: `Bearer ${FAKE_TOKEN}`,
-    }
-  })
+export const postProductRequest = async (requestBody: PostProductRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_PRODUCT_URL, requestBody, bearerAuthorization(accessToken)
+  )
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;

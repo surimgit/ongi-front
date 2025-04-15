@@ -5,11 +5,12 @@ import { GetProductResponseDto, ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import { Product } from 'src/types/interfaces';
 import { useNavigate } from 'react-router';
-import { PRODUCT_VIEW_ABSOLUTE_PATH, PRODUCT_WRITE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, PRODUCT_VIEW_ABSOLUTE_PATH, PRODUCT_WRITE_PATH } from 'src/constants';
 import Pagination from 'src/components/Pagination';
 import { usePagination } from 'src/hooks';
 import Sort from 'src/types/aliases/sort.alias';
 import { Category } from 'src/types/aliases';
+import { useCookies } from 'react-cookie';
 
 interface TableItemProps {
   product: Product;
@@ -100,12 +101,15 @@ function TableItem({product, index}: TableItemProps & {index: number}){
 // component: 공동구매 메인 화면 컴포넌트 //
 export default function ProductMain() {
 
+  
   // state: 페이지네이션 상태 //
   const { 
     currentPage, setCurrentPage, currentSection, setCurrentSection,
     totalSection, setTotalList, viewList, pageList, totalList
   } = usePagination<Product>();
 
+  // state: cookie 상태 //
+  const [cookies] = useCookies();
   // state: 정렬 상태 //
   const [sort, setSort] = useState<Sort>('');
   // state: 카테고리 상태 // 
@@ -116,6 +120,9 @@ export default function ProductMain() {
   const [name, setName] = useState<string>('');
   // state: 빈 리스트 반환시 문자열 상태 //
   const [filterMessage, setFilterMessage] = useState<string>('');
+
+  // variable: access token //
+  const accessToken = cookies[ACCESS_TOKEN];
 
   // variable: 정렬방식 클래스 //
   const sortDeadlineClass = 
@@ -199,7 +206,7 @@ export default function ProductMain() {
 
   // effect: 카테고리 변경 시 실행할 함수 //
   useEffect(() => {
-    getProductCategoryRequest(category, name).then(getProductResponse);
+    getProductCategoryRequest(category, name, accessToken).then(getProductResponse);
   },[category, name]);
 
   // render: 공동구매 메인 화면 컴포넌트 렌더링 //

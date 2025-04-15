@@ -142,7 +142,7 @@ export default function ProductWrite() {
       name, price, category, content, productQuantity, deadline, image: productImage
     }
 
-    postProductRequest(requestBody).then(postProductResponse);
+    postProductRequest(requestBody, accessToken).then(postProductResponse);
   }
 
   return (

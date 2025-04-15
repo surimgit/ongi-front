@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import './style.css'
 import { getProductDetailRequest } from 'src/apis';
 import { useNavigate, useParams } from 'react-router';
-import { PRODUCT_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, PRODUCT_ABSOLUTE_PATH } from 'src/constants';
 import { Category } from 'src/types/aliases';
+import { useCookies } from 'react-cookie';
 
 export default function DetailProduct() {
 
@@ -31,10 +32,14 @@ export default function DetailProduct() {
   const [rating, setRating] = useState<number>(0.0);
   // state: 상품 설명 상태 //
   const [content, setContent] = useState<string>('');
+  // state: cookie 상태 //
+  const [cookies] = useCookies();
+  // variable: access token //
+  const accessToken = cookies[ACCESS_TOKEN];
 
   // function: navigator 함수 //
   const navigator = useNavigate();
-  
+
   const jumbotronContent = '마늘 프랑크소시지\n\n통통한 몸집을 자랑하는 프랑크소시지예요. 한입 먹어보면 뽀득뽀득하고 탱탱한 식감을 선사하지요. 마늘로 더한 알싸한 감칠맛이 입맛을 사로잡는답니다. 꼬치에 꽂혀있어 손으로 들고 간편하게 즐기기 좋아요.\n\n통통한 몸집을 자랑하는 프랑크소시지예요. 한입 먹어보면 뽀득뽀득하고 탱탱한 식감을 선사하지요. 마늘로 더한 알싸한 감칠맛이 입맛을 사로잡는답니다. 꼬치에 꽂혀있어 손으로 들고 간편하게 즐기기 좋아요.\n\n통통한 몸집을 자랑하는 프랑크소시지예요. 한입 먹어보면 뽀득뽀득하고 탱탱한 식감을 선사하지요. 마늘로 더한 알싸한 감칠맛이 입맛을 사로잡는답니다. 꼬치에 꽂혀있어 손으로 들고 간편하게 즐기기 좋아요.';
   
   // function: get product detail response 처리 함수 //
@@ -48,7 +53,7 @@ export default function DetailProduct() {
       return;
     }
 
-    getProductDetailRequest(sequence).then(getProductDetailResponse);
+    getProductDetailRequest(sequence, accessToken).then(getProductDetailResponse);
   },[]);
 
   return (
