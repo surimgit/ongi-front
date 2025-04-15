@@ -22,6 +22,7 @@ export default function Layout() {
         <div className='my-content'>
           <div className='my-content-chat'></div>
           <div className='my-content-alert'></div>
+          <div className='my-content-shopping-cart'></div>
           <div className='login-container'>
             <div className='login-icon'></div>
             <div className='login-content'>로그인/회원가입</div>
