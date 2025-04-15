@@ -4,4 +4,5 @@ import ResponseDto from "./response.dto";
 // interface: get product response body DTO //
 export default interface GetProductResponseDto extends ResponseDto {
   products: Product[];
+  filterType: 'category' | 'name' | 'categoryAndName' | 'all';
 }

@@ -59,10 +59,8 @@ const usePagination = <T>() => {
 
   // effect: 전체 리스트 변경시 실행될 함수 //
   useEffect(() => {
-    if(totalList.length) {
       init(totalList);
       initViewList(totalList);
-    }
   },[totalList]);
 
   // effect: 뷰 리스트 변경시 실행될 함수 //
@@ -75,7 +73,6 @@ const usePagination = <T>() => {
     if(totalPage) initPageList(totalPage);
   },[totalPage, currentSection]);
 
-  console.log(totalList);
 
   return {
     currentPage, setCurrentPage,
