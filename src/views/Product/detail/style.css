@@ -1,6 +1,7 @@
 #detail-product-wrapper {
   width: 1280px;
   margin: 0 auto;
+  padding-top: 70px;
 }
 
 #detail-product-wrapper .detail-product-container {
@@ -14,7 +15,6 @@
 .detail-product-container .detail-product-content {
   display: flex;
   gap: 25px;
-
 }
 
 .detail-product-content .detail-image {
@@ -139,6 +139,7 @@
   align-items: center;
   
   gap: 20px;
+  cursor: pointer;
 }
 .product-utility-bar .product-toolbox .product-tool {
   width: 30px;
@@ -171,12 +172,14 @@
 
 .product-detail .jumbotron {
   font-size: 24px;
-  padding: 50px 30px;
+  width: 100%;
+  margin: 0px 30px;
+  padding: 50px 0px;
 
   border-bottom: solid #979797;
 }
 
 .product-detail .jumbotron .jumbotron-box {
   white-space: pre-wrap;
-  
+  padding: 0px 50px;
 }

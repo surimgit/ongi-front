@@ -15,4 +15,5 @@ export default interface GetProductDetailResponseDto extends ResponseDto {
   deadline: string;
   isSoldOut: boolean;
   content: string;
+  openDate: string;
 }
