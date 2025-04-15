@@ -1,9 +1,18 @@
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 import './style.css';
+import { AUTH_ABSOLUTE_PATH } from 'src/constants';
 
 
 // component: 공통 레이아웃 컴포넌트 //
 export default function Layout() {
+
+  // function: 내비게이터 //
+  const navigator = useNavigate();
+
+  // event handler: 로그인/회원가입 버튼 클릭 이벤트 처리 //
+  const onSignInUpClickHandler = () => {
+    navigator(AUTH_ABSOLUTE_PATH);
+  };
 
   // render: 공통 레이아웃 컴포넌트 렌더링 //
   return (
@@ -25,7 +34,7 @@ export default function Layout() {
           <div className='my-content-shopping-cart'></div>
           <div className='login-container'>
             <div className='login-icon'></div>
-            <div className='login-content'>로그인/회원가입</div>
+            <div className='login-content' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
           </div>
         </div>
       </div>

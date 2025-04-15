@@ -1,0 +1,137 @@
+#info-community-main-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+#info-community-main-wrapper .board-header-container {
+    display: flex;
+    gap: 20px;
+
+    margin: 40px 0 10px;
+
+    font-size: 36px;
+    font-weight: 700;
+}
+
+#info-community-main-wrapper .board-header-container .divider {
+    align-self: stretch;
+    border-left: 4px solid var(--Black);
+}
+
+#info-community-main-wrapper .board-list-container .divider {
+    border: 1px solid var(--Lightmode-Grey2);
+}
+
+#info-community-main-wrapper .board-list-container {
+    display: flex;
+    flex-direction: column;
+
+    border-top: 2px solid var(--Lightmode-Grey);
+    border-bottom: 2px solid var(--Lightmode-Grey);
+
+    gap: 24px;
+}
+
+.board-list-table>.tr {
+    display: flex;
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--Grey);
+    height: 50px;
+}
+
+.board-list-table .th,
+.board-list-table .td {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    color: var(--Lightmode-Grey);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.board-list-table .th.category,
+.board-list-table .td.category {
+    width: 100px;
+}
+
+.board-list-table .th.title,
+.board-list-table .td.title {
+    width: 560px;
+}
+
+.board-list-table .td.title {
+    justify-content: left;
+
+    padding: 0 40px;
+
+    cursor: pointer;
+}
+
+.board-list-table .th.nickname,
+.board-list-table .td.nickname {
+    width: 140px;
+}
+
+.board-list-table .th.liked,
+.board-list-table .td.liked {
+    width: 80px;
+}
+
+.board-list-table .th.postDate,
+.board-list-table .td.postDate {
+    width: 80px;
+}
+
+#info-community-main-wrapper .pagination-container {
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 10px;
+}
+
+#info-community-main-wrapper .search-container {
+    display: flex;
+    justify-content: center;
+
+    gap: 10px;
+
+    height: 50px;
+}
+
+.search-container .search-category {
+    border: 2px solid var(--Lightmode-Grey5);
+    border-radius: 5px;
+
+    padding: 10px;
+
+    width: 130px;
+}
+
+.search-container .search-box {
+    border: 2px solid var(--Lightmode-Grey5);
+    border-radius: 5px;
+
+    padding: 10px;
+
+    width: 490px;
+}
+
+.search-container .search-button {
+    border-radius: 5px;
+
+    background-image: url(src/assets/images/search-icon.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    
+    background-color: var(--Black);
+
+    width: 70px;
+
+    cursor: pointer;
+}

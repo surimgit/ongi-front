@@ -7,6 +7,8 @@ import { PostProductRequestDto } from './dto/request/product';
 import { Category } from 'src/types/aliases';
 import { GetProductResponseDto } from './dto/response';
 import GetProductDetailResponseDto from './dto/response/get-product-detail.request.dto';
+import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
+import { GetCommunityPostResponseDto } from './dto/response/community';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -24,11 +26,14 @@ const PRODUCT_MODULE_URL = `${API_DOMAIN}/api/v1/product`
 const POST_PRODUCT_URL = `${PRODUCT_MODULE_URL}/write`;
 const GET_PRODUCT_CATEGORY_NAME_URL = (category: Category, name:string) =>  `${PRODUCT_MODULE_URL}?category=${category}&name=${name}`;
 const GET_PRODUCT_DETAIL_URL = (sequence:number | string) => `${PRODUCT_MODULE_URL}/${sequence}`; 
+const COMMUNITY_MODULE_URL = `${API_DOMAIN}/api/v1/community`;
 
 const FILE_UPLOAD_URL = `${API_DOMAIN}/file/upload`;
 const multipartFormData = { headers: { 'Content-Type': 'multipart/form-data' } };
 
-const FAKE_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhc2RmMTIzNCIsImlhdCI6MTc0NDY4NzIzMSwiZXhwIjoxNzQ0NzE5NjMxfQ.icMvql_rjZLTw78lW6u6REQbKXTqxHf5K_9vygog10I";
+const GET_COMMUNITY_MODULE_URL = `${COMMUNITY_MODULE_URL}`;
+const GET_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
+const DELETE_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
 
 
 // function: Authorization Bearer 헤더 //
@@ -36,7 +41,6 @@ const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorizatio
 
 // function: response 성공 처리 함수 //
 const responseSuccessHandler = <T = ResponseDto>(response: AxiosResponse<T>) => {
-  // response.data: Response Body
   const { data } = response;
   return data;
 };
@@ -104,3 +108,26 @@ export const fileUploadRequest = async (requestBody: FormData) => {
   return responseBody;
 };
 
+// function: get community post API 요청 함수 //
+export const getCommunityPostRequest = async (postSequence:number | string) => {
+  const responseBody = await axios.get(GET_COMMUNITY_POST_URL(postSequence))
+  .then(responseSuccessHandler<GetCommunityPostResponseDto>)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get community API 요청 함수 //
+export const getCommunityRequest = async () => {
+  const responseBody = await axios.get(GET_COMMUNITY_MODULE_URL)
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: delete community post API 요청 함수 //
+export const deleteCommunityPostRequest = async (postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_COMMUNITY_POST_URL(postSequence), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
