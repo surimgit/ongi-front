@@ -13,7 +13,6 @@ import WishList from './views/MyPage/GroupBuying/WishList';
 import Faq from './views/MyPage/Inquiry/Faq';
 import Notice from './views/MyPage/Inquiry/Notice';
 import MyReview from './views/MyPage/Activity/MyReview';
-import NeedHelper from './views/MyPage/Activity/MyNeedHelper';
 import MyNeedHelper from './views/MyPage/Activity/MyNeedHelper';
 import MyCommunity from './views/MyPage/Activity/MyCommunity';import './App.css';
 
@@ -25,7 +24,7 @@ function App() {
           <Route index element={<ProductMain/>}/>
           <Route path={WRITE_PATH} element={<ProductWrite/>}/>
         </Route>
-        <Route path='/main' element={<HomePage/>}/>
+        <Route path='/main'/>
         <Route path='/others'>
           <Route index element={<Others/>} />
         </Route>
