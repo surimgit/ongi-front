@@ -1,7 +1,8 @@
 import { Routes, Route } from 'react-router';
 import Layout from './layouts/Layout';
-import HomePage from './views/HomePage';
-import './App.css';
+import { PRODUCT_PATH, WRITE_PATH } from './constants';
+import ProductWrite from './views/Product/write';
+import ProductMain from './views/Product';
 import MyPage from './views/MyPage';
 import Inquiry from './views/MyPage/Inquiry';
 import Others from './views/MyPage/Others';
@@ -14,11 +15,16 @@ import Notice from './views/MyPage/Inquiry/Notice';
 import MyReview from './views/MyPage/Activity/MyReview';
 import NeedHelper from './views/MyPage/Activity/MyNeedHelper';
 import MyNeedHelper from './views/MyPage/Activity/MyNeedHelper';
-import MyCommunity from './views/MyPage/Activity/MyCommunity';
+import MyCommunity from './views/MyPage/Activity/MyCommunity';import './App.css';
+
 function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
+        <Route path={PRODUCT_PATH}>
+          <Route index element={<ProductMain/>}/>
+          <Route path={WRITE_PATH} element={<ProductWrite/>}/>
+        </Route>
         <Route path='/main' element={<HomePage/>}/>
         <Route path='/others'>
           <Route index element={<Others/>} />
