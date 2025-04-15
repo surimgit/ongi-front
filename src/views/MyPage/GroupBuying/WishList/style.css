@@ -91,17 +91,16 @@
 #wish-list-main-wrapper .body .product-list-table .tr{
   display: flex;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  display: flex;
+  border-bottom: 2px solid rgb(164, 164, 164);
 }
 
 #wish-list-main-wrapper .body .product-list-table .th{
-  
   background-color: antiquewhite;
   padding: 15px 0px;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
+  border-right: 2px solid antiquewhite;
 }
 
 #wish-list-main-wrapper .body .product-list-table .name-box{
@@ -109,21 +108,53 @@
 }
 
 #wish-list-main-wrapper .body .product-list-table .purchased-people{
-  flex: 1;
+  flex: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #wish-list-main-wrapper .body .product-list-table .quantity{
   flex: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#wish-list-main-wrapper .body .product-list-table .date{
+#wish-list-main-wrapper .body .product-list-table .tr .date{
   flex: 1.3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+#wish-list-main-wrapper .body .product-list-table .td{
+  border-right: 2px solid rgb(164, 164, 164);
+  height: 130px;
 }
 
 #wish-list-main-wrapper .body .product-list-table .td.name-box{
   display: flex;
-  height: 100px;
-  padding-left: 20px;
   align-items: center;
   gap: 20px;
+}
+
+#wish-list-main-wrapper .body .product-list-table .td .picture{
+  background-color: aqua;
+  height: 100px;
+  width: 100px;
+  padding-left: 20px;
+}
+
+#wish-list-main-wrapper .body .product-list-table .td.name-box .detail-box{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 10px;
+  font-size: 18px;
+}
+
+#wish-list-main-wrapper .body .product-list-table .td.name-box .detail-box .amount{
+  font-weight: bold;
 }

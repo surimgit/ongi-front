@@ -108,11 +108,11 @@ export default function GroupBuying() {
           </div>
           <div className='product-list-table'>
             <div className='tr'>
-              <div className='date'>주문일자</div>
-              <div className='detail-box'>상품명</div>
-              <div className='quantity'>수량</div>
-              <div className='amount'>주문금액</div>
-              <div className='order-number'>배송조회</div>
+              <div className='th date'>주문일자</div>
+              <div className='th detail-box'>상품명</div>
+              <div className='th quantity'>수량</div>
+              <div className='th amount'>주문금액</div>
+              <div className='th order-number'>배송조회</div>
             </div>
             {products.map((product, index) => (
             <ProductItem key={index} {...product} />

@@ -34,8 +34,87 @@ const products = [
     purchasedPeople: 30,
     quantity: 12,
     date: '2025-04-11',
+  },
+  {
+    pictureUrl: 'product1.jpg',
+    name: '연세두유 뼈를 생각한 고칼슘 두유 진득찰 96팩',
+    amount: 34000,
+    purchasedPeople: 30,
+    quantity: 12,
+    date: '2025-04-11',
+  },
+  {
+    pictureUrl: 'product1.jpg',
+    name: '연세두유 뼈를 생각한 고칼슘 두유 진득찰 96팩',
+    amount: 34000,
+    purchasedPeople: 30,
+    quantity: 12,
+    date: '2025-04-11',
+  },
+  {
+    pictureUrl: 'product1.jpg',
+    name: '연세두유 뼈를 생각한 고칼슘 두유 진득찰 96팩',
+    amount: 34000,
+    purchasedPeople: 30,
+    quantity: 12,
+    date: '2025-04-11',
+  },
+  {
+    pictureUrl: 'product1.jpg',
+    name: '연세두유 뼈를 생각한 고칼슘 두유 진득찰 96팩',
+    amount: 34000,
+    purchasedPeople: 30,
+    quantity: 12,
+    date: '2025-04-11',
+  },
+  {
+    pictureUrl: 'product1.jpg',
+    name: '연세두유 뼈를 생각한 고칼슘 두유 진득찰 96팩',
+    amount: 34000,
+    purchasedPeople: 30,
+    quantity: 12,
+    date: '2025-04-11',
+  },
+  {
+    pictureUrl: 'product1.jpg',
+    name: '연세두유 뼈를 생각한 고칼슘 두유 진득찰 96팩',
+    amount: 34000,
+    purchasedPeople: 30,
+    quantity: 12,
+    date: '2025-04-11',
+  },
+  {
+    pictureUrl: 'product1.jpg',
+    name: '연세두유 뼈를 생각한 고칼슘 두유 진득찰 96팩',
+    amount: 34000,
+    purchasedPeople: 30,
+    quantity: 12,
+    date: '2025-04-11',
+  },
+  {
+    pictureUrl: 'product1.jpg',
+    name: '연세두유 뼈를 생각한 고칼슘 두유 진득찰 96팩',
+    amount: 34000,
+    purchasedPeople: 30,
+    quantity: 12,
+    date: '2025-04-11',
+  },
+  {
+    pictureUrl: 'product1.jpg',
+    name: '연세두유 뼈를 생각한 고칼슘 두유 진득찰 96팩',
+    amount: 34000,
+    purchasedPeople: 30,
+    quantity: 12,
+    date: '2025-04-11',
+  },
+  {
+    pictureUrl: 'product1.jpg',
+    name: '연세두유 뼈를 생각한 고칼슘 두유 진득찰 96팩',
+    amount: 34000,
+    purchasedPeople: 30,
+    quantity: 12,
+    date: '2025-04-11',
   }
-  // 추가 상품들 ...
 ];
 
 function ProductItem({
@@ -44,9 +123,11 @@ function ProductItem({
   return (
     <div className='tr'>
       <div className='td name-box'>
-        <div className='td picture'>{pictureUrl}</div>
-        <div className='td name'>{name}</div>
-        <div className='td amount'>{amount}</div>
+        <div className='picture'>{pictureUrl}</div>
+        <div className='detail-box'>
+          <div className='name'>{name}</div>
+          <div className='amount'>{amount}</div>
+        </div>
       </div>
       <div className='td purchased-people'>{purchasedPeople}</div>
       <div className='td quantity'>{quantity}</div>
@@ -89,8 +170,8 @@ export default function WishList() {
       </div>
       <div className='body'>
           <div className='select-bar'>
-            <div className='content'>찜한 목록</div>
-            <div className='content active'>구매목록</div>
+            <div className='content active' >찜한 목록</div>
+            <div className='content '>구매목록</div>
             <div className='content'>판매목록</div>
           </div>
           <div className='product-list-table'>

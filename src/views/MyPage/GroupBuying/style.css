@@ -86,8 +86,8 @@
 #group-buying-main-wrapper .body .product-list-table .tr{
   display: flex;
   align-items: center;
-  justify-content: center;
   text-align: center;
+  border-bottom: 2px solid rgb(197, 193, 193);
 }
 
 #group-buying-main-wrapper .body .product-list-table .tr:first-child{
@@ -97,8 +97,9 @@
   font-weight: bold;
 }
 
-#group-buying-main-wrapper .body .product-list-table .tr:last-child{
-  border-bottom: 2px solid rgb(197, 193, 193);
+#group-buying-main-wrapper .body .product-list-table .tr:first-child *{
+  border-right: 2px solid antiquewhite;
+
 }
 
 #group-buying-main-wrapper .body .product-list-table .tr .date{
@@ -119,6 +120,7 @@
   justify-content: center;
 }
 
+
 #group-buying-main-wrapper .body .product-list-table .tr .amount{
   flex:1.6;
   display: flex;
@@ -131,6 +133,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border: none;
 }
 
 #group-buying-main-wrapper .body .product-list-table .td.detail-box{
@@ -139,9 +142,8 @@
 } 
 
 #group-buying-main-wrapper .body .product-list-table .td{
-  border-left: 2px solid rgb(197, 193, 193);
-  border-top: 2px solid rgb(197, 193, 193);
-  height: 130px ;
+  height: 130px;
+  border-right: 2px solid rgb(197, 193, 193);
 } 
 
 #group-buying-main-wrapper .td.detail-box .picture{

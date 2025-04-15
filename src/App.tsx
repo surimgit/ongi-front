@@ -9,7 +9,12 @@ import MyActivity from './views/MyPage/Activity';
 import Setting from './views/MyPage/Setting';
 import GroupBuying from './views/MyPage/GroupBuying';
 import WishList from './views/MyPage/GroupBuying/WishList';
-
+import Faq from './views/MyPage/Inquiry/Faq';
+import Notice from './views/MyPage/Inquiry/Notice';
+import MyReview from './views/MyPage/Activity/MyReview';
+import NeedHelper from './views/MyPage/Activity/MyNeedHelper';
+import MyNeedHelper from './views/MyPage/Activity/MyNeedHelper';
+import MyCommunity from './views/MyPage/Activity/MyCommunity';
 function App() {
   return (
     <Routes>
@@ -20,8 +25,17 @@ function App() {
         </Route>
         <Route path='/mypage'>
           <Route index element={<MyPage/>}/>
-          <Route path='inquiry' element={<Inquiry/>}/>
-          <Route path='activity' element={<MyActivity/>}/>
+          <Route path='inquiry'>
+            <Route index element={<Inquiry />} />
+            <Route path='faq' element={<Faq/>} />
+            <Route path='notice' element={<Notice/>}/>
+          </Route>
+          <Route path='activity'>
+            <Route index element={<MyActivity/>} />
+            <Route path='my-review' element={<MyReview/>} />
+            <Route path='my-needHelper' element={<MyNeedHelper/>} />
+            <Route path='my-community' element={<MyCommunity/>} />
+          </Route>
           <Route path='setting' element={<Setting/>}/>
           <Route path='group-buying' element={<GroupBuying/>}/>
           <Route path='wish-list' element={<WishList/>}/>
