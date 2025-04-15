@@ -4,6 +4,7 @@ import { PRODUCT_PATH, WRITE_PATH } from './constants';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
 import MyPage from './views/MyPage';
+import Auth from './views/Auth';
 import Inquiry from './views/MyPage/Inquiry';
 import Others from './views/MyPage/Others';
 import MyActivity from './views/MyPage/Activity';
@@ -18,7 +19,8 @@ import MyCommunity from './views/MyPage/Activity/MyCommunity';import './App.css'
 
 function App() {
   return (
-    <Routes>
+    <Routes>      
+      <Route path='/auth' element={<Auth />} />
       <Route element={<Layout />}>
         <Route path={PRODUCT_PATH}>
           <Route index element={<ProductMain/>}/>
