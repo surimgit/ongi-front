@@ -9,6 +9,7 @@ import { GetProductResponseDto } from './dto/response';
 import GetProductDetailResponseDto from './dto/response/get-product-detail.request.dto';
 import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
 import { GetCommunityPostResponseDto } from './dto/response/community';
+import { PostShoppingCartRequestDto } from './dto/request/shopping-cart';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -21,7 +22,7 @@ const USER_MODULE_URL = `${API_DOMAIN}/api/v1/user`;
 
 const GET_SIGN_IN_USER_URL = `${USER_MODULE_URL}/sign-in`;
 
-
+// 공동구매 API 경로
 const PRODUCT_MODULE_URL = `${API_DOMAIN}/api/v1/product`
 const POST_PRODUCT_URL = `${PRODUCT_MODULE_URL}/write`;
 const GET_PRODUCT_CATEGORY_NAME_URL = (category: Category, name:string) =>  `${PRODUCT_MODULE_URL}?category=${category}&name=${name}`;
@@ -35,6 +36,9 @@ const GET_COMMUNITY_MODULE_URL = `${COMMUNITY_MODULE_URL}`;
 const GET_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
 const DELETE_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
 
+// 장바구니 API 경로
+const SHOPPING_CART_MODULE_URL = `${API_DOMAIN}/api/v1/cart`;
+const POST_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
@@ -131,3 +135,11 @@ export const deleteCommunityPostRequest = async (postSequence: number | string, 
   .catch(responseErrorHandler);
   return responseBody;
 };
+
+// function: post shopping cart API 요청 함수 //
+export const PostShoppingCartRequest = async (requestBody: PostShoppingCartRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_SHOPPING_CART_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}

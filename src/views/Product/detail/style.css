@@ -17,11 +17,9 @@
   gap: 25px;
 }
 
-.detail-product-content .detail-image {
+.detail-product-content .detail-image img{
   width: 300px;
   height: 300px;
-
-  background-color: blanchedalmond;
 }
 
 .detail-product-content .detail-product-info {
@@ -146,8 +144,14 @@
   height: 30px;
 }
 
-.product-utility-bar .product-toolbox .product-tool.favorite {
-  background-image: url(src/assets/images/icon-favorite.png);
+.product-utility-bar .product-toolbox .product-tool.liked.active {
+  background-image: url(src/assets/images/icon-liked-active.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.product-utility-bar .product-toolbox .product-tool.liked {
+  background-image: url(src/assets/images/icon-liked.png);
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -182,4 +186,64 @@
 .product-detail .jumbotron .jumbotron-box {
   white-space: pre-wrap;
   padding: 0px 50px;
+}
+
+#detail-product-wrapper .cart-update-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+#detail-product-wrapper .header-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#detail-product-wrapper .header-box .title {
+  font-size: 32px;
+  font-weight: 700;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#detail-product-wrapper .cart-update-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#detail-product-wrapper .cart-update-box .minus-button {
+  width: 20px;
+  height: 20px;
+
+  padding: 6px;
+  background-image: url(src/assets/images/icon-minus.png);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-color: #d9d9d9;
+
+  cursor: pointer;
+}
+
+#detail-product-wrapper .cart-update-box .quantity {
+  width: 120px;
+
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+#detail-product-wrapper .cart-update-box .plus-button {
+  width: 20px;
+  height: 20px;
+
+  padding: 6px;
+  background-image: url(src/assets/images/icon-plus.png);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-color: #d9d9d9;
+  cursor: pointer;
 }

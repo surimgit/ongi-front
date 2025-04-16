@@ -27,12 +27,22 @@ import PostWrite from './views/Community/Write';
 import HotBoard from './views/Community/HotBoard';
 import InfoBoard from './views/Community/InfoBoard';
 import CountyBoard from './views/Community/CountyBoard';
+import SuccessPage from './views/TossPayment/SuccessPage';
+import FailPage from './views/TossPayment/FailPage';
+import CheckoutPage from './views/TossPayment/CheckoutPage';
 
 function App() {
   
   return (
     <Routes>      
       <Route path='/auth' element={<Auth />} />
+      
+      <Route path='/payment' element={<CheckoutPage/>}/>
+      <Route path='success' element={<SuccessPage/>}/>
+      <Route path='fail' element={<FailPage/>}/>
+    
+      
+
       <Route element={<Layout />}>
         <Route path={PRODUCT_PATH}>
           <Route index element={<ProductMain/>}/>
