@@ -8,8 +8,8 @@ import { getCommunityRequest } from 'src/apis';
 import { GetCommunityResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
 import { useCookies } from 'react-cookie';
-import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
-import dayjs from "dayjs";
+import { COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
+import { CommunityCategory } from 'src/types/aliases';
 
 const SECOND = 1000;
 const MINUTE = 60;
@@ -19,20 +19,12 @@ const DAY = 24;
 // interface: 게시글 레코드 컴포넌트 속성 //
 interface TableItemProps {
   communityPost: CommunityPost;
+  boardCategory: CommunityCategory | string;
 }
 
 // component: 게시글 테이블 레코드 컴포넌트 //
-function TableItem({ communityPost }: TableItemProps) {
-  const { postSequence, nickname, category, postDate, title, liked} = communityPost;
-
-  // variable: 현재 시간 //
-  const now = dayjs();
-  // variable: 작성 시간 //
-  const postedDate = dayjs(postDate);
-  // variable: 일 단위 작성 시간 차이 //
-  const diffPostDate = now.diff(postedDate, 'date');
-  // variable: 일 단위 변동 여부 //
-  const ifDayPast = diffPostDate >= 1 ? true : false;
+function TableItem({ communityPost, boardCategory }: TableItemProps) {
+  const { postSequence, nickname, category, postDate, title, liked, viewCount } = communityPost;
 
   // function: 내비게이터 함수 //
   const navigator = useNavigate();
@@ -48,7 +40,6 @@ function TableItem({ communityPost }: TableItemProps) {
 
     const diffTime = now.getTime() - postedDate.getTime();
 
-    const MINUTE = 1000;
     const diffDays = diffTime / (SECOND * MINUTE * HOUR * DAY);
 
     if (diffDays >= 1) {
@@ -58,27 +49,21 @@ function TableItem({ communityPost }: TableItemProps) {
     }
   };
 
-  // function: 제목 fotmat을 생성하는 함수 //
-  const titleFormat = (title: string) => {
-    if (title.length > 30) {
-      return `${title.substring(0,28)}...`;
-    } else {
-      return title;
-    }
-  }
-
   // event handler: 레코드 클릭 이벤트 처리 //
   const onClick = () => {
     navigator(COMMUNITY_VIEW_ABSOLUTE_PATH(postSequence));
   };
 
-  // render: 게시글 테이블 레코드 컴포넌트 렌더링
+  // render: 게시글 테이블 레코드 컴포넌트 렌더링 //
   return (
     <div className='tr'>
       <div className='td category'>{category}</div>
-      <div className='td title' onClick={onClick}>{titleFormat(title)}</div>
+      <div className='td title' >
+        <span className='title-text' onClick={onClick}>{title}</span>
+      </div>
       <div className='td nickname'>{nickname}</div>
       <div className='td liked'>{liked}</div>
+      <div className='td view'>{viewCount}</div>
       <div className='td postDate'>{formatPostDate(postDate)}</div>
     </div>
   )
@@ -86,7 +71,7 @@ function TableItem({ communityPost }: TableItemProps) {
 
 
 // component: 게시판 메인 화면 컴포넌트 //
-export default function InfoCommunityMain() {
+export default function CommunityMain() {
 
   // state: cookie 상태 //
   const [cookies] = useCookies();
@@ -97,14 +82,8 @@ export default function InfoCommunityMain() {
     totalSection, setTotalList, viewList, pageList
   } = usePagination<CommunityPost>();
 
-  // state: 개별 카테고리 게시판 상태 //
-  const [isItem, setItem] = useState<boolean>(false);
-
-  // variable: access Token //
-  const accessToken = cookies[ACCESS_TOKEN];
-  
-  // function: 내비게이터 함수 //
-  const navigator = useNavigate();
+  // state: 게시판 카테고리 상태 //
+  const [boardCategory, setBoardCategory] = useState<CommunityCategory | string>('전체');
 
   // function: get community response 처리 함수 //
   const getCommunityResponse = (responseBody: GetCommunityResponseDto | ResponseDto | null) => {
@@ -127,7 +106,7 @@ export default function InfoCommunityMain() {
     getCommunityRequest().then(getCommunityResponse);
   }, []);
 
-  // render: 정보 게시판 메인 화면 컴포넌트 렌더링 //
+  // render: 커뮤니티 메인 화면 컴포넌트 렌더링 //
   return (
     <div id='info-community-main-wrapper'>
       <div className='board-header-container'>
@@ -140,9 +119,10 @@ export default function InfoCommunityMain() {
             <div className='th title'>제목</div>
             <div className='th nickname'>작성자</div>
             <div className='th liked'>좋아요</div>
+            <div className='th view'>조회</div>
             <div className='th postDate'>작성 일자</div>
           </div>
-          {viewList.map((communityPost, index) => <TableItem key={index} communityPost={communityPost} />)}
+          {viewList.map((communityPost, index) => <TableItem key={index} communityPost={communityPost} boardCategory={boardCategory} />)}
         </div>
       </div>
       <div className='pagination-container'>

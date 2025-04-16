@@ -75,8 +75,6 @@ const usePagination = <T>() => {
     if(totalPage) initPageList(totalPage);
   },[totalPage, currentSection]);
 
-  console.log(totalList);
-
   return {
     currentPage, setCurrentPage,
     currentSection, setCurrentSection,

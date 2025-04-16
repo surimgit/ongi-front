@@ -57,12 +57,14 @@ export default function CommunityLayout() {
                     <div className='category-item'>ㄴ재테크</div>
                     <div className='category-item'>ㄴ패션</div>
                     <div className='category-item'>ㄴ핫딜</div>
+                    <div className='category-item'>ㄴ정보기타</div>
                 </div>
                 <div className='divider'></div>
                 <div className='category-container'>
                     <div className='large-category' onClick={onCountyBoardClickHandler}>🏙️ 우리 동네 게시판</div>
                     <div className='category-item'>ㄴ동네 생활</div>
                     <div className='category-item'>ㄴ모임</div>
+                    <div className='category-item'>ㄴ우리동네기타</div>
                 </div>
             </div>
             <div id='board-format'>
