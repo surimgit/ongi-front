@@ -8,10 +8,15 @@
     font-family: 'Pretendard', sans-serif;
   }
   
-  .logo {
-    font-size: 40px;
-    font-weight: 800;
-    margin-bottom: 40px;
+  .login-wrapper .logo {
+    background-image: url(src/assets/images/logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 80px;
+    height: 110px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+    cursor: pointer;
   }
   
   .login-card {
@@ -21,19 +26,19 @@
     padding: 40px;
   }
   
-  .input-group {
+  .login-input-group {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
   }
   
-  .input-group label {
+  .login-input-group label {
     font-size: 14px;
     margin-bottom: 6px;
     font-weight: 700;
   }
   
-  .input-group input {
+  .login-input-group input {
     padding: 12px;
     font-size: 14px;
     border: 1px solid rgba(117, 117, 117, 0.2);
@@ -71,7 +76,7 @@
   .bottom-link {
     margin-top: 20px;
     font-size: 13px;
-    color: rgba(117, 117, 117, 0.8);
+    color: rgba(117, 117, 117, 0.);
     text-align: center;
   }
   
