@@ -1,11 +1,10 @@
 import { Routes, Route, useNavigate } from 'react-router';
 import Layout from './layouts/Layout';
 import './App.css';
-import { ADDRESS_PATH, PAYMENTS_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
+import {  MAIN_ABSOLUTE_PATH, MAIN_PATH, ADDRESS_PATH, PAYMENTS_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
 import { MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH } from './constants';
 import { NEEDHELPER_PATH } from './constants';
 import NeedHelper from './views/NeedHelper';
-import { MAIN_ABSOLUTE_PATH, MAIN_PATH, PRODUCT_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
 import DetailProduct from './views/Product/detail';
@@ -28,8 +27,6 @@ import PostWrite from './views/Community/Write';
 import HotBoard from './views/Community/HotBoard';
 import InfoBoard from './views/Community/InfoBoard';
 import CountyBoard from './views/Community/CountyBoard';
-import { useEffect } from 'react';
-import Main from './views/Main';
 import SuccessPage from './views/TossPayment/SuccessPage';
 import FailPage from './views/TossPayment/FailPage';
 import CheckoutPage from './views/TossPayment/CheckoutPage';
@@ -39,6 +36,9 @@ import PostDetail from './views/Community/Detail';
 import Question from './views/MyPage/Question';
 import Account from './views/MyPage/Account';
 
+import { useEffect } from 'react';
+import Main from './views/Main';
+import ShoppingCartAddress from './views/ShoppingCart/Address';
 
 function App() {
   
