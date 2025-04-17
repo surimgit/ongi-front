@@ -35,11 +35,9 @@ import './App.css';
 import CommunityLayout from './layouts/Community';
 import { COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
 import PostWrite from './views/Community/Write';
-// import HotBoard from './views/Community/HotBoard';
-// import InfoBoard from './views/Community/InfoBoard';
-// import CountyBoard from './views/Community/CountyBoard';
-import { useEffect } from 'react';
-import Main from './views/Main';
+import HotBoard from './views/Community/HotBoard';
+import InfoBoard from './views/Community/InfoBoard';
+import CountyBoard from './views/Community/CountyBoard';
 import SuccessPage from './views/TossPayment/SuccessPage';
 import FailPage from './views/TossPayment/FailPage';
 import CheckoutPage from './views/TossPayment/CheckoutPage';
@@ -50,6 +48,9 @@ import ShoppingCartAddress from './views/ShoppingCart/Address';
 import Question from './views/MyPage/Question';
 import Account from './views/MyPage/Account';
 
+import { useEffect } from 'react';
+import Main from './views/Main';
+import ShoppingCartAddress from './views/ShoppingCart/Address';
 
 function App() {
   return (
