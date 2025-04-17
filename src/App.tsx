@@ -1,6 +1,6 @@
-import { Routes, Route } from 'react-router';
+import { Routes, Route, useNavigate } from 'react-router';
 import Layout from './layouts/Layout';
-import { PRODUCT_PATH, WRITE_PATH } from './constants';
+import { MAIN_ABSOLUTE_PATH, MAIN_PATH, PRODUCT_PATH, WRITE_PATH } from './constants';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
 import MyPage from './views/MyPage';
@@ -25,12 +25,18 @@ import PostWrite from './views/Community/Write';
 import HotBoard from './views/Community/HotBoard';
 import InfoBoard from './views/Community/InfoBoard';
 import CountyBoard from './views/Community/CountyBoard';
+import { useEffect } from 'react';
+import Main from './views/Main';
 
 function App() {
   return (
-    <Routes>      
+    <Routes> 
+      <Route index element={<Index />} />     
       <Route path='/auth' element={<Auth />} />
       <Route element={<Layout />}>
+        <Route path={MAIN_PATH}>
+            <Route index element={<Main />}/>
+        </Route>
         <Route path={PRODUCT_PATH}>
           <Route index element={<ProductMain/>}/>
           <Route path={WRITE_PATH} element={<ProductWrite/>}/>
@@ -85,3 +91,17 @@ function App() {
 }
 
 export default App;
+
+// component: Root 경로 컴포넌트 //
+function Index() {
+
+  // function: 네비게이터 함수 //
+  const navigator = useNavigate();
+
+  // effect: 컴포넌트가 렌더링될 때 실행할 함수 //
+  useEffect(()=> {
+    navigator(MAIN_ABSOLUTE_PATH);
+  }, []);
+
+  return null;
+}
