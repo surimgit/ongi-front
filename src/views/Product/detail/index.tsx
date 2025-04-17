@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router';
 import { ACCESS_TOKEN, PRODUCT_ABSOLUTE_PATH } from 'src/constants';
 import { Category } from 'src/types/aliases';
 import { useCookies } from 'react-cookie';
-import GetProductDetailResponseDto from 'src/apis/dto/response/get-product-detail.request.dto';
+import GetProductDetailResponseDto from 'src/apis/dto/response/product/get-product-detail.request.dto';
 import { ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import Modal from 'src/components/Modal';

@@ -6,10 +6,12 @@ import { GetSignInUserResponseDto } from './dto/response/user';
 import { PostProductRequestDto } from './dto/request/product';
 import { Category } from 'src/types/aliases';
 import { GetProductResponseDto } from './dto/response';
-import GetProductDetailResponseDto from './dto/response/get-product-detail.request.dto';
+import GetProductDetailResponseDto from './dto/response/product/get-product-detail.request.dto';
 import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
 import { GetCommunityPostResponseDto } from './dto/response/community';
 import { PostShoppingCartRequestDto } from './dto/request/shopping-cart';
+import PostPaymentConfirmRequestDto from './dto/request/payment/post-payment-confirm.request.dto';
+import PostOrderRequestDto from './dto/request/payment/post-order.request.dto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -19,6 +21,8 @@ const AUTH_MODULE_URL = `${API_DOMAIN}/api/v1/auth`;
 const SIGN_IN_URL = `${AUTH_MODULE_URL}/sign-in`;
 
 const USER_MODULE_URL = `${API_DOMAIN}/api/v1/user`;
+
+const PAYMENT_URL = `${API_DOMAIN}/api/v1/payments`;
 
 const GET_SIGN_IN_USER_URL = `${USER_MODULE_URL}/sign-in`;
 
@@ -39,6 +43,8 @@ const DELETE_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNIT
 // 장바구니 API 경로
 const SHOPPING_CART_MODULE_URL = `${API_DOMAIN}/api/v1/cart`;
 const POST_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
+const POST_ORDER_URL = `${PAYMENT_URL}/`;
+const POST_PAYMENT_CONFIRM_URL =  `${PAYMENT_URL}/confirm`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
@@ -141,5 +147,22 @@ export const PostShoppingCartRequest = async (requestBody: PostShoppingCartReque
   const responseBody = await axios.post(POST_SHOPPING_CART_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post order API 요청 함수 //
+export const postOrderRequest = async (requestBody: PostOrderRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_ORDER_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post payment confirm API 요청 함수 //
+export const postPaymentConfirm = async(requestBody: PostPaymentConfirmRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_PAYMENT_CONFIRM_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+
   return responseBody;
 }

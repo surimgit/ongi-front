@@ -37,7 +37,7 @@ function App() {
     <Routes>      
       <Route path='/auth' element={<Auth />} />
       
-      <Route path='/payment' element={<CheckoutPage/>}/>
+      <Route path='/payments' element={<CheckoutPage/>}/>
       <Route path='success' element={<SuccessPage/>}/>
       <Route path='fail' element={<FailPage/>}/>
     

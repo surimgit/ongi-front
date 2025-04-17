@@ -1,5 +1,5 @@
 import { Category } from "src/types/aliases";
-import ResponseDto from "./response.dto";
+import { ResponseDto } from "src/apis/dto/response";
 
 // interface: get product detail response body DTO //
 export default interface GetProductDetailResponseDto extends ResponseDto {

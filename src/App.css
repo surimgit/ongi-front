@@ -35,10 +35,11 @@ body {
 
   font-size: 24px;
   font-weight: 400;
-  line-height: 175%;
+  text-align: center;
 
+  line-height: 60px;
   cursor: pointer;
-} */
+}
 
 
 .button:hover {

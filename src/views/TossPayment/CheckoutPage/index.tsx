@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { loadTossPayments, ANONYMOUS, TossPaymentsWidgets } from "@tosspayments/tosspayments-sdk";
 import { TossPaymentAmount } from 'src/types/interfaces';
 import './style.css'
+import { postOrderRequest } from 'src/apis';
+import PostOrderRequestDto  from 'src/apis/dto/request/payment/post-order.request.dto';
+import { useCookies } from 'react-cookie';
+import { ACCESS_TOKEN } from 'src/constants';
+import { ResponseDto } from 'src/apis/dto/response';
+import { responseMessage } from 'src/utils';
 
 const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 const customerKey = '4RzTdEvffNsrGd9ta7nZI';
@@ -17,6 +23,47 @@ export default function CheckoutPage() {
   const [ready, setReady] = useState<boolean>(false);
   // state: 결제 위젯 상태 //
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // state: cookie 상태 //
+  const [cookies] = useCookies();
+
+  // variable: access Token//
+  const accessToken = cookies[ACCESS_TOKEN];
+
+  // event handler: 결제 요청 버튼 클릭 이벤트 핸들러 //
+  const onButtonClickHandler = async () => {
+
+    if(isProcessing) return;
+    setIsProcessing(true);
+
+    const requestBody: PostOrderRequestDto = {
+      orderId:'94q3myHfFfqYebqvbsasb36', amount:amount.value, buyerAddress: '양산'
+    }
+
+    postOrderRequest(requestBody, accessToken)
+
+    try {
+      if(widgets === null) return;
+      await widgets.requestPayment({
+        orderId: '94q3myHfFfqYebqvbsasb36',
+        orderName: '토스 티셔츠 외 2건',
+        successUrl: window.location.origin + '/success',
+        failUrl: window.location.origin + '/fail',
+        customerEmail:'customer123@gmail.com',
+        customerName: '김토스',
+        customerMobilePhone: '01011111111',
+        metadata:{
+          address: '부산진구'
+        }
+      });
+    } catch(error){
+      console.log(error);
+    } finally{
+      setIsProcessing(false);
+    }
+    
+  }
 
   // effect: clientKey, customerKey 변경 시 실행될 함수 //
   useEffect(() => {
@@ -71,7 +118,8 @@ export default function CheckoutPage() {
     if(widgets === null) return;
 
     widgets.setAmount(amount);
-  }, [widgets, amount])
+  }, [widgets, amount]);
+
   return (
     <div id='checkout-wrapper'>
       <div className='box-section'>
@@ -80,22 +128,7 @@ export default function CheckoutPage() {
         <button
           className='button'
           disabled={!ready} 
-          onClick={async () => {
-            try {
-              if(widgets === null) return;
-              await widgets.requestPayment({
-                orderId: '94q3myHfFfvEqEYqojiSy',
-                orderName: '토스 티셔츠 외 2건',
-                successUrl: window.location.origin + '/success',
-                failUrl: window.location.origin + '/fail',
-                customerEmail:'customer123@gmail.com',
-                customerName: '김토스',
-                customerMobilePhone: '01011111111'
-              });
-            } catch(error){
-              console.log(error);
-            }
-          }} 
+          onClick={onButtonClickHandler} 
         >
           결제하기
         </button>
