@@ -4,8 +4,11 @@ import { SignInRequestDto } from './dto/request/auth';
 import { SignInResponseDto } from './dto/response/auth';
 import { GetSignInUserResponseDto } from './dto/response/user';
 import { PostProductRequestDto } from './dto/request/product';
-import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN } from 'src/constants';
 import { GetCommunityPostResponseDto } from './dto/response/community';
+import PostCommunityRequestDto from './dto/request/community/post-community.request.dto';
+import GetCommunityCommentResponse from './dto/response/community/get-community-comment.response.dto';
+import PostCommunityCommentRequestDto from './dto/request/community/post-community-comment.request.dto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -20,15 +23,23 @@ const GET_SIGN_IN_USER_URL = `${USER_MODULE_URL}/sign-in`;
 
 const PRODUCT_MODULE_URL = `${API_DOMAIN}/api/v1/product`
 const POST_PRODUCT_URL = `${PRODUCT_MODULE_URL}/write`;
+
 const COMMUNITY_MODULE_URL = `${API_DOMAIN}/api/v1/community`;
+const POST_COMMUNITY_URL = `${COMMUNITY_MODULE_URL}/write`;
 
 const FILE_UPLOAD_URL = `${API_DOMAIN}/file/upload`
 const multipartFormData = { headers: { 'Content-Type': 'multipart/form-data' } };
 
 const GET_COMMUNITY_MODULE_URL = `${COMMUNITY_MODULE_URL}`;
 const GET_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
+const PATCH_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
+const PATCH_COMMUNITY_VIEW_COUNT_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/view`;
 const DELETE_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
-
+const POST_COMMUNITY_COMMENT_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/comment`;
+const DELETE_COMMUNITY_COMMENT_URL = (postSequence: number | string, commentSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/comment/${commentSequence}`;
+const GET_COMMUNITY_COMMENT_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/comment`;
+const PUT_COMMUNITY_LIKED_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/liked`;
+const GET_COMMUNITY_LIKED_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/liked`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
@@ -110,6 +121,22 @@ export const getCommunityRequest = async () => {
   return responseBody;
 };
 
+// function: post community API 요청 함수 //
+export const postCommunityRequest = async (requestBody: PostCommunityRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_COMMUNITY_URL, requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: patch community view count API 요청 함수 //
+export const patchCommunityViewCountRequest = async (postSequence: number| string) => {
+  const responseBody = await axios.patch(PATCH_COMMUNITY_VIEW_COUNT_URL(postSequence))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
 // function: delete community post API 요청 함수 //
 export const deleteCommunityPostRequest = async (postSequence: number | string, accessToken: string) => {
   const responseBody = await axios.delete(DELETE_COMMUNITY_POST_URL(postSequence), bearerAuthorization(accessToken))
@@ -117,3 +144,43 @@ export const deleteCommunityPostRequest = async (postSequence: number | string, 
   .catch(responseErrorHandler);
   return responseBody;
 };
+
+// function: post community comment API 요청 함수 //
+export const postCommunityCommentRequest = async (requestBody:PostCommunityCommentRequestDto, postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.post(POST_COMMUNITY_COMMENT_URL(postSequence), requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: delete community comment API 요청 함수 //
+export const deleteCommunityCommentRequest = async (postSequence: number | string, commentSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_COMMUNITY_COMMENT_URL(postSequence, commentSequence), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get community comment API 요청 함수 //
+export const getCommunityCommentRequest = async (postSequence: number | string) => {
+  const responseBody = await axios.get(GET_COMMUNITY_COMMENT_URL(postSequence))
+  .then(responseSuccessHandler<GetCommunityCommentResponse>)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: put community liked API 요청 함수 //
+export const putCommunityLikedRequest = async (postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.put(PUT_COMMUNITY_LIKED_URL(postSequence), {}, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get community liked API 요청 함수 //
+export const getCommunityLikedRequest = async (postSequence: number | string) => {
+  const responseBody = await axios.get(GET_COMMUNITY_LIKED_URL(postSequence))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
