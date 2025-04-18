@@ -12,7 +12,8 @@ const ITEMS_PER_PAGE = 10;
 const PAGES_PER_SECTION = 10;
 
 const usePagination = <T>() => {
-
+  
+  // state: 페이지네이션 관련 상태 //
   const [totalList, setTotalList] = useState<T[]>([]);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [totalSection, setTotalSection] = useState<number>(0);
