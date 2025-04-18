@@ -9,6 +9,7 @@ import { getAlertRequest } from 'src/apis';
 import GetAlertResponseDto from 'src/apis/dto/response/alert/get-alert.response.dto';
 import { ResponseDto } from 'src/apis/dto/response';
 import Alert from 'src/types/interfaces/Alert.interface';
+import { useSignInUserStore } from 'src/stores';
 
 // interface: 알림 레코드 컴포넌트 속성 //
 interface AlertItemProps {
@@ -32,7 +33,7 @@ export default function Layout() {
   const [cookies] = useCookies();
 
   // state: nickname 상태 //
-  const [nickname, setNickname] = useState<string>('');
+  const { nickname } = useSignInUserStore();
 
   // state: My Alert List 요소 참조 //
   const myAlertListRef = useRef<HTMLDivElement | null>(null);
@@ -75,6 +76,11 @@ export default function Layout() {
     navigator(AUTH_ABSOLUTE_PATH);
   };
 
+  // event handler: user nickname 버튼 클릭 이벤트 처리 //
+  const onNicknameClickHandler = () => {
+    navigator('/mypage');
+  };
+
   // event handler: 게시판 클릭 이벤트 처리 //
   const onBoardClickHandler = (targetBoard: Board) => {
     navigator(COMMUNITY_BOARD_ABSOLUTE_PATH(targetBoard));
@@ -99,7 +105,7 @@ export default function Layout() {
 
   // effect: cookie의 accessToken과 경로가 변경될 시 실행할 함수 //
   useEffect(() => {
-    if (!cookies[ACCESS_TOKEN]) {
+    if (!cookies[ACCESS_TOKEN] && pathname !== MAIN_ABSOLUTE_PATH) {
       navigator(AUTH_ABSOLUTE_PATH);
       return;
     }
@@ -147,8 +153,11 @@ export default function Layout() {
           <div className='my-content-shopping-cart'></div>
           <div className='login-container'>
             <div className='login-icon'></div>
-            <div className='login-content login'>{nickname}</div>
-            <div className='login-content logout' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
+            {accessToken ? (
+              <div className='login-content login' onClick={onNicknameClickHandler}>{nickname}</div>
+            ) : (
+              <div className='login-content logout' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
+            )}
           </div>
         </div>
       </div>
