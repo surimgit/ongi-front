@@ -16,6 +16,8 @@ export const COMMUNITY_HOTBOARD_PATH = 'hot';
 export const COMMUNITY_INFOBOARD_PATH = 'info';
 export const COMMUNITY_COUNTYBOARD_PATH = 'county';
 
+export const NEEDHELPER_PATH = 'needHelper';
+
 // variable: 절대 path 상수 //
 export const ROOT_ABSOLUTE_PATH = ROOT_PATH;
 export const AUTH_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}`;
@@ -38,6 +40,8 @@ export const COMMUNITY_INFOBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/
 export const COMMUNITY_HOTBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_HOTBOARD_PATH}`;
 export const COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_COUNTYBOARD_PATH}`;
 
+export const ROOT_ABSOLUTE_PATH = ROOT_PATH;
+export const NEEDHELPER_ABSOLUTE_PATH = `${ROOT_PATH}${NEEDHELPER_PATH}`;
 
 // variable: access token 속성명 //
 export const ACCESS_TOKEN = 'accessToken';
