@@ -4,8 +4,9 @@ import { Board, CommunityCategory, SearchCategory } from "src/types/aliases";
 export const ROOT_PATH = '/';
 export const AUTH_PATH = 'auth';
 export const PRODUCT_PATH = 'product';
+export const SHOPPING_CART_PATH = 'shoppingCart';
 export const WRITE_PATH = 'write';
-export const PRODUCT_VIEW_PATH = ':productNumber';
+export const PRODUCT_VIEW_PATH = ':sequence';
 
 export const COMMUNITY_PATH = 'community';
 export const COMMUNITY_POST_PATH = 'post';
@@ -25,6 +26,8 @@ export const AUTH_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}`;
 export const PRODUCT_ABSOLUTE_PATH = `${ROOT_PATH}${PRODUCT_PATH}`;
 export const PRODUCT_WRITE_PATH = `${ROOT_PATH}${PRODUCT_PATH}/${WRITE_PATH}`;
 export const PRODUCT_VIEW_ABSOLUTE_PATH = (sequence: number) => `${ROOT_PATH}${PRODUCT_PATH}/${sequence}`;
+
+export const SHOPPING_CART_ABSOLUTE_PATH = `${ROOT_PATH}${SHOPPING_CART_PATH}`;
 
 export const COMMUNITY_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}`;
 export const COMMUNITY_OVERALL_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}?board=${'전체 글'}`;

@@ -2,6 +2,7 @@ export default interface Product {
   sequence: number;
   name: string;
   price: number;
+  category: string;
   rating: number;
   purchasedPeople: number;
   deadline: string;

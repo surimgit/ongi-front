@@ -70,7 +70,8 @@ const usePagination = <T>() => {
 
   // effect: 전체 리스트 변경시 실행될 함수 //
   useEffect(() => {
-    init(totalList);
+      init(totalList);
+      initViewList(totalList);
   },[totalList]);
 
   // effect: 뷰 리스트 변경시 실행될 함수 //

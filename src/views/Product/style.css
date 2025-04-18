@@ -23,7 +23,7 @@
 
 #product-main-wrapper .main-container .filter-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; 
 }
 
 .filter-container .category-box {
@@ -119,6 +119,7 @@
 
   padding: 20px 30px;
   border-bottom: 1px solid #d8d8d8;
+  cursor: pointer;
 }
 
 .product-list-table .tr .td.image{
@@ -188,5 +189,13 @@
 
 .td.deadline-box .deadline-title.normal{
   font-size: 32px;
+}
+
+.no-category-product {
+  margin: 0 auto;
+  padding-top: 200px;
+
+  font-size: 30px;
+  font-weight: 700;
 }
 

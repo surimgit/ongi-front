@@ -3,9 +3,10 @@ import Layout from './layouts/Layout';
 import HomePage from './views/HomePage';
 import { NEEDHELPER_PATH } from './constants';
 import NeedHelper from './views/NeedHelper';
-import { PRODUCT_PATH, WRITE_PATH } from './constants';
+import { PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
+import DetailProduct from './views/Product/detail';
 import MyPage from './views/MyPage';
 import Auth from './views/Auth';
 import Inquiry from './views/MyPage/Inquiry';
@@ -24,13 +25,26 @@ import './App.css';
 import CommunityLayout from './layouts/Community';
 import { COMMUNITY_COUNTYBOARD_PATH, COMMUNITY_HOTBOARD_PATH, COMMUNITY_INFOBOARD_PATH, COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
 import PostWrite from './views/Community/Write';
+import HotBoard from './views/Community/HotBoard';
+import InfoBoard from './views/Community/InfoBoard';
+import CountyBoard from './views/Community/CountyBoard';
+import SuccessPage from './views/TossPayment/SuccessPage';
+import FailPage from './views/TossPayment/FailPage';
+import CheckoutPage from './views/TossPayment/CheckoutPage';
+import ShoppingCart from './views/ShoppingCart';
 import CommunityMain from './views/Community';
 import PostDetail from './views/Community/Detail';
 
 function App() {
+  
   return (
     <Routes>      
       <Route path='/auth' element={<Auth />} />
+      
+      <Route path='/payments' element={<CheckoutPage/>}/>
+      <Route path='success' element={<SuccessPage/>}/>
+      <Route path='fail' element={<FailPage/>}/>
+   
       <Route element={<Layout />}>
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
@@ -38,6 +52,10 @@ function App() {
         <Route path={PRODUCT_PATH}>
           <Route index element={<ProductMain/>}/>
           <Route path={WRITE_PATH} element={<ProductWrite/>}/>
+          <Route path={PRODUCT_VIEW_PATH} element={<DetailProduct/>}/>
+        </Route>
+        <Route path={SHOPPING_CART_PATH}>
+          <Route index element={<ShoppingCart/>}></Route>
         </Route>
         <Route path='/others'>
           <Route index element={<Others/>} />
