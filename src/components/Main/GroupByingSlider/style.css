@@ -1,0 +1,21 @@
+#group-bying-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 1134px;
+    margin: 100px auto 0;
+}
+
+.gb-container-title {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    width: 100%;
+    margin-bottom: 10px;
+
+    font-size: 30px;
+    font-weight: 700;
+    cursor: pointer;
+}

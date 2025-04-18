@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import './style.css';
-import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH } from 'src/constants';
 import { Board } from 'src/types/aliases';
 import useSignInUser from 'src/hooks/sign-in-user.hook';
 import { useEffect, useRef, useState } from 'react';
@@ -27,11 +27,12 @@ function AlertItem({ alert }: AlertItemProps) {
 // component: 공통 레이아웃 컴포넌트 //
 export default function Layout() {
 
-  // state: cookie 상태 //
-  const [cookies, _, removeCookie] = useCookies();
-
   // state: 경로 상태 //
   const { pathname } = useLocation();
+  const [cookies] = useCookies();
+
+  // state: nickname 상태 //
+  const [nickname, setNickname] = useState<string>('');
 
   // state: My Alert List 요소 참조 //
   const myAlertListRef = useRef<HTMLDivElement | null>(null);
@@ -70,6 +71,7 @@ export default function Layout() {
 
   // event handler: 로그인/회원가입 버튼 클릭 이벤트 처리 //
   const onSignInUpClickHandler = () => {
+    if(!accessToken) navigator(MAIN_ABSOLUTE_PATH);
     navigator(AUTH_ABSOLUTE_PATH);
   };
 
@@ -145,7 +147,8 @@ export default function Layout() {
           <div className='my-content-shopping-cart'></div>
           <div className='login-container'>
             <div className='login-icon'></div>
-            <div className='login-content' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
+            <div className='login-content login'>{nickname}</div>
+            <div className='login-content logout' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
           </div>
         </div>
       </div>
