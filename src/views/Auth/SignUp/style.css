@@ -1,0 +1,170 @@
+#auth-sign-up-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--White);
+    font-family: 'Pretendard', sans-serif;
+    position: relative;
+}
+
+#auth-sign-up-container .header {
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+#auth-sign-up-container .logo {
+    background-image: url(src/assets/images/logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 80px;
+    height: 110px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    width: 400px;
+    min-height: 500px;
+    background: var(--White);
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid rgba(117, 117, 117, 0.2);
+}
+
+.signup-input-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.signup-input-group-oneline {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.signup-input-group input {
+    flex: 1;
+    padding: 12px; 
+    font-size: 14px;
+    border: 1px solid rgba(117, 117, 117, 0.3);
+    border-radius: 8px; 
+    align-self: stretch; 
+}
+
+.signup-input-group-oneline input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid rgba(117, 117, 117, 0.3);
+    border-radius: 8px;
+}
+
+.signup-input-group-oneline button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--Primary);
+    color: var(--White);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    align-self: stretch; 
+}
+
+.error-message {
+    font-size: 12px;
+    margin-left: 3px;
+    margin-top: 5px;
+    color: var(--Error);
+}
+
+.success-message {
+    font-size: 12px;
+    margin-left: 3px;
+    margin-top: 5px;
+    color: var(--Primary);
+}
+
+.gender-label {
+    margin-top: 12px;
+    margin-bottom: 6px;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.gender-select {
+    display: flex;
+}
+
+.gender-btn {
+    padding: 10px 20px;
+    border: 1.5px solid rgba(117, 117, 117, 0.3);
+    border-radius: 6px 0 0 6px;
+    background-color: var(--White);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.gender-btn:last-child {
+    padding: 10px 20px;
+    border: 1.5px solid rgba(117, 117, 117, 0.3);
+    border-left: 0px;
+    border-radius: 0 6px 6px 0;
+    background-color: var(--White);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+input[type="radio"]:checked + .gender-btn {
+    background-color: var(--Grey);
+    color: var(--White);
+}
+
+.submit-button {
+    margin-top: 20px;
+    width: 100%;
+    height: 50px;
+    padding: 12px;
+    background-color: black;
+    color: var(--White);
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* 우측 비밀번호 상태 확인 영역 */
+.password-status {
+    position: absolute;
+    right: 80px;
+    top: 200px;
+    width: 200px;
+}
+
+.password-status label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.password-status button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    border: none;
+    background-color: rgba(117, 117, 117, 0.3);
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+}

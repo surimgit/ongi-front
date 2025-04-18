@@ -1,0 +1,27 @@
+#group-main-wrapper {
+  width: 1280px;
+  margin: 0 auto;
+}
+
+#group-main-wrapper .main-container {
+  display: flex;
+  flex-direction: column;
+
+}
+
+#group-main-wrapper .main-container .main-title {
+  display: flex;
+  
+  gap: 10px;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+#group-main-wrapper .main-container .main-title.color {
+  color: var(--Red);
+}
+
+#group-main-wrapper .filter_container {
+  display: flex;
+  gap: 20px;
+}
