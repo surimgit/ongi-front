@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router';
 import Layout from './layouts/Layout';
 import './App.css';
-import { PRODUCT_PATH, PRODUCT_VIEW_PATH, WRITE_PATH } from './constants';
+import { PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
 import DetailProduct from './views/Product/detail';
@@ -30,6 +30,7 @@ import CountyBoard from './views/Community/CountyBoard';
 import SuccessPage from './views/TossPayment/SuccessPage';
 import FailPage from './views/TossPayment/FailPage';
 import CheckoutPage from './views/TossPayment/CheckoutPage';
+import ShoppingCart from './views/ShoppingCart';
 
 function App() {
   
@@ -48,6 +49,9 @@ function App() {
           <Route index element={<ProductMain/>}/>
           <Route path={WRITE_PATH} element={<ProductWrite/>}/>
           <Route path={PRODUCT_VIEW_PATH} element={<DetailProduct/>}/>
+        </Route>
+        <Route path={SHOPPING_CART_PATH}>
+          <Route index element={<ShoppingCart/>}></Route>
         </Route>
         <Route path='/others'>
           <Route index element={<Others/>} />

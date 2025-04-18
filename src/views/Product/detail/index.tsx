@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import './style.css'
-import { getProductDetailRequest, PostShoppingCartRequest } from 'src/apis';
+import { getProductDetailRequest, postShoppingCartRequest } from 'src/apis';
 import { useNavigate, useParams } from 'react-router';
-import { ACCESS_TOKEN, PRODUCT_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, PRODUCT_ABSOLUTE_PATH, SHOPPING_CART_ABSOLUTE_PATH } from 'src/constants';
 import { Category } from 'src/types/aliases';
 import { useCookies } from 'react-cookie';
 import GetProductDetailResponseDto from 'src/apis/dto/response/product/get-product-detail.request.dto';
@@ -14,11 +14,12 @@ import { PostShoppingCartRequestDto } from 'src/apis/dto/request/shopping-cart';
 interface CartUpdateProps {
   onModalViewChange: () => void;
   name:string;
+  price: number;
   sequence: string;
 }
 
 // component: 장바구니 담기 컴포넌트 //
-function CartUpdate({onModalViewChange, name, sequence}: CartUpdateProps) {
+function CartUpdate({onModalViewChange, name, sequence, price}: CartUpdateProps) {
 
   // state: 쿠키 상태 //
   const [cookies] = useCookies();
@@ -61,10 +62,10 @@ function CartUpdate({onModalViewChange, name, sequence}: CartUpdateProps) {
     const productSequence = parseInt(sequence);
 
     const requestBody: PostShoppingCartRequestDto = {
-      quantity, productSequence
+      quantity, productSequence, name, price
     }
 
-    PostShoppingCartRequest(requestBody, accessToken).then(PostShoppingCartResponse);
+    postShoppingCartRequest(requestBody, accessToken).then(PostShoppingCartResponse);
   }
 
   // render: 장바구니 담기 컴포넌트 렌더링 //
@@ -136,8 +137,6 @@ export default function DetailProduct() {
   // function: navigator 함수 //
   const navigator = useNavigate();
 
-  const jumbotronContent = '마늘 프랑크소시지\n\n통통한 몸집을 자랑하는 프랑크소시지예요. 한입 먹어보면 뽀득뽀득하고 탱탱한 식감을 선사하지요. 마늘로 더한 알싸한 감칠맛이 입맛을 사로잡는답니다. 꼬치에 꽂혀있어 손으로 들고 간편하게 즐기기 좋아요.\n\n통통한 몸집을 자랑하는 프랑크소시지예요. 한입 먹어보면 뽀득뽀득하고 탱탱한 식감을 선사하지요. 마늘로 더한 알싸한 감칠맛이 입맛을 사로잡는답니다. 꼬치에 꽂혀있어 손으로 들고 간편하게 즐기기 좋아요.\n\n통통한 몸집을 자랑하는 프랑크소시지예요. 한입 먹어보면 뽀득뽀득하고 탱탱한 식감을 선사하지요. 마늘로 더한 알싸한 감칠맛이 입맛을 사로잡는답니다. 꼬치에 꽂혀있어 손으로 들고 간편하게 즐기기 좋아요.';
-
   // function: get product detail response 처리 함수 //
   const getProductDetailResponse = (responseBody: GetProductDetailResponseDto | ResponseDto | null) => {
     const { isSuccess, message } = responseMessage(responseBody);
@@ -178,6 +177,11 @@ export default function DetailProduct() {
   // event handler: 찜 상태 변경 처리 핸들러 //
   const onChangeLikedHandler = () => {
     setIsLiked(!isLiked);
+  }
+
+  // event handler: 공동구매 참여 버튼 클릭 이벤트 핸들러 //
+  const onParticipationButtonClickHandler = () => {
+    navigator(SHOPPING_CART_ABSOLUTE_PATH);
   }
 
   const unitPrice = useMemo(() => {
@@ -234,7 +238,7 @@ export default function DetailProduct() {
                 <div className='content'>5.0점</div>
               </div>
             </div>
-            <div className='button black'>참여하기</div>
+            <div className='button black' onClick={onParticipationButtonClickHandler}>참여하기</div>
           </div>
         </div>
         <div className='product-detail'>
@@ -262,7 +266,7 @@ export default function DetailProduct() {
             title='장바구니 담기'
             onClose={onUpdateShoppingCartClickHandler}
           >
-            <CartUpdate onModalViewChange={onUpdateShoppingCartClickHandler} name={name} sequence={sequence} />
+            <CartUpdate onModalViewChange={onUpdateShoppingCartClickHandler} name={name} price={price} sequence={sequence} />
           </Modal>
         }
         <div className='detail-product-similar'>

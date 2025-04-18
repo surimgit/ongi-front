@@ -12,6 +12,7 @@ import { GetCommunityPostResponseDto } from './dto/response/community';
 import { PostShoppingCartRequestDto } from './dto/request/shopping-cart';
 import PostPaymentConfirmRequestDto from './dto/request/payment/post-payment-confirm.request.dto';
 import PostOrderRequestDto from './dto/request/payment/post-order.request.dto';
+import { GetShoppingCartResponseDto } from './dto/response/shoppingCart';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -43,6 +44,7 @@ const DELETE_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNIT
 // 장바구니 API 경로
 const SHOPPING_CART_MODULE_URL = `${API_DOMAIN}/api/v1/cart`;
 const POST_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
+const GET_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
 const POST_ORDER_URL = `${PAYMENT_URL}/`;
 const POST_PAYMENT_CONFIRM_URL =  `${PAYMENT_URL}/confirm`;
 
@@ -143,9 +145,17 @@ export const deleteCommunityPostRequest = async (postSequence: number | string, 
 };
 
 // function: post shopping cart API 요청 함수 //
-export const PostShoppingCartRequest = async (requestBody: PostShoppingCartRequestDto, accessToken: string) => {
+export const postShoppingCartRequest = async (requestBody: PostShoppingCartRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_SHOPPING_CART_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get shopping cart API 요청 함수 //
+export const getShoppingCartRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(GET_SHOPPING_CART_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetShoppingCartResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 }

@@ -23,13 +23,28 @@ export default function CheckoutPage() {
   const [ready, setReady] = useState<boolean>(false);
   // state: 결제 위젯 상태 //
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-
+  // state: 이벤트 핸들러 실행 상태 //
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  // state: 주문번호 상태 //
+  const [orderId, setOrderId] = useState<string>('');
   // state: cookie 상태 //
   const [cookies] = useCookies();
 
   // variable: access Token//
   const accessToken = cookies[ACCESS_TOKEN];
+
+  // function: 주문번호 생성 함수 //
+  const createOrderId = (minLength:number = 6, maxLength:number = 64) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+    let result = '';
+
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    return result;
+  }
 
   // event handler: 결제 요청 버튼 클릭 이벤트 핸들러 //
   const onButtonClickHandler = async () => {
@@ -38,7 +53,7 @@ export default function CheckoutPage() {
     setIsProcessing(true);
 
     const requestBody: PostOrderRequestDto = {
-      orderId:'94q3myHfFfqYebqvbsasb36', amount:amount.value, buyerAddress: '양산'
+      orderId, amount:amount.value, buyerAddress: '양산'
     }
 
     postOrderRequest(requestBody, accessToken)
@@ -46,7 +61,7 @@ export default function CheckoutPage() {
     try {
       if(widgets === null) return;
       await widgets.requestPayment({
-        orderId: '94q3myHfFfqYebqvbsasb36',
+        orderId,
         orderName: '토스 티셔츠 외 2건',
         successUrl: window.location.origin + '/success',
         failUrl: window.location.origin + '/fail',
@@ -54,7 +69,19 @@ export default function CheckoutPage() {
         customerName: '김토스',
         customerMobilePhone: '01011111111',
         metadata:{
-          address: '부산진구'
+          address: '부산진구',
+          items: [
+            {
+              id: 'prod001',
+              name: '화이트 티셔츠',
+              price: 10000
+            },
+            {
+              id: 'prod002',
+              name: '청바지',
+              price: 40000
+            }
+          ]
         }
       });
     } catch(error){
@@ -113,12 +140,15 @@ export default function CheckoutPage() {
     renderPaymentWidgets();
   },[widgets])
 
-  // effect: widgets, amount 변경시 실행할 함수 //
+  // effect: widgets, amount, orderId 변경시 실행할 함수 //
   useEffect(() => {
     if(widgets === null) return;
 
     widgets.setAmount(amount);
-  }, [widgets, amount]);
+
+    const orderId = createOrderId();
+    setOrderId(orderId);
+  }, [widgets, amount, orderId]);
 
   return (
     <div id='checkout-wrapper'>
