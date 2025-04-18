@@ -1,7 +1,9 @@
 import CommunityCategory from "./community-category.alias";
-import BoardType from "./community-board.alias";
+import Board from "./community-board.alias";
+import SearchCategory from "./search-category.alias";
 
 export type {
     CommunityCategory,
-    BoardType,
+    Board,
+    SearchCategory,
 }

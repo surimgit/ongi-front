@@ -57,16 +57,6 @@ function App() {
         <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
           <Route index element={<CommunityMain />} />
 
-          <Route path={COMMUNITY_HOTBOARD_PATH}>
-            <Route index element={<CommunityMain />} />
-          </Route>
-          <Route path={COMMUNITY_INFOBOARD_PATH}>
-            <Route index element={<CommunityMain />} />
-          </Route>
-          <Route path={COMMUNITY_COUNTYBOARD_PATH}>
-            <Route index element={<CommunityMain />} />
-          </Route>
-
           <Route path={COMMUNITY_VIEW_PATH}>
             <Route index element={<PostDetail />} />
           </Route>
