@@ -20,7 +20,7 @@ const useStore = create<SignInUserStore>(set => ({
     profileImage: null,
 
     setUserId: (userId: string) => set(state => ({ ...state, userId })),
-    setNickname: (name: string) => set(state => ({ ... state, name })),
+    setNickname: (nickname: string) => set(state => ({ ... state, nickname })),
     setProfileImage: (profileImage: string | null) => set(state => ({ ...state, profileImage })),
 
     resetSignInUser: () => set(state => ({ 
