@@ -56,6 +56,17 @@
   gap: 20px;
 }
 
+#top-bar .my-content .my-alert-list {
+  position: absolute;
+  
+  width: 300px;
+  height: 100px;
+
+  border: 1px solid;
+
+  background-color: var(--White);
+}
+
 
 #top-bar .my-content .login-container {
   display: flex;
