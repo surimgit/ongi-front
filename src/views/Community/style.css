@@ -15,6 +15,11 @@
     font-weight: 700;
 }
 
+.board-header-container .category-name {
+    padding-left: 20px;
+    border-left: 4px solid;
+}
+
 #info-community-main-wrapper .board-header-container .divider {
     align-self: stretch;
     border-left: 4px solid var(--Black);
@@ -29,7 +34,7 @@
     flex-direction: column;
 
     border-top: 2px solid var(--Lightmode-Grey);
-    border-bottom: 2px solid var(--Lightmode-Grey);
+    border-bottom: 1px solid var(--Lightmode-Grey);
 
     gap: 24px;
 }
@@ -61,13 +66,21 @@
 
 .board-list-table .th.title,
 .board-list-table .td.title {
-    width: 560px;
+    width: 500px;
 }
 
 .board-list-table .td.title {
+    display: flex;
     justify-content: left;
 
+    min-width: 0;
+
+    box-sizing: border-box;
     padding: 0 40px;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 
     cursor: pointer;
 }
@@ -79,7 +92,12 @@
 
 .board-list-table .th.liked,
 .board-list-table .td.liked {
-    width: 80px;
+    width: 70px;
+}
+
+.board-list-table .th.view,
+.board-list-table .td.view {
+    width: 70px;
 }
 
 .board-list-table .th.postDate,

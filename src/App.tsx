@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router';
 import Layout from './layouts/Layout';
-import './App.css';
+import HomePage from './views/HomePage';
+import { NEEDHELPER_PATH } from './constants';
+import NeedHelper from './views/NeedHelper';
 import { PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
@@ -18,11 +20,10 @@ import Notice from './views/MyPage/Inquiry/Notice';
 import MyReview from './views/MyPage/Activity/MyReview';
 import NeedHelper from './views/MyPage/Activity/MyNeedHelper';
 import MyNeedHelper from './views/MyPage/Activity/MyNeedHelper';
-import MyCommunity from './views/MyPage/Activity/MyCommunity';import './App.css';
-import InfoCommunityMain from './views/Community';
+import MyCommunity from './views/MyPage/Activity/MyCommunity';
+import './App.css';
 import CommunityLayout from './layouts/Community';
 import { COMMUNITY_COUNTYBOARD_PATH, COMMUNITY_HOTBOARD_PATH, COMMUNITY_INFOBOARD_PATH, COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
-import InfoPostDetail from './views/Community/Detail';
 import PostWrite from './views/Community/Write';
 import HotBoard from './views/Community/HotBoard';
 import InfoBoard from './views/Community/InfoBoard';
@@ -31,6 +32,8 @@ import SuccessPage from './views/TossPayment/SuccessPage';
 import FailPage from './views/TossPayment/FailPage';
 import CheckoutPage from './views/TossPayment/CheckoutPage';
 import ShoppingCart from './views/ShoppingCart';
+import CommunityMain from './views/Community';
+import PostDetail from './views/Community/Detail';
 
 function App() {
   
@@ -41,10 +44,11 @@ function App() {
       <Route path='/payments' element={<CheckoutPage/>}/>
       <Route path='success' element={<SuccessPage/>}/>
       <Route path='fail' element={<FailPage/>}/>
-    
-      
-
+   
       <Route element={<Layout />}>
+        <Route path={NEEDHELPER_PATH}>
+          <Route index element={<NeedHelper />} />
+        </Route>
         <Route path={PRODUCT_PATH}>
           <Route index element={<ProductMain/>}/>
           <Route path={WRITE_PATH} element={<ProductWrite/>}/>
@@ -74,29 +78,16 @@ function App() {
           <Route path='wish-list' element={<WishList/>}/>
         </Route> 
         <Route path='/mypage' element={<MyPage/>}/>
-
-
         <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
-          <Route index element={<InfoCommunityMain />} />
-
-          <Route path={COMMUNITY_HOTBOARD_PATH}>
-            <Route index element={<HotBoard />} />
-          </Route>
-          <Route path={COMMUNITY_INFOBOARD_PATH}>
-            <Route index element={<InfoBoard />} />
-          </Route>
-          <Route path={COMMUNITY_COUNTYBOARD_PATH}>
-            <Route index element={<CountyBoard />} />
-          </Route>
+          <Route index element={<CommunityMain />} />
 
           <Route path={COMMUNITY_VIEW_PATH}>
-            <Route index element={<InfoPostDetail />} />
+            <Route index element={<PostDetail />} />
           </Route>
           <Route path={COMMUNITY_WRITE_PATH}>
             <Route index element={<PostWrite />} />
           </Route>
         </Route>
-
       </Route>
     </Routes>
   );

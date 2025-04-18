@@ -1,0 +1,203 @@
+#need-helper-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  margin: 0 auto;
+  width: 900px;
+}
+
+#need-helper-wrapper .top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+#need-helper-wrapper .top .title {
+  display: flex;
+
+  font-size: 40px;
+  font-weight: 700;
+}
+
+#need-helper-wrapper .option-container {
+  display: flex;
+  align-items: center;
+
+  height: 70px;
+
+  border-radius: 10px;
+  border: 1px solid #D9D9D9;
+  padding: 0px 20px;
+
+  gap: 25px;
+}
+
+#need-helper-wrapper .sub-title {
+  color: #505050;
+  font-size: 14px;
+  padding: 5px 3px;
+}
+
+#need-helper-wrapper .option-check-box {
+  display: flex;
+  gap: 6px;
+  
+  font-size: 16px;
+  font-weight: 700;
+  color: '#505050';
+}
+
+.option-check-box [type="checkbox"] {
+  width: 20px;
+  height: 20px;
+
+  cursor: pointer;
+}
+
+.face-to-face, .non-face-to-face {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+#need-helper-wrapper .option-location-box {
+  display: flex;
+  gap: 8px;
+}
+
+.city select, .district select {
+  font-size: 16px;
+  font-weight: 700;
+  color: '#505050';
+  padding: 3px 10px;
+  border-radius: 5px;
+
+  cursor: pointer;
+}
+
+#need-helper-wrapper .option-salary-box {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.min input {
+  width: 135px;
+  padding: 3px 5px;
+  font-size: 14px;
+  font-weight: 700;
+  color: '#505050';
+  border-radius: 5px;
+}
+
+#need-helper-wrapper .vertical-bar {
+  font-size: 45px;
+  font-weight: 200;
+  color: #D9D9D9;
+}
+
+#need-helper-wrapper .option-button-box {
+  margin-left: auto;
+  padding-right: 5px;
+}
+
+#need-helper-wrapper .search-button {
+  width: 80px;
+  height: 35px;
+
+  background-color: black;
+  border: none;
+  border-radius: 5px;
+
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+#need-helper-wrapper .write-button-box {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+#need-helper-wrapper .write-button {
+  padding: 3px 15px;
+
+  background-color: #008cff;
+  border: none;
+  border-radius: 5px;
+
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+#need-helper-wrapper .helper-list-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#need-helper-wrapper .helper-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.helper-list-table .tr {
+  display: flex;
+  box-sizing: border-box;
+  border-top: 2px solid #D9D9D9;
+  height: 75px;
+  padding: 0px 20px;
+
+  cursor: pointer;
+}
+
+.helper-list-table .tr:first-child {
+  border-top: 2px solid #505050;
+}
+
+.helper-list-table .tr:last-child {
+  border-bottom: 2px solid #505050;
+}
+
+.helper-list-table .td.content {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.helper-list-table .td.content .title {
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.helper-list-table .td.content .summary {
+  display: flex;
+  font-size: 13px;
+  color: #505050;
+}
+
+.helper-list-table .td.content .pay {
+  font-weight: 700;
+  color: #008cff;
+}
+
+.td.deadline {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 16px;
+  color: #505050;
+}
