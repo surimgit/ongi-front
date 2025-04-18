@@ -1,9 +1,9 @@
-import { Routes, Route } from 'react-router';
+import { Routes, Route, useNavigate } from 'react-router';
 import Layout from './layouts/Layout';
 import HomePage from './views/HomePage';
 import { NEEDHELPER_PATH } from './constants';
 import NeedHelper from './views/NeedHelper';
-import { PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
+import { MAIN_ABSOLUTE_PATH, MAIN_PATH, PRODUCT_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
 import DetailProduct from './views/Product/detail';
@@ -28,6 +28,8 @@ import PostWrite from './views/Community/Write';
 import HotBoard from './views/Community/HotBoard';
 import InfoBoard from './views/Community/InfoBoard';
 import CountyBoard from './views/Community/CountyBoard';
+import { useEffect } from 'react';
+import Main from './views/Main';
 import SuccessPage from './views/TossPayment/SuccessPage';
 import FailPage from './views/TossPayment/FailPage';
 import CheckoutPage from './views/TossPayment/CheckoutPage';
@@ -35,10 +37,12 @@ import ShoppingCart from './views/ShoppingCart';
 import CommunityMain from './views/Community';
 import PostDetail from './views/Community/Detail';
 
+
 function App() {
   
   return (
-    <Routes>      
+    <Routes> 
+      <Route index element={<Index />} />     
       <Route path='/auth' element={<Auth />} />
       
       <Route path='/payments' element={<CheckoutPage/>}/>
@@ -46,6 +50,8 @@ function App() {
       <Route path='fail' element={<FailPage/>}/>
    
       <Route element={<Layout />}>
+        <Route path={MAIN_PATH}>
+            <Route index element={<Main />}/>
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
         </Route>
@@ -94,3 +100,17 @@ function App() {
 }
 
 export default App;
+
+// component: Root 경로 컴포넌트 //
+function Index() {
+
+  // function: 네비게이터 함수 //
+  const navigator = useNavigate();
+
+  // effect: 컴포넌트가 렌더링될 때 실행할 함수 //
+  useEffect(()=> {
+    navigator(MAIN_ABSOLUTE_PATH);
+  }, []);
+
+  return null;
+}

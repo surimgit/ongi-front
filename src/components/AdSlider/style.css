@@ -1,0 +1,73 @@
+.ad-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+    height: 300px;
+    background-color: #FFF07E;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.ad-inner-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+.ad-inner {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.ad-slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+.ad-image {
+    height: 250px;
+    margin-right: 100px;
+    cursor: pointer;
+}
+
+.ad-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.ad-content {
+    font-size: 25px;
+    padding-bottom: 10px;
+}
+
+.ad-price {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.ad-slide-btn img {
+    width: 100px;
+}
+
+.ad-slide-btn {
+    position: absolute;
+    top: 50%;
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 20px;
+}
+
+.ad-slide-btn button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+

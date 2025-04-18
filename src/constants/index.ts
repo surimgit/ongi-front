@@ -3,6 +3,7 @@ import { Board, CommunityCategory, SearchCategory } from "src/types/aliases";
 // variable: 상대 path 변수 //
 export const ROOT_PATH = '/';
 export const AUTH_PATH = 'auth';
+export const MAIN_PATH = 'main';
 export const PRODUCT_PATH = 'product';
 export const SHOPPING_CART_PATH = 'shoppingCart';
 export const WRITE_PATH = 'write';
@@ -22,6 +23,7 @@ export const NEEDHELPER_PATH = 'needHelper';
 // variable: 절대 path 상수 //
 export const ROOT_ABSOLUTE_PATH = ROOT_PATH;
 export const AUTH_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}`;
+export const MAIN_ABSOLUTE_PATH = `${ROOT_PATH}${MAIN_PATH}`;
 
 export const PRODUCT_ABSOLUTE_PATH = `${ROOT_PATH}${PRODUCT_PATH}`;
 export const PRODUCT_WRITE_PATH = `${ROOT_PATH}${PRODUCT_PATH}/${WRITE_PATH}`;
