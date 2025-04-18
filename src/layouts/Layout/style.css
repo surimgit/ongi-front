@@ -36,6 +36,7 @@
 
 #top-bar .navigation>.navigation-list>.navigation-list-item {
   color: var(--Lightmode-Grey);
+  text-decoration: none;
   font-size: 20px;
   font-weight: 700;
   line-height: 200%;

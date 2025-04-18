@@ -9,6 +9,8 @@ import { GetCommunityPostResponseDto } from './dto/response/community';
 import PostCommunityRequestDto from './dto/request/community/post-community.request.dto';
 import GetCommunityCommentResponse from './dto/response/community/get-community-comment.response.dto';
 import PostCommunityCommentRequestDto from './dto/request/community/post-community-comment.request.dto';
+import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
+import PatchCommunityPostRequestDto from './dto/request/community/patch-community-post.request.dto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -39,6 +41,7 @@ const GET_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_M
 const PATCH_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
 const PATCH_COMMUNITY_VIEW_COUNT_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/view`;
 const DELETE_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
+const GET_COMMUNITY_SEARCH_URL = (searchCategory: SearchCategory, keyword: string) => `${COMMUNITY_MODULE_URL}/search?type=${searchCategory}&keyword=${keyword}`;
 const POST_COMMUNITY_COMMENT_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/comment`;
 const DELETE_COMMUNITY_COMMENT_URL = (postSequence: number | string, commentSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/comment/${commentSequence}`;
 const GET_COMMUNITY_COMMENT_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/comment`;
@@ -177,8 +180,8 @@ export const getCommunityPostRequest = async (postSequence:number | string) => {
 };
 
 // function: get community API 요청 함수 //
-export const getCommunityRequest = async () => {
-  const responseBody = await axios.get(GET_COMMUNITY_MODULE_URL)
+export const getCommunityRequest = async (boardType:Board | string | null, categoryType: CommunityCategory | string | null) => {
+  const responseBody = await axios.get(GET_COMMUNITY_MODULE_URL, { params: { board: boardType, category: categoryType}} )
   .then(responseSuccessHandler)
   .catch(responseErrorHandler);
   return responseBody;
@@ -193,7 +196,7 @@ export const postCommunityRequest = async (requestBody: PostCommunityRequestDto,
 }
 
 // function: patch community view count API 요청 함수 //
-export const patchCommunityViewCountRequest = async (postSequence: number| string) => {
+export const patchCommunityViewCountRequest = async (postSequence: number | string) => {
   const responseBody = await axios.patch(PATCH_COMMUNITY_VIEW_COUNT_URL(postSequence))
   .then(responseSuccessHandler)
   .catch(responseErrorHandler);
@@ -203,6 +206,14 @@ export const patchCommunityViewCountRequest = async (postSequence: number| strin
 // function: delete community post API 요청 함수 //
 export const deleteCommunityPostRequest = async (postSequence: number | string, accessToken: string) => {
   const responseBody = await axios.delete(DELETE_COMMUNITY_POST_URL(postSequence), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get community search API 요청 함수 //
+export const getCommunitySearchRequest = async (searchCategory: SearchCategory, keyword: string) => {
+  const responseBody = await axios.get(GET_COMMUNITY_SEARCH_URL(searchCategory, keyword))
   .then(responseSuccessHandler)
   .catch(responseErrorHandler);
   return responseBody;

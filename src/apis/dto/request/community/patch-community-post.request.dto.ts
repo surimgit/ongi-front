@@ -1,7 +1,7 @@
 import { Board, CommunityCategory } from "src/types/aliases";
 
-// interface: post community request body DTO //
-export default interface PostCommunityRequestDto {
+// interface: patch community post request body DTO //
+export default interface PatchCommunityPostRequestDto {
     board: Board;
     category: CommunityCategory;
     title: string;

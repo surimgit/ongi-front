@@ -15,6 +15,11 @@
     font-weight: 700;
 }
 
+.board-header-container .category-name {
+    padding-left: 20px;
+    border-left: 4px solid;
+}
+
 #info-community-main-wrapper .board-header-container .divider {
     align-self: stretch;
     border-left: 4px solid var(--Black);
@@ -29,7 +34,7 @@
     flex-direction: column;
 
     border-top: 2px solid var(--Lightmode-Grey);
-    border-bottom: 2px solid var(--Lightmode-Grey);
+    border-bottom: 1px solid var(--Lightmode-Grey);
 
     gap: 24px;
 }
