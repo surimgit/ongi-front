@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import './style.css';
 import { useNavigate, useParams } from 'react-router';
 import { useCookies } from 'react-cookie';
-import { ACCESS_TOKEN, COMMUNITY_ABSOLUTE_PATH, COMMUNITY_EDIT_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, COMMUNITY_EDIT_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH } from 'src/constants';
 import { deleteCommunityCommentRequest, deleteCommunityPostRequest, getCommunityCommentRequest, getCommunityLikedRequest, getCommunityPostRequest, patchCommunityViewCountRequest, postCommunityCommentRequest, putCommunityLikedRequest } from 'src/apis';
 import { GetCommunityPostResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
@@ -11,6 +11,7 @@ import GetCommunityCommentResponse from 'src/apis/dto/response/community/get-com
 import PostCommunityCommentRequestDto from 'src/apis/dto/request/community/post-community-comment.request.dto';
 import patchCommunityViewCountResponse from 'src/hooks/viewcount.hook';
 import GetCommunityLikedResponseDto from 'src/apis/dto/response/community/get-community-liked.response.dto';
+import { useSignInUserStore } from 'src/stores';
 
 // interface: 댓글 레코드 컴포넌트 속성 //
 interface CommentItemProps {
@@ -87,7 +88,7 @@ export default function PostDetail() {
     const [cookies] = useCookies();
 
     // state: 게시글 내용 상태 //
-    const [userId, setUserId] = useState<string>('');
+    const [writerId, setWriterId] = useState<string>('');
     const [nickname, setNickname] = useState<string>('');
     const [postDate, setPostDate] = useState<string>('');
     const [category, setCategory] = useState<string>('');
@@ -97,7 +98,8 @@ export default function PostDetail() {
     const [viewCount, setViewCount] = useState<number>(0);
 
     // state: 로그인 사용자 아이디 상태 //
-    // const { userId } = useSignInUserStore();
+    const { userId } = useSignInUserStore();
+    console.log(useSignInUserStore());
 
     // state: 댓글 상태 //
     const [comment, setComment] = useState<string>('');
@@ -131,12 +133,12 @@ export default function PostDetail() {
 
         if (!isSuccess) {
             alert(message);
-            navigator(COMMUNITY_ABSOLUTE_PATH);
+            navigator(COMMUNITY_OVERALL_ABSOLUTE_PATH);
             return;
         }
 
         const { userId, nickname, postDate, category, title, content, liked, viewCount } = responseBody as GetCommunityPostResponseDto;
-        setUserId(userId);
+        setWriterId(userId);
         setNickname(nickname);
         setPostDate(postDate);
         setCategory(category);
@@ -162,7 +164,7 @@ export default function PostDetail() {
         }
 
         alert('삭제되었습니다.');
-        navigator(COMMUNITY_ABSOLUTE_PATH);
+        navigator(COMMUNITY_OVERALL_ABSOLUTE_PATH);
     };
 
     // function: get community comment response 처리 함수 //
@@ -198,6 +200,7 @@ export default function PostDetail() {
             return;
         }
 
+        setComment('');
         if (!postSequence) return;
         getCommunityCommentRequest(postSequence).then(getCommunityCommentResponse);
     };
@@ -285,14 +288,14 @@ export default function PostDetail() {
     // effect: 컴포넌트 로드 시 실행할 함수 //
     useEffect(() => {
         if (!postSequence) {
-            navigator(COMMUNITY_ABSOLUTE_PATH);
+            navigator(COMMUNITY_OVERALL_ABSOLUTE_PATH);
             return;
         }
 
-        getCommunityPostRequest(postSequence).then(getCommunityPostResponse);
-        getCommunityCommentRequest(postSequence).then(getCommunityCommentResponse);
         patchCommunityViewCountRequest(postSequence).then(patchCommunityViewCountResponse);
         getCommunityLikedRequest(postSequence).then(getCommunityLikedResponse);
+        getCommunityPostRequest(postSequence).then(getCommunityPostResponse);
+        getCommunityCommentRequest(postSequence).then(getCommunityCommentResponse);
     }, []);
 
     // render: 커뮤니티 글 상세 화면 컴포넌트 렌더링 //
@@ -332,12 +335,14 @@ export default function PostDetail() {
                     <textarea className='comment-input' value={comment} maxLength={200} onChange={onCommentChangeHandler}/>
                     <div className='comment-post' onClick={onCommentButtonClickHandler}>작성</div>
                 </div>
-                <div className='comment-container'>
-                    {
-                    comments.map((communityComment, index) => 
-                    <CommentItem key={index} communityComment={communityComment} getCommunityComment={getCommunityComment} />)
-                    }
-                </div>
+                { comments.length !== 0 &&
+                    <div className='comment-container'>
+                        {
+                        comments.map((communityComment, index) => 
+                        <CommentItem key={index} communityComment={communityComment} getCommunityComment={getCommunityComment} />)
+                        }
+                    </div>
+                }
             </div>
         </div>
     )
