@@ -11,6 +11,8 @@ import GetCommunityCommentResponse from './dto/response/community/get-community-
 import PostCommunityCommentRequestDto from './dto/request/community/post-community-comment.request.dto';
 import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import PatchCommunityPostRequestDto from './dto/request/community/patch-community-post.request.dto';
+import PostAlertRequestDto from './dto/request/alert/post-alert.request.dto';
+import GetAlertResponseDto from './dto/response/alert/get-alert.response.dto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -31,6 +33,8 @@ const POST_COMMUNITY_URL = `${COMMUNITY_MODULE_URL}/write`;
 
 const FILE_UPLOAD_URL = `${API_DOMAIN}/file/upload`
 const multipartFormData = { headers: { 'Content-Type': 'multipart/form-data' } };
+
+const ALERT_MODULE_URL = `${API_DOMAIN}/api/v1/alert`;
 
 const GET_COMMUNITY_MODULE_URL = `${COMMUNITY_MODULE_URL}`;
 const GET_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}`;
@@ -192,6 +196,22 @@ export const putCommunityLikedRequest = async (postSequence: number | string, ac
 export const getCommunityLikedRequest = async (postSequence: number | string) => {
   const responseBody = await axios.get(GET_COMMUNITY_LIKED_URL(postSequence))
   .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post alert API 요청 함수 //
+export const postAlertRequest = async (requestBody: PostAlertRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(ALERT_MODULE_URL, requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get alert API 요청 함수 //
+export const getAlertRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(ALERT_MODULE_URL, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler<GetAlertResponseDto>)
   .catch(responseErrorHandler);
   return responseBody;
 }

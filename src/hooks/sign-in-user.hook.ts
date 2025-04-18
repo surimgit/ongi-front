@@ -31,7 +31,6 @@ const useSignInUser = () => {
         }
 
         const { userId, nickname, profileImage } = responseBody as GetSignInUserResponseDto;
-        console.log(userId);
 
         setUserId(userId);
         setNickname(nickname);
