@@ -16,6 +16,11 @@ import Notice from './views/MyPage/Inquiry/Notice';
 import MyReview from './views/MyPage/Activity/MyReview';
 import MyNeedHelper from './views/MyPage/Activity/MyNeedHelper';
 import MyCommunity from './views/MyPage/Activity/MyCommunity';import './App.css';
+import CommunityLayout from './layouts/Community';
+import { COMMUNITY_COUNTYBOARD_PATH, COMMUNITY_HOTBOARD_PATH, COMMUNITY_INFOBOARD_PATH, COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
+import PostWrite from './views/Community/Write';
+import CommunityMain from './views/Community';
+import PostDetail from './views/Community/Detail';
 
 function App() {
   return (
@@ -26,7 +31,6 @@ function App() {
           <Route index element={<ProductMain/>}/>
           <Route path={WRITE_PATH} element={<ProductWrite/>}/>
         </Route>
-        <Route path='/main'/>
         <Route path='/others'>
           <Route index element={<Others/>} />
         </Route>
@@ -47,6 +51,30 @@ function App() {
           <Route path='group-buying' element={<GroupBuying/>}/>
           <Route path='wish-list' element={<WishList/>}/>
         </Route> 
+        <Route path='/mypage' element={<MyPage/>}/>
+
+
+        <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
+          <Route index element={<CommunityMain />} />
+
+          <Route path={COMMUNITY_HOTBOARD_PATH}>
+            <Route index element={<CommunityMain />} />
+          </Route>
+          <Route path={COMMUNITY_INFOBOARD_PATH}>
+            <Route index element={<CommunityMain />} />
+          </Route>
+          <Route path={COMMUNITY_COUNTYBOARD_PATH}>
+            <Route index element={<CommunityMain />} />
+          </Route>
+
+          <Route path={COMMUNITY_VIEW_PATH}>
+            <Route index element={<PostDetail />} />
+          </Route>
+          <Route path={COMMUNITY_WRITE_PATH}>
+            <Route index element={<PostWrite />} />
+          </Route>
+        </Route>
+
       </Route>
     </Routes>
   );
