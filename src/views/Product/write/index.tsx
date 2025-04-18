@@ -142,7 +142,7 @@ export default function ProductWrite() {
       name, price, category, content, productQuantity, deadline, image: productImage
     }
 
-    postProductRequest(requestBody).then(postProductResponse);
+    postProductRequest(requestBody, accessToken).then(postProductResponse);
   }
 
   return (
@@ -172,7 +172,7 @@ export default function ProductWrite() {
               <select value={category} onChange={onCategoryChangeHandler}>
                 <option value="">카테고리를 선택하세요</option>
                 <option value="식품">식품</option>
-                <option value="의류">의류</option>
+                <option value="패션의류">의류</option>
                 <option value="생필품">생필품</option>
                 <option value="가전제품">가전제품</option>
                 <option value="기타">기타</option>

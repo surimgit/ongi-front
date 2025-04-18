@@ -59,6 +59,13 @@
     border: 1px solid var(--Lightmode-Grey4);
 }
 
+#community-layout-wrapper .large-category {
+    color: var(--Lightmode-Grey);
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
 #community-layout-wrapper .large-category:hover {
     text-decoration: underline;
 }

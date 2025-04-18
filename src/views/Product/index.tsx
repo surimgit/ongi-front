@@ -1,18 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import "./style.css"
-import { getProductRequest } from 'src/apis';
+import { getProductCategoryRequest } from 'src/apis';
 import { GetProductResponseDto, ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import { Product } from 'src/types/interfaces';
 import { useNavigate } from 'react-router';
-import { PRODUCT_WRITE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, PRODUCT_VIEW_ABSOLUTE_PATH, PRODUCT_WRITE_PATH } from 'src/constants';
 import Pagination from 'src/components/Pagination';
 import { usePagination } from 'src/hooks';
 import Sort from 'src/types/aliases/sort.alias';
+import { Category } from 'src/types/aliases';
+import { useCookies } from 'react-cookie';
 
 interface TableItemProps {
   product: Product;
 }
+
+const categoryList:Category[] = [
+  '전체',
+  '가전제품',
+  '건강식품',
+  '패션의류',
+  '스포츠',
+  '식품',
+  '뷰티',
+  '기타'
+]
 
 // function: 마감까지 남은 시간 처리 함수 //
 const getTimeUntilDeadLine = (deadline: string | Date) => {
@@ -21,14 +34,13 @@ const getTimeUntilDeadLine = (deadline: string | Date) => {
 
   const diff = target.getTime() - today.getTime();
   if(diff <= 0) return 0;
-
  
   return diff;
 }
 
 // component: 상품 테이블 레코드 컴포넌트 //
 function TableItem({product, index}: TableItemProps & {index: number}){
-  const { image, name, price, rating, purchasedPeople, productQuantity, boughtAmount, deadline, productRound } = product;
+  const { sequence, image, name, price, rating, purchasedPeople, productQuantity, boughtAmount, deadline, productRound } = product;
 
   // state: 모집 완료 여부 상태 //
   const [isFinish, setIsFinish] = useState<boolean>(false);
@@ -49,15 +61,15 @@ function TableItem({product, index}: TableItemProps & {index: number}){
   // function: 요일 변환 함수 //
   const changeDateFormat = (diff: number) => {
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-    const hours = Math.ceil((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.ceil(((diff % (1000 * 60 * 60 * 24)) % (1000 * 60 * 60)) / (1000 * 60));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor(((diff % (1000 * 60 * 60 * 24)) % (1000 * 60 * 60)) / (1000 * 60));
 
     return `${days}일 ${hours}시간 ${minutes}분 남음`;
   }; 
 
   // event handler: 테이블 클릭 이벤트 핸들러 //
   const onClick = () => {
-    // navigator(PRODUCT_VIEW_ABSOLUTE_PATH(sequence));
+    navigator(PRODUCT_VIEW_ABSOLUTE_PATH(sequence));
   }
 
   return (
@@ -89,14 +101,28 @@ function TableItem({product, index}: TableItemProps & {index: number}){
 // component: 공동구매 메인 화면 컴포넌트 //
 export default function ProductMain() {
 
+  
   // state: 페이지네이션 상태 //
   const { 
     currentPage, setCurrentPage, currentSection, setCurrentSection,
     totalSection, setTotalList, viewList, pageList, totalList
   } = usePagination<Product>();
 
+  // state: cookie 상태 //
+  const [cookies] = useCookies();
   // state: 정렬 상태 //
   const [sort, setSort] = useState<Sort>('');
+  // state: 카테고리 상태 // 
+  const [category, setCategory] = useState<Category>('전체');
+  // state: 검색어 입력 상태 //
+  const [searchName, setSearchName] = useState<string>('');
+  // state: 검색어 상태 //
+  const [name, setName] = useState<string>('');
+  // state: 빈 리스트 반환시 문자열 상태 //
+  const [filterMessage, setFilterMessage] = useState<string>('');
+
+  // variable: access token //
+  const accessToken = cookies[ACCESS_TOKEN];
 
   // variable: 정렬방식 클래스 //
   const sortDeadlineClass = 
@@ -115,8 +141,21 @@ export default function ProductMain() {
       alert(message);
       return;
     }
-    const { products } = responseBody as GetProductResponseDto;
+    const { products, filterType } = responseBody as GetProductResponseDto;
+    if(products.length === 0){
+      if(filterType === 'categoryAndName') setFilterMessage(`${category}에 ${name}이(가) 포함된 상품이 없습니다!!`);
+      else if(filterType === 'category') setFilterMessage(`${category} 상품이 없습니다!!`);
+      else if(filterType === 'name') setFilterMessage(`${name}이(가) 포함된 상품이 없습니다!!`);
+      else setFilterMessage(`등록된 상품이 없습니다!!`);
+    }else setFilterMessage('');
+    
+
     setTotalList(products);
+  }
+
+  // function: filter type 처리 함수 //
+  const filter = () => {
+
   }
 
   // event handler: 작성 버튼 클릭 이벤트 핸들러 //
@@ -124,13 +163,30 @@ export default function ProductMain() {
     navigator(PRODUCT_WRITE_PATH);
   }
 
-  // event handler: 정렬방식 클릭 이벤트 핸들러 //
-  const onSortChangeHandler = (sort: Sort) => {
-    console.log(sort);
-    setSort(sort);
+  // event handler: 검색 버튼 클릭 이벤트 핸들러 //
+  const onSearchClickHandler = () => {
+    setName(searchName);
   }
 
+  // event handler: 정렬방식 변경 이벤트 핸들러 //
+  const onSortChangeHandler = (sort: Sort) => {
+    setSort(sort);
+  }
   
+  // event handler: 카테고리 변경 이벤트 핸들러 //
+  const onCategoryChangeHandler = (e:ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.currentTarget;
+
+    setCategory(value as Category);
+  }
+
+  // event handler: 검색어 변경 이벤트 핸들러 //
+  const onSearchNameChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
+
+    setSearchName(value);
+  }
+
   // effect: 정렬 방식 변경 시 실행할 함수 //
   useEffect(() => {
     const sortedProducts = [...totalList];
@@ -148,11 +204,11 @@ export default function ProductMain() {
     setTotalList(sortedProducts);
   },[sort]);
 
-  // effect: 컴포넌트 로드 시 실행할 함수 //
+  // effect: 카테고리 변경 시 실행할 함수 //
   useEffect(() => {
-    getProductRequest().then(getProductResponse);
-  },[])
-  
+    getProductCategoryRequest(category, name, accessToken).then(getProductResponse);
+  },[category, name]);
+
   // render: 공동구매 메인 화면 컴포넌트 렌더링 //
   return (
     <div id='product-main-wrapper'>
@@ -164,17 +220,12 @@ export default function ProductMain() {
         <div className='filter-container'>
           <div className='category-box'>
             <div className='title'>카테고리</div>
-            <select>
-              <option value='전체'>전체</option>
-              <option value='건강식품'>건강식품</option>
-              <option value='패션의류'>패션의류</option>
-              <option value='스포츠'>스포츠</option>
-              <option value='식품'>식품</option>
-              <option value='뷰티'>뷰티</option>
+            <select onChange={onCategoryChangeHandler}>
+              {categoryList.map((category, index) => (<option key={index} value={category} >{category}</option>))}
             </select>
           </div> 
           <div className='search-box'>
-            <input type='text'/> 
+            <input value={searchName} onChange={onSearchNameChangeHandler} type='text'/> 
           </div>
           <div className='sort-box'>
             <div className='title'>정렬방식</div>
@@ -185,13 +236,18 @@ export default function ProductMain() {
             </div>
           </div>
           <div className='button-box'>
-          <div className='search-button'>검색</div>
+          <div className='search-button' onClick={onSearchClickHandler}>검색</div>
           <div className='write-button' onClick={onWriteClickHandler}>작성</div>
           </div>
         </div>
         <div className='product-list-container'>
           <div className='product-list-table'>
-            {viewList.map((product, index) => (<TableItem key={product.sequence} product={product} index={index}/>))}
+            {totalList.length !== 0 && 
+              viewList.map((product, index) => (<TableItem key={product.sequence} product={product} index={index}/>))
+            }
+            {totalList.length === 0 &&
+              <div className='no-category-product'>{filterMessage}</div>
+            }
           </div>
         </div>
         <div className='pagination-container'>

@@ -9,4 +9,5 @@ export default interface CommunityPost {
     title: string;
     content: string;
     liked: number;
+    viewCount: number;
 }
