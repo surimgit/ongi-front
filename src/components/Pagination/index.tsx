@@ -12,25 +12,6 @@ interface Props{
 }
 
 // component: 페이지네이션 컴포넌트 //
-export default function Pagination({currentPage, currentSection, totalSection, pageList, setCurrentPage, setCurrentSection}:Props) {
-
-  // function: 페이지 클래스 //
-  const pageClass = (page: number) => currentPage == page ? 'page active' : 'page';
-
-import React from 'react';
-import './style.css';
-
-// interface: 페이지네이션 컴포넌트 속성 //
-interface Props {
-    currentPage: number;
-    currentSection: number;
-    totalSection: number;
-    pageList: number[];
-    setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-    setCurrentSection: React.Dispatch<React.SetStateAction<number>>;
-}
-
-// component: 페이지네이션 컴포넌트 //
 export default function Pagination(
     {currentPage, currentSection, totalSection, pageList, setCurrentPage, setCurrentSection}: Props
 ) {
@@ -68,4 +49,4 @@ export default function Pagination(
             <div className='pagination-button right' onClick={onNextSectionClickHandler}></div>
         </div>
     )
-
+}
