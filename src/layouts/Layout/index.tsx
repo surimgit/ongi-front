@@ -98,7 +98,7 @@ export default function Layout() {
   const { pathname } = useLocation();
 
   // state: nickname 상태 //
-  const [nickname, setNickname] = useState<string>('');
+  const { nickname } = useSignInUserStore();
 
   // state: My Alert List 요소 참조 //
   const myAlertListRef = useRef<HTMLDivElement | null>(null);
