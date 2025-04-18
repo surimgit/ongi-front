@@ -1,5 +1,6 @@
 import { Routes, Route, useNavigate } from 'react-router';
 import Layout from './layouts/Layout';
+import { MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, PRODUCT_PATH, QUESTION_PATH, WRITE_PATH } from './constants';
 import HomePage from './views/HomePage';
 import { NEEDHELPER_PATH } from './constants';
 import NeedHelper from './views/NeedHelper';
@@ -9,16 +10,14 @@ import ProductMain from './views/Product';
 import DetailProduct from './views/Product/detail';
 import MyPage from './views/MyPage';
 import Auth from './views/Auth';
-import Inquiry from './views/MyPage/Inquiry';
+import Inquiry from './views/MyPage/Question';
 import Others from './views/MyPage/Others';
 import MyActivity from './views/MyPage/Activity';
-import Setting from './views/MyPage/Setting';
 import GroupBuying from './views/MyPage/GroupBuying';
 import WishList from './views/MyPage/GroupBuying/WishList';
-import Faq from './views/MyPage/Inquiry/Faq';
-import Notice from './views/MyPage/Inquiry/Notice';
+import Faq from './views/MyPage/Question/Faq';
+import Notice from './views/MyPage/Question/Notice';
 import MyReview from './views/MyPage/Activity/MyReview';
-import NeedHelper from './views/MyPage/Activity/MyNeedHelper';
 import MyNeedHelper from './views/MyPage/Activity/MyNeedHelper';
 import MyCommunity from './views/MyPage/Activity/MyCommunity';
 import './App.css';
@@ -36,6 +35,8 @@ import CheckoutPage from './views/TossPayment/CheckoutPage';
 import ShoppingCart from './views/ShoppingCart';
 import CommunityMain from './views/Community';
 import PostDetail from './views/Community/Detail';
+import Question from './views/MyPage/Question';
+import Account from './views/MyPage/Account';
 
 
 function App() {
@@ -63,13 +64,14 @@ function App() {
         <Route path={SHOPPING_CART_PATH}>
           <Route index element={<ShoppingCart/>}></Route>
         </Route>
-        <Route path='/others'>
-          <Route index element={<Others/>} />
+        <Route path={OTHER_MYPAGE_PATH}>
+          <Route path={OTHER_MYPAGE_VIEW_PATH} index element={<Others/>} />
         </Route>
-        <Route path='/mypage'>
+        <Route path={MYPAGE_PATH}>
           <Route index element={<MyPage/>}/>
-          <Route path='inquiry'>
-            <Route index element={<Inquiry />} />
+          <Route path={MYPAGE_ACCOUNT_PATH} element={<Account/>}/>
+          <Route path={QUESTION_PATH}>
+            <Route index element={<Question />} />
             <Route path='faq' element={<Faq/>} />
             <Route path='notice' element={<Notice/>}/>
           </Route>
@@ -79,7 +81,7 @@ function App() {
             <Route path='my-needHelper' element={<MyNeedHelper/>} />
             <Route path='my-community' element={<MyCommunity/>} />
           </Route>
-          <Route path='setting' element={<Setting/>}/>
+          <Route path={QUESTION_PATH} element={<Question/>}/>
           <Route path='group-buying' element={<GroupBuying/>}/>
           <Route path='wish-list' element={<WishList/>}/>
         </Route> 
