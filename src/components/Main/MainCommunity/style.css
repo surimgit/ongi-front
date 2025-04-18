@@ -90,7 +90,7 @@
     margin-bottom: 4px;
 
     background-color: var(--White);
-    border: 1px solid var(--Lightmode-Grey4);
+    border: 1px solid var(--Lightmode-Grey5);
     border-radius: 5px;
 }
 
@@ -109,8 +109,8 @@
     text-overflow: ellipsis;
 
     font-size: 18px;
-    font-weight: 600;
-    color: var(--Lightmode-Grey);
+    font-weight: 700;
+    color: var(--Lightmode-Grey6);
     width: 100%;
 }
 
