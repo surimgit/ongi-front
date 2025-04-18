@@ -4,4 +4,7 @@ export default interface GetSignInUserResponseDto extends ResponseDto {
   userId: string;
   nickname: string;
   profileImage: string | null;
+  address: string | null;
+  detailAddress: string | null;
+  gender: string;
 }
