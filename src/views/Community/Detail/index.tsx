@@ -3,7 +3,7 @@ import './style.css';
 import { useNavigate, useParams } from 'react-router';
 import { useCookies } from 'react-cookie';
 import { ACCESS_TOKEN, COMMUNITY_EDIT_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH } from 'src/constants';
-import { deleteCommunityCommentRequest, deleteCommunityPostRequest, getCommunityCommentRequest, getCommunityLikedRequest, getCommunityPostRequest, patchCommunityViewCountRequest, postCommunityCommentRequest, putCommunityLikedRequest } from 'src/apis';
+import { deleteCommunityCommentRequest, deleteCommunityPostRequest, getCommunityCommentRequest, getCommunityLikedRequest, getCommunityPostRequest, patchCommunityViewCountRequest, postAlertRequest, postCommunityCommentRequest, putCommunityLikedRequest } from 'src/apis';
 import { GetCommunityPostResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
 import { CommunityComment } from 'src/types/interfaces';
@@ -12,6 +12,7 @@ import PostCommunityCommentRequestDto from 'src/apis/dto/request/community/post-
 import patchCommunityViewCountResponse from 'src/hooks/viewcount.hook';
 import GetCommunityLikedResponseDto from 'src/apis/dto/response/community/get-community-liked.response.dto';
 import { useSignInUserStore } from 'src/stores';
+import PostAlertRequestDto from 'src/apis/dto/request/alert/post-alert.request.dto';
 
 // interface: 댓글 레코드 컴포넌트 속성 //
 interface CommentItemProps {
@@ -21,10 +22,13 @@ interface CommentItemProps {
 
 // component: 댓글 테이블 레코드 컴포넌트 //
 function CommentItem({ communityComment, getCommunityComment }: CommentItemProps) {
-    const { commentSequence, postSequence, profileImage, nickname, commentPostDate, comment } = communityComment;
+    const { commentSequence, postSequence, profileImage, commentWriterId, nickname, commentPostDate, comment } = communityComment;
 
     // state: cookie 상태 //
     const [cookies] = useCookies();
+
+    // state: 로그인 사용자 아이디 상태 //
+    const { userId } = useSignInUserStore();
 
     // variable: access Token //
     const accessToken = cookies[ACCESS_TOKEN];
@@ -70,8 +74,12 @@ function CommentItem({ communityComment, getCommunityComment }: CommentItemProps
             </div>
             <div className='interaction-container'>
                 <div className='report'></div>
-                <div className='btn edit'>수정</div>
-                <div className='btn delete' onClick={onDeleteCommentButtonClickHandler}>삭제</div>
+                { commentWriterId === userId &&
+                    <>
+                        <div className='btn edit'>수정</div>
+                        <div className='btn delete' onClick={onDeleteCommentButtonClickHandler}>삭제</div>
+                    </>
+                }
             </div>
         </div>
     )
@@ -99,7 +107,6 @@ export default function PostDetail() {
 
     // state: 로그인 사용자 아이디 상태 //
     const { userId } = useSignInUserStore();
-    console.log(useSignInUserStore());
 
     // state: 댓글 상태 //
     const [comment, setComment] = useState<string>('');
@@ -109,6 +116,16 @@ export default function PostDetail() {
 
     // state: 좋아요를 누른 사용자 리스트 상태 //
     const [likes, setLikes] = useState<string[]>([]);
+
+    // state: 신규 댓글 등록 상태 //
+    const [newCommentTriger, setNewCommentTriger] = useState<boolean>(false);
+
+    // state: 알림 구성 요소 상태 //
+    const [senderId, setSenderId] = useState<string>('');
+    const [receiverId, setReceiverId] = useState<string>('');
+    const [alertEntitySequence, setAlertEntitySequence] = useState<number>(Number(postSequence));
+    const [alertType, setAlertType] = useState<string>('');
+
 
     // variable: access token //
     const accessToken = cookies[ACCESS_TOKEN];
@@ -203,6 +220,11 @@ export default function PostDetail() {
         setComment('');
         if (!postSequence) return;
         getCommunityCommentRequest(postSequence).then(getCommunityCommentResponse);
+
+        setSenderId(userId);
+        setReceiverId(writerId);
+        setAlertType('community_comment');
+        setNewCommentTriger(true);
     };
 
     // function: put community liked response 처리 함수 //
@@ -237,6 +259,20 @@ export default function PostDetail() {
 
         const { likes } = responseBody as GetCommunityLikedResponseDto;
         setLikes(likes);
+    };
+
+    // function: post alert response 처리 함수 //
+    const postAlertResponse = (responseBody: ResponseDto | null) => {
+        const message = 
+        !responseBody ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+
+        const isSuccess = responseBody !== null && responseBody.code === 'SU';
+        if (!isSuccess) {
+            alert(message);
+            return;
+        }
     };
 
     // event handler: 댓글 목록 리렌더링 처리 //
@@ -291,12 +327,23 @@ export default function PostDetail() {
             navigator(COMMUNITY_OVERALL_ABSOLUTE_PATH);
             return;
         }
-
         patchCommunityViewCountRequest(postSequence).then(patchCommunityViewCountResponse);
         getCommunityLikedRequest(postSequence).then(getCommunityLikedResponse);
         getCommunityPostRequest(postSequence).then(getCommunityPostResponse);
         getCommunityCommentRequest(postSequence).then(getCommunityCommentResponse);
     }, []);
+
+    // effect: 신규 댓글 등록 시 실행할 함수 //
+    useEffect(() => {
+        if (newCommentTriger) {
+            const requestBody: PostAlertRequestDto = {
+                senderId, receiverId, alertEntitySequence, alertType
+            };
+
+            postAlertRequest(requestBody, accessToken).then(postAlertResponse);
+            setNewCommentTriger(false);
+        }
+    }, [newCommentTriger]);
 
     // render: 커뮤니티 글 상세 화면 컴포넌트 렌더링 //
     return (
@@ -313,8 +360,12 @@ export default function PostDetail() {
                         <div className='interaction-box'>
                             <div className='view-count'>조회수 {viewCount}</div>
                             <div className='report'></div>
-                            <div className='bt edit' onClick={onEditClickHandler}>수정</div>
-                            <div className='bt delete' onClick={onDeleteClickHandler}>삭제</div>
+                            { writerId === userId &&
+                                <>
+                                <div className='bt edit' onClick={onEditClickHandler}>수정</div>
+                                <div className='bt delete' onClick={onDeleteClickHandler}>삭제</div>
+                                </>
+                            }
                         </div>
                     </div>
                 </div>

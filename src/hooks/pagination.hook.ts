@@ -12,7 +12,6 @@ const ITEMS_PER_PAGE = 10;
 const PAGES_PER_SECTION = 10;
 
 const usePagination = <T>() => {
-  
   // state: 페이지네이션 관련 상태 //
   const [totalList, setTotalList] = useState<T[]>([]);
   const [totalPage, setTotalPage] = useState<number>(0);
@@ -42,7 +41,6 @@ const usePagination = <T>() => {
     initViewList(totalList);
   }
 
-
   // function: 뷰 리스트 변경 함수 //
   // 페이지를 선택하면 해당 페이지의 뷰 리스트로 변경됨
   const initViewList = (totalList:T[]) => {
@@ -71,7 +69,8 @@ const usePagination = <T>() => {
 
   // effect: 전체 리스트 변경시 실행될 함수 //
   useEffect(() => {
-    init(totalList);
+      init(totalList);
+      initViewList(totalList);
   },[totalList]);
 
   // effect: 뷰 리스트 변경시 실행될 함수 //

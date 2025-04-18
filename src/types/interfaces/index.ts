@@ -1,5 +1,7 @@
 import Product from "./Product.interface"
 import CommunityPost from "./community-post.interface"
+import TossPaymentAmount from "./toss-payment-amount.interface"
+import ShoppingCart from "./shopping-cart.interface"
 import CommunityComment from "./CommunityComment.interface"
 import LikeKeyword from "./like-keyword.interface"
 import Notice from "./notice.interface"
@@ -12,4 +14,6 @@ export type {
   LikeKeyword,
   Notice,
   Question
+  TossPaymentAmount,
+  ShoppingCart
 }

@@ -1,0 +1,31 @@
+#checkout-wrapper {
+  background-color: #e8f3ff;
+  width: 100vw;
+  height: 100vh;
+  min-height: 880px;
+  display: flex;
+  justify-content: center; 
+}
+
+.box-section {
+  margin: 50px 0px;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+  max-width: 1280px;
+  max-height: 600px;
+  width: 100%;
+}
+
+.box-section .button {
+  display: block;
+  margin: 0 auto;
+
+  width: 500px;
+  color: #f9fcff;
+  background-color: #3182f6;
+
+  font-size: 24px;
+  border: none;
+}

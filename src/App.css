@@ -11,12 +11,10 @@
   --Lightmode-Grey: rgba(64, 64, 64, 1);
   --Lightmode-Grey2: rgba(138, 146, 166, 1);
   --Lightmode-Grey3: rgba(238, 238, 238, 1);
-  --Lightmode-Grey4: rgba(113, 113, 113, 1);
-  --Lightmode-Grey5: rgba(160, 160, 160, 1);
-  --Lightmode-Grey6: rgba(80, 80, 80, 1);
+  --Lightmode-Grey4: rgba(160, 160, 160, 1);
   --Primary: rgba(0, 132, 255, 1);
   --Second: rgba(0, 132, 255, 0.10);
-  --Error: rgba(255, 84, 64, 1);
+  --Cancel: rgba(255, 84, 64, 1);
   --Beige: rgba(247, 247, 247, 1);
   --Red: rgba(255, 52, 33, 1);
   --Black: rgba(0, 0, 0, 1);
@@ -32,13 +30,14 @@ body {
   align-items: center;
 
   border-radius: 6px;
-  width: 92px;
-  height: 44px;
+  width: 300px;
+  height: 60px;
 
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 400;
-  line-height: 175%;
+  text-align: center;
 
+  line-height: 60px;
   cursor: pointer;
 }
 
@@ -80,10 +79,10 @@ body {
   opacity: 1;
 }
 
-.button.second {
-  background-color: var(--Second);
+.button.black {
+  background-color: var(--Black);
 
-  color: var(--Primary);
+  color: var(--White);
 }
 
 .button.primary {
@@ -92,10 +91,23 @@ body {
   color: var(--White);
 }
 
-.button.error {
-  background-color: var(--Error);
+.button.cancel {
+  background-color: var(--Cancel);
 
   color: var(--White);
+}
+
+.button.complete {
+  background-color: var(--Lightmode-Grey4);
+
+  color: var(--White);
+}
+
+.button.ask {
+  width: 150px;
+  background-color: var(--White);
+  border: 1px solid #979797;
+  border-radius: 5px;
 }
 
 .link {
