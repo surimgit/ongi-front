@@ -1,5 +1,7 @@
 import React from 'react'
 import './style.css'
+
+// interface: 페이지네이션 컴포넌트 속성 //
 interface Props{
   currentPage: number;
   currentSection: number;
@@ -9,8 +11,10 @@ interface Props{
   setCurrentSection: React.Dispatch<React.SetStateAction<number>>;
 }
 
+// component: 페이지네이션 컴포넌트 //
 export default function Pagination({currentPage, currentSection, totalSection, pageList, setCurrentPage, setCurrentSection}:Props) {
 
+  // function: 페이지 클래스 //
   const pageClass = (page: number) => currentPage == page ? 'page active' : 'page';
 
   // event handler: 페이지 클릭 이벤트 핸들러 //
