@@ -33,7 +33,7 @@ export default function Layout() {
   const [cookies] = useCookies();
 
   // state: nickname 상태 //
-  const [nickname, setNickname] = useState<string>('');
+  const { nickname } = useSignInUserStore();
 
   // state: My Alert List 요소 참조 //
   const myAlertListRef = useRef<HTMLDivElement | null>(null);
@@ -161,8 +161,11 @@ export default function Layout() {
           <div className='my-content-shopping-cart'></div>
           <div className='login-container'>
             <div className='login-icon'></div>
-            <div className='login-content login'>{nickname}</div>
-            <div className='login-content logout' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
+            {accessToken ? (
+              <div className='login-content login' onClick={onNicknameClickHandler}>{nickname}</div>
+            ) : (
+              <div className='login-content logout' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
+            )}
           </div>
         </div>
       </div>
