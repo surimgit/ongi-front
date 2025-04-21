@@ -3,6 +3,8 @@ export const ROOT_PATH = '/';
 export const AUTH_PATH = 'auth';
 export const PRODUCT_PATH = 'product';
 export const SHOPPING_CART_PATH = 'shoppingCart';
+export const PAYMENTS_PATH = 'payments'
+export const ADDRESS_PATH = 'address';
 export const WRITE_PATH = 'write';
 export const PRODUCT_VIEW_PATH = ':sequence';
 
@@ -24,6 +26,9 @@ export const PRODUCT_WRITE_PATH = `${ROOT_PATH}${PRODUCT_PATH}/${WRITE_PATH}`
 export const PRODUCT_VIEW_ABSOLUTE_PATH = (sequence: number) => `${ROOT_PATH}${PRODUCT_PATH}/${sequence}`
 
 export const SHOPPING_CART_ABSOLUTE_PATH = `${ROOT_PATH}${SHOPPING_CART_PATH}`;
+export const SHOPPING_CART_ADDRESS_ABSOLUTE_PATH = `${ROOT_PATH}${SHOPPING_CART_PATH}/${ADDRESS_PATH}`;
+
+export const PAYMENTS_ABSOLUTE_PATH = `${ROOT_PATH}${PAYMENTS_PATH}`;
 
 export const COMMUNITY_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}`;
 export const COMMUNITY_POST_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_POST_PATH}`;

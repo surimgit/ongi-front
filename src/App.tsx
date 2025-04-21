@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router';
 import Layout from './layouts/Layout';
 import './App.css';
-import { PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
+import { ADDRESS_PATH, PAYMENTS_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
 import DetailProduct from './views/Product/detail';
@@ -31,6 +31,7 @@ import SuccessPage from './views/TossPayment/SuccessPage';
 import FailPage from './views/TossPayment/FailPage';
 import CheckoutPage from './views/TossPayment/CheckoutPage';
 import ShoppingCart from './views/ShoppingCart';
+import ShoppingCartAddress from './views/ShoppingCart/Address';
 
 function App() {
   
@@ -38,7 +39,7 @@ function App() {
     <Routes>      
       <Route path='/auth' element={<Auth />} />
       
-      <Route path='/payments' element={<CheckoutPage/>}/>
+      <Route path={PAYMENTS_PATH} element={<CheckoutPage/>}/>
       <Route path='success' element={<SuccessPage/>}/>
       <Route path='fail' element={<FailPage/>}/>
     
@@ -52,6 +53,7 @@ function App() {
         </Route>
         <Route path={SHOPPING_CART_PATH}>
           <Route index element={<ShoppingCart/>}></Route>
+          <Route path={ADDRESS_PATH} element={<ShoppingCartAddress/>}/>
         </Route>
         <Route path='/others'>
           <Route index element={<Others/>} />

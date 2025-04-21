@@ -8,6 +8,7 @@ interface ResponseMessage {
 
 // function: response message 처리 함수 //
 export function responseMessage(responseBody: ResponseDto | null) {
+  
   const message =
     !responseBody ? '서버에 문제가 있습니다.' :
     responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' :
@@ -19,7 +20,6 @@ export function responseMessage(responseBody: ResponseDto | null) {
     responseBody.code === 'NP' ? '권한이 없습니다.' : '';
 
   const isSuccess = responseBody !== null && responseBody.code === 'SU';
-
 
   return { isSuccess, message };
 }
