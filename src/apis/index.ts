@@ -13,6 +13,7 @@ import { PostShoppingCartRequestDto } from './dto/request/shopping-cart';
 import PostPaymentConfirmRequestDto from './dto/request/payment/post-payment-confirm.request.dto';
 import PostOrderRequestDto from './dto/request/payment/post-order.request.dto';
 import { GetShoppingCartResponseDto } from './dto/response/shoppingCart';
+import { GetOrderResponseDto } from './dto/response/payment';
 import PostCommunityRequestDto from './dto/request/community/post-community.request.dto';
 import GetCommunityCommentResponse from './dto/response/community/get-community-comment.response.dto';
 import PostCommunityCommentRequestDto from './dto/request/community/post-community-comment.request.dto';
@@ -67,7 +68,10 @@ const DELETE_COMMUNITY_POST_URL = (postSequence: number | string) => `${COMMUNIT
 const SHOPPING_CART_MODULE_URL = `${API_DOMAIN}/api/v1/cart`;
 const POST_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
 const GET_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
+const DELETE_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`
+
 const POST_ORDER_URL = `${PAYMENT_URL}/`;
+const GET_ORDER_URL = `${PAYMENT_URL}/`;
 const POST_PAYMENT_CONFIRM_URL =  `${PAYMENT_URL}/confirm`;
 
 const GET_COMMUNITY_SEARCH_URL = (searchCategory: SearchCategory, keyword: string) => `${COMMUNITY_MODULE_URL}/search?type=${searchCategory}&keyword=${keyword}`;
@@ -213,7 +217,6 @@ export const getProductRequest = async (accessToken: string) => {
   return responseBody;
 }
     
-
 // function: write product API 요청 함수 //
 export const postProductRequest = async (requestBody: PostProductRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_PRODUCT_URL, requestBody, bearerAuthorization(accessToken)
@@ -287,10 +290,31 @@ export const getShoppingCartRequest = async (accessToken: string) => {
   return responseBody;
 }
 
+// function: delete shopping cart API 요청 함수 //
+export const deleteShoppingCartRequest = async (shoppingCartSequence: number, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_SHOPPING_CART_URL, {
+    ...bearerAuthorization(accessToken),
+    data: {
+      shoppingCartSequence: shoppingCartSequence
+    }
+  })
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
 // function: post order API 요청 함수 //
 export const postOrderRequest = async (requestBody: PostOrderRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_ORDER_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get order API 요청 함수 //
+export const getOrderRequest = async(accessToken: string) => {
+  const responseBody = await axios.get(GET_ORDER_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetOrderResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 }
@@ -300,6 +324,7 @@ export const postPaymentConfirm = async(requestBody: PostPaymentConfirmRequestDt
   const responseBody = await axios.post(POST_PAYMENT_CONFIRM_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
+}
 
 // function: get community search API 요청 함수 //
 export const getCommunitySearchRequest = async (searchCategory: SearchCategory, keyword: string) => {
@@ -498,3 +523,4 @@ export const getAlertRequest = async (accessToken: string) => {
   .catch(responseErrorHandler);
   return responseBody;
 }
+

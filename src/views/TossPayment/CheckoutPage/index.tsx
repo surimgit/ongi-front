@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { loadTossPayments, ANONYMOUS, TossPaymentsWidgets } from "@tosspayments/tosspayments-sdk";
 import { TossPaymentAmount } from 'src/types/interfaces';
 import './style.css'
-import { postOrderRequest } from 'src/apis';
+import { getOrderRequest, postOrderRequest } from 'src/apis';
 import PostOrderRequestDto  from 'src/apis/dto/request/payment/post-order.request.dto';
 import { useCookies } from 'react-cookie';
 import { ACCESS_TOKEN } from 'src/constants';
 import { ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
+import { GetOrderResponseDto } from 'src/apis/dto/response/payment';
 
 const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 const customerKey = '4RzTdEvffNsrGd9ta7nZI';
@@ -27,36 +28,21 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   // state: 주문번호 상태 //
   const [orderId, setOrderId] = useState<string>('');
+  // state: 주문자명 상태 //
+  const [userName, setUserName] = useState<string>('');
+  // state: 주문자 번호 상태 //
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
   // state: cookie 상태 //
   const [cookies] = useCookies();
 
   // variable: access Token//
   const accessToken = cookies[ACCESS_TOKEN];
 
-  // function: 주문번호 생성 함수 //
-  const createOrderId = (minLength:number = 6, maxLength:number = 64) => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
-    let result = '';
-
-    for (let i = 0; i < length; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-
-    return result;
-  }
-
   // event handler: 결제 요청 버튼 클릭 이벤트 핸들러 //
   const onButtonClickHandler = async () => {
 
     if(isProcessing) return;
     setIsProcessing(true);
-
-    const requestBody: PostOrderRequestDto = {
-      orderId, amount:amount.value, buyerAddress: '양산'
-    }
-
-    postOrderRequest(requestBody, accessToken)
 
     try {
       if(widgets === null) return;
@@ -91,6 +77,28 @@ export default function CheckoutPage() {
     }
     
   }
+
+  // function: get order response 함수 //
+  const getOrderResponse = (responseBody: GetOrderResponseDto | ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+
+    if(!isSuccess) {
+      alert(message);
+      return;
+    }
+
+    const { orderId, amount, userName, phoneNumber } = responseBody as GetOrderResponseDto;
+    setOrderId(orderId)
+    setAmount({currency:'KRW', value:amount});
+    setUserName(userName);
+    setPhoneNumber(phoneNumber);
+  }
+
+  console.log(orderId);
+  // effect: 컴포넌트 렌더링시 실행할 함수 //
+  useEffect(() => {
+    getOrderRequest(accessToken).then(getOrderResponse);
+  },[])
 
   // effect: clientKey, customerKey 변경 시 실행될 함수 //
   useEffect(() => {
@@ -146,9 +154,8 @@ export default function CheckoutPage() {
 
     widgets.setAmount(amount);
 
-    const orderId = createOrderId();
     setOrderId(orderId);
-  }, [widgets, amount, orderId]);
+  }, [widgets, amount]);
 
   return (
     <div id='checkout-wrapper'>
