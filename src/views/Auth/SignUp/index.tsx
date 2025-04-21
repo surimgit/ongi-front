@@ -26,7 +26,7 @@ export default function SignUp(props: Props){
     // state: 필수입력값 상태 //
     const [userId, setUserId] = useState<string>('');
     const [userPassword, setUserPassword] = useState<string>('');
-    const [name, setName] = useState<string>('');
+    const [nickname, setNickname] = useState<string>('');
     const [gender, setGender] = useState<string>('');
     const [telNumber, setTelNumber] = useState<string>('');
 
@@ -34,7 +34,7 @@ export default function SignUp(props: Props){
     const [userIdMessage, setUserIdMessage] = useState<string>('');
     const [userPasswordMessage, setUserPasswordMessage] = useState<string>('');
     const [passwordCheckMessage, setPasswordCheckMessage] = useState<string>('');
-    const [nameMessage, setNameMessage] = useState<string>('');
+    const [nicknameMessage, setNicknameMessage] = useState<string>('');
     const [telNumberMessage, setTelNumberMessage] = useState<string>('');
     const [verificationMessage, setVerificationMessage] = useState<string>('');
 
@@ -64,7 +64,7 @@ export default function SignUp(props: Props){
     const isUserIdCheckButtonActive = userId !== '';
     // variable: 회원가입 버튼 활성화 //
     const isSignUpButtonActive = 
-    userId && userPassword && userPasswordCheck && name && gender && telNumber && 
+    userId && userPassword && userPasswordCheck && nickname && gender && telNumber && 
     isUserIdChecked && isUserPasswordChecked && verificationCheck;
     // variable: 회원가입 버튼 클래스 //
     const signUpButtonClass = `button ${isSignUpButtonActive ? 'primary' : 'disable'} fullwidth`;
@@ -159,13 +159,12 @@ export default function SignUp(props: Props){
         }
     };
 
-
     // event handler: 사용자 이름 변경 이벤트 처리 //
-    const onUserNameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const onUserNicknameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
-        setName(value);
+        setNickname(value);
 
-        setNameMessage('');
+        setNicknameMessage('');
     }
 
     // event handler: 사용자 휴대전화 번호 변경 이벤트 처리 //
@@ -252,14 +251,14 @@ export default function SignUp(props: Props){
     const onSignUpClickHandler = () => {
         if(!userId) setUserIdMessage('아이디를 입력해주세요.');
         if(!userPassword) setUserPasswordMessage('비밀번호를 입력해주세요.');
-        if(!name) setNameMessage('이름을 입력해주세요.');
+        if(!nickname) setNicknameMessage('별명을 입력해주세요.');
         if(!telNumber) setTelNumberMessage('전화번호를 입력해주세요.');
         if(!verificationCheck) setVerificationMessage('인증번호를 확인해주세요.');
         if(!isUserIdChecked) setUserIdMessage('아이디 중복 여부를 확인해주세요.');
         if(!isSignUpButtonActive) return;
 
         const requestBody: SignUpRequestDto = {
-            userId, userPassword, name, gender, telNumber
+            userId, userPassword, nickname, gender, telNumber
         };
         signUpRequest(requestBody).then(signUpResponse);
     };
@@ -323,11 +322,11 @@ export default function SignUp(props: Props){
 
                 <div className="signup-input-wrapper">
                     <div className='signup-input-group'>
-                    <input type='text' placeholder='이름'
-                            value={name as string}
-                            onChange={onUserNameChangeHandler} />
+                    <input type='text' placeholder='닉네임'
+                            value={nickname as string}
+                            onChange={onUserNicknameChangeHandler} />
                     </div>
-                    {nameMessage && <div className='error-message'>{nameMessage}</div>}
+                    {nicknameMessage && <div className='error-message'>{nicknameMessage}</div>}
                 </div>
 
                 <div className="gender-select">

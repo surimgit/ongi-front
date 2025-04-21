@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { ResponseDto } from './dto/response';
 import { IdCheckRequestDto, ResignedCheckRequestDto, SignInRequestDto, SignUpRequestDto, VerificationRequestDto } from './dto/request/auth';
 import { SignInResponseDto } from './dto/response/auth';
-import { GetSignInUserResponseDto } from './dto/response/user';
+import { GetLikeKeywordListResponseDto, GetSignInUserResponseDto, GetUserAccountResponseDto, GetUserIntroductionResponseDto } from './dto/response/user';
 import { PostProductRequestDto } from './dto/request/product';
 import { Category } from 'src/types/aliases';
 import { GetProductResponseDto } from './dto/response';
@@ -19,9 +19,13 @@ import GetCommunityCommentResponse from './dto/response/community/get-community-
 import PostCommunityCommentRequestDto from './dto/request/community/post-community-comment.request.dto';
 import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import PatchCommunityPostRequestDto from './dto/request/community/patch-community-post.request.dto';
+import { PatchAnswerRequestDto, PostNoticeRequestDto } from './dto/request/admin';
+import { PatchQuestionRequestDto, PostQuestionRequestDto } from './dto/request/question';
+import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchUserIntroductionRequestDto } from './dto/request/user';
+import { GetNoticeListResponseDto, GetNoticeResponseDto } from './dto/response/notice';
+import { GetQuestionListResponseDto, GetQuestionResponseDto } from './dto/response/question';
 import PostAlertRequestDto from './dto/request/alert/post-alert.request.dto';
 import GetAlertResponseDto from './dto/response/alert/get-alert.response.dto';
-
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -77,6 +81,27 @@ const GET_COMMUNITY_COMMENT_URL = (postSequence: number | string) => `${COMMUNIT
 const PUT_COMMUNITY_LIKED_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/liked`;
 const GET_COMMUNITY_LIKED_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/liked`;
 
+
+const MYPAGE_MODULE_URL =  `${API_DOMAIN}/api/v1/mypage`;
+const OTHER_MYPAGE_MODULE_URL =  `${API_DOMAIN}/api/v1/mypage/other`;
+const OTHER_MYPAGE_VIEW_URL = (userId: string) => `${OTHER_MYPAGE_MODULE_URL}/${userId}`;
+const PATCH_MYPAGE_URL = `${MYPAGE_MODULE_URL}`;
+const MYPAGE_ACCOUNT_URL = `${API_DOMAIN}/api/v1/mypage/account`;
+const PATCH_MYPAGE_ACCOUNT_URL = `${MYPAGE_ACCOUNT_URL}`;
+const MYPAGE_KEYWORD_URL = `${MYPAGE_MODULE_URL}/keyword`;
+const ADD_MYPAGE_KEYWORD_URL =  `${MYPAGE_MODULE_URL}`;
+const DELETE_MYPAGE_KEYWORD_URL =  `${MYPAGE_MODULE_URL}`;
+
+const QUESTION_MODULE_URL = `${API_DOMAIN}/api/v1/question`;
+const POST_QUESTION_URL = `${QUESTION_MODULE_URL}`;
+const GET_QUESTION_LIST_URL= `${QUESTION_MODULE_URL}`;
+const GET_QUESTION_POST_URL= (questionSequence: number | string) => `${QUESTION_MODULE_URL}/${questionSequence}`;
+const PATCH_QUESTION_ANSWER_URL = (questionSequence: number | string) => `${QUESTION_MODULE_URL}/${questionSequence}`;
+
+const NOTICE_MODULE_URL = `${API_DOMAIN}/api/v1/notice`;
+const GET_NOTICE_LIST_URL = `${NOTICE_MODULE_URL}`;
+const POST_NOTICE_URL = `${NOTICE_MODULE_URL}`;
+const GET_NOTICE_POST_URL = (sequence: number | string) =>  `${NOTICE_MODULE_URL}/${sequence}`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
@@ -346,6 +371,140 @@ export const getCommunityLikedRequest = async (postSequence: number | string) =>
   const responseBody = await axios.get(GET_COMMUNITY_LIKED_URL(postSequence))
   .then(responseSuccessHandler)
   .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: patch question answer API 요청 함수 //
+export const patchAnswerRequest = async (questionSequence: number | string, requestBody: PatchAnswerRequestDto, accessToken: string) => {
+  const responseBody = await axios.patch(PATCH_QUESTION_ANSWER_URL(questionSequence), requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler)
+  return responseBody;
+}
+
+// function: post notice API 요청 함수 //
+export const postNoticeRequest = async (requestBody: PostNoticeRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_NOTICE_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler)
+  return responseBody;
+}
+
+// function: get notice list API 요청 함수 //
+export const getNoticeListRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(GET_NOTICE_LIST_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetNoticeListResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get notice post API 요청 함수 //
+export const getNoticeRequest = async (sequence: number | string, accessToken: string) => {
+  const responseBody = await axios.get(GET_NOTICE_POST_URL(sequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetNoticeResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get question list API 요청 함수 //
+export const getQuestionListRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(GET_QUESTION_LIST_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetQuestionListResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get question post API 요청 함수 //
+export const getQuestionRequest = async (questionSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.get(GET_QUESTION_POST_URL(questionSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetQuestionResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+
+// function: post question API 요청 함수 //
+export const postQuestionRequest = async (requestBody: PostQuestionRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_QUESTION_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler)
+  return responseBody;
+}
+
+// function: patch question API 요청 함수 //
+export const patchQuestionRequest = async (questionSequence: number | string, requestBody: PatchQuestionRequestDto, accessToken: string) => {
+  const responseBody = await axios.patch(PATCH_QUESTION_ANSWER_URL(questionSequence), requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler)
+  return responseBody;
+}
+
+// function: add like keyword API 요청 함수 //
+export const addLikeKeywordRequest = async (requestBody: AddLikeKeywordRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(ADD_MYPAGE_KEYWORD_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler)
+  return responseBody;
+}
+
+// function: get like keyword API 요청 함수 //
+export const getLikeKeywordListRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(MYPAGE_KEYWORD_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetLikeKeywordListResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: delete like keyword API 요청 함수 //
+export const deleteLikeKeywordRequest = async (requestBody: DeleteLikeKeywordRequestDto, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_MYPAGE_KEYWORD_URL, {
+    headers: {
+      Authorization:  `Bearer ${accessToken}`,
+    },
+    data: requestBody
+  })
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get user introductrion API 요청 함수 //
+export const getUserIntroductionRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(MYPAGE_MODULE_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetUserIntroductionResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get other user introductrion API 요청 함수 //
+export const getOtherUserIntroductionRequest = async (userId: string) => {
+  const responseBody = await axios.get(OTHER_MYPAGE_VIEW_URL(userId))
+    .then(responseSuccessHandler<GetUserIntroductionResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: patch user introduction API 요청 함수 //
+export const patchUserIntroductionRequest = async (requestBody: PatchUserIntroductionRequestDto, accessToken: string) => {
+  const responseBody = await axios.patch(PATCH_MYPAGE_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler)
+  return responseBody;
+}
+
+// function: patch user account API 요청 함수 //
+export const patchUserAccountRequest = async (requestBody: PatchQuestionRequestDto, accessToken: string) => {
+  const responseBody = await axios.patch(PATCH_MYPAGE_ACCOUNT_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler)
+  return responseBody;
+}
+
+// function: get user account API 요청 함수 //
+export const getUserAccountRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(MYPAGE_ACCOUNT_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetUserAccountResponseDto>)
+    .catch(responseErrorHandler);
   return responseBody;
 }
 
