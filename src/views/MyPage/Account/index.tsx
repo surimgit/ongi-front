@@ -1,6 +1,6 @@
 import React from 'react'
 import './style.css'
-export default function Setting() {
+export default function Account() {
   return (
     <div id='setting-main-wrapper'>
       <div className='sidebar-container'>

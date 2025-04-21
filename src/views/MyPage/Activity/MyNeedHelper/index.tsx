@@ -56,7 +56,7 @@ function NeedHelperItem({
 
 
 
-export default function MyNeedHelper() {
+export default function NeedHelper() {
   return (
     <div id='need-helper-main-wrapper'>
       <div className='sidebar-container'>
