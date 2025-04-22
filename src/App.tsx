@@ -1,7 +1,7 @@
 import { Routes, Route, useNavigate } from 'react-router';
 import Layout from './layouts/Layout';
 import './App.css';
-import { ADDRESS_PATH, PAYMENTS_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
+import { ADDRESS_PATH, MAIN_ABSOLUTE_PATH, PAYMENTS_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
 import { NEEDHELPER_PATH } from './constants';
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
@@ -80,7 +80,7 @@ function App() {
             <Route path="my-needHelper" element={<MyNeedHelper />} />
             <Route path="my-community" element={<MyCommunity />} />
           </Route>
-          <Route path='setting' element={<Setting/>}/>
+          {/* <Route path='setting' element={<Setting/>}/> */}
           <Route path='group-buying' element={<GroupBuying/>}/>
           <Route path='wish-list' element={<WishList/>}/>
         </Route> 

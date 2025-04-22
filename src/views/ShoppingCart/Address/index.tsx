@@ -46,7 +46,7 @@ export default function ShoppingCartAddress() {
   const newAddressTypeClass = addressType === '신규' ? 'select-img active' : 'select-img';
   const existAddressTypeClass = addressType === '기존' ? 'select-img active' : 'select-img';
   // variable: 장바구니 변수 //
-  const raw = localStorage.getItem("shoppingCart");
+  const raw = localStorage.getItem("storedShoppingCart");
   // variable: 선택된 상품 번호 배열 //
   const selectedIds = getSelectedIds();
 
@@ -136,8 +136,7 @@ export default function ShoppingCartAddress() {
   // effect: 컴포넌트 로드시 실행할 함수 //
   useEffect(() => {
     if(raw){
-      const parsed = JSON.parse(raw);
-      const shoppingCart = parsed.state.shoppingCart;
+      const shoppingCart = JSON.parse(raw);
       setShoppingCart(shoppingCart);
 
       const totalPrice = shoppingCart.reduce((total: number, value:ShoppingCart) => total += value.price * value.quantity ,0);
@@ -219,7 +218,7 @@ export default function ShoppingCartAddress() {
   )
 
   return (
-    <ShoppingCartLayout cartContent={cartContent} selectedTotalPrice={totalPrice} onPaymentClickHandler={onPaymentClickHandler} productQuantity={shoppingCart.length}/>
+    <ShoppingCartLayout cartContent={cartContent} onPaymentClickHandler={onPaymentClickHandler} productQuantity={shoppingCart.length}/>
   )
 }
 

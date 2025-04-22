@@ -26,6 +26,7 @@ import { GetNoticeListResponseDto, GetNoticeResponseDto } from './dto/response/n
 import { GetQuestionListResponseDto, GetQuestionResponseDto } from './dto/response/question';
 import PostAlertRequestDto from './dto/request/alert/post-alert.request.dto';
 import GetAlertResponseDto from './dto/response/alert/get-alert.response.dto';
+import { PostOrderItemRequestDto } from './dto/request/payment';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -73,6 +74,7 @@ const DELETE_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`
 const POST_ORDER_URL = `${PAYMENT_URL}/`;
 const GET_ORDER_URL = `${PAYMENT_URL}/`;
 const POST_PAYMENT_CONFIRM_URL =  `${PAYMENT_URL}/confirm`;
+const POST_ORDER_ITEM_URL = `${PAYMENT_URL}/order-items`;
 
 const GET_COMMUNITY_SEARCH_URL = (searchCategory: SearchCategory, keyword: string) => `${COMMUNITY_MODULE_URL}/search?type=${searchCategory}&keyword=${keyword}`;
 const POST_COMMUNITY_COMMENT_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/comment`;
@@ -306,6 +308,14 @@ export const deleteShoppingCartRequest = async (shoppingCartSequence: number, ac
 // function: post order API 요청 함수 //
 export const postOrderRequest = async (requestBody: PostOrderRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_ORDER_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post order items API 요청 함수 //
+export const postOrderItemsRequest = async (requestBody: PostOrderItemRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_ORDER_ITEM_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;

@@ -13,7 +13,7 @@ export type {
   CommunityComment,
   LikeKeyword,
   Notice,
-  Question
+  Question,
   TossPaymentAmount,
   ShoppingCart
 }

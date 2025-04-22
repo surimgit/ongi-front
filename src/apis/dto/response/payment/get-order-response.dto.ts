@@ -5,4 +5,5 @@ export default interface GetOrderResponseDto extends ResponseDto{
   amount: number,
   phoneNumber: string,
   userName: string,
+  buyerAddress: string;
 }
