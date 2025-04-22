@@ -1,7 +1,8 @@
 import { Routes, Route, useNavigate } from 'react-router';
 import Layout from './layouts/Layout';
 import './App.css';
-import { ADDRESS_PATH, MAIN_ABSOLUTE_PATH, PAYMENTS_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
+import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
+import { MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH } from './constants';
 import { NEEDHELPER_PATH } from './constants';
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';

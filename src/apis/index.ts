@@ -533,3 +533,4 @@ export const getAlertRequest = async (accessToken: string) => {
   .catch(responseErrorHandler);
   return responseBody;
 }
+
