@@ -1,0 +1,178 @@
+.content-box .shopping-cart-address-container {
+  display: flex;
+  flex-direction: column;
+
+  background-color: #fff;
+  padding: 20px;
+}
+
+.shopping-cart-address-container .address-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.address-container .title {
+  padding-bottom: 10px;
+  
+
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.address-box-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.address-box-container .address-box:first-child {
+  
+  border-top: solid 3px #000;
+}
+
+.address-container .address-box {
+  display: flex;
+  gap: 10px;
+
+  padding: 5px 0px;
+  min-height: 70px;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.address-box .address-box-title {
+  display: flex;
+  align-items: center;
+
+  width: 150px;
+  padding-left: 10px;
+
+  font-size: 18px;
+  font-weight: 700;
+  background-color: #f3f3f3;
+}
+
+.address-box .address-select-box-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.address-select-box-content .address-select-box {
+  display: flex;
+  gap: 20px;
+
+  padding: 10px 0;
+}
+
+.address-box .select-box {
+  display: flex;
+  gap: 8px;
+}
+
+
+.select-box .select-img.active {
+  width: 18px;
+  height: 18px;
+  border: none;
+
+  background-image: url(src/assets/images/icon-check-blue.png);
+  background-size: cover;
+  cursor: pointer;
+}
+
+.address-box-content {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.select-box .select-img {
+  width: 16px;
+  height: 16px;
+
+  border: 1px solid #000;
+  border-radius: 50%;
+
+  cursor: pointer;
+}
+
+.address-select-box-content select {
+  padding: 5px;
+  font-size: 14px;
+  
+  border-radius: 5px;
+  appearance:none;
+  background:url(src/assets/images/icon-select-arrow.png) no-repeat right 6px center;
+}
+
+.address-box-content select{
+  padding: 5px;
+  font-size: 14px;
+  
+  border-radius: 5px;
+}
+
+.address-box-content .input  {
+  padding: 5px;
+
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #505050;
+}
+
+.address-box-content .input.phone{
+  width: 70px;
+}
+
+.address-box-title {
+  font-weight: bold;
+  display: flex;
+  align-items: center; /* 세로 가운데 정렬 */
+  min-height: 70px;
+}
+
+.address-input-box-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.address-input-box-top {
+  display: flex;
+  gap: 10px;
+}
+
+.postal-code {
+  width: 150px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+}
+
+.postal-code-button {
+  padding: 10px 15px;
+  background-color: #f0fff0;
+  border: 1px solid #8bc34a;
+  border-radius: 4px;
+  color: #4caf50;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.address {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #f4f4f4;
+  color: #333;
+  min-height: 50px;
+  line-height: 1.4;
+}
+
+.detail-address {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
