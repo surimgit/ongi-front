@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie';
-import { deleteShoppingCartRequest, getProductDetailRequest, getShoppingCartRequest } from 'src/apis';
+import { deleteShoppingCartRequest, getProductDetailRequest, getShoppingCartRequest, postReserveRequest } from 'src/apis';
 import { ResponseDto } from 'src/apis/dto/response';
 import { GetShoppingCartResponseDto } from 'src/apis/dto/response/shoppingCart';
 import { ACCESS_TOKEN, SHOPPING_CART_ADDRESS_ABSOLUTE_PATH } from 'src/constants';
-import { ShoppingCart } from 'src/types/interfaces';
+import { ShoppingCart, StockReservation } from 'src/types/interfaces';
 import { responseMessage } from 'src/utils';
 import useShoppingCartSelectStore from 'src/hooks/cart-select.hook';
 
 import "./style.css"
 import { useNavigate } from 'react-router';
 import ShoppingCartLayout from 'src/components/ShoppingCart';
+import { PostStockReservationRequestDto } from 'src/apis/dto/request/shopping-cart';
 
 
 interface TableItemProps {
@@ -139,6 +140,31 @@ export default function ShoppingCartMain() {
   const fetchShoppingCart = () => {
     getShoppingCartRequest(accessToken).then(GetShoppingCartResponse);
   };
+  
+  // function: 결제하기 버튼 클릭 처리 함수 //
+  const postReserveResponse = (responseBody: ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+
+    if(!isSuccess) {
+      alert(message);
+      return;
+    }
+    
+    navigator(SHOPPING_CART_ADDRESS_ABSOLUTE_PATH);
+  }
+
+  // function: get shopping cart response 함수 //
+  const GetShoppingCartResponse = (responseBody: GetShoppingCartResponseDto | ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+
+    if(!isSuccess) {
+      alert(message);
+      return;
+    }
+
+    const { shoppingCarts } = responseBody as GetShoppingCartResponseDto;
+    setShoppingCart(shoppingCarts); 
+  }
 
   // event handler: 전체 선택 버튼 클릭 이벤트 핸들러 //
   const onSelectAllClickHandler = () => {
@@ -164,20 +190,25 @@ export default function ShoppingCartMain() {
 
   // event handler: 결제하기 버튼 클릭 이벤트 핸들러 //
   const onPaymentClickHandler = () => {
-    navigator(SHOPPING_CART_ADDRESS_ABSOLUTE_PATH);
-  }
+    const storedData = localStorage.getItem("storedShoppingCart");
 
-  // function: get shopping cart response 함수 //
-  const GetShoppingCartResponse = (responseBody: GetShoppingCartResponseDto | ResponseDto | null) => {
-    const { isSuccess, message } = responseMessage(responseBody);
-
-    if(!isSuccess) {
-      alert(message);
-      return;
+    if (storedData) {
+      const cartList = JSON.parse(storedData);
+    
+      const reserves: StockReservation[] = cartList.map((item: { productSequence: number; quantity: number }) => ({
+        productSequence: item.productSequence,
+        quantity: item.quantity,
+      }));
+    
+      const dto: PostStockReservationRequestDto = {
+        list: reserves
+      };
+    
+      console.log(JSON.stringify(dto, null, 2));
+      postReserveRequest(dto, accessToken).then(postReserveResponse);
+      console.log(reserves.toString());
     }
-
-    const { shoppingCarts } = responseBody as GetShoppingCartResponseDto;
-    setShoppingCart(shoppingCarts); 
+    
   }
 
   // effect: 컴포넌트 렌더시 실행할 함수 //

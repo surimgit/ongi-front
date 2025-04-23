@@ -28,6 +28,7 @@ export default function SuccessPage() {
   const onNavigateMainClickHandler = () => {
     navigator(MAIN_ABSOLUTE_PATH);
   }
+
   // effect: 컴포넌트 렌더링시 실행할 함수 //
   useEffect(() => {
   
@@ -53,6 +54,8 @@ export default function SuccessPage() {
         await postPaymentConfirm(requestData, accessToken);
         
         await postOrderItemsRequest(orderItemRequestData, accessToken);
+
+        await localStorage.clear();
         
       } catch (error) {
         console.error('Error during payment confirmation or order processing:', error);

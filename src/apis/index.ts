@@ -3,13 +3,13 @@ import { ResponseDto } from './dto/response';
 import { IdCheckRequestDto, ResignedCheckRequestDto, SignInRequestDto, SignUpRequestDto, VerificationRequestDto } from './dto/request/auth';
 import { SignInResponseDto } from './dto/response/auth';
 import { GetLikeKeywordListResponseDto, GetSignInUserResponseDto, GetUserAccountResponseDto, GetUserIntroductionResponseDto } from './dto/response/user';
-import { PostProductRequestDto } from './dto/request/product';
+import { PatchProductQuantityRequestDto, PostProductRequestDto } from './dto/request/product';
 import { Category } from 'src/types/aliases';
 import { GetProductResponseDto } from './dto/response';
-import GetProductDetailResponseDto from './dto/response/product/get-product-detail.request.dto';
+import GetProductDetailResponseDto from './dto/response/product/get-product-detail.response.dto';
 import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
 import { GetCommunityPostResponseDto } from './dto/response/community';
-import { PostShoppingCartRequestDto } from './dto/request/shopping-cart';
+import { PostShoppingCartRequestDto, PostStockReservationRequestDto } from './dto/request/shopping-cart';
 import PostPaymentConfirmRequestDto from './dto/request/payment/post-payment-confirm.request.dto';
 import PostOrderRequestDto from './dto/request/payment/post-order.request.dto';
 import { GetShoppingCartResponseDto } from './dto/response/shoppingCart';
@@ -47,6 +47,10 @@ const GET_SIGN_IN_USER_URL = `${USER_MODULE_URL}/sign-in`;
 // 공동구매 API 경로
 const PRODUCT_MODULE_URL = `${API_DOMAIN}/api/v1/product`
 const POST_PRODUCT_URL = `${PRODUCT_MODULE_URL}/write`;
+const POST_STOCK_RESERVE_URL = `${PRODUCT_MODULE_URL}/reserve`;
+const GET_STOCK_RESERVE_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/reserve`;
+
+const PATCH_PRODUCT_QUANTITY_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/quantity`;
 
 const GET_PRODUCT_CATEGORY_NAME_URL = (category: Category, name:string) =>  `${PRODUCT_MODULE_URL}?category=${category}&name=${name}`;
 const GET_PRODUCT_DETAIL_URL = (sequence:number | string) => `${PRODUCT_MODULE_URL}/${sequence}`; 
@@ -75,6 +79,7 @@ const POST_ORDER_URL = `${PAYMENT_URL}/`;
 const GET_ORDER_URL = `${PAYMENT_URL}/`;
 const POST_PAYMENT_CONFIRM_URL =  `${PAYMENT_URL}/confirm`;
 const POST_ORDER_ITEM_URL = `${PAYMENT_URL}/order-items`;
+
 
 const GET_COMMUNITY_SEARCH_URL = (searchCategory: SearchCategory, keyword: string) => `${COMMUNITY_MODULE_URL}/search?type=${searchCategory}&keyword=${keyword}`;
 const POST_COMMUNITY_COMMENT_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/comment`;
@@ -211,6 +216,7 @@ export const getSignInUserRequest = async (accessToken: string) => {
     .catch(responseErrorHandler);
   return responseBody;
 }
+
 // function: get product list API 요청 함수 //
 export const getProductRequest = async (accessToken: string) => {
   const responseBody = await axios.get(PRODUCT_MODULE_URL, bearerAuthorization(accessToken))
@@ -219,10 +225,17 @@ export const getProductRequest = async (accessToken: string) => {
   return responseBody;
 }
     
-// function: write product API 요청 함수 //
+// function: post product API 요청 함수 //
 export const postProductRequest = async (requestBody: PostProductRequestDto, accessToken: string) => {
-  const responseBody = await axios.post(POST_PRODUCT_URL, requestBody, bearerAuthorization(accessToken)
-  )
+  const responseBody = await axios.post(POST_PRODUCT_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: patch product quantity API 요청 함수 //
+export const patchProductRequest = async (requestBody: PatchProductQuantityRequestDto, sequence: number, accessToken:string) => {
+  const responseBody = await axios.post(PATCH_PRODUCT_QUANTITY_URL(sequence), requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;
@@ -317,6 +330,22 @@ export const postOrderRequest = async (requestBody: PostOrderRequestDto, accessT
 export const postOrderItemsRequest = async (requestBody: PostOrderItemRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_ORDER_ITEM_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post stock reserve API 요청 함수 //
+export const postReserveRequest = async (requestBody: PostStockReservationRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_STOCK_RESERVE_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get stock API 요청 함수 //
+export const getReserveRequest = async(sequence: number | string) => {
+  const responseBody = await axios.get(GET_STOCK_RESERVE_URL(sequence))
+    .then(responseSuccessHandler<GetOrderResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 }

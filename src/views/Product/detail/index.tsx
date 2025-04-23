@@ -1,25 +1,27 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import './style.css'
-import { getProductDetailRequest, postShoppingCartRequest } from 'src/apis';
-import { useNavigate, useParams } from 'react-router';
+import { getProductDetailRequest, getReserveRequest, patchProductRequest, postShoppingCartRequest } from 'src/apis';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { ACCESS_TOKEN, PRODUCT_ABSOLUTE_PATH, SHOPPING_CART_ABSOLUTE_PATH } from 'src/constants';
 import { Category } from 'src/types/aliases';
 import { useCookies } from 'react-cookie';
-import GetProductDetailResponseDto from 'src/apis/dto/response/product/get-product-detail.request.dto';
+import GetProductDetailResponseDto from 'src/apis/dto/response/product/get-product-detail.response.dto';
 import { ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import Modal from 'src/components/Modal';
 import { PostShoppingCartRequestDto } from 'src/apis/dto/request/shopping-cart';
+import { ShoppingCart } from 'src/types/interfaces';
+import { GetReserveResponseDto } from 'src/apis/dto/response/product';
+
 
 interface CartUpdateProps {
   onModalViewChange: () => void;
   name:string;
-  price: number;
   sequence: string;
 }
 
 // component: 장바구니 담기 컴포넌트 //
-function CartUpdate({onModalViewChange, name, sequence, price}: CartUpdateProps) {
+function CartUpdate({onModalViewChange, name, sequence}: CartUpdateProps) {
 
   // state: 쿠키 상태 //
   const [cookies] = useCookies();
@@ -62,7 +64,7 @@ function CartUpdate({onModalViewChange, name, sequence, price}: CartUpdateProps)
     const productSequence = parseInt(sequence);
 
     const requestBody: PostShoppingCartRequestDto = {
-      quantity, productSequence, name, price
+      quantity, productSequence
     }
 
     postShoppingCartRequest(requestBody, accessToken).then(PostShoppingCartResponse);
@@ -120,9 +122,17 @@ export default function DetailProduct() {
   const [tabMenu, setTabMenu] = useState<string>('설명');
   // state: 찜 클릭 상태 //
   const [isLiked, setIsLiked] = useState<boolean>(false);
+  // state: 주문 예약 상품 개수 상태 //
+  const [quantity, setQuantity] = useState<number>(0);
 
   // state: 장바구니 모달 오픈 상태 //
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  // state: 공유하기 버튼 클릭 상태 //
+  const [isShare, setIsShare] = useState<boolean>(false);
+
+  // variable: 현재 경로 변수 //
+  const pathname = useLocation().pathname;
+  const url = "http://localhost:3000" + pathname;
 
   // variable: access token //
   const accessToken = cookies[ACCESS_TOKEN];
@@ -134,8 +144,8 @@ export default function DetailProduct() {
   const descriptionClass = tabMenu === '설명' ? 'content active' : 'content';
   const reviewClass = tabMenu === '후기' ? 'content active' : 'content';
 
-  // function: navigator 함수 //
-  const navigator = useNavigate();
+  // function: navigate 함수 //
+  const navigate = useNavigate();
 
   // function: get product detail response 처리 함수 //
   const getProductDetailResponse = (responseBody: GetProductDetailResponseDto | ResponseDto | null) => {
@@ -163,6 +173,29 @@ export default function DetailProduct() {
     setProductContent(content);
   }
 
+  const postShoppingCartResponse = (responseBody: ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+    
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+    navigate(SHOPPING_CART_ABSOLUTE_PATH);
+  }
+
+  const getReserveResponse = (responseBody: GetReserveResponseDto | ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+    
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+    const {quantity} = responseBody as GetReserveResponseDto;
+    setQuantity(quantity);
+  }
+
 
   // event handler: 상품 설명, 후기 변경 이벤트 핸들러 //
   const onChangeProductHandler = (click: string) => {
@@ -179,9 +212,25 @@ export default function DetailProduct() {
     setIsLiked(!isLiked);
   }
 
+  // event handler: 공유하기 클릭 이벤트 핸들러 //
+  const copyToClipboard = async (text:string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('복사되었습니다!');
+    } catch (err) {
+      alert('복사 실패');
+    }
+  };
+  
+
   // event handler: 공동구매 참여 버튼 클릭 이벤트 핸들러 //
   const onParticipationButtonClickHandler = () => {
-    navigator(SHOPPING_CART_ABSOLUTE_PATH);
+
+    const requestBody: PostShoppingCartRequestDto = {
+      productSequence: parseInt(sequence), quantity:1
+    }
+
+    postShoppingCartRequest(requestBody, accessToken).then(postShoppingCartResponse);
   }
 
   const unitPrice = useMemo(() => {
@@ -202,11 +251,12 @@ export default function DetailProduct() {
   // effect: 컴포넌트 렌더링 시 실행할 함수 //
   useEffect(() => {
     if(!sequence){
-      navigator(PRODUCT_ABSOLUTE_PATH);
+      navigate(PRODUCT_ABSOLUTE_PATH);
       return;
     }
 
     getProductDetailRequest(sequence, accessToken).then(getProductDetailResponse);
+    getReserveRequest(sequence).then(getReserveResponse);
   },[]);
 
   return (
@@ -231,7 +281,7 @@ export default function DetailProduct() {
               <div className='content bold red'>{achievement}% 달성</div>
               <div className='content-box'>
                 <div className='content sub'>{}잔여 수량</div>
-                <div className='content bold'>{remainingQuantity} 개</div>
+                <div className='content bold'>{remainingQuantity - quantity} 개</div>
               </div>
               <div className='rating-box'>
                 <div className='star'></div>
@@ -250,7 +300,7 @@ export default function DetailProduct() {
             <div className='product-toolbox'>
               <div className={liked} onClick={onChangeLikedHandler}></div>
               <div className='product-tool shopping-cart' onClick={onUpdateShoppingCartClickHandler}></div>
-              <div className='product-tool share'></div>
+              <div className='product-tool share' onClick={() => copyToClipboard(url)}></div>
               <div className='product-tool report'></div>
               <div className='button ask'>문의하기</div>
             </div>
@@ -266,7 +316,7 @@ export default function DetailProduct() {
             title='장바구니 담기'
             onClose={onUpdateShoppingCartClickHandler}
           >
-            <CartUpdate onModalViewChange={onUpdateShoppingCartClickHandler} name={name} price={price} sequence={sequence} />
+            <CartUpdate onModalViewChange={onUpdateShoppingCartClickHandler} name={name} sequence={sequence} />
           </Modal>
         }
         <div className='detail-product-similar'>
