@@ -5,6 +5,7 @@ import MainHelper from "src/components/Main/MainHelper";
 import MainCommunity from "src/components/Main/MainCommunity";
 
 import './style.css';
+import Calendar from "../Calendar";
 
 export default function Main() {
 
@@ -16,7 +17,7 @@ export default function Main() {
             <MainCommunity />
             <div className="calendar-container">
                 <span className="calendar-title">청년달력</span>
-                <div className="calendar-box"></div>
+                <Calendar />
             </div>
             
             <footer></footer>
