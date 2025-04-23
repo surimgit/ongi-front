@@ -13,7 +13,7 @@ export type {
   SearchCategory,
   Mbti,
   Gender,
-  QuestionCategory
+  QuestionCategory,
   Category,
   Sort,
   BoardType,
