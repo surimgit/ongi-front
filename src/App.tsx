@@ -1,6 +1,5 @@
 import { Routes, Route, useNavigate, Outlet } from 'react-router';
 import Layout from './layouts/Layout';
-import './App.css';
 import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, 
     SHOPPING_CART_PATH, WRITE_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH, NEEDHELPER_PATH, 
     MY_GROUPBUYING_PATH,
@@ -35,9 +34,9 @@ import './App.css';
 import CommunityLayout from './layouts/Community';
 import { COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
 import PostWrite from './views/Community/Write';
-import HotBoard from './views/Community/HotBoard';
-import InfoBoard from './views/Community/InfoBoard';
-import CountyBoard from './views/Community/CountyBoard';
+// import HotBoard from './views/Community/HotBoard';
+// import InfoBoard from './views/Community/InfoBoard';
+// import CountyBoard from './views/Community/CountyBoard';
 import SuccessPage from './views/TossPayment/SuccessPage';
 import FailPage from './views/TossPayment/FailPage';
 import CheckoutPage from './views/TossPayment/CheckoutPage';
@@ -51,6 +50,7 @@ import Account from './views/MyPage/Account';
 import { useEffect } from 'react';
 import Main from './views/Main';
 import ShoppingCartAddress from './views/ShoppingCart/Address';
+import Calendar from './views/Calendar';
 
 function App() {
   return (
