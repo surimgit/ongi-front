@@ -51,7 +51,7 @@ export default function PostWrite() {
   const onTitleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setTitle(value);
-};
+  };
 
   // event handler: 내용 변경 이벤트 처리 //
   const onContentChangeHandler = (content: string) => {

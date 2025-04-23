@@ -1,10 +1,9 @@
 import { Routes, Route, useNavigate } from 'react-router';
 import Layout from './layouts/Layout';
-import { MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, PRODUCT_PATH, QUESTION_PATH, WRITE_PATH } from './constants';
-import HomePage from './views/HomePage';
+import { COMMUNITY_EDIT_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, PRODUCT_PATH, QUESTION_PATH, REPORT_PATH, WRITE_PATH } from './constants';
 import { NEEDHELPER_PATH } from './constants';
 import NeedHelper from './views/NeedHelper';
-import { MAIN_ABSOLUTE_PATH, MAIN_PATH, PRODUCT_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
+import { MAIN_ABSOLUTE_PATH, MAIN_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH } from './constants';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
 import DetailProduct from './views/Product/detail';
@@ -22,11 +21,8 @@ import MyNeedHelper from './views/MyPage/Activity/MyNeedHelper';
 import MyCommunity from './views/MyPage/Activity/MyCommunity';
 import './App.css';
 import CommunityLayout from './layouts/Community';
-import { COMMUNITY_COUNTYBOARD_PATH, COMMUNITY_HOTBOARD_PATH, COMMUNITY_INFOBOARD_PATH, COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
+import { COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
 import PostWrite from './views/Community/Write';
-import HotBoard from './views/Community/HotBoard';
-import InfoBoard from './views/Community/InfoBoard';
-import CountyBoard from './views/Community/CountyBoard';
 import { useEffect } from 'react';
 import Main from './views/Main';
 import SuccessPage from './views/TossPayment/SuccessPage';
@@ -37,6 +33,8 @@ import CommunityMain from './views/Community';
 import PostDetail from './views/Community/Detail';
 import Question from './views/MyPage/Question';
 import Account from './views/MyPage/Account';
+import PostEdit from './views/Community/Edit';
+import ReportBoard from './views/Report';
 
 
 function App() {
@@ -53,6 +51,7 @@ function App() {
       <Route element={<Layout />}>
         <Route path={MAIN_PATH}>
             <Route index element={<Main />}/>
+        </Route>
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
         </Route>
@@ -88,13 +87,18 @@ function App() {
         <Route path='/mypage' element={<MyPage/>}/>
         <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
           <Route index element={<CommunityMain />} />
-
           <Route path={COMMUNITY_VIEW_PATH}>
             <Route index element={<PostDetail />} />
+            <Route path={COMMUNITY_EDIT_PATH}>
+              <Route index element={<PostEdit />} />
+            </Route>
           </Route>
           <Route path={COMMUNITY_WRITE_PATH}>
             <Route index element={<PostWrite />} />
           </Route>
+        </Route>
+        <Route path={REPORT_PATH} element={<CommunityLayout />}>
+          <Route index element={<ReportBoard />} />
         </Route>
       </Route>
     </Routes>

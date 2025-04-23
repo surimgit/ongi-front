@@ -12,12 +12,14 @@
   --Lightmode-Grey2: rgba(138, 146, 166, 1);
   --Lightmode-Grey3: rgba(238, 238, 238, 1);
   --Lightmode-Grey4: rgba(160, 160, 160, 1);
+  --Lightmode-Grey5: rgba(80, 80, 80, 1);
   --Primary: rgba(0, 132, 255, 1);
   --Second: rgba(0, 132, 255, 0.10);
   --Cancel: rgba(255, 84, 64, 1);
   --Beige: rgba(247, 247, 247, 1);
   --Red: rgba(255, 52, 33, 1);
   --Black: rgba(0, 0, 0, 1);
+  --Lightmode-Green: rgba(80, 220, 80, 1);
 }
 
 body {

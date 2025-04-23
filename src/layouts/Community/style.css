@@ -66,6 +66,13 @@
     cursor: pointer;
 }
 
+#community-layout-wrapper .large-category.active,
+#community-layout-wrapper .category-item.active {
+    color: var(--Black);
+    font-weight: 800;
+    text-decoration: underline;
+}
+
 #community-layout-wrapper .large-category:hover {
     text-decoration: underline;
 }

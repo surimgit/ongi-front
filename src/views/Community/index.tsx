@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import './style.css';
 import { useLocation, useNavigate, useSearchParams } from 'react-router';
-import { CommunityPost } from 'src/types/interfaces';
+import { CommunityComment, CommunityPost } from 'src/types/interfaces';
 import usePagination from 'src/hooks/pagination.hook';
 import Pagination from 'src/components/Pagination';
 import { getCommunityRequest, getCommunitySearchRequest } from 'src/apis';
@@ -10,6 +10,7 @@ import { ResponseDto } from 'src/apis/dto/response';
 import { useCookies } from 'react-cookie';
 import { COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
 import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
+import useCommentCountStore from 'src/stores/comment-count.store';
 
 const SECOND = 1000;
 const MINUTE = 60;
@@ -25,6 +26,10 @@ interface TableItemProps {
 // component: 게시글 테이블 레코드 컴포넌트 //
 function TableItem({ communityPost, boardCategory }: TableItemProps) {
   const { postSequence, nickname, category, postDate, title, liked, viewCount } = communityPost;
+  
+  // state: 게시글 댓글 수 상태 //
+  const { commentCountMap } = useCommentCountStore();
+  const commentCount = commentCountMap[postSequence];
 
   // function: 내비게이터 함수 //
   const navigator = useNavigate();
@@ -48,7 +53,7 @@ function TableItem({ communityPost, boardCategory }: TableItemProps) {
       return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
     }
   };
-
+  
   // event handler: 레코드 클릭 이벤트 처리 //
   const onClick = () => {
     navigator(COMMUNITY_VIEW_ABSOLUTE_PATH(postSequence));
@@ -59,7 +64,12 @@ function TableItem({ communityPost, boardCategory }: TableItemProps) {
     <div className='tr'>
       <div className='td category'>{category}</div>
       <div className='td title' >
-        <span className='title-text' onClick={onClick}>{title}</span>
+        <span className='title-text' onClick={onClick}>
+          {title} 
+          {commentCount !== 0 && commentCount !== undefined &&
+          <span> [{commentCount}]</span>
+          }
+          </span>
       </div>
       <div className='td nickname'>{nickname}</div>
       <div className='td liked'>{liked}</div>
@@ -203,7 +213,11 @@ export default function CommunityMain() {
             <div className='th view'>조회</div>
             <div className='th postDate'>작성 일자</div>
           </div>
-          {viewList.map((communityPost, index) => <TableItem key={index} communityPost={communityPost} boardCategory={boardCategory} />)}
+          {viewList.map((communityPost, index) => 
+          <TableItem key={index} 
+          communityPost={communityPost} 
+          boardCategory={boardCategory} 
+          />)}
         </div>
       </div>
       <div className='pagination-container'>

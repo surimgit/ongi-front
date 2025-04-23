@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Color } from '@tiptap/extension-color';
 import ListItem from '@tiptap/extension-list-item';
@@ -108,6 +108,12 @@ export default function TextEditor({ content, setContent }: Props) {
       setContent(editor.getText())
     }
   })
+
+  useEffect(() => {
+    if (content) {
+      editor?.commands.setContent(content);
+    }
+  }, [content]);
 
   // render: tiptap Text Editor 컴포넌트 렌더링 //
   return (

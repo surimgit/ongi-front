@@ -1,0 +1,17 @@
+.button-box .btn.edit {
+    background-color: var(--Lightmode-Grey2);
+
+    color: var(--White);
+}
+
+.button-box .btn.edit.active {
+    background-color: var(--Black);
+
+    color: var(--White);
+}
+
+.button-box .btn.edit.active:hover {
+    background-color: var(--Lightmode-Grey5);
+
+    color: var(--White);
+}
