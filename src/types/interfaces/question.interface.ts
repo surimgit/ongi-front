@@ -5,5 +5,5 @@ export default interface Question {
   postDate: string;
   category: QuestionCategory;
   title: string;
-  inAnswered: boolean;
+  isAnswered: boolean;
 }

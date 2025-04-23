@@ -6,51 +6,6 @@
   margin: 0 auto;
 }
 
-#mypage-main-wrapper .sidebar-container{
-  display: flex;
-  flex-direction: column;
-  width: 180px;
-}
-
-#mypage-main-wrapper .sidebar-container .button{
-  width: 180px;
-  height: 40px;
-  background-color: rgba(24,50,81,1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: var(--White);
-  font-size: 18px;
-  font-weight: bold;
-}
-
-#mypage-main-wrapper .sidebar-container .categories{
-  display: flex;
-  padding: 29px 22px;
-  flex-direction: column;
-  gap: 18px;
-  letter-spacing: 0.3px;
-}
-
-#mypage-main-wrapper .sidebar-container .categories .title{
-  font-size: 16px;
-  font-weight: bold;
-}
-
-#mypage-main-wrapper .sidebar-container .categories .sub-title{
-  display: flex;
-  margin-bottom: 2px;
-  
-  flex-direction: column;
-  gap: 7px;
-  font-size: 13px;
-}
-
-#mypage-main-wrapper .sidebar-container .categories .sub-text{
-  margin-left: 10px;
-}
-
 #mypage-main-wrapper .contents-wrapper{
   display: flex;
   flex-direction: column;
@@ -69,7 +24,7 @@
   font-weight: bold;
 }
 
-#my-activity-main-wrapper .contents-wrapper .title-area .current{
+#mypage-main-wrapper .contents-wrapper .title-area .current{
   border-top: 4px solid;
   padding: 2px;
   font-size: 25px;
@@ -77,7 +32,8 @@
   cursor: pointer;
 }
 
-#my-activity-main-wrapper .contents-wrapper .title-area .current.active{
+#mypage-main-wrapper .contents-wrapper .title-area .current.active{
+  cursor: default;
   border-top: 4px solid var(--Primary);
   color: var(--Primary);
 }

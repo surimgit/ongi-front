@@ -1,24 +1,91 @@
 import React from 'react'
 import './style.css';
+import { useNavigate } from 'react-router';
+
+// component: 다른 사용자 사이드바 컴포넌트 //
+function OtherSidebar(){
+  const navigator = useNavigate();
+
+  const onSidebarClickHandler = (path: string) => {
+    navigator(path);
+  };
+
+  return (
+    <div className='sidebar-container'>
+      <div className='button'>카테고리</div>
+      <div className='categories'>
+        <div
+          className='title'
+          style={{ cursor: 'pointer' }}
+          onClick={() => onSidebarClickHandler('/mypage/need-helper')}
+        >
+          도우미
+        </div>
+
+        <div
+          className='sub-title'
+          style={{ cursor: 'pointer' }}
+          onClick={() => onSidebarClickHandler('/mypage/review')}
+        >
+          후기
+        </div>
+
+        <div
+          className='title'
+          style={{ cursor: 'pointer' }}
+          onClick={() => onSidebarClickHandler('/mypage/community')}
+        >
+          커뮤니티
+        </div>
+
+        <div
+          className='sub-title'
+          style={{ cursor: 'pointer' }}
+          onClick={() => onSidebarClickHandler('/mypage/community/post')}
+        >
+          작성 글
+        </div>
+
+        <div
+          className='title'
+          style={{ cursor: 'pointer' }}
+          onClick={() => onSidebarClickHandler('/mypage/group-buying')}
+        >
+          공동 구매
+        </div>
+
+        <div className='sub-title-group'>
+          <div
+            className='sub-title'
+            style={{ cursor: 'pointer' }}
+            onClick={() => onSidebarClickHandler('/mypage/group-buying/sell/pending')}
+          >
+            판매 대기
+          </div>
+          <div
+            className='sub-title'
+            style={{ cursor: 'pointer' }}
+            onClick={() => onSidebarClickHandler('/mypage/group-buying/sell/completed')}
+          >
+            판매 완료
+          </div>
+          <div
+            className='sub-title'
+            style={{ cursor: 'pointer' }}
+            onClick={() => onSidebarClickHandler('/mypage/group-buying/sell/review')}
+          >
+            후기
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Others() {
   return (
     <div id='others-main-wrapper'>
-      <div className='sidebar-container'>
-        <div className='button'>카테고리</div>
-        <div className='categories'>
-          <div className='title'>도우미</div>
-          <div className='sub-title'>후기</div>
-          <div className='title'>커뮤니티</div>
-          <div className='sub-title'>작성 글</div>
-          <div className='title'>공동 구매</div>
-          <div className='sub-title-group'>
-            <div className='sub-title'>판매 대기</div>
-            <div className='sub-title'>판매 완료</div>
-            <div className='sub-title'>후기</div>
-          </div>
-        </div>
-      </div>
+      <OtherSidebar/>
       <div className='contents-wrapper'>
         <div className='summary-box'>
           <div className='content'>
