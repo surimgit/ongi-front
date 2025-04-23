@@ -9,7 +9,8 @@ export const SHOPPING_CART_PATH = 'shoppingCart';
 export const PAYMENTS_PATH = 'payments'
 export const ADDRESS_PATH = 'address';
 export const WRITE_PATH = 'write';
-export const PRODUCT_VIEW_PATH = ':sequence';
+export const PRODUCT_VIEW_PATH = ':productNumber';
+export const CALENDAR_PATH = 'calendar';
 
 export const COMMUNITY_PATH = 'community';
 export const COMMUNITY_POST_PATH = 'post';
@@ -88,8 +89,9 @@ export const NOTICE_ABSOLUTE_PATH = `${ROOT_PATH}${NOTICE_PATH}`;
 export const NOTICE_WRITE_ABSOLUTE_PATH = `${ROOT_PATH}${NOTICE_PATH}/${NOTICE_WRITE_PATH}`;
 export const NOTICE_VIEW_ABSOLUTE_PATH = (sequence: number | string) =>  `${ROOT_PATH}${NOTICE_PATH}`;
 
-export const ROOT_ABSOLUTE_PATH = ROOT_PATH;
 export const NEEDHELPER_ABSOLUTE_PATH = `${ROOT_PATH}${NEEDHELPER_PATH}`;
+export const CALENDAR_ABSOLUTE_PATH = `${ROOT_PATH}${CALENDAR_PATH}`;
+
 
 // variable: access token 속성명 //
 export const ACCESS_TOKEN = 'accessToken';
