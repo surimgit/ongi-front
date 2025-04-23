@@ -90,7 +90,8 @@ export default function Layout() {
   const onMyAlertClickHandler = () => {
     setShowMyAlert(!showMyAlert);
     getAlertRequest(accessToken).then(getAlertResponse);
-    
+  }
+
   // event handler: 청년달력 클릭 이벤트 처리 //
   const onCalendarClickHandler = () => {
     navigator(CALENDAR_ABSOLUTE_PATH);
