@@ -40,21 +40,23 @@ const getTimeUntilDeadLine = (deadline: string | Date) => {
 
 // component: 상품 테이블 레코드 컴포넌트 //
 function TableItem({product, index}: TableItemProps & {index: number}){
-  const { sequence, image, name, price, rating, purchasedPeople, productQuantity, boughtAmount, deadline, productRound } = product;
+  const { sequence, image, name, price, rating, productQuantity, boughtAmount, deadline } = product;
 
   // state: 모집 완료 여부 상태 //
   const [isFinish, setIsFinish] = useState<boolean>(false);
   // state: 잔여 상품수 상태 //
   const [remainingProducts, setRemainingProducts] = useState<number>(productQuantity);
   // state: 달성율 상태 //
-  const [achievementRate, setAchievementRate] = useState<number>(0);
+  const [achievementRate, setAchievementRate] = useState<number>(Math.floor((boughtAmount / productQuantity) * 100));
   // state: 마감기한 상태 //
-  const [remainingTime, setRemainingTime] = useState<number>(0);
-
-  if(remainingProducts === 0) setIsFinish(true);
-
-  const borderTopStyle = index === 0 ? {borderTop: '3px solid #000'} : {};
+  const [remainingTime, setRemainingTime] = useState<number>(getTimeUntilDeadLine(deadline));
   
+  // variable: 상품 이미지 클래스 //
+  const imageClass = remainingTime === 0 ? 'td image expired' : 'td image';
+
+  console.log(isFinish);
+  console.log(getTimeUntilDeadLine(deadline));
+
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
 
@@ -69,13 +71,39 @@ function TableItem({product, index}: TableItemProps & {index: number}){
 
   // event handler: 테이블 클릭 이벤트 핸들러 //
   const onClick = () => {
+    if(isFinish) {
+      alert('마감된 상품입니다!');
+      return;
+    }
     navigator(PRODUCT_VIEW_ABSOLUTE_PATH(sequence));
   }
 
+  useEffect(() => {
+    setRemainingProducts(remainingProducts - boughtAmount);
+    setAchievementRate(Math.floor((boughtAmount / productQuantity) * 100));
+  },[boughtAmount, productQuantity])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRemainingTime(getTimeUntilDeadLine(deadline));
+    }, 1000 * 60);
+
+    return () => clearInterval(interval);
+  },[deadline]);
+
+  useEffect(() => {
+    if(remainingProducts === 0 || remainingTime === 0) setIsFinish(true);
+  },[])
+
   return (
-    <div className='tr' style={borderTopStyle} onClick={onClick}>
-      <div className='td image'>
+    <div className='tr' onClick={onClick}>
+      <div className={imageClass}>
         <img src={image} alt='업로드된 이미지'/>
+        {isFinish && 
+          <div className='img-text'>
+            <p>마감</p>
+          </div>
+        }
       </div>
       <div className='td content-box' >
         <div className='content-title'>{name}</div>
@@ -92,7 +120,7 @@ function TableItem({product, index}: TableItemProps & {index: number}){
       </div>
       <div className='td deadline-box'>
         <div className='deadline-title color'>마감까지</div>
-        <div className='deadline-title normal'>{changeDateFormat(getTimeUntilDeadLine(deadline))}</div>
+        <div className='deadline-title normal'>{changeDateFormat(remainingTime)}</div>
       </div>
     </div>
   )
@@ -195,10 +223,12 @@ export default function ProductMain() {
         const timeA = getTimeUntilDeadLine(a.deadline);
         const timeB = getTimeUntilDeadLine(b.deadline);
 
+        if(timeA === 0 && timeB !== 0) return 1;
+        if(timeA !== 0 && timeB === 0) return -1;
         return timeA - timeB;
       })
     } else {
-      sortedProducts.sort((a, b) => b.purchasedPeople - a.purchasedPeople);
+      sortedProducts.sort((a, b) => b.boughtAmount - a.boughtAmount);
     }
 
     setTotalList(sortedProducts);
@@ -250,6 +280,8 @@ export default function ProductMain() {
             }
           </div>
         </div>
+        {totalList.length !== 0 &&
+
         <div className='pagination-container'>
           {totalSection !== 0 &&
             <Pagination
@@ -262,6 +294,8 @@ export default function ProductMain() {
             />
           }
         </div>
+        }
+        
       </div>
     </div>
   )

@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import './style.css'
-import { getProductDetailRequest, getReserveRequest, patchProductRequest, postShoppingCartRequest } from 'src/apis';
+import { deleteWishRequest, getProductDetailRequest, getReserveRequest, getWishRequest, patchProductRequest, postShoppingCartRequest, postWishRequest } from 'src/apis';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { ACCESS_TOKEN, PRODUCT_ABSOLUTE_PATH, SHOPPING_CART_ABSOLUTE_PATH } from 'src/constants';
 import { Category } from 'src/types/aliases';
 import { useCookies } from 'react-cookie';
 import GetProductDetailResponseDto from 'src/apis/dto/response/product/get-product-detail.response.dto';
-import { ResponseDto } from 'src/apis/dto/response';
+import { GetWishResponseDto, ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import Modal from 'src/components/Modal';
 import { PostShoppingCartRequestDto } from 'src/apis/dto/request/shopping-cart';
@@ -87,6 +87,24 @@ function CartUpdate({onModalViewChange, name, sequence}: CartUpdateProps) {
   )
 }
 
+// component: 상품 후기 컴포넌트 //
+function ProductReview() {
+  return(
+    <div className='review-list-wrapper'>
+      <ul className='review-list'>
+        <li>
+          <div className='info'>
+            
+          </div>
+          <div className='review-content'></div>
+        </li>
+      </ul>
+      <div className='review-content'></div>
+    </div>
+  )
+}
+
+// component: 상품 상세보기 페이지 컴포넌트 //
 export default function DetailProduct() {
 
   // state: cookie 상태 //
@@ -127,8 +145,6 @@ export default function DetailProduct() {
 
   // state: 장바구니 모달 오픈 상태 //
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
-  // state: 공유하기 버튼 클릭 상태 //
-  const [isShare, setIsShare] = useState<boolean>(false);
 
   // variable: 현재 경로 변수 //
   const pathname = useLocation().pathname;
@@ -144,6 +160,8 @@ export default function DetailProduct() {
   const descriptionClass = tabMenu === '설명' ? 'content active' : 'content';
   const reviewClass = tabMenu === '후기' ? 'content active' : 'content';
 
+  console.log(descriptionClass)
+  
   // function: navigate 함수 //
   const navigate = useNavigate();
 
@@ -173,6 +191,7 @@ export default function DetailProduct() {
     setProductContent(content);
   }
 
+  // function: post shopping cart 처리 함수 //
   const postShoppingCartResponse = (responseBody: ResponseDto | null) => {
     const { isSuccess, message } = responseMessage(responseBody);
     
@@ -184,6 +203,7 @@ export default function DetailProduct() {
     navigate(SHOPPING_CART_ABSOLUTE_PATH);
   }
 
+  // function: get reserve cart 처리 함수 //
   const getReserveResponse = (responseBody: GetReserveResponseDto | ResponseDto | null) => {
     const { isSuccess, message } = responseMessage(responseBody);
     
@@ -196,6 +216,13 @@ export default function DetailProduct() {
     setQuantity(quantity);
   }
 
+  // function: get wish 처리 함수 //
+  const getWishResponse = (responseBody: GetWishResponseDto | ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+
+    if(isSuccess && responseBody && 'productSequence' in responseBody) setIsLiked(true);
+
+  }
 
   // event handler: 상품 설명, 후기 변경 이벤트 핸들러 //
   const onChangeProductHandler = (click: string) => {
@@ -209,6 +236,13 @@ export default function DetailProduct() {
 
   // event handler: 찜 상태 변경 처리 핸들러 //
   const onChangeLikedHandler = () => {
+
+    if(isLiked) {
+      deleteWishRequest(+sequence, accessToken);
+    }else{
+      postWishRequest(+sequence, accessToken);
+    }
+
     setIsLiked(!isLiked);
   }
 
@@ -257,6 +291,7 @@ export default function DetailProduct() {
 
     getProductDetailRequest(sequence, accessToken).then(getProductDetailResponse);
     getReserveRequest(sequence).then(getReserveResponse);
+    getWishRequest(sequence, accessToken).then(getWishResponse);
   },[]);
 
   return (
@@ -307,7 +342,8 @@ export default function DetailProduct() {
           </div>
           <div className='jumbotron'>
             <div className='jumbotron-box'>
-              {productContent}
+              {descriptionClass === 'content active' && productContent}
+              {reviewClass}
             </div>
           </div>
         </div>

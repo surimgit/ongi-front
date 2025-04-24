@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { ResponseDto } from './dto/response';
+import { GetWishListResponseDto, GetWishResponseDto, ResponseDto } from './dto/response';
 import { IdCheckRequestDto, ResignedCheckRequestDto, SignInRequestDto, SignUpRequestDto, VerificationRequestDto } from './dto/request/auth';
 import { SignInResponseDto } from './dto/response/auth';
 import { GetLikeKeywordListResponseDto, GetSignInUserResponseDto, GetUserAccountResponseDto, GetUserIntroductionResponseDto } from './dto/response/user';
@@ -55,6 +55,13 @@ const PATCH_PRODUCT_QUANTITY_URL = (sequence: number | string) => `${PRODUCT_MOD
 const GET_PRODUCT_CATEGORY_NAME_URL = (category: Category, name:string) =>  `${PRODUCT_MODULE_URL}?category=${category}&name=${name}`;
 const GET_PRODUCT_DETAIL_URL = (sequence:number | string) => `${PRODUCT_MODULE_URL}/${sequence}`; 
 
+// 찜목록 API 경로
+const WISHLIST_MODULE_URL = `${API_DOMAIN}/api/v1/wish`;
+const POST_WISHLIST_URL = (postSequence: number | string) => `${WISHLIST_MODULE_URL}/${postSequence}`;
+const GET_WISHLIST_URL = `${WISHLIST_MODULE_URL}`;
+const GET_WISH_URL = (postSequence: number | string) => `${WISHLIST_MODULE_URL}/${postSequence}`;
+const DELETE_WISH_URL = (postSequence: number | string) => `${WISHLIST_MODULE_URL}/${postSequence}`;
+
 const COMMUNITY_MODULE_URL = `${API_DOMAIN}/api/v1/community`;
 const POST_COMMUNITY_URL = `${COMMUNITY_MODULE_URL}/write`;
 
@@ -75,6 +82,7 @@ const POST_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
 const GET_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
 const DELETE_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`
 
+// 결제 API 경로
 const POST_ORDER_URL = `${PAYMENT_URL}/`;
 const GET_ORDER_URL = `${PAYMENT_URL}/`;
 const POST_PAYMENT_CONFIRM_URL =  `${PAYMENT_URL}/confirm`;
@@ -249,6 +257,37 @@ export const fileUploadRequest = async (requestBody: FormData) => {
   return responseBody;
 };
 
+// function: post wish API 요청 함수//
+export const postWishRequest = async(postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.post(POST_WISHLIST_URL(postSequence), null , bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get wish API 요청 함수//
+export const getWishRequest = async(postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.get(GET_WISH_URL(postSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetWishResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get wish list API 요청 함수//
+export const getWishListRequest = async(accessToken: string) => {
+  const responseBody = await axios.post(GET_WISHLIST_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetWishListResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: delete wish API 요청 함수//
+export const deleteWishRequest = async(postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_WISH_URL(postSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
 // function: get community post API 요청 함수 //
 export const getCommunityPostRequest = async (postSequence:number | string) => {
   const responseBody = await axios.get(GET_COMMUNITY_POST_URL(postSequence))
