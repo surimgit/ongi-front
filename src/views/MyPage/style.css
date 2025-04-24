@@ -9,6 +9,7 @@
 #mypage-main-wrapper .contents-wrapper{
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 #mypage-main-wrapper .contents-wrapper .title-area{
@@ -51,7 +52,6 @@
 #mypage-main-wrapper .contents-wrapper .body{
   display: flex;
   justify-content: space-between;
-  
 }
 
 #mypage-main-wrapper .contents-wrapper .body .profile-container{
@@ -65,7 +65,13 @@
 #mypage-main-wrapper .contents-wrapper .body .profile-container .profile-image{
   width: 210px;
   height: 280px;
-  background-color: rgb(123, 123, 168)
+}
+
+#mypage-main-wrapper .contents-wrapper .body .profile-container .profile-image img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 #mypage-main-wrapper .contents-wrapper .body .profile-container .name{
@@ -76,8 +82,8 @@
 #mypage-main-wrapper .contents-wrapper .body .user-info-area{
   display: flex;
   flex-direction: column;
-  width: 800px;
   gap: 15px;
+  width: 800px;
 }
 
 #mypage-main-wrapper .contents-wrapper .body .user-info-area .outline{
