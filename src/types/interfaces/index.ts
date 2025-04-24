@@ -6,6 +6,8 @@ import CommunityComment from "./CommunityComment.interface"
 import LikeKeyword from "./like-keyword.interface"
 import Notice from "./notice.interface"
 import Question from "./question.interface"
+import StockReservation from "./stock-reservation.interface"
+import Wish from "./wish.interface"
 
 export type {
   Product,
@@ -15,5 +17,7 @@ export type {
   Notice,
   Question,
   TossPaymentAmount,
-  ShoppingCart
+  ShoppingCart,
+  StockReservation,
+  Wish,
 }

@@ -23,6 +23,7 @@
     "@types/react-dom": "^19.1.2",
     "axios": "^1.8.4",
     "chart.js": "^4.4.8",
+    "copy-to-clipboard": "^3.3.3",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "react": "^19.1.0",
