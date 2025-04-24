@@ -96,6 +96,7 @@ const GET_COMMUNITY_COMMENT_URL = (postSequence: number | string) => `${COMMUNIT
 const PUT_COMMUNITY_LIKED_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/liked`;
 const GET_COMMUNITY_LIKED_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/liked`;
 
+// 마이페이지 관련 경로
 
 const MYPAGE_MODULE_URL =  `${API_DOMAIN}/api/v1/mypage`;
 const OTHER_MYPAGE_MODULE_URL =  `${API_DOMAIN}/api/v1/mypage/other`;
@@ -104,16 +105,17 @@ const PATCH_MYPAGE_URL = `${MYPAGE_MODULE_URL}`;
 const MYPAGE_ACCOUNT_URL = `${API_DOMAIN}/api/v1/mypage/account`;
 const PATCH_MYPAGE_ACCOUNT_URL = `${MYPAGE_ACCOUNT_URL}`;
 const MYPAGE_KEYWORD_URL = `${MYPAGE_MODULE_URL}/keyword`;
-const ADD_MYPAGE_KEYWORD_URL =  `${MYPAGE_MODULE_URL}`;
-const DELETE_MYPAGE_KEYWORD_URL =  `${MYPAGE_MODULE_URL}`;
+const ADD_MYPAGE_KEYWORD_URL =  `${MYPAGE_KEYWORD_URL}`;
+const DELETE_MYPAGE_KEYWORD_URL =  `${MYPAGE_KEYWORD_URL}`;
 
-const QUESTION_MODULE_URL = `${API_DOMAIN}/api/v1/question`;
+const QUESTION_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/question`;
 const POST_QUESTION_URL = `${QUESTION_MODULE_URL}`;
 const GET_QUESTION_LIST_URL= `${QUESTION_MODULE_URL}`;
 const GET_QUESTION_POST_URL= (questionSequence: number | string) => `${QUESTION_MODULE_URL}/${questionSequence}`;
+const PATCH_QUESTION_POST_URL= (questionSequence: number | string) => `${QUESTION_MODULE_URL}/${questionSequence}`;
 const PATCH_QUESTION_ANSWER_URL = (questionSequence: number | string) => `${QUESTION_MODULE_URL}/${questionSequence}`;
 
-const NOTICE_MODULE_URL = `${API_DOMAIN}/api/v1/notice`;
+const NOTICE_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/notice`;
 const GET_NOTICE_LIST_URL = `${NOTICE_MODULE_URL}`;
 const POST_NOTICE_URL = `${NOTICE_MODULE_URL}`;
 const GET_NOTICE_POST_URL = (sequence: number | string) =>  `${NOTICE_MODULE_URL}/${sequence}`;
@@ -139,7 +141,7 @@ const responseErrorHandler = (error: AxiosError<ResponseDto>) => {
 export const getProductCategoryRequest = async (category:Category, name: string, accessToken:string) => {
   const responseBody = await axios.get(GET_PRODUCT_CATEGORY_NAME_URL(category, name), bearerAuthorization(accessToken)
   ).then(responseSuccessHandler<GetProductResponseDto>)
-   .catch(responseErrorHandler);
+  .catch(responseErrorHandler);
   return responseBody;
 }
 

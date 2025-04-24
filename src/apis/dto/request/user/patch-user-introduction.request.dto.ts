@@ -9,4 +9,5 @@ export default interface PatchUserIntroductionRequestDto {
   mbti: Mbti;
   job: string;
   selfIntro: string;
+  profileImage: string;
 }

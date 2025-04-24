@@ -1,5 +1,5 @@
 export default interface Notice{
   sequence: number;
-  postdate: number;
+  postDate: string;
   title: string;
 }

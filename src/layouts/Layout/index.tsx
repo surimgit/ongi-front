@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import './style.css';
-import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH } from 'src/constants';
 import { Board } from 'src/types/aliases';
 import useSignInUser from 'src/hooks/sign-in-user.hook';
 import { useEffect, useRef, useState } from 'react';
@@ -84,6 +84,11 @@ export default function Layout() {
     getAlertRequest(accessToken).then(getAlertResponse);
   };
 
+  // event handler: 마이페이지 버튼 클릭 이벤트 처리 //
+  const onMyPageClickHandler = () => {
+    navigator(MYPAGE_ABSOLUTE_PATH);
+  }
+
   // effect: cookie의 accessToken이 변경될 시 실행할 함수 //
   useEffect(() => {
     if (!cookies[ACCESS_TOKEN]) return;
@@ -122,7 +127,7 @@ export default function Layout() {
             <div className='navigation-list-item'>공구</div>
             <div className='navigation-list-item'>도우미</div>
             <div className='navigation-list-item'>청년달력</div>
-            <div className='navigation-list-item'>마이페이지</div>
+            <div className='navigation-list-item' onClick={onMyPageClickHandler}>마이페이지</div>
           </div>
         </div>
         <div className='my-content'>
