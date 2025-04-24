@@ -100,6 +100,7 @@
   font-size: 24px;
   display: flex;
   align-items: center;
+  justify-content: center;
 
   cursor: pointer;
 }
@@ -107,6 +108,7 @@
 .product-detail .content.active {
   border-bottom: solid #000;
   color: #000;
+  font-weight: 700;
 }
 
 .product-detail .product-utility-bar {
@@ -118,9 +120,8 @@
   width: 100%;
   height: 80px;
 
-  border-top: solid #979797;
-  border-bottom: solid #979797;
-  box-shadow: 0px 1px 1px #979797;
+  border-top: solid 0.5px #979797;
+  box-shadow: 0px 2px 1px #ced4da;
 }
 
 .product-detail .product-utility-bar .product-tab-menu {
@@ -130,6 +131,8 @@
   padding-left: 24px;
   gap: 40px;
 }
+
+
 
 
 .product-utility-bar .product-toolbox {

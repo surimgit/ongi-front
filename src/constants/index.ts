@@ -88,7 +88,6 @@ export const NOTICE_ABSOLUTE_PATH = `${ROOT_PATH}${NOTICE_PATH}`;
 export const NOTICE_WRITE_ABSOLUTE_PATH = `${ROOT_PATH}${NOTICE_PATH}/${NOTICE_WRITE_PATH}`;
 export const NOTICE_VIEW_ABSOLUTE_PATH = (sequence: number | string) =>  `${ROOT_PATH}${NOTICE_PATH}`;
 
-export const ROOT_ABSOLUTE_PATH = ROOT_PATH;
 export const NEEDHELPER_ABSOLUTE_PATH = `${ROOT_PATH}${NEEDHELPER_PATH}`;
 
 // variable: access token 속성명 //

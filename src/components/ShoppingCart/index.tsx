@@ -11,16 +11,23 @@ import { ResponseDto } from 'src/apis/dto/response';
 
 interface ShoppingCartLayoutProps {
   cartContent: React.ReactNode;
-  selectedTotalPrice: number;
   productQuantity: number;
   onPaymentClickHandler: () => void
 }
 
-export default function ShoppingCartLayout({ cartContent, selectedTotalPrice, productQuantity ,onPaymentClickHandler }: ShoppingCartLayoutProps) {
+export default function ShoppingCartLayout({ cartContent, productQuantity ,onPaymentClickHandler }: ShoppingCartLayoutProps) {
 
   const location = useLocation();
   const pathname = location.pathname;
   
+  const raw = localStorage.getItem('shoppingCart');
+  let totalPrice = 0;
+
+  if(raw){
+
+    const parsed = JSON.parse(raw);
+    totalPrice = parsed.state.totalPrice;
+  } 
   return (
     <div id='shopping-cart-main-wrapper'>
       <div className='shopping-cart-container'>
@@ -44,7 +51,7 @@ export default function ShoppingCartLayout({ cartContent, selectedTotalPrice, pr
                   <div className='price-box'>
                     <div className='price-content'>
                       <div className='sub-title'>주문 금액</div>
-                      <div className='price'>{selectedTotalPrice.toLocaleString()}원</div>
+                      <div className='price'>{totalPrice.toLocaleString()}원</div>
                     </div>
                     <div className='price-content'>
                       <div className='sub-title'>할인 금액</div>
@@ -53,7 +60,7 @@ export default function ShoppingCartLayout({ cartContent, selectedTotalPrice, pr
                   </div>
                   <div className='price-content'>
                     <div className='title primary'>총 결제 금액</div>
-                    <div className='title primary'>{selectedTotalPrice.toLocaleString()}원</div>
+                    <div className='title primary'>{totalPrice.toLocaleString()}원</div>
                   </div>
                 </div>
               </div>
