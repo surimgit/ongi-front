@@ -527,14 +527,6 @@ export const addLikeKeywordRequest = async (requestBody: AddLikeKeywordRequestDt
   return responseBody;
 }
 
-// function: get like keyword API 요청 함수 //
-export const getLikeKeywordListRequest = async (accessToken: string) => {
-  const responseBody = await axios.get(MYPAGE_KEYWORD_URL, bearerAuthorization(accessToken))
-    .then(responseSuccessHandler<GetLikeKeywordListResponseDto>)
-    .catch(responseErrorHandler);
-  return responseBody;
-}
-
 // function: delete like keyword API 요청 함수 //
 export const deleteLikeKeywordRequest = async (requestBody: DeleteLikeKeywordRequestDto, accessToken: string) => {
   const responseBody = await axios.delete(DELETE_MYPAGE_KEYWORD_URL, {
@@ -544,6 +536,14 @@ export const deleteLikeKeywordRequest = async (requestBody: DeleteLikeKeywordReq
     data: requestBody
   })
     .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get like keyword API 요청 함수 //
+export const getLikeKeywordListRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(MYPAGE_KEYWORD_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetLikeKeywordListResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 }
