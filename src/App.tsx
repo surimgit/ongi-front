@@ -40,11 +40,11 @@ import Account from './views/MyPage/Account';
 
 import { useEffect } from 'react';
 import Main from './views/Main';
-import ShoppingCartAddress from './views/ShoppingCart/Address';
 import Calendar from './views/Calendar';
 import FindId from './views/Auth/FindId';
 import FindPassword from './views/Auth/FindPassword';
 import FindResult from './views/Auth/FindResult';
+import ShoppingCartAddress from './views/ShoppingCart/Address';
 
 function App() {
   return (
