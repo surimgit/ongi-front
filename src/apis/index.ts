@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { GetWishListResponseDto, GetWishResponseDto, ResponseDto } from './dto/response';
-import { IdCheckRequestDto, ResignedCheckRequestDto, SignInRequestDto, SignUpRequestDto, VerificationRequestDto } from './dto/request/auth';
+import { FindIdRequestDto, FindPasswordRequestDto, IdCheckRequestDto, ResignedCheckRequestDto, SignInRequestDto, SignUpRequestDto, VerificationRequestDto } from './dto/request/auth';
 import { SignInResponseDto } from './dto/response/auth';
 import { GetLikeKeywordListResponseDto, GetSignInUserResponseDto, GetUserAccountResponseDto, GetUserIntroductionResponseDto } from './dto/response/user';
 import { PatchProductQuantityRequestDto, PostProductRequestDto } from './dto/request/product';
@@ -27,6 +27,9 @@ import { GetQuestionListResponseDto, GetQuestionResponseDto } from './dto/respon
 import PostAlertRequestDto from './dto/request/alert/post-alert.request.dto';
 import GetAlertResponseDto from './dto/response/alert/get-alert.response.dto';
 import { PostOrderItemRequestDto } from './dto/request/payment';
+import { PatchCalendarRequestDto, PostScheduleRequestDto } from './dto/request/calendar';
+import { GetAllScheduleResponseDto } from './dto/response/calendar';
+import { FindIdResponseDto } from './dto/response/auth/find-id.response.dto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -39,6 +42,8 @@ const SIGN_UP_URL = `${AUTH_MODULE_URL}/sign-up`;
 const SEND_VERIFY_CODE_URL = `${AUTH_MODULE_URL}/send-verify-code`;
 const VERIFY_CODE_URL = `${AUTH_MODULE_URL}/verify-code`;
 const RESIGNED_CHECK_URL = `${AUTH_MODULE_URL}/resigned-check`;
+const FIND_ID_URL = `${AUTH_MODULE_URL}/find-id`;
+const FIND_PASSWORD_URL = `${AUTH_MODULE_URL}/find-password`;
 
 const PAYMENT_URL = `${API_DOMAIN}/api/v1/payments`;
 const SIGN_IN_URL = `${AUTH_MODULE_URL}/sign-in`;
@@ -119,6 +124,11 @@ const NOTICE_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/notice`;
 const GET_NOTICE_LIST_URL = `${NOTICE_MODULE_URL}`;
 const POST_NOTICE_URL = `${NOTICE_MODULE_URL}`;
 const GET_NOTICE_POST_URL = (sequence: number | string) =>  `${NOTICE_MODULE_URL}/${sequence}`;
+const CALENDAR_MODULE_URL = `${API_DOMAIN}/api/v1/calendar`;
+const GET_SCHEDULE_URL = `${CALENDAR_MODULE_URL}`
+const POST_SCHEDULE_URL = `${CALENDAR_MODULE_URL}`
+const PATCH_SCHEDULE_URL = (calendarSequence: number | string) => `${CALENDAR_MODULE_URL}/${calendarSequence}`;
+const DELETE_SCHEDULE_URL = (calendarSequence: number | string) => `${CALENDAR_MODULE_URL}/${calendarSequence}`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
@@ -223,6 +233,22 @@ export const signInRequest = async (requestBody: SignInRequestDto) => {
 export const getSignInUserRequest = async (accessToken: string) => {
   const responseBody = await axios.get(GET_SIGN_IN_USER_URL, bearerAuthorization(accessToken))
     .then(responseSuccessHandler<GetSignInUserResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: find id API 요청 함수 //
+export const findIdRequest = async (requestBody: FindIdRequestDto) => {
+  const responseBody = await axios.post(FIND_ID_URL, requestBody)
+    .then(responseSuccessHandler<FindIdResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: find Password API 요청 함수 //
+export const findPasswordRequest = async (requestBody: FindPasswordRequestDto) => {
+  const responseBody = await axios.post(FIND_PASSWORD_URL, requestBody)
+    .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;
 }
@@ -591,15 +617,48 @@ export const getUserAccountRequest = async (accessToken: string) => {
 // function: post alert API 요청 함수 //
 export const postAlertRequest = async (requestBody: PostAlertRequestDto, accessToken: string) => {
   const responseBody = await axios.post(ALERT_MODULE_URL, requestBody, bearerAuthorization(accessToken))
-  .then(responseSuccessHandler)
-  .catch(responseErrorHandler);
-  return responseBody;
 }
 
 // function: get alert API 요청 함수 //
 export const getAlertRequest = async (accessToken: string) => {
   const responseBody = await axios.get(ALERT_MODULE_URL, bearerAuthorization(accessToken))
   .then(responseSuccessHandler<GetAlertResponseDto>)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post Schedule API 요청 함수 //
+export const postScheduleRequest = async (requestBody:PostScheduleRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_SCHEDULE_URL, requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  console.log("📤 저장 요청 바디:", requestBody);
+  return responseBody;
+} 
+
+// function: get Schedule API 요청 함수 //
+export const getAllScheduleRequest = async (
+  accessToken: string
+): Promise<GetAllScheduleResponseDto | ResponseDto | null> => {
+  const responseBody = await axios
+    .get(GET_SCHEDULE_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetAllScheduleResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: patch Schedule API 요청 함수 //
+export const patchScheduleRequest = async (calendarSequence: number, requestBody:PatchCalendarRequestDto, accessToken: string) => {
+  const responseBody = await axios.patch(PATCH_SCHEDULE_URL(calendarSequence), requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: delete schedule API 요청 함수 //
+export const deleteScheduleRequest = async (calendarSequence: number, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_SCHEDULE_URL(calendarSequence), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
   .catch(responseErrorHandler);
   return responseBody;
 }

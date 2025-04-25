@@ -1,0 +1,111 @@
+.calendar-modal {
+    position: absolute;
+    top: 150px;
+    left: 150px;
+    width: 550px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid var(--Lightmode-Grey4);
+    z-index: 9999;
+    font-family: 'Pretendard', sans-serif;
+    overflow: hidden;
+  }
+  
+  .calendar-modal .modal-header {
+    margin: 10px 15px;
+    padding: 12px 16px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: move;
+    user-select: none;
+    border-bottom: 2px solid #e0e0e0;
+  }
+  
+  .calendar-modal .modal-content {
+    margin: 10px 15px;
+  }
+  
+  .calendar-modal .row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .calendar-modal .row input,
+  select {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .color-picker {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  
+  .color {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  
+  .color.selected {
+    border: 3px solid #0d4dadd0;
+  }
+  
+  .purple { background-color: #9b69f8; }
+  .green { background-color: #4dd454; }
+  .yellow { background-color: #ffd416; }
+  .orange { background-color: #ffa928; }
+  .red { background-color: #f3554a; }
+  .pink { background-color: #ff81cf; }
+  .blue { background-color: #5ea9ff; }
+  
+  textarea {
+    width: 95%;
+    height: 80px;
+    resize: none;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 16px;
+    font-family: 'Pretendard', sans-serif;
+  }
+  
+  .calendar-modal .buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .calendar-modal button.cancel {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    background-color: var(--Lightmode-Grey4);
+    color: var(--White);
+    width: 140px;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+  
+  .calendar-modal button.submit {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    background-color: var(--Primary);
+    color: var(--White);
+    width: 140px;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+  
+  .react-datepicker-popper {
+    z-index: 99999 !important;
+  }
+  

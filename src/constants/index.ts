@@ -9,7 +9,12 @@ export const SHOPPING_CART_PATH = 'shoppingCart';
 export const PAYMENTS_PATH = 'payments'
 export const ADDRESS_PATH = 'address';
 export const WRITE_PATH = 'write';
-export const PRODUCT_VIEW_PATH = ':sequence';
+export const PRODUCT_VIEW_PATH = ':productNumber';
+export const CALENDAR_PATH = 'calendar';
+
+export const AUTH_FIND_ID_PATH = 'find-id';
+export const AUTH_FIND_PASSWORD_PATH = 'find-password';
+export const AUTH_FIND_USER_RESULT_PATH = 'find-result';
 
 export const COMMUNITY_PATH = 'community';
 export const COMMUNITY_POST_PATH = 'post';
@@ -65,6 +70,10 @@ export const NEEDHELPER_PATH = 'needHelper';
 export const ROOT_ABSOLUTE_PATH = `${ROOT_PATH}`;
 export const AUTH_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}`;
 export const MAIN_ABSOLUTE_PATH = `${ROOT_PATH}${MAIN_PATH}`;
+
+export const AUTH_FIND_ID_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}/${AUTH_FIND_ID_PATH}`;
+export const AUTH_FIND_PASSWORD_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}/${AUTH_FIND_PASSWORD_PATH}`;
+export const AUTH_FIND_USER_RESULT_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}/${AUTH_FIND_USER_RESULT_PATH}`;
 
 export const PRODUCT_ABSOLUTE_PATH = `${ROOT_PATH}${PRODUCT_PATH}`;
 export const PRODUCT_WRITE_PATH = `${ROOT_PATH}${PRODUCT_PATH}/${WRITE_PATH}`;
@@ -127,6 +136,8 @@ export const MY_GROUPBUYING_BUY_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY
 export const MY_GROUPBUYING_SELL_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_GROUPBUYING_PATH}/${MY_GROUPBUYING_SELL_PATH}`;
 
 export const NEEDHELPER_ABSOLUTE_PATH = `${ROOT_PATH}${NEEDHELPER_PATH}`;
+export const CALENDAR_ABSOLUTE_PATH = `${ROOT_PATH}${CALENDAR_PATH}`;
+
 
 // variable: access token 속성명 //
 export const ACCESS_TOKEN = 'accessToken';

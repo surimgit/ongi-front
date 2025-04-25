@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import './style.css';
-import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, CALENDAR_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH } from 'src/constants';
 import { Board } from 'src/types/aliases';
 import useSignInUser from 'src/hooks/sign-in-user.hook';
 import { useEffect, useRef, useState } from 'react';
@@ -9,6 +9,7 @@ import { getAlertRequest } from 'src/apis';
 import GetAlertResponseDto from 'src/apis/dto/response/alert/get-alert.response.dto';
 import { ResponseDto } from 'src/apis/dto/response';
 import Alert from 'src/types/interfaces/Alert.interface';
+import { useSignInUserStore } from 'src/stores';
 
 // interface: 알림 레코드 컴포넌트 속성 //
 interface AlertItemProps {
@@ -27,11 +28,12 @@ function AlertItem({ alert }: AlertItemProps) {
 // component: 공통 레이아웃 컴포넌트 //
 export default function Layout() {
 
-  // state: cookie 상태 //
-  const [cookies, _, removeCookie] = useCookies();
-
   // state: 경로 상태 //
   const { pathname } = useLocation();
+  const [cookies] = useCookies();
+
+  // state: nickname 상태 //
+  const { nickname } = useSignInUserStore();
 
   // state: My Alert List 요소 참조 //
   const myAlertListRef = useRef<HTMLDivElement | null>(null);
@@ -68,9 +70,18 @@ export default function Layout() {
     setAlerts(alerts);
   }
 
+  // event handler: 로고 이미지 클릭 이벤트 처리 //
+  const onLogoClickHandler = () => {navigator(MAIN_ABSOLUTE_PATH);};
+
   // event handler: 로그인/회원가입 버튼 클릭 이벤트 처리 //
   const onSignInUpClickHandler = () => {
+    if(!accessToken) navigator(MAIN_ABSOLUTE_PATH);
     navigator(AUTH_ABSOLUTE_PATH);
+  };
+
+  // event handler: user nickname 버튼 클릭 이벤트 처리 //
+  const onNicknameClickHandler = () => {
+    navigator('/mypage');
   };
 
   // event handler: 게시판 클릭 이벤트 처리 //
@@ -82,6 +93,11 @@ export default function Layout() {
   const onMyAlertClickHandler = () => {
     setShowMyAlert(!showMyAlert);
     getAlertRequest(accessToken).then(getAlertResponse);
+  }
+
+  // event handler: 청년달력 클릭 이벤트 처리 //
+  const onCalendarClickHandler = () => {
+    navigator(CALENDAR_ABSOLUTE_PATH);
   };
 
   // event handler: 마이페이지 버튼 클릭 이벤트 처리 //
@@ -97,7 +113,7 @@ export default function Layout() {
 
   // effect: cookie의 accessToken과 경로가 변경될 시 실행할 함수 //
   useEffect(() => {
-    if (!cookies[ACCESS_TOKEN]) {
+    if (!cookies[ACCESS_TOKEN] && pathname !== MAIN_ABSOLUTE_PATH) {
       navigator(AUTH_ABSOLUTE_PATH);
       return;
     }
@@ -121,12 +137,12 @@ export default function Layout() {
     <div id='layout-wrapper'>
       <div id='top-bar'>
         <div className='navigation'>
-          <div className='logo'></div>
+          <div className='logo' onClick={onLogoClickHandler}></div>
           <div className='navigation-list'>
             <div className='navigation-list-item' onClick={() => onBoardClickHandler('전체 글')}>커뮤니티</div>
             <div className='navigation-list-item'>공구</div>
             <div className='navigation-list-item'>도우미</div>
-            <div className='navigation-list-item'>청년달력</div>
+            <div className='navigation-list-item' onClick={onCalendarClickHandler}>청년달력</div>
             <div className='navigation-list-item' onClick={onMyPageClickHandler}>마이페이지</div>
           </div>
         </div>
@@ -145,7 +161,11 @@ export default function Layout() {
           <div className='my-content-shopping-cart'></div>
           <div className='login-container'>
             <div className='login-icon'></div>
-            <div className='login-content' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
+            {accessToken ? (
+              <div className='login-content login' onClick={onNicknameClickHandler}>{nickname}</div>
+            ) : (
+              <div className='login-content logout' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
+            )}
           </div>
         </div>
       </div>
