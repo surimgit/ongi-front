@@ -2,7 +2,18 @@ import { Routes, Route, useNavigate, Outlet } from 'react-router';
 import Layout from './layouts/Layout';
 import './App.css';
 import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, 
-    SHOPPING_CART_PATH, WRITE_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH, NEEDHELPER_PATH } from './constants';
+    SHOPPING_CART_PATH, WRITE_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH, NEEDHELPER_PATH, 
+    MY_GROUPBUYING_PATH,
+    MY_GROUPBUYING_WISH_LIST_PATH,
+    MY_REVIEW_PATH,
+    MY_NEEDHELLPER_PATH,
+    MY_NEEDHELLPER_ASK_PATH,
+    MY_NEEDHELLPER_APPLY_PATH,
+    MY_NEEDHELLPER_LIKED_PATH,
+    MY_COMMUNITY_PATH,
+    FAQ_PATH,
+    NOTICE_PATH,
+    MAIN_PATH} from './constants';
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
@@ -22,7 +33,7 @@ import MyNeedHelper from './views/MyPage/Activity/MyNeedHelper';
 import MyCommunity from './views/MyPage/Activity/MyCommunity';
 import './App.css';
 import CommunityLayout from './layouts/Community';
-import { COMMUNITY_COUNTYBOARD_PATH, COMMUNITY_HOTBOARD_PATH, COMMUNITY_INFOBOARD_PATH, COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
+import { COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
 import PostWrite from './views/Community/Write';
 // import HotBoard from './views/Community/HotBoard';
 // import InfoBoard from './views/Community/InfoBoard';
