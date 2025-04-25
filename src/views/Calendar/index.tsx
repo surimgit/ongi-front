@@ -272,7 +272,7 @@ export default function Calendar() {
         </div>
       </div>
     )}
-      <Policy items={[]} />
+      {pathname === MAIN_ABSOLUTE_PATH ? undefined : <Policy items={[]} />}
     </div>
   );
 }
