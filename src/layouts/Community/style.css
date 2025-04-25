@@ -29,7 +29,7 @@
 
     border-radius: 3px;
 
-    background-color: var(--Black);
+    background-color: var(--Lightmode-Grey4);
 
     color: var(--White);
     font-size: 20px;
@@ -39,7 +39,7 @@
 }
 
 #community-layout-wrapper .community-post-button:hover {
-    text-decoration: underline;
+    background-color: var(--Lightmode-Grey);
 }
 
 #community-layout-wrapper .category-list-container .category-container {

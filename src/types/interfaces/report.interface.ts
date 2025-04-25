@@ -1,6 +1,7 @@
 import ReportCategory from "../aliases/report-category.alias";
 
 export default interface ReportEntity {
+    reportSequence: number,
     reporterId: string,
     reportedNickname: string,
     reportedId: string,

@@ -1,13 +1,13 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import './style.css';
 import { useNavigate, useParams } from 'react-router';
 import { useCookies } from 'react-cookie';
-import { ACCESS_TOKEN, COMMUNITY_EDIT_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
-import { deleteCommunityCommentRequest, deleteCommunityPostRequest, getCommunityCommentRequest, getCommunityLikedRequest, getCommunityPostRequest, patchCommunityCommentRequest, patchCommunityViewCountRequest, postAlertRequest, postCommunityCommentRequest, putCommunityLikedRequest } from 'src/apis';
+import { ACCESS_TOKEN, COMMUNITY_EDIT_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH } from 'src/constants';
+import { deleteCommunityCommentRequest, deleteCommunityPostRequest, getCommunityCommentRequest, getCommunityCommentsRequest, getCommunityLikedRequest, getCommunityPostRequest, patchCommunityCommentRequest, patchCommunityViewCountRequest, postAlertRequest, postCommunityCommentRequest, postReportRequest, putCommunityLikedRequest } from 'src/apis';
 import { GetCommunityPostResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
 import { CommunityComment } from 'src/types/interfaces';
-import GetCommunityCommentResponse from 'src/apis/dto/response/community/get-community-comment.response.dto';
+import GetCommunityCommentsResponse from 'src/apis/dto/response/community/get-community-comments.response.dto';
 import PostCommunityCommentRequestDto from 'src/apis/dto/request/community/post-community-comment.request.dto';
 import patchCommunityViewCountResponse from 'src/hooks/viewcount.hook';
 import GetCommunityLikedResponseDto from 'src/apis/dto/response/community/get-community-liked.response.dto';
@@ -16,8 +16,192 @@ import PostAlertRequestDto from 'src/apis/dto/request/alert/post-alert.request.d
 import DefaultProfile from 'src/assets/images/default_profile.png';
 import useCommentCountStore from 'src/stores/comment-count.store';
 import PatchCommunityCommentRequestDto from 'src/apis/dto/request/community/patch-community-comment.request.dto';
-import Report from 'src/components/Report';
-import ReportEntity from 'src/types/interfaces/report.interface';
+import ReportCategory from 'src/types/aliases/report-category.alias';
+import PostReportRequestDto from 'src/apis/dto/request/report/post-report.request.dto';
+import Modal from 'src/components/Modal';
+import GetCommunityCommentResponse from 'src/apis/dto/response/community/get-community-comment.response.dto';
+
+// interface: 신고 모달 컴포넌트 속성 //
+interface TypeProps {
+    onClose(): void;
+    entityType: string;
+    entitySequence: number | string | undefined;
+    children?: ReactNode;
+}
+
+// component: 신고 모달 화면 컴포넌트 //
+function Report({ onClose, entityType, entitySequence }: TypeProps) {
+
+    // state: cookie 상태 //
+    const [cookies] = useCookies();
+
+    // state: 경로 변수 상태 //
+    const { postSequence } = useParams();
+
+    // state: 신고 테이블 상태 //
+    const [reportedId, setReportedId] = useState<string>('');
+    const [reportedNickname, setReportedNickname] = useState<string>('');
+    const [category, setCategory] = useState<ReportCategory>('');
+    const [detail, setDetail] = useState<string>('');
+    const [content, setContent] = useState<string>('');
+
+    // state: 기타 사유 선택 상태 //
+    const [isEtc, setEtc] = useState<boolean>(false);
+
+    // variable: access Token //
+    const accessToken = cookies[ACCESS_TOKEN];
+
+    // function: 내비게이터 함수 //
+    const navigator = useNavigate();
+
+    // function: post report response 처리 함수 //
+    const postReportResponse = (responseBody: ResponseDto | null) => {
+        const message =
+        !responseBody ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'AF' ? '인증에 실패했습니다.' 
+        : responseBody.code === 'ARU' ? '탈퇴한 사용자입니다.' : '';
+
+        const isSuccess = responseBody !== null && responseBody.code === 'SU';
+        if (!isSuccess) {
+        alert(message);
+        onClose();
+        return;
+        }
+
+        onClose();
+    };
+
+    // function: get community post resopnse 처리 함수 //
+    const getCommunityPostResponse = (responseBody: GetCommunityPostResponseDto | ResponseDto | null) => {
+        const message = 
+        !responseBody ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'AF' ? '인증에 실패했습니다.'
+        : responseBody.code === 'NPS' ? '존재하지 않는 게시물입니다.' : '';
+
+        const isSuccess = responseBody !== null && responseBody.code === 'SU';
+
+        if (!isSuccess) {
+            alert(message);
+            navigator(COMMUNITY_OVERALL_ABSOLUTE_PATH);
+            return;
+        }
+
+        const { userId, nickname, title } = responseBody as GetCommunityPostResponseDto;
+        setReportedId(userId);
+        setReportedNickname(nickname);
+        setContent(title);
+    }
+
+    // function: get community comment response 처리 함수 //
+    const getCommunityCommentResponse = (responseBody: GetCommunityCommentResponse | ResponseDto | null) => {
+        const message = 
+        !responseBody ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'AF' ? '인증에 실패했습니다.'
+        : responseBody.code === 'NPS' ? '존재하지 않는 게시물입니다.'
+        : responseBody.code === 'NEC' ? '존재하지 않는 댓글입니다.' : '';
+
+        const isSuccess = responseBody !== null && responseBody.code === 'SU';
+
+        if (!isSuccess) {
+            alert(message);
+            navigator(COMMUNITY_OVERALL_ABSOLUTE_PATH);
+            return;
+        }
+
+        const { userId, nickname, content } = responseBody as GetCommunityCommentResponse;
+        setReportedId(userId);
+        setReportedNickname(nickname);
+        setContent(content);
+
+    };
+
+    // event handler: 카테고리 선택 이벤트 처리 //
+    const onCategoryClickHandler = (reportCategory: ReportCategory) => {
+        if (reportCategory === '기타') setEtc(true);
+        else {
+            setEtc(false);
+        }
+        setCategory(reportCategory);
+    };
+
+    // event handler: 신고 상세 내역 변경 이벤트 처리 //
+    const onReportDetailChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        const { value } = event?.target;
+        setDetail(value);
+    };
+
+    // event handler: 신고 버튼 클릭 시 이벤트 처리 //
+    const onReportClickHandler = () => {
+        if (!category) return;
+        const requestBody: PostReportRequestDto = {
+            reportedId, reportedEntityNum: entitySequence, reportedEntityType: entityType, 
+            reportedContent: content, reportCategory: category, reportDetail: detail
+        };
+
+        postReportRequest(requestBody, accessToken).then(postReportResponse);
+    };
+
+    // effect: 컴포넌트 로드 시 실행할 함수 //
+    useEffect(() => {
+        if (!entitySequence) return;
+        if (entityType === 'community_post') getCommunityPostRequest(entitySequence).then(getCommunityPostResponse);
+        else if (entityType === 'comment' && postSequence) getCommunityCommentRequest(postSequence, entitySequence).then(getCommunityCommentResponse);
+
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = '';
+        };
+    } , []);
+
+    // render: 신고 모달 화면 컴포넌트 렌더링 //
+    return (
+        <div className='report-container'>
+            <div className='report-body'>
+                <div className='info-type'>
+                    <span>신고 대상</span>
+                    <span>신고 내용</span>
+                </div>
+                <div className='info-container'>
+                    <span>{reportedNickname}({reportedId})</span>
+                    <span>{content}</span>
+                </div>
+            </div>
+            <div className='report-category-box'>
+                <label>
+                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('도배')}/> 
+                    <span>도배</span>
+                </label>
+                <label>
+                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('음란물')}/> 
+                    <span>음란물</span>
+                </label>
+                <label>
+                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('혐오스러운 컨텐츠')}/> 
+                    <span>혐오스러운 컨텐츠</span>
+                </label>
+                <label>
+                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('욕설')}/> 
+                    <span>욕설</span>
+                </label>
+                <label>
+                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('광고')}/> 
+                    <span>광고</span>
+                </label>
+                <label>
+                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('기타')}/> 
+                    <span>기타</span>
+                </label>
+            </div>
+            {isEtc &&
+                <textarea className='report-detail' placeholder='상세 신고 내용을 입력해주세요.' value={detail} onChange={onReportDetailChangeHandler}></textarea>
+            }
+            <div className='report-btn' onClick={onReportClickHandler}>신고</div>
+        </div>
+    )
+}
 
 // interface: 댓글 레코드 컴포넌트 속성 //
 interface CommentItemProps {
@@ -40,6 +224,9 @@ function CommentItem({ communityComment, getCommunityComment }: CommentItemProps
 
     // state: 수정 내용 상태 //
     const [content, setContent] = useState<string>(comment);
+
+    // state: 신고 모달 오픈 상태 //
+    const [isReportOpen, setReportOpen] = useState<boolean>(false);
 
     // variable: access Token //
     const accessToken = cookies[ACCESS_TOKEN];
@@ -111,6 +298,16 @@ function CommentItem({ communityComment, getCommunityComment }: CommentItemProps
         setContent(value);
     };
 
+    // event handler: 신고 버튼 클릭 이벤트 처리 //
+    const onOpenReportClickHandler = () => {
+        setReportOpen(true);
+    };
+
+    // event handler: 신고 모달 화면 닫기 클릭 이벤트 처리 //
+    const onCloseReportClickHandler = () => {
+        setReportOpen(false);
+    };
+
     // render: 댓글 테이블 레코드 컴포넌트 렌더링 //
     return (
         <div className='comment-box'>
@@ -123,7 +320,20 @@ function CommentItem({ communityComment, getCommunityComment }: CommentItemProps
                         <div className='post-date'>{commentPostDate}</div>
                     </div>
                     <div className='interaction-container'>
-                        <div className='report'></div>
+                        <div className='report' onClick={onOpenReportClickHandler}></div>
+                        {isReportOpen &&
+                            <Modal
+                                title='신고'
+                                onClose={onCloseReportClickHandler}
+                            >
+                                <Report
+                                    onClose={onCloseReportClickHandler}
+                                    entityType='comment'
+                                    entitySequence={commentSequence}
+                                >
+                                </Report>
+                            </Modal>
+                        }
                         { commentWriterId === userId &&
                             <>
                                 <div className='btn edit' onClick={onEditCommentButtonClickHandler}>수정</div>
@@ -187,20 +397,6 @@ export default function PostDetail() {
     const [alertEntitySequence] = useState<number>(Number(postSequence));
     const [alertType, setAlertType] = useState<string>('');
 
-    // state: 신고 객체 상태 //
-    const reportEntity: ReportEntity = {
-        reporterId: userId,
-        reportCategory: '',
-        reportDate: '',
-        reportedId: writerId,
-        reportedNickname: nickname,
-        reportContent: content,
-        reportDetail: '',
-        reportedEntityType: 'community_post',
-        reportedEntityNum: postSequence,
-        reportProcess: '',
-    };
-
     // state: 신고 모달 오픈 상태 //
     const [isReportOpen, setReportOpen] = useState<boolean>(false);
 
@@ -262,7 +458,7 @@ export default function PostDetail() {
     };
 
     // function: get community comment response 처리 함수 //
-    const getCommunityCommentResponse = (responseBody: GetCommunityCommentResponse | ResponseDto | null) => {
+    const getCommunityCommentsResponse = (responseBody: GetCommunityCommentsResponse | ResponseDto | null) => {
         const message =
         !responseBody ? '서버에 문제가 있습니다.'
         : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
@@ -275,7 +471,7 @@ export default function PostDetail() {
             return;
         }
 
-        const { comments } = responseBody as GetCommunityCommentResponse;
+        const { comments } = responseBody as GetCommunityCommentsResponse;
         setComments(comments);
     };
 
@@ -296,7 +492,7 @@ export default function PostDetail() {
 
         setComment('');
         if (!postSequence) return;
-        getCommunityCommentRequest(postSequence).then(getCommunityCommentResponse);
+        getCommunityCommentsRequest(postSequence).then(getCommunityCommentsResponse);
 
         setSenderId(userId);
         setReceiverId(writerId);
@@ -353,9 +549,9 @@ export default function PostDetail() {
     };
 
     // event handler: 댓글 목록 리렌더링 처리 //
-    const getCommunityComment = () => {
+    const getCommunityComments = () => {
         if (!postSequence) return;
-        getCommunityCommentRequest(postSequence).then(getCommunityCommentResponse);
+        getCommunityCommentsRequest(postSequence).then(getCommunityCommentsResponse);
     }
 
     // event handler: 삭제 버튼 클릭 이벤트 처리 //
@@ -397,7 +593,7 @@ export default function PostDetail() {
         if (!accessToken || !postSequence) return;
 
         putCommunityLikedRequest(postSequence, accessToken).then(putCommunityLikedResponse);
-        getCommunityCommentRequest(postSequence).then(getCommunityCommentResponse);
+        getCommunityCommentsRequest(postSequence).then(getCommunityCommentsResponse);
     }
 
     // event handler: 신고 버튼 클릭 이벤트 처리 //
@@ -419,14 +615,14 @@ export default function PostDetail() {
         patchCommunityViewCountRequest(postSequence).then(patchCommunityViewCountResponse);
         getCommunityLikedRequest(postSequence).then(getCommunityLikedResponse);
         getCommunityPostRequest(postSequence).then(getCommunityPostResponse);
-        getCommunityCommentRequest(postSequence).then(getCommunityCommentResponse);
+        getCommunityCommentsRequest(postSequence).then(getCommunityCommentsResponse);
     }, []);
 
     // effect: 신규 댓글 등록 시 실행할 함수 //
     useEffect(() => {
         if (newCommentTriger) {
             const requestBody: PostAlertRequestDto = {
-                senderId, receiverId, alertEntitySequence, alertType
+                senderId, receiverId, alertEntitySequence, alertType, reason: null
             };
             if (senderId === receiverId) return;
 
@@ -457,13 +653,17 @@ export default function PostDetail() {
                             <div className='view-count'>조회수 {viewCount}</div>
                             <div className='report' onClick={onOpenReportClickHandler}></div>
                             {isReportOpen &&
-                            <Report
+                            <Modal
+                                title='신고'
                                 onClose={onCloseReportClickHandler}
-                                reportEntity={reportEntity}
-                                isReportPage={false}
                             >
-                                
-                            </Report>
+                                <Report
+                                    onClose={onCloseReportClickHandler}
+                                    entityType='community_post'
+                                    entitySequence={postSequence}
+                                >
+                                </Report>
+                            </Modal>
                             }
                             { writerId === userId &&
                                 <>
@@ -495,7 +695,7 @@ export default function PostDetail() {
                     <div className='comment-container'>
                         {
                         comments.map((communityComment, index) => 
-                        <CommentItem key={index} communityComment={communityComment} getCommunityComment={getCommunityComment} />)
+                        <CommentItem key={index} communityComment={communityComment} getCommunityComment={getCommunityComments} />)
                         }
                     </div>
                 }

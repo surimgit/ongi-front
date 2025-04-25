@@ -1,14 +1,14 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import './style.css';
-import { useLocation, useNavigate, useSearchParams } from 'react-router';
-import { CommunityComment, CommunityPost } from 'src/types/interfaces';
+import { useNavigate, useSearchParams } from 'react-router';
+import { CommunityPost } from 'src/types/interfaces';
 import usePagination from 'src/hooks/pagination.hook';
 import Pagination from 'src/components/Pagination';
 import { getCommunityRequest, getCommunitySearchRequest } from 'src/apis';
 import { GetCommunityResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
 import { useCookies } from 'react-cookie';
-import { COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
+import { COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
 import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import useCommentCountStore from 'src/stores/comment-count.store';
 

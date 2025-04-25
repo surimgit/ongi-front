@@ -105,15 +105,15 @@ export default function TextEditor({ content, setContent }: Props) {
     extensions,
     content,
     onUpdate: ({ editor }) => {
-      setContent(editor.getText())
+      setContent(editor.getHTML())
     }
   })
 
   useEffect(() => {
-    if (content) {
-      editor?.commands.setContent(content);
+    if (editor && content && editor?.getHTML() !== content) {
+      editor.commands.setContent(content);
     }
-  }, [content]);
+  }, [content, editor]);
 
   // render: tiptap Text Editor 컴포넌트 렌더링 //
   return (

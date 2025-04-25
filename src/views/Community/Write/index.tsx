@@ -118,7 +118,6 @@ export default function PostWrite() {
         <div className='btn cancel'>취소</div>
         <div className='btn write' onClick={onWriteButtonClickHandler}>작성</div>
       </div>
-      
     </div>
   )
 }

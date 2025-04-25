@@ -20,6 +20,7 @@
   --Red: rgba(255, 52, 33, 1);
   --Black: rgba(0, 0, 0, 1);
   --Lightmode-Green: rgba(80, 220, 80, 1);
+  --Darkmode-Yellow: rgb(220, 220, 0, 1);
 }
 
 body {

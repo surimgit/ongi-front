@@ -1,9 +1,11 @@
 import { Routes, Route, useNavigate } from 'react-router';
 import Layout from './layouts/Layout';
-import { COMMUNITY_EDIT_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, PRODUCT_PATH, QUESTION_PATH, REPORT_PATH, WRITE_PATH } from './constants';
+import './App.css';
+import { ADDRESS_PATH, PAYMENTS_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH, WRITE_PATH } from './constants';
+import { MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH } from './constants';
+import { MAIN_ABSOLUTE_PATH, MAIN_PATH, COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH, COMMUNITY_EDIT_PATH, REPORT_PATH } from './constants';
 import { NEEDHELPER_PATH } from './constants';
 import NeedHelper from './views/NeedHelper';
-import { MAIN_ABSOLUTE_PATH, MAIN_PATH, PRODUCT_VIEW_PATH, SHOPPING_CART_PATH } from './constants';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
 import DetailProduct from './views/Product/detail';
@@ -21,7 +23,6 @@ import MyNeedHelper from './views/MyPage/Activity/MyNeedHelper';
 import MyCommunity from './views/MyPage/Activity/MyCommunity';
 import './App.css';
 import CommunityLayout from './layouts/Community';
-import { COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
 import PostWrite from './views/Community/Write';
 import { useEffect } from 'react';
 import Main from './views/Main';
@@ -35,6 +36,7 @@ import Question from './views/MyPage/Question';
 import Account from './views/MyPage/Account';
 import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
+import ShoppingCartAddress from './views/ShoppingCart/Address';
 
 
 function App() {
@@ -44,7 +46,7 @@ function App() {
       <Route index element={<Index />} />     
       <Route path='/auth' element={<Auth />} />
       
-      <Route path='/payments' element={<CheckoutPage/>}/>
+      <Route path={PAYMENTS_PATH} element={<CheckoutPage/>}/>
       <Route path='success' element={<SuccessPage/>}/>
       <Route path='fail' element={<FailPage/>}/>
    
@@ -62,6 +64,7 @@ function App() {
         </Route>
         <Route path={SHOPPING_CART_PATH}>
           <Route index element={<ShoppingCart/>}></Route>
+          <Route path={ADDRESS_PATH} element={<ShoppingCartAddress/>}/>
         </Route>
         <Route path={OTHER_MYPAGE_PATH}>
           <Route path={OTHER_MYPAGE_VIEW_PATH} index element={<Others/>} />

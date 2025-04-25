@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import './style.css';
-import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, ROOT_PATH } from 'src/constants';
 import { Board } from 'src/types/aliases';
 import useSignInUser from 'src/hooks/sign-in-user.hook';
 import { useEffect, useRef, useState } from 'react';
@@ -9,6 +9,7 @@ import { deleteAlertRequest, getAlertRequest, patchAlertReadRequest } from 'src/
 import GetAlertResponseDto from 'src/apis/dto/response/alert/get-alert.response.dto';
 import { ResponseDto } from 'src/apis/dto/response';
 import Alert from 'src/types/interfaces/Alert.interface';
+import { useSignInUserStore } from 'src/stores';
 
 // interface: 알림 레코드 컴포넌트 속성 //
 interface AlertItemProps {
@@ -62,7 +63,7 @@ function AlertItem({ alertItem }: AlertItemProps) {
 
     patchAlertReadRequest(alertSequence, accessToken).then(patchAlertReadResponse);
 
-    if (alertType === 'community_comment'){
+    if (alertType === 'community_comment' || alertType === 'report_alerted'){
       navigator(COMMUNITY_VIEW_ABSOLUTE_PATH(alertEntitySequence));
     }
   };
@@ -89,6 +90,9 @@ export default function Layout() {
 
   // state: cookie 상태 //
   const [cookies, _, removeCookie] = useCookies();
+
+  // state: 로그인 사용자 아이디 상태 //
+  const { userId, resetSignInUser } = useSignInUserStore();
 
   // state: 경로 상태 //
   const { pathname } = useLocation();
@@ -148,6 +152,12 @@ export default function Layout() {
     navigator(AUTH_ABSOLUTE_PATH);
   };
 
+  // event handler: 로그아웃 버튼 클릭 이벤트 처리 //
+  const onLogoutClickHandler = () => {
+    removeCookie(ACCESS_TOKEN, { path: ROOT_PATH });
+    resetSignInUser();
+  };
+
   // event handler: 게시판 클릭 이벤트 처리 //
   const onBoardClickHandler = (targetBoard: Board) => {
     navigator(COMMUNITY_BOARD_ABSOLUTE_PATH(targetBoard));
@@ -205,6 +215,7 @@ export default function Layout() {
           </div>
         </div>
         <div className='my-content'>
+          <div>{userId}</div>
           <div className='my-content-chat'></div>
           <div className='my-content-alert' onClick={onMyAlertClickHandler}>
             {showMyAlert &&
@@ -225,7 +236,12 @@ export default function Layout() {
           <div className='my-content-shopping-cart'></div>
           <div className='login-container'>
             <div className='login-icon'></div>
-            <div className='login-content' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
+            { userId &&
+              <div className='login-content' onClick={onLogoutClickHandler}>로그아웃</div>
+            }
+            { !userId &&
+              <div className='login-content' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
+            }
           </div>
         </div>
       </div>
