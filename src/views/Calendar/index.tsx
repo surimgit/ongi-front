@@ -16,6 +16,7 @@ import { useCookies } from "react-cookie";
 import { deleteScheduleRequest, getAllScheduleRequest, patchScheduleRequest, postScheduleRequest } from "src/apis";
 import { PatchCalendarRequestDto, PostScheduleRequestDto } from "src/apis/dto/request/calendar";
 import ScheduleViewModal from "./View/ScheduleViewModal";
+import Policy from "../Policy";
 
 export default function Calendar() {
   // state: cookie 상태 //
@@ -82,7 +83,7 @@ export default function Calendar() {
     setShowViewModal(true);
   };
 
-  // event handler: 일정 렌더링 //
+  // function: 일정 렌더링 //
   const onRenderEventContentHandler = (eventInfo: any) => {
     const backgroundColor = eventInfo.event.backgroundColor || '#ffffff';
     return (
@@ -92,7 +93,7 @@ export default function Calendar() {
     );
   };
 
-  // event handler: 일정 저장 //
+  // function: 일정 저장 //
   const onSaveSchedule = async (schedule: PostScheduleRequestDto) => {
     if (!accessToken) return;
   
@@ -104,7 +105,7 @@ export default function Calendar() {
     calendarRef.current?.getApi().refetchEvents();
   };
   
-  // event handler: 일정 수정 //
+  // function: 일정 수정 //
   const onUpdateSchedule = async (id: number, dto: PatchCalendarRequestDto) => {
     if (!accessToken) return;
     const res = await patchScheduleRequest(id, dto, accessToken);
@@ -115,7 +116,7 @@ export default function Calendar() {
     calendarRef.current?.getApi().refetchEvents();
   };
   
-  // event handler: 일정 삭제 //
+  // function: 일정 삭제 //
   const onDeleteSchedule = async (id: number) => {
     if (!accessToken) return;
     const res = await deleteScheduleRequest(id, accessToken);
@@ -126,7 +127,7 @@ export default function Calendar() {
     calendarRef.current?.getApi().refetchEvents();
   };  
 
-  // event handler: open/close 우클릭 메뉴 //  
+  // function: open/close 우클릭 메뉴 //  
   const openContextMenu = (x: number, y: number, event: any) => {
     setContextMenu({ x, y, event });
   };
@@ -176,7 +177,7 @@ export default function Calendar() {
         eventDidMount={(info) => {          
           info.el.addEventListener("contextmenu", (e) => {
             e.preventDefault(); // 기본 우클릭 메뉴 막기
-            openContextMenu(e.pageX, e.pageY, info.event); // 나중에 정의할 함수
+            openContextMenu(e.pageX, e.pageY, info.event); 
           });
         }}
         eventSources={[
@@ -188,7 +189,7 @@ export default function Calendar() {
           {
             events: async (info, successCallback, failureCallback) => {
               const response = await getAllScheduleRequest(accessToken);
-            
+              
               if (!response || !('schedules' in response)) {
                 console.error("📛 일정 정보 없음 또는 오류:", response);
                 failureCallback(new Error("일정 불러오기 실패"));
@@ -196,7 +197,7 @@ export default function Calendar() {
               }
             
               const { schedules } = response;
-            
+              
               const events = schedules.map(schedule => ({
                 id: schedule.calendarSequence.toString(),
                 title: schedule.calendarTitle,
@@ -209,15 +210,25 @@ export default function Calendar() {
                   repeat: schedule.calendarRepeat,
                 }
               }));
-              
+
               successCallback(events);
             },
           },
         ]}
 
         dateClick={pathname === MAIN_ABSOLUTE_PATH ? undefined : onDateClickHandler}
-        eventClick={pathname === MAIN_ABSOLUTE_PATH ? undefined : onEventClickHandler}
-        eventContent={pathname === MAIN_ABSOLUTE_PATH ? undefined : onRenderEventContentHandler}
+        eventClick={pathname === MAIN_ABSOLUTE_PATH ? undefined : (info) => {
+          const isGoogleCalendarEvent = info.event.url?.includes('google.com');
+        
+          if (isGoogleCalendarEvent) {
+            info.jsEvent.preventDefault();
+            info.jsEvent.stopPropagation();
+            return false;
+          }
+        
+          onEventClickHandler(info);
+        }}
+        eventContent={onRenderEventContentHandler}
 
         expandRows={true}
         dayMaxEventRows={false}
@@ -261,6 +272,7 @@ export default function Calendar() {
         </div>
       </div>
     )}
+      <Policy items={[]} />
     </div>
   );
 }

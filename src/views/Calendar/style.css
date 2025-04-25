@@ -32,6 +32,7 @@
 
 .fc-event {
   border: none;
+  color: white;
   cursor: pointer;
 }
 
@@ -51,6 +52,7 @@
 .fc-event.korea-holiday {
   background-color: transparent !important;
   border: none !important;
-  color: var(--Error);
+  color: var(--Cancel);
   font-weight: normal;
+  cursor: default;
 }

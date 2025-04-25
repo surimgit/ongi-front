@@ -70,6 +70,9 @@ export default function Layout() {
     setAlerts(alerts);
   }
 
+  // event handler: 로고 이미지 클릭 이벤트 처리 //
+  const onLogoClickHandler = () => {navigator(MAIN_ABSOLUTE_PATH);};
+
   // event handler: 로그인/회원가입 버튼 클릭 이벤트 처리 //
   const onSignInUpClickHandler = () => {
     if(!accessToken) navigator(MAIN_ABSOLUTE_PATH);
@@ -134,7 +137,7 @@ export default function Layout() {
     <div id='layout-wrapper'>
       <div id='top-bar'>
         <div className='navigation'>
-          <div className='logo'></div>
+          <div className='logo' onClick={onLogoClickHandler}></div>
           <div className='navigation-list'>
             <div className='navigation-list-item' onClick={() => onBoardClickHandler('전체 글')}>커뮤니티</div>
             <div className='navigation-list-item'>공구</div>

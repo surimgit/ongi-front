@@ -4,8 +4,8 @@ export default interface PostScheduleRequestDto {
     calendarTitle: string;
     calendarCategory: string;
     calendarMemo: string;
-    calendarStart: Date;
-    calendarEnd: Date;
+    calendarStart: string;
+    calendarEnd: string;
     calendarRepeat: string;
     color: CalendarColor;
 }
