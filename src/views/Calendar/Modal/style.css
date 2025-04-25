@@ -5,7 +5,7 @@
     width: 550px;
     background-color: #fff;
     border-radius: 10px;
-    border: 1px solid var(--Lightmode-Grey5);
+    border: 1px solid var(--Lightmode-Grey4);
     z-index: 9999;
     font-family: 'Pretendard', sans-serif;
     overflow: hidden;
@@ -86,7 +86,7 @@
   .calendar-modal button.cancel {
     font-family: 'Pretendard', sans-serif;
     font-size: 15px;
-    background-color: var(--Lightmode-Grey5);
+    background-color: var(--Lightmode-Grey4);
     color: var(--White);
     width: 140px;
     border: none;
@@ -103,5 +103,9 @@
     border: none;
     padding: 8px 16px;
     border-radius: 8px;
+  }
+  
+  .react-datepicker-popper {
+    z-index: 99999 !important;
   }
   

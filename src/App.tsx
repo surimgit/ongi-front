@@ -2,17 +2,9 @@ import { Routes, Route, useNavigate, Outlet } from 'react-router';
 import Layout from './layouts/Layout';
 import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, 
     SHOPPING_CART_PATH, WRITE_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH, NEEDHELPER_PATH, 
-    MY_GROUPBUYING_PATH,
-    MY_GROUPBUYING_WISH_LIST_PATH,
-    MY_REVIEW_PATH,
-    MY_NEEDHELLPER_PATH,
-    MY_NEEDHELLPER_ASK_PATH,
-    MY_NEEDHELLPER_APPLY_PATH,
-    MY_NEEDHELLPER_LIKED_PATH,
-    MY_COMMUNITY_PATH,
-    FAQ_PATH,
-    NOTICE_PATH,
-    MAIN_PATH} from './constants';
+    MY_GROUPBUYING_PATH, MY_GROUPBUYING_WISH_LIST_PATH, MY_REVIEW_PATH, MY_NEEDHELLPER_PATH, MY_NEEDHELLPER_ASK_PATH, MY_NEEDHELLPER_APPLY_PATH,
+    MY_NEEDHELLPER_LIKED_PATH, MY_COMMUNITY_PATH, FAQ_PATH, NOTICE_PATH, MAIN_PATH, AUTH_PATH, AUTH_FIND_ID_PATH, AUTH_FIND_PASSWORD_PATH,
+    AUTH_FIND_USER_RESULT_PATH} from './constants';
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
@@ -43,7 +35,6 @@ import CheckoutPage from './views/TossPayment/CheckoutPage';
 import ShoppingCart from './views/ShoppingCart';
 import CommunityMain from './views/Community';
 import PostDetail from './views/Community/Detail';
-import ShoppingCartAddress from './views/ShoppingCart/Address';
 import Question from './views/MyPage/Question';
 import Account from './views/MyPage/Account';
 
@@ -51,11 +42,20 @@ import { useEffect } from 'react';
 import Main from './views/Main';
 import ShoppingCartAddress from './views/ShoppingCart/Address';
 import Calendar from './views/Calendar';
+import FindId from './views/Auth/FindId';
+import FindPassword from './views/Auth/FindPassword';
+import FindResult from './views/Auth/FindResult';
 
 function App() {
   return (
-    <Routes>      
-      <Route path='/auth' element={<Auth />} />
+    <Routes> 
+      <Route index element={<Index />} />     
+      <Route path={AUTH_PATH}>
+        <Route index element={<Auth />} />
+        <Route path={AUTH_FIND_ID_PATH} element={<FindId />}/>
+        <Route path={AUTH_FIND_PASSWORD_PATH} element={<FindPassword/>}/>
+        <Route path={AUTH_FIND_USER_RESULT_PATH} element={<FindResult />}/>
+      </Route>
       
       <Route path={PAYMENTS_PATH} element={<CheckoutPage/>}/>
       <Route path='success' element={<SuccessPage/>}/>

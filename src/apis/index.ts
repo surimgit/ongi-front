@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { GetWishListResponseDto, GetWishResponseDto, ResponseDto } from './dto/response';
-import { IdCheckRequestDto, ResignedCheckRequestDto, SignInRequestDto, SignUpRequestDto, VerificationRequestDto } from './dto/request/auth';
+import { FindIdRequestDto, FindPasswordRequestDto, IdCheckRequestDto, ResignedCheckRequestDto, SignInRequestDto, SignUpRequestDto, VerificationRequestDto } from './dto/request/auth';
 import { SignInResponseDto } from './dto/response/auth';
 import { GetLikeKeywordListResponseDto, GetSignInUserResponseDto, GetUserAccountResponseDto, GetUserIntroductionResponseDto } from './dto/response/user';
 import { PatchProductQuantityRequestDto, PostProductRequestDto } from './dto/request/product';
@@ -29,6 +29,7 @@ import GetAlertResponseDto from './dto/response/alert/get-alert.response.dto';
 import { PostOrderItemRequestDto } from './dto/request/payment';
 import { PatchCalendarRequestDto, PostScheduleRequestDto } from './dto/request/calendar';
 import { GetAllScheduleResponseDto } from './dto/response/calendar';
+import { FindIdResponseDto } from './dto/response/auth/find-id.response.dto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -41,6 +42,8 @@ const SIGN_UP_URL = `${AUTH_MODULE_URL}/sign-up`;
 const SEND_VERIFY_CODE_URL = `${AUTH_MODULE_URL}/send-verify-code`;
 const VERIFY_CODE_URL = `${AUTH_MODULE_URL}/verify-code`;
 const RESIGNED_CHECK_URL = `${AUTH_MODULE_URL}/resigned-check`;
+const FIND_ID_URL = `${AUTH_MODULE_URL}/find-id`;
+const FIND_PASSWORD_URL = `${AUTH_MODULE_URL}/find-password`;
 
 const PAYMENT_URL = `${API_DOMAIN}/api/v1/payments`;
 const SIGN_IN_URL = `${AUTH_MODULE_URL}/sign-in`;
@@ -230,6 +233,22 @@ export const signInRequest = async (requestBody: SignInRequestDto) => {
 export const getSignInUserRequest = async (accessToken: string) => {
   const responseBody = await axios.get(GET_SIGN_IN_USER_URL, bearerAuthorization(accessToken))
     .then(responseSuccessHandler<GetSignInUserResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: find id API 요청 함수 //
+export const findIdRequest = async (requestBody: FindIdRequestDto) => {
+  const responseBody = await axios.post(FIND_ID_URL, requestBody)
+    .then(responseSuccessHandler<FindIdResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: find Password API 요청 함수 //
+export const findPasswordRequest = async (requestBody: FindPasswordRequestDto) => {
+  const responseBody = await axios.post(FIND_PASSWORD_URL, requestBody)
+    .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;
 }

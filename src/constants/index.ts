@@ -12,6 +12,10 @@ export const WRITE_PATH = 'write';
 export const PRODUCT_VIEW_PATH = ':productNumber';
 export const CALENDAR_PATH = 'calendar';
 
+export const AUTH_FIND_ID_PATH = 'find-id';
+export const AUTH_FIND_PASSWORD_PATH = 'find-password';
+export const AUTH_FIND_USER_RESULT_PATH = 'find-result';
+
 export const COMMUNITY_PATH = 'community';
 export const COMMUNITY_POST_PATH = 'post';
 export const COMMUNITY_WRITE_PATH = 'write';
@@ -66,6 +70,10 @@ export const NEEDHELPER_PATH = 'needHelper';
 export const ROOT_ABSOLUTE_PATH = `${ROOT_PATH}`;
 export const AUTH_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}`;
 export const MAIN_ABSOLUTE_PATH = `${ROOT_PATH}${MAIN_PATH}`;
+
+export const AUTH_FIND_ID_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}/${AUTH_FIND_ID_PATH}`;
+export const AUTH_FIND_PASSWORD_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}/${AUTH_FIND_PASSWORD_PATH}`;
+export const AUTH_FIND_USER_RESULT_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}/${AUTH_FIND_USER_RESULT_PATH}`;
 
 export const PRODUCT_ABSOLUTE_PATH = `${ROOT_PATH}${PRODUCT_PATH}`;
 export const PRODUCT_WRITE_PATH = `${ROOT_PATH}${PRODUCT_PATH}/${WRITE_PATH}`;

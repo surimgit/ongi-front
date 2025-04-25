@@ -11,6 +11,7 @@ import { useCookies } from 'react-cookie';
 import { ACCESS_TOKEN } from 'src/constants';
 import { GetAllScheduleResponseDto } from 'src/apis/dto/response/calendar';
 import { Schedule } from 'src/types/interfaces';
+import dayjs from 'dayjs';
 
 type Props = {
     show: boolean;
@@ -92,8 +93,8 @@ export default function ScheduleModal({ show, selectedSchedule, onClose, onSave,
           calendarTitle: title,
           calendarCategory: category,
           calendarMemo: memo,
-          calendarStart: startDate,
-          calendarEnd: endDate,
+          calendarStart: dayjs(startDate).format('YYYY-MM-DD HH:mm:ss'),
+          calendarEnd: dayjs(endDate).format('YYYY-MM-DD HH:mm:ss'),
           calendarRepeat: repeat,
           color: selectedColor
         };
@@ -113,12 +114,11 @@ export default function ScheduleModal({ show, selectedSchedule, onClose, onSave,
           calendarTitle: title,
           calendarCategory: category,
           calendarMemo: memo,
-          calendarStart: startDate,
-          calendarEnd: endDate,
+          calendarStart: dayjs(startDate).format('YYYY-MM-DD HH:mm:ss'),
+          calendarEnd: dayjs(endDate).format('YYYY-MM-DD HH:mm:ss'),
           calendarRepeat: repeat,
           color: selectedColor
         };
-      
         if (selectedSchedule) {
           onUpdate?.(selectedSchedule.calendarSequence, updatedData);
         }
@@ -177,15 +177,19 @@ export default function ScheduleModal({ show, selectedSchedule, onClose, onSave,
         <div className="row">            
         <DatePicker
         selected={startDate}                
-        onChange={(date) => setStartDate(date)} 
+        onChange={(date) => setStartDate(date)}
+        showTimeSelect 
         placeholderText="시작일" 
-        dateFormat="yyyy-MM-dd" 
+        dateFormat="yyyy-MM-dd HH:mm" 
+        portalId="root-portal"
         />
         <DatePicker
         selected={endDate}                
-        onChange={(date) => setEndDate(date)} 
+        onChange={(date) => setEndDate(date)}
+        showTimeSelect  
         placeholderText="종료일" 
-        dateFormat="yyyy-MM-dd"  
+        dateFormat="yyyy-MM-dd HH:mm"  
+        portalId="root-portal"
         />
             <select value={repeat} onChange={(e) => setRepeat(e.target.value)}> 
             <option value='반복 없음'>반복 없음</option>

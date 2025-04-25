@@ -333,17 +333,17 @@ export default function PostDetail() {
         getCommunityCommentRequest(postSequence).then(getCommunityCommentResponse);
     }, []);
 
-    // effect: 신규 댓글 등록 시 실행할 함수 //
-    useEffect(() => {
-        if (newCommentTriger) {
-            const requestBody: PostAlertRequestDto = {
-                senderId, receiverId, alertEntitySequence, alertType
-            };
+    // // effect: 신규 댓글 등록 시 실행할 함수 //
+    // useEffect(() => {
+    //     if (newCommentTriger) {
+    //         const requestBody: PostAlertRequestDto = {
+    //             senderId, receiverId, alertEntitySequence, alertType
+    //         };
 
-            postAlertRequest(requestBody, accessToken).then(postAlertResponse);
-            setNewCommentTriger(false);
-        }
-    }, [newCommentTriger]);
+    //         postAlertRequest(requestBody, accessToken).then(postAlertResponse);
+    //         setNewCommentTriger(false);
+    //     }
+    // }, [newCommentTriger]);
 
     // render: 커뮤니티 글 상세 화면 컴포넌트 렌더링 //
     return (
