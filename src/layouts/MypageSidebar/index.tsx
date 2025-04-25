@@ -57,7 +57,7 @@ export default function MypageSidebar() {
   // variable: 사이드바 메뉴 아이템 //
   const menuItems: (TitleItem | SubTitleItem)[] = [
     new TitleItem('내 정보', '/mypage'),
-    new TitleItem('내 활동', '/mypage/account'),
+    new TitleItem('내 활동', '/mypage/activity'),
     new SubTitleItem('내가 받은 후기', [
       new SubTextItem('도우미 후기', '/mypage/review', 'helper'),
       new SubTextItem('도움 받은 후기', '/mypage/review', 'helped'),
@@ -93,40 +93,42 @@ export default function MypageSidebar() {
 
   // event handler: 현재 위치가 일치하는지 확인하는 이벤트 처리
   const isActive = (path: string) => location.pathname === path;
-
+  const isAccount = (path:string) => location.pathname === '/mypage/account';
   return (
     <div id='sidebar-container'>
     <div className='button'>카테고리</div>
     <div className='categories'>
     {menuItems.map((item, index) => {
-          if (item instanceof TitleItem) {
-            return( <div
-            key={index}
-            className={`title ${isActive(item.path) ? 'active' : ''}`}
-            onClick={() => onSidebarClickHandler(item.path)}
+      if (item instanceof TitleItem) {
+        const isActivePath = isActive(item.path) || (item.path === '/mypage' && isAccount(location.pathname));           
+        return( 
+          <div
+          key={index}
+          className={`title ${isActivePath ? 'active' : ''}`}
+          onClick={() => onSidebarClickHandler(item.path)}
           >
             {item.label}
           </div>
             );
-          }
-          if (item instanceof SubTitleItem) {
-            return (
-              <div key={index} className='sub-title'>
-                {item.label}
-                {item.children.map((child, cIndex) => (
-                  <div
-                    key={cIndex}
-                    className={`sub-text ${isActive(child.path) ? 'active' : ''}`}
-                    onClick={() => onSidebarClickHandler(child.path, child.state)}
-                  >
-                    {child.label}
-                  </div>
-                ))}
+      }
+      if (item instanceof SubTitleItem) {
+        return (
+          <div key={index} className='sub-title'>
+            {item.label}
+            {item.children.map((child, cIndex) => (
+              <div
+                key={cIndex}
+                className={`sub-text ${isActive(child.path) ? 'active' : ''}`}
+                onClick={() => onSidebarClickHandler(child.path, child.state)}
+              >
+                {child.label}
               </div>
-            );
-          }
-          return null;
-        })}
+            ))}
+          </div>
+        );
+      }
+        return null;
+      })}
     </div>
   </div>
   )

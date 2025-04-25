@@ -34,6 +34,8 @@ export const MY_GROUPBUYING_SELL_PATH = 'sell';
 
 export const MY_REVIEW_PATH = 'review';
 
+export const MY_ACTIVITY_PATH = 'activity';
+
 export const MY_NEEDHELLPER_PATH = 'need-helper';
 export const MY_NEEDHELLPER_ASK_PATH = 'ask';
 export const MY_NEEDHELLPER_APPLY_PATH = 'apply';
@@ -112,6 +114,8 @@ export const NOTICE_VIEW_ABSOLUTE_PATH = (sequence: number | string) =>  `${ROOT
 export const FAQ_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${FAQ_PATH}`;
 
 export const MY_REVIEW_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_REVIEW_PATH}`;
+
+export const MY_ACTIVITY_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_ACTIVITY_PATH}`;
 
 export const MY_NEEDHELLPER_ASK_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_NEEDHELLPER_PATH}/${MY_NEEDHELLPER_ASK_PATH}`;
 export const MY_NEEDHELLPER_APPLY_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_NEEDHELLPER_PATH}/${MY_NEEDHELLPER_APPLY_PATH}`;

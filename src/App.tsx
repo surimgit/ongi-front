@@ -13,7 +13,8 @@ import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_
     MY_COMMUNITY_PATH,
     FAQ_PATH,
     NOTICE_PATH,
-    MAIN_PATH} from './constants';
+    MAIN_PATH,
+    MY_ACTIVITY_PATH} from './constants';
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
@@ -83,6 +84,7 @@ function App() {
         </Route>
         <Route path={MYPAGE_PATH}>          
           <Route index element={<MyPage/>}/>
+          <Route path={MY_ACTIVITY_PATH} element={<MyActivity/>}/>
           <Route path={MYPAGE_ACCOUNT_PATH} element={<Account/>}/>
           <Route path={MY_GROUPBUYING_PATH}>
             <Route path={MY_GROUPBUYING_WISH_LIST_PATH} element={<GroupBuying/>} />
