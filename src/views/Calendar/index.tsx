@@ -135,6 +135,25 @@ export default function Calendar() {
     setContextMenu(null);
   };
 
+  // function: 정책 스크랩 저장 함수 //
+  const onScrapPolicy = async (policy: {title: string, period: string}) => {
+    if(!accessToken) return;
+
+    const [start, end] = policy.period.split(' ~ ').map(date => date.replace(/\./g, '-'));
+    
+    const dto: PostScheduleRequestDto = {
+      calendarTitle: policy.title,      
+      calendarCategory: '정책',
+      calendarMemo: '스크랩한 정책입니다.',
+      calendarStart: start,
+      calendarEnd: end,
+      calendarRepeat: '반복 없음',
+      color: 'blue'
+    };
+    console.log(dto);
+    await onSaveSchedule(dto);
+  };
+
   // effect: 메뉴 바깥 클릭 시 닫히도록 처리 //
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -272,7 +291,7 @@ export default function Calendar() {
         </div>
       </div>
     )}
-      {pathname === MAIN_ABSOLUTE_PATH ? undefined : <Policy items={[]} />}
+      {pathname === MAIN_ABSOLUTE_PATH ? undefined : <Policy items={[]} onScrap={onScrapPolicy}/>}
     </div>
   );
 }

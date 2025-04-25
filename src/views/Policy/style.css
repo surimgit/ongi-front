@@ -80,9 +80,16 @@
 }
   
 .policy-card-box .remain {
+    display: flex;
+    flex-direction: row;
     font-size: 15px;
     color: var(--Cancel);
     margin-top: 20px;
+}
+
+.remain img {
+    width: 25px;
+    margin-left: 95px;
 }
 
 .policy-card-box .category {

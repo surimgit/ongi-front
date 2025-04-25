@@ -33,7 +33,8 @@ import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_
     AUTH_FIND_USER_RESULT_PATH,
     COMMUNITY_EDIT_PATH,
     REPORT_PATH,
-    COMMUNITY_SEARCH_PATH} from './constants';
+    COMMUNITY_SEARCH_PATH,
+    CALENDAR_PATH} from './constants';
 
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
@@ -88,6 +89,7 @@ import FindResult from './views/Auth/FindResult';
 import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
 import CommunitySearch from './views/Community/Search';
+import PolicyView from './views/Policy/PolicyView';
 
 function App() {
   return (
@@ -111,7 +113,9 @@ function App() {
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
         </Route>
-        <Route path='/calendar' element={<Calendar/>}/>
+        <Route path={CALENDAR_PATH} element={<Calendar/>}/>
+        <Route path='policy' element={<PolicyView />}/>
+
         <Route path={PRODUCT_PATH}>
           <Route index element={<ProductMain />} />
           <Route path={WRITE_PATH} element={<ProductWrite />} />
