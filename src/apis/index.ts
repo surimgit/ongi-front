@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { GetWishListResponseDto, GetWishResponseDto, ResponseDto } from './dto/response';
 import { IdCheckRequestDto, ResignedCheckRequestDto, SignInRequestDto, SignUpRequestDto, VerificationRequestDto } from './dto/request/auth';
 import { SignInResponseDto } from './dto/response/auth';
-import { GetLikeKeywordListResponseDto, GetSignInUserResponseDto, GetUserAccountResponseDto, GetUserIntroductionResponseDto } from './dto/response/user';
+import { GetLikeKeywordListResponseDto, GetMyBuyingResponseDto, GetSignInUserResponseDto, GetUserAccountResponseDto, GetUserIntroductionResponseDto } from './dto/response/user';
 import { PatchProductQuantityRequestDto, PostProductRequestDto } from './dto/request/product';
 import { Category } from 'src/types/aliases';
 import { GetProductResponseDto } from './dto/response';
@@ -21,7 +21,7 @@ import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import PatchCommunityPostRequestDto from './dto/request/community/patch-community-post.request.dto';
 import { PatchAnswerRequestDto, PostNoticeRequestDto } from './dto/request/admin';
 import { PatchQuestionRequestDto, PostQuestionRequestDto } from './dto/request/question';
-import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchUserIntroductionRequestDto } from './dto/request/user';
+import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchUserIntroductionRequestDto, PostProductReviewRequestDto } from './dto/request/user';
 import { GetNoticeListResponseDto, GetNoticeResponseDto } from './dto/response/notice';
 import { GetQuestionListResponseDto, GetQuestionResponseDto } from './dto/response/question';
 import PostAlertRequestDto from './dto/request/alert/post-alert.request.dto';
@@ -66,6 +66,7 @@ const COMMUNITY_MODULE_URL = `${API_DOMAIN}/api/v1/community`;
 const POST_COMMUNITY_URL = `${COMMUNITY_MODULE_URL}/write`;
 
 const FILE_UPLOAD_URL = `${API_DOMAIN}/file/upload`;
+const FILE_UPLOADS_URL = `${API_DOMAIN}/file/uploads`;
 const multipartFormData = { headers: { 'Content-Type': 'multipart/form-data' } };
 
 const ALERT_MODULE_URL = `${API_DOMAIN}/api/v1/alert`;
@@ -119,6 +120,10 @@ const NOTICE_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/notice`;
 const GET_NOTICE_LIST_URL = `${NOTICE_MODULE_URL}`;
 const POST_NOTICE_URL = `${NOTICE_MODULE_URL}`;
 const GET_NOTICE_POST_URL = (sequence: number | string) =>  `${NOTICE_MODULE_URL}/${sequence}`;
+
+const BUYING_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/buy`;
+const GET_MY_BUYING_URL = `${BUYING_MODULE_URL}/my`;
+const POST_PRODUCT_REVIEW_URL = `${BUYING_MODULE_URL}/my/review`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
@@ -255,6 +260,14 @@ export const patchProductRequest = async (requestBody: PatchProductQuantityReque
 export const fileUploadRequest = async (requestBody: FormData) => {
   const responseBody = await axios.post(FILE_UPLOAD_URL, requestBody, multipartFormData)
     .then(responseSuccessHandler<string>)
+    .catch(error => null);
+  return responseBody;
+};
+
+// function: file uploads 요청 함수 //
+export const fileUploadsRequest = async (requestBody: FormData) => {
+  const responseBody = await axios.post(FILE_UPLOADS_URL, requestBody, multipartFormData)
+    .then(responseSuccessHandler<string[]>)
     .catch(error => null);
   return responseBody;
 };
@@ -604,3 +617,18 @@ export const getAlertRequest = async (accessToken: string) => {
   return responseBody;
 }
 
+// function: get my buying API 요청 함수 //
+export const getMyBuyingRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(GET_MY_BUYING_URL, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler<GetMyBuyingResponseDto>)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post product review API 요청 함수 //
+export const postProductReviewRequest = async (requestBody: PostProductReviewRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_PRODUCT_REVIEW_URL, JSON.stringify(requestBody), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}

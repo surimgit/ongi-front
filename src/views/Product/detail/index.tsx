@@ -20,6 +20,13 @@ interface CartUpdateProps {
   sequence: string;
 }
 
+// function: 현재 날짜 구하기 함수 //
+const getToday = () => {
+  const today = new Date();
+  return today.toISOString().split("T")[0];
+};
+
+
 // component: 장바구니 담기 컴포넌트 //
 function CartUpdate({onModalViewChange, name, sequence}: CartUpdateProps) {
 
@@ -130,6 +137,8 @@ export default function DetailProduct() {
   const [boughtAmount, setBoughtAmount] = useState<number>(0);
   // state: 마감 기한 상태 //
   const [deadline, setDeadline] = useState<string>('');
+  // state: 오픈예정 일자 상태 //
+  const [openDate, setOpenDate] = useState<string>('');
   // state: 마감 여부 상태 //
   const [isSoldOut, setIsSoldOut] = useState<boolean>(false);
   // state: 평점 상태 //
@@ -160,7 +169,8 @@ export default function DetailProduct() {
   const descriptionClass = tabMenu === '설명' ? 'content active' : 'content';
   const reviewClass = tabMenu === '후기' ? 'content active' : 'content';
 
-  console.log(descriptionClass)
+  // variable: 오픈 예정 여부 클래스 //
+  const isOpen = openDate === null ? true : openDate <= getToday() ? true : false;
   
   // function: navigate 함수 //
   const navigate = useNavigate();
@@ -189,6 +199,7 @@ export default function DetailProduct() {
     setDeadline(deadline);
     setIsSoldOut(isSoldOut);
     setProductContent(content);
+    setOpenDate(openDate);
   }
 
   // function: post shopping cart 처리 함수 //
@@ -231,6 +242,10 @@ export default function DetailProduct() {
 
   // event handler: 장바구니 클릭 이벤트 핸들러 //
   const onUpdateShoppingCartClickHandler = () => {
+    if(!isOpen){
+      alert('오픈 예정 상품입니다.');
+      return;
+    }
     setIsCartOpen(!isCartOpen);
   }
 
@@ -260,6 +275,11 @@ export default function DetailProduct() {
   // event handler: 공동구매 참여 버튼 클릭 이벤트 핸들러 //
   const onParticipationButtonClickHandler = () => {
 
+    if(!isOpen){
+      alert('오픈 예정 상품입니다.');
+      return;
+    }
+    
     const requestBody: PostShoppingCartRequestDto = {
       productSequence: parseInt(sequence), quantity:1
     }
@@ -302,7 +322,7 @@ export default function DetailProduct() {
             <img src={image} alt='상품 이미지' style={{backgroundSize:'cover'}}/>
           </div>
           <div className='detail-product-info'>
-            <div className='content category bold'>{category}</div>
+            <div className='content category bold'>{category} &nbsp;   {openDate} 오픈 예정</div>
             <div className='info-box'>
               <div className='content sub'>{userId}</div>
               <div className='title bold'>{name}</div>

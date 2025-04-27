@@ -10,4 +10,5 @@ export default interface PostProductRequestDto {
   productQuantity: number;
   deadline: string;
   image: string;
+  openDate:string
 }

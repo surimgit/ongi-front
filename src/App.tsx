@@ -2,7 +2,19 @@ import { Routes, Route, useNavigate, Outlet } from 'react-router';
 import Layout from './layouts/Layout';
 import './App.css';
 import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, 
-    SHOPPING_CART_PATH, WRITE_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH, NEEDHELPER_PATH } from './constants';
+    SHOPPING_CART_PATH, WRITE_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH, NEEDHELPER_PATH, 
+    MAIN_PATH,
+    MY_GROUPBUYING_PATH,
+    MY_GROUPBUYING_WISH_LIST_PATH,
+    MY_REVIEW_PATH,
+    MY_NEEDHELLPER_PATH,
+    MY_NEEDHELLPER_ASK_PATH,
+    MY_NEEDHELLPER_LIKED_PATH,
+    MY_NEEDHELLPER_APPLY_PATH,
+    MY_COMMUNITY_PATH,
+    FAQ_PATH,
+    NOTICE_PATH,
+    MY_GROUPBUYING_BUY_PATH} from './constants';
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
@@ -40,6 +52,7 @@ import Question from './views/MyPage/Question';
 import Account from './views/MyPage/Account';
 
 
+
 function App() {
   return (
     <Routes>      
@@ -74,7 +87,7 @@ function App() {
           <Route index element={<MyPage/>}/>
           <Route path={MYPAGE_ACCOUNT_PATH} element={<Account/>}/>
           <Route path={MY_GROUPBUYING_PATH}>
-            <Route path={MY_GROUPBUYING_WISH_LIST_PATH} element={<GroupBuying/>} />
+            <Route path={MY_GROUPBUYING_BUY_PATH} element={<GroupBuying/>} />
             <Route path='my-needHelper' element={<MyNeedHelper/>} />
             <Route path='my-community' element={<MyCommunity/>} />
           </Route>

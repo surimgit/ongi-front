@@ -38,9 +38,15 @@ const getTimeUntilDeadLine = (deadline: string | Date) => {
   return diff;
 }
 
+// function: 현재 날짜 구하기 함수 //
+const getToday = () => {
+  const today = new Date();
+  return today.toISOString().split("T")[0];
+};
+
 // component: 상품 테이블 레코드 컴포넌트 //
 function TableItem({product, index}: TableItemProps & {index: number}){
-  const { sequence, image, name, price, rating, productQuantity, boughtAmount, deadline } = product;
+  const { sequence, image, name, price, rating, productQuantity, boughtAmount, deadline, openDate } = product;
 
   // state: 모집 완료 여부 상태 //
   const [isFinish, setIsFinish] = useState<boolean>(false);
@@ -53,9 +59,8 @@ function TableItem({product, index}: TableItemProps & {index: number}){
   
   // variable: 상품 이미지 클래스 //
   const imageClass = remainingTime === 0 ? 'td image expired' : 'td image';
-
-  console.log(isFinish);
-  console.log(getTimeUntilDeadLine(deadline));
+  // variable: 오픈 예정 여부 클래스 //
+  const isOpen = openDate === null ? true : openDate <= getToday() ? true : false;
 
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
@@ -118,10 +123,19 @@ function TableItem({product, index}: TableItemProps & {index: number}){
           <div className='achievement-rate'>{achievementRate}% 달성</div>
         </div>
       </div>
-      <div className='td deadline-box'>
-        <div className='deadline-title color'>마감까지</div>
-        <div className='deadline-title normal'>{changeDateFormat(remainingTime)}</div>
-      </div>
+      {isOpen && 
+        <div className='td deadline-box'>
+          <div className='deadline-title color'>마감까지</div>
+          <div className='deadline-title normal'>{changeDateFormat(remainingTime)}</div>
+        </div>
+      }
+      {!isOpen &&
+        <div className='td deadline-box'>
+          <div className='deadline-title color'>오픈예정</div>
+          <div className='deadline-title normal'>{openDate}</div>
+        </div>
+      }
+      
     </div>
   )
 }
