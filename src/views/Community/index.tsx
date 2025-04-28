@@ -8,7 +8,7 @@ import { getCommunityRequest, getCommunitySearchRequest } from 'src/apis';
 import { GetCommunityResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
 import { useCookies } from 'react-cookie';
-import { COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
+import { COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
 import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import useCommentCountStore from 'src/stores/comment-count.store';
 
@@ -20,11 +20,10 @@ const DAY = 24;
 // interface: 게시글 레코드 컴포넌트 속성 //
 interface TableItemProps {
   communityPost: CommunityPost;
-  boardCategory: CommunityCategory | string;
 }
 
 // component: 게시글 테이블 레코드 컴포넌트 //
-function TableItem({ communityPost, boardCategory }: TableItemProps) {
+function TableItem({ communityPost }: TableItemProps) {
   const { postSequence, nickname, category, postDate, title, liked, viewCount } = communityPost;
   
   // state: 게시글 댓글 수 상태 //
@@ -72,7 +71,10 @@ function TableItem({ communityPost, boardCategory }: TableItemProps) {
           </span>
       </div>
       <div className='td nickname'>{nickname}</div>
-      <div className='td liked'>{liked}</div>
+      <div className='td liked'>
+        <div className='td liked icon'></div>
+        {liked}
+      </div>
       <div className='td view'>{viewCount}</div>
       <div className='td postDate'>{formatPostDate(postDate)}</div>
     </div>
@@ -97,18 +99,6 @@ export default function CommunityMain() {
 
   // state: 게시판 카테고리 상태 //
   const categoryType = searchParams.get('category') as CommunityCategory;
-
-  // state: 검색어 상태 //
-  const keywordState = searchParams.get('keyword') as string;
-
-  // state: 게시글 카테고리 상태 //
-  const [boardCategory, setBoardCategory] = useState<CommunityCategory | string>('전체');
-
-  // state: 검색 카테고리 상태 //
-  const [searchCategory, setSearchCategory] = useState<SearchCategory>('작성자');
-
-  // state: 검색 키워드 상태 //
-  const [keyword, setKeyword] = useState<string>('');
 
   // function: 내비게이터 //
   const navigator = useNavigate();
@@ -148,19 +138,6 @@ export default function CommunityMain() {
     setTotalList(posts);
   };
 
-  // event handler: 검색어 변경 이벤트 처리 //
-  const onKeywordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setKeyword(value);
-  };
-
-  // event handler: 검색 이벤트 처리 //
-  const onSearchClickHandler = () => {
-    if (!searchCategory || !keyword) return;
-
-    getCommunitySearchRequest(searchCategory, keyword).then(getCommunitySearchResponse);
-  };
-
   // effect: 컴포넌트 로드 시 실행할 함수 //
   useEffect(() => {
     if(!boardType) navigator(COMMUNITY_OVERALL_ABSOLUTE_PATH);
@@ -174,13 +151,16 @@ export default function CommunityMain() {
     <div id='info-community-main-wrapper'>
       <div className='board-header-container'>
         <div className='board-name'>
+          <span className='board-type'>
           {
           boardType === 
           '전체 글' ? '전체 글'
-          : boardType === '인기 게시판' ? '인기 게시판'
-          : boardType === '정보 게시판' ? '정보 게시판'
-          : boardType === '우리 동네 게시판' ? '우리 동네 게시판' : ''
+          : boardType === '인기 게시판' ? '인기 '
+          : boardType === '정보 게시판' ? '정보 '
+          : boardType === '우리 동네 게시판' ? '우리 동네 ' : ''
           }
+          </span>
+          <span>게시판</span>
         </div>
         { categoryType &&
           <div className='category-name'>
@@ -216,7 +196,6 @@ export default function CommunityMain() {
           {viewList.map((communityPost, index) => 
           <TableItem key={index} 
           communityPost={communityPost} 
-          boardCategory={boardCategory} 
           />)}
         </div>
       </div>
@@ -231,16 +210,6 @@ export default function CommunityMain() {
             setCurrentSection={setCurrentSection}
         />
         }
-      </div>
-      <div className='search-container'>
-        <select className='search-category' value={searchCategory} onChange={(event) => setSearchCategory(event.target.value as SearchCategory)}>
-          <option value="선택">선택</option>
-          <option value="writer">작성자</option>
-          <option value="title">제목</option>
-          <option value="content">내용</option>
-        </select>
-        <input className='search-box' value={keyword} placeholder='검색 키워드를 입력해주세요.' onChange={onKeywordChangeHandler}/>
-        <div className='search-button' onClick={onSearchClickHandler}></div>
       </div>
     </div>
   )

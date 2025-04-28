@@ -9,7 +9,12 @@ export const SHOPPING_CART_PATH = 'shoppingCart';
 export const PAYMENTS_PATH = 'payments'
 export const ADDRESS_PATH = 'address';
 export const WRITE_PATH = 'write';
-export const PRODUCT_VIEW_PATH = ':sequence';
+export const PRODUCT_VIEW_PATH = ':productNumber';
+export const CALENDAR_PATH = 'calendar';
+
+export const AUTH_FIND_ID_PATH = 'find-id';
+export const AUTH_FIND_PASSWORD_PATH = 'find-password';
+export const AUTH_FIND_USER_RESULT_PATH = 'find-result';
 
 export const COMMUNITY_PATH = 'community';
 export const COMMUNITY_POST_PATH = 'post';
@@ -19,19 +24,38 @@ export const COMMUNITY_EDIT_PATH = 'edit';
 export const COMMUNITY_HOTBOARD_PATH = 'hot';
 export const COMMUNITY_INFOBOARD_PATH = 'info';
 export const COMMUNITY_COUNTYBOARD_PATH = 'county';
+export const COMMUNITY_SEARCH_PATH = 'search';
 
 export const MYPAGE_PATH = 'mypage';
-export const MYPAGE_UPDATE_PATH = 'update';
+export const MYPAGE_PATCH_PATH = 'patch';
 export const MYPAGE_KEYWORD_PATH = 'keyword';
-export const MYPAGE_KEYWORD_UPDATE_PATH = 'update';
+export const MYPAGE_KEYWORD_PATCH_PATH = 'patch';
 export const MYPAGE_ACCOUNT_PATH = 'account';
-export const MYPAGE_ACCOUNT_UPDATE_PATH = 'update';
+export const MYPAGE_ACCOUNT_PATCH_PATH = 'patch';
 
-export const OTHER_MYPAGE_PATH = `${MYPAGE_PATH}/other`;
+export const MY_GROUPBUYING_PATH = 'group-buying';
+export const MY_GROUPBUYING_WISH_LIST_PATH = 'wish-list';
+export const MY_GROUPBUYING_BUY_PATH = 'buy';
+export const MY_GROUPBUYING_SELL_PATH = 'sell';
+
+export const MY_REVIEW_PATH = 'review';
+
+export const MY_NEEDHELLPER_PATH = 'need-helper';
+export const MY_NEEDHELLPER_ASK_PATH = 'ask';
+export const MY_NEEDHELLPER_APPLY_PATH = 'apply';
+export const MY_NEEDHELLPER_LIKED_PATH = 'liked';
+
+export const MY_COMMUNITY_PATH = 'community';
+export const MY_COMMUNITY_POST_PATH = 'post';
+export const MY_COMMUNITY_COMMENT_PATH = 'comment';
+export const MY_COMMUNITY_LIKED_PATH = 'liked';
+
+export const OTHER_MYPAGE_PATH = 'other';
 export const OTHER_MYPAGE_VIEW_PATH = ':userId';
 
 export const QUESTION_PATH = 'question';
 export const QUESTION_WRTIE_PATH = 'write';
+export const QUESTION_PATCH_PATH = 'patch';
 export const QUESTION_VIEW_PATH = ':questionSequence';
 export const QUESTION_ANSWER_PATH = 'answer';
 
@@ -39,14 +63,20 @@ export const NOTICE_PATH = 'notice';
 export const NOTICE_WRITE_PATH = 'notice';
 export const NOTICE_VIEW_PATH = 'sequence';
 
+export const FAQ_PATH = 'faq';
+
 export const NEEDHELPER_PATH = 'needHelper';
 
 export const REPORT_PATH = 'report';
 
 // variable: 절대 path 상수 //
-export const ROOT_ABSOLUTE_PATH = ROOT_PATH;
+export const ROOT_ABSOLUTE_PATH = `${ROOT_PATH}`;
 export const AUTH_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}`;
 export const MAIN_ABSOLUTE_PATH = `${ROOT_PATH}${MAIN_PATH}`;
+
+export const AUTH_FIND_ID_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}/${AUTH_FIND_ID_PATH}`;
+export const AUTH_FIND_PASSWORD_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}/${AUTH_FIND_PASSWORD_PATH}`;
+export const AUTH_FIND_USER_RESULT_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}/${AUTH_FIND_USER_RESULT_PATH}`;
 
 export const PRODUCT_ABSOLUTE_PATH = `${ROOT_PATH}${PRODUCT_PATH}`;
 export const PRODUCT_WRITE_PATH = `${ROOT_PATH}${PRODUCT_PATH}/${WRITE_PATH}`;
@@ -73,25 +103,45 @@ export const COMMUNITY_HOTBOARD_ABSOLUTE_PATH = (boardType: Board) => `${ROOT_PA
 export const COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_COUNTYBOARD_PATH}`;
 
 export const MYPAGE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}`;
-export const MYPAGE_PATCH_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_UPDATE_PATH}`;
+export const MYPAGE_PATCH_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_PATCH_PATH}`;
 export const MYPAGE_ACCOUNT_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_ACCOUNT_PATH}`;
-export const MYPAGE_ACCOUNT_PATCH_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_ACCOUNT_PATH}/${MYPAGE_ACCOUNT_UPDATE_PATH}`;
+export const MYPAGE_ACCOUNT_PATCH_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_ACCOUNT_PATH}/${MYPAGE_ACCOUNT_PATCH_PATH}`;
 export const MYPAGE_KEYWORD_ABSOULUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_KEYWORD_PATH}`;
-export const MYPAGE_KEYWORD_PATCH_ABSOULUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_KEYWORD_PATH}/${MYPAGE_KEYWORD_UPDATE_PATH}`;
+export const MYPAGE_KEYWORD_PATCH_ABSOULUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_KEYWORD_PATH}/${MYPAGE_KEYWORD_PATCH_PATH}`;
 
-export const OTHER_MYPAGE_ABSOLUTE_PATH = `${ROOT_PATH}/${OTHER_MYPAGE_PATH}`;
-export const OTHER_MYPAGE_VIEW_ABSOULTE_PATH = (userId : string) => `${ROOT_PATH}/${OTHER_MYPAGE_PATH}/${userId}`;
+export const OTHER_MYPAGE_ABSOLUTE_PATH = `${ROOT_PATH}${OTHER_MYPAGE_PATH}`;
+export const OTHER_MYPAGE_VIEW_ABSOULTE_PATH = (userId : string) => `${ROOT_PATH}${OTHER_MYPAGE_PATH}?userId=${userId}`;
 
-export const QUESTION_ABSOLUTE_PATH = `${ROOT_PATH}${QUESTION_PATH}`;
-export const QUESTION_WRTIE_ABSOLUTE_PATH = `${ROOT_PATH}${QUESTION_PATH}/${QUESTION_WRTIE_PATH}`;
-export const QUESTION_VIEW_ABSOLUTE_PATH = (questionSequence: number | string) => `${ROOT_PATH}${QUESTION_PATH}/${questionSequence}`;
-export const QUESTION_ANSWER_ABSOLUTE_PATH = (questionSequence: number | string) => `${ROOT_PATH}${QUESTION_PATH}/${questionSequence}/${QUESTION_ANSWER_PATH}`;
+export const QUESTION_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}`;
+export const QUESTION_WRTIE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${QUESTION_WRTIE_PATH}`;
+export const QUESTION_PATCH_ABSOLUTE_PATH =  `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${QUESTION_WRTIE_PATH}`;
+export const QUESTION_VIEW_ABSOLUTE_PATH = (questionSequence: number | string) => `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${questionSequence}/${QUESTION_PATCH_PATH}`;
+export const QUESTION_ANSWER_ABSOLUTE_PATH = (questionSequence: number | string) => `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${questionSequence}/${QUESTION_ANSWER_PATH}`;
 
-export const NOTICE_ABSOLUTE_PATH = `${ROOT_PATH}${NOTICE_PATH}`;
-export const NOTICE_WRITE_ABSOLUTE_PATH = `${ROOT_PATH}${NOTICE_PATH}/${NOTICE_WRITE_PATH}`;
-export const NOTICE_VIEW_ABSOLUTE_PATH = (sequence: number | string) =>  `${ROOT_PATH}${NOTICE_PATH}`;
+export const NOTICE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${NOTICE_PATH}`;
+export const NOTICE_WRITE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${NOTICE_PATH}/${NOTICE_WRITE_PATH}`;
+export const NOTICE_VIEW_ABSOLUTE_PATH = (sequence: number | string) =>  `${ROOT_PATH}${MYPAGE_PATH}/${NOTICE_PATH}`;
+
+export const FAQ_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${FAQ_PATH}`;
+
+export const MY_REVIEW_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_REVIEW_PATH}`;
+
+export const MY_NEEDHELLPER_ASK_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_NEEDHELLPER_PATH}/${MY_NEEDHELLPER_ASK_PATH}`;
+export const MY_NEEDHELLPER_APPLY_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_NEEDHELLPER_PATH}/${MY_NEEDHELLPER_APPLY_PATH}`;
+export const MY_NEEDHELLPER_LIKED_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_NEEDHELLPER_PATH}/${MY_NEEDHELLPER_LIKED_PATH}`;
+
+export const MY_COMMUNITY_POST_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_COMMUNITY_PATH}/${MY_COMMUNITY_POST_PATH}`;
+export const MY_COMMUNITY_COMMENT_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_COMMUNITY_PATH}/${MY_COMMUNITY_COMMENT_PATH}`;
+export const MY_COMMUNITY_LIKED_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_COMMUNITY_PATH}/${MY_COMMUNITY_LIKED_PATH}`;
+
+export const MY_GROUPBUYING_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_GROUPBUYING_PATH}`;
+export const MY_GROUPBUYING_WISH_LIST_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_GROUPBUYING_PATH}/${MY_GROUPBUYING_WISH_LIST_PATH}`;
+export const MY_GROUPBUYING_BUY_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_GROUPBUYING_PATH}/${MY_GROUPBUYING_BUY_PATH}`;
+export const MY_GROUPBUYING_SELL_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_GROUPBUYING_PATH}/${MY_GROUPBUYING_SELL_PATH}`;
 
 export const NEEDHELPER_ABSOLUTE_PATH = `${ROOT_PATH}${NEEDHELPER_PATH}`;
+export const CALENDAR_ABSOLUTE_PATH = `${ROOT_PATH}${CALENDAR_PATH}`;
+
 
 export const REPORT_ABSOLUTE_PATH = `${ROOT_PATH}${REPORT_PATH}`;
 

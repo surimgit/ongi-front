@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react'
 import './style.css'
 import { useNavigate } from 'react-router';
-import { ACCESS_TOKEN, QUESTION_VIEW_ABSOLUTE_PATH, QUESTION_WRTIE_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, FAQ_ABSOLUTE_PATH, NOTICE_ABSOLUTE_PATH, QUESTION_VIEW_ABSOLUTE_PATH, QUESTION_WRTIE_ABSOLUTE_PATH } from 'src/constants';
 import { useCookies } from 'react-cookie';
 import type { Question } from 'src/types/interfaces';
 import { usePagination } from 'src/hooks';
 import { GetQuestionListResponseDto } from 'src/apis/dto/response/question';
 import { ResponseDto } from 'src/apis/dto/response';
-import { l } from 'react-router/dist/development/fog-of-war-oa9CGk10';
 import { getQuestionListRequest } from 'src/apis';
 import Pagination from 'src/components/Pagination';
+import MypageSidebar from 'src/layouts/MypageSidebar';
 
 // interface: 문의사항 테이블 레코드 컴포넌트 속성 //
 interface QuestionItemProps{
@@ -19,7 +19,7 @@ interface QuestionItemProps{
 // component: 문의사항 테이블 레코드 컴포넌트 //
 function QuestionItem({ question }: QuestionItemProps){
 
-  const {category, inAnswered, postDate, questionSequence, title} = question;
+  const {category, isAnswered, postDate, questionSequence, title} = question;
 
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
@@ -32,10 +32,10 @@ function QuestionItem({ question }: QuestionItemProps){
   // render: 문의사항 테이블 레코드 컴포넌트 렌더링 //
   return(
     <div className='tr' onClick={onClick}>
-      <div className='th date'>{postDate}</div>
-      <div className='th category'>{category}</div>
-      <div className='th title'>{title}</div>
-      <div className='th is-answered'>{inAnswered}</div>
+      <div className='td date'>{postDate}</div>
+      <div className='td category'>{category}</div>
+      <div className='td title'>{title}</div>
+      <div className='td is-answered'>{isAnswered === true ? "답변완료" : "접수중"}</div>
     </div>
   )
 }
@@ -81,6 +81,16 @@ export default function Question() {
     navigator(QUESTION_WRTIE_ABSOLUTE_PATH);
   }
 
+  // event handler: FAQ 버튼 클릭 이벤트 처리 //
+  const onFaqButtonClickHandler = () => {
+    navigator(FAQ_ABSOLUTE_PATH);
+  }
+  
+  // event handler: NOTICE 버튼 클릭 이벤트 처리 //
+  const onNoticeButtonClickHandler = () => {
+    navigator(NOTICE_ABSOLUTE_PATH);
+  }
+  
   // effect: 컴포넌트 로드시 실행할 함수 //
   useEffect(() => {
     if(!accessToken) return;
@@ -90,40 +100,13 @@ export default function Question() {
 
   return (
     <div id='question-main-wrapper'>
-      <div className='sidebar-container'>
-        <div className='button'>카테고리</div>
-        <div className='categories'>
-          <div className='title'>내 정보</div>
-          <div className='title'>내 활동</div>
-          <div className='sub-title'>내가 받은 후기
-            <div className='sub-text'>도우미 후기</div>
-            <div className='sub-text'>도움 받은 후기</div>
-          </div>
-          <div className='sub-title'>내 공동구매
-            <div className='sub-text'>판매 내역</div>
-            <div className='sub-text'>구매 내역</div>
-            <div className='sub-text'>장바구니</div>
-            <div className='sub-text'>찜한 목록</div>
-          </div>
-          <div className='sub-title'>도우미
-            <div className='sub-text'>내가 요청한 도움</div>
-            <div className='sub-text'>신청 현황</div>
-            <div className='sub-text'>좋아요 누른 글</div>
-          </div>
-          <div className='sub-title'>커뮤니티
-            <div className='sub-text'>내가 쓴 글</div>
-            <div className='sub-text'>내가 쓴 댓글</div>
-            <div className='sub-text'>좋아요 누른 글</div>
-          </div>
-          <div className='title'>고객센터</div>
-        </div>
-      </div>
+      <MypageSidebar/>
       <div className='contents-wrapper'>
         <div className='title-area'>
           <div className='title'>고객센터</div>
-          <div className='current active'>문의 내역</div>
-          <div className='current'>FAQ</div>
-          <div className='current'>공지사항</div>
+          <div className='current active' >문의 내역</div>
+          <div className='current' onClick={onFaqButtonClickHandler}>FAQ</div>
+          <div className='current' onClick={onNoticeButtonClickHandler}>공지사항</div>
         </div>
         <hr className='question-hr'/>
         <div className='question-header'>
@@ -134,7 +117,7 @@ export default function Question() {
           <div className='tr'>
               <div className='th date'>등록일</div>
               <div className='th category'>카테고리</div>
-              <div className='th titile'>제목</div>
+              <div className='th title'>제목</div>
               <div className='th is-answered'>처리여부</div>
           </div>
           {viewList.map((question, index) => (

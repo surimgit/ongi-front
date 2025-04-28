@@ -4,8 +4,10 @@ import { ShoppingCart } from 'src/types/interfaces'
 
 interface CartSelectState {
   shoppingCart: ShoppingCart[];
-  setShoppingCart: (shoppingCarts: ShoppingCart[]) => void;
   selectedMap: Record<number, boolean>;
+  totalProductPrice: number;
+  setShoppingCart: (shoppingCarts: ShoppingCart[]) => void;
+  setTotalProductPrice:(total:number) => void;
   toggle: (id: number) => void;
   setSelectAll: (ids: number[]) => void;
   clear: () => void;
@@ -18,8 +20,13 @@ const useShoppingCartSelectStore = create<CartSelectState>()(
     (set, get) => ({
       shoppingCart: [],
       selectedMap: {},
+      totalProductPrice: 0,
 
       setShoppingCart: (shoppingCarts) => set({ shoppingCart: shoppingCarts }),
+
+      setTotalProductPrice: (total:number) => 
+        set((state) => state.totalProductPrice !== total
+              ? {totalProductPrice: total} : state),
 
       toggle: (id) =>
         set((state) => ({
@@ -57,6 +64,7 @@ const useShoppingCartSelectStore = create<CartSelectState>()(
             selectedIds.includes(cart.shoppingCartSequence)
           ),
           selectedMap: state.selectedMap,
+          totalPrice: state.totalProductPrice
         };
       },
     }

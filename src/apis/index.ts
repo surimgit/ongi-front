@@ -1,14 +1,15 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { ResponseDto } from './dto/response';
-import { IdCheckRequestDto, ResignedCheckRequestDto, SignInRequestDto, SignUpRequestDto, VerificationRequestDto } from './dto/request/auth';
+import { GetWishListResponseDto, GetWishResponseDto, ResponseDto } from './dto/response';
+import { FindIdRequestDto, FindPasswordRequestDto, IdCheckRequestDto, ResignedCheckRequestDto, SignInRequestDto, SignUpRequestDto, VerificationRequestDto } from './dto/request/auth';
 import { SignInResponseDto } from './dto/response/auth';
 import { GetLikeKeywordListResponseDto, GetSignInUserResponseDto, GetUserAccountResponseDto, GetUserIntroductionResponseDto } from './dto/response/user';
-import { PostProductRequestDto } from './dto/request/product';
+import { PatchProductQuantityRequestDto, PostProductRequestDto } from './dto/request/product';
 import { Category } from 'src/types/aliases';
 import { GetProductResponseDto } from './dto/response';
-import GetProductDetailResponseDto from './dto/response/product/get-product-detail.request.dto';
+import GetProductDetailResponseDto from './dto/response/product/get-product-detail.response.dto';
+import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
 import { GetCommunityPostResponseDto } from './dto/response/community';
-import { PostShoppingCartRequestDto } from './dto/request/shopping-cart';
+import { PostShoppingCartRequestDto, PostStockReservationRequestDto } from './dto/request/shopping-cart';
 import PostPaymentConfirmRequestDto from './dto/request/payment/post-payment-confirm.request.dto';
 import PostOrderRequestDto from './dto/request/payment/post-order.request.dto';
 import { GetShoppingCartResponseDto } from './dto/response/shoppingCart';
@@ -25,6 +26,10 @@ import { GetNoticeListResponseDto, GetNoticeResponseDto } from './dto/response/n
 import { GetQuestionListResponseDto, GetQuestionResponseDto } from './dto/response/question';
 import PostAlertRequestDto from './dto/request/alert/post-alert.request.dto';
 import GetAlertResponseDto from './dto/response/alert/get-alert.response.dto';
+import { PostOrderItemRequestDto } from './dto/request/payment';
+import { PatchCalendarRequestDto, PostScheduleRequestDto } from './dto/request/calendar';
+import { GetAllScheduleResponseDto } from './dto/response/calendar';
+import { FindIdResponseDto } from './dto/response/auth/find-id.response.dto';
 import PatchCommunityCommentRequestDto from './dto/request/community/patch-community-comment.request.dto';
 import PostReportRequestDto from './dto/request/report/post-report.request.dto';
 import GetReportsResponseDto from './dto/response/report/get-reports.response.dto';
@@ -44,6 +49,8 @@ const SIGN_UP_URL = `${AUTH_MODULE_URL}/sign-up`;
 const SEND_VERIFY_CODE_URL = `${AUTH_MODULE_URL}/send-verify-code`;
 const VERIFY_CODE_URL = `${AUTH_MODULE_URL}/verify-code`;
 const RESIGNED_CHECK_URL = `${AUTH_MODULE_URL}/resigned-check`;
+const FIND_ID_URL = `${AUTH_MODULE_URL}/find-id`;
+const FIND_PASSWORD_URL = `${AUTH_MODULE_URL}/find-password`;
 
 const PAYMENT_URL = `${API_DOMAIN}/api/v1/payments`;
 const SIGN_IN_URL = `${AUTH_MODULE_URL}/sign-in`;
@@ -53,9 +60,20 @@ const RESIGN_URL = `${USER_MODULE_URL}/resign`;
 // 공동구매 API 경로
 const PRODUCT_MODULE_URL = `${API_DOMAIN}/api/v1/product`
 const POST_PRODUCT_URL = `${PRODUCT_MODULE_URL}/write`;
+const POST_STOCK_RESERVE_URL = `${PRODUCT_MODULE_URL}/reserve`;
+const GET_STOCK_RESERVE_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/reserve`;
+
+const PATCH_PRODUCT_QUANTITY_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/quantity`;
 
 const GET_PRODUCT_CATEGORY_NAME_URL = (category: Category, name:string) =>  `${PRODUCT_MODULE_URL}?category=${category}&name=${name}`;
 const GET_PRODUCT_DETAIL_URL = (sequence:number | string) => `${PRODUCT_MODULE_URL}/${sequence}`; 
+
+// 찜목록 API 경로
+const WISHLIST_MODULE_URL = `${API_DOMAIN}/api/v1/wish`;
+const POST_WISHLIST_URL = (postSequence: number | string) => `${WISHLIST_MODULE_URL}/${postSequence}`;
+const GET_WISHLIST_URL = `${WISHLIST_MODULE_URL}`;
+const GET_WISH_URL = (postSequence: number | string) => `${WISHLIST_MODULE_URL}/${postSequence}`;
+const DELETE_WISH_URL = (postSequence: number | string) => `${WISHLIST_MODULE_URL}/${postSequence}`;
 
 const COMMUNITY_MODULE_URL = `${API_DOMAIN}/api/v1/community`;
 const POST_COMMUNITY_URL = `${COMMUNITY_MODULE_URL}/write`;
@@ -79,9 +97,12 @@ const POST_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
 const GET_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
 const DELETE_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`
 
+// 결제 API 경로
 const POST_ORDER_URL = `${PAYMENT_URL}/`;
 const GET_ORDER_URL = `${PAYMENT_URL}/`;
 const POST_PAYMENT_CONFIRM_URL =  `${PAYMENT_URL}/confirm`;
+const POST_ORDER_ITEM_URL = `${PAYMENT_URL}/order-items`;
+
 
 const GET_COMMUNITY_SEARCH_URL = (searchCategory: SearchCategory, keyword: string) => `${COMMUNITY_MODULE_URL}/search?type=${searchCategory}&keyword=${keyword}`;
 const POST_COMMUNITY_COMMENT_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/comment`;
@@ -92,6 +113,7 @@ const GET_COMMUNITY_COMMENT_URL = (postSequence: number | string, commentSequenc
 const PUT_COMMUNITY_LIKED_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/liked`;
 const GET_COMMUNITY_LIKED_URL = (postSequence: number | string) => `${COMMUNITY_MODULE_URL}/${postSequence}/liked`;
 
+// 마이페이지 관련 경로
 
 const MYPAGE_MODULE_URL =  `${API_DOMAIN}/api/v1/mypage`;
 const OTHER_MYPAGE_MODULE_URL =  `${API_DOMAIN}/api/v1/mypage/other`;
@@ -100,19 +122,25 @@ const PATCH_MYPAGE_URL = `${MYPAGE_MODULE_URL}`;
 const MYPAGE_ACCOUNT_URL = `${API_DOMAIN}/api/v1/mypage/account`;
 const PATCH_MYPAGE_ACCOUNT_URL = `${MYPAGE_ACCOUNT_URL}`;
 const MYPAGE_KEYWORD_URL = `${MYPAGE_MODULE_URL}/keyword`;
-const ADD_MYPAGE_KEYWORD_URL =  `${MYPAGE_MODULE_URL}`;
-const DELETE_MYPAGE_KEYWORD_URL =  `${MYPAGE_MODULE_URL}`;
+const ADD_MYPAGE_KEYWORD_URL =  `${MYPAGE_KEYWORD_URL}`;
+const DELETE_MYPAGE_KEYWORD_URL =  `${MYPAGE_KEYWORD_URL}`;
 
-const QUESTION_MODULE_URL = `${API_DOMAIN}/api/v1/question`;
+const QUESTION_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/question`;
 const POST_QUESTION_URL = `${QUESTION_MODULE_URL}`;
 const GET_QUESTION_LIST_URL= `${QUESTION_MODULE_URL}`;
 const GET_QUESTION_POST_URL= (questionSequence: number | string) => `${QUESTION_MODULE_URL}/${questionSequence}`;
+const PATCH_QUESTION_POST_URL= (questionSequence: number | string) => `${QUESTION_MODULE_URL}/${questionSequence}`;
 const PATCH_QUESTION_ANSWER_URL = (questionSequence: number | string) => `${QUESTION_MODULE_URL}/${questionSequence}`;
 
-const NOTICE_MODULE_URL = `${API_DOMAIN}/api/v1/notice`;
+const NOTICE_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/notice`;
 const GET_NOTICE_LIST_URL = `${NOTICE_MODULE_URL}`;
 const POST_NOTICE_URL = `${NOTICE_MODULE_URL}`;
-const GET_NOTICE_POST_URL = (sequence: number | string) => `${NOTICE_MODULE_URL}/${sequence}`;
+const GET_NOTICE_POST_URL = (sequence: number | string) =>  `${NOTICE_MODULE_URL}/${sequence}`;
+const CALENDAR_MODULE_URL = `${API_DOMAIN}/api/v1/calendar`;
+const GET_SCHEDULE_URL = `${CALENDAR_MODULE_URL}`
+const POST_SCHEDULE_URL = `${CALENDAR_MODULE_URL}`
+const PATCH_SCHEDULE_URL = (calendarSequence: number | string) => `${CALENDAR_MODULE_URL}/${calendarSequence}`;
+const DELETE_SCHEDULE_URL = (calendarSequence: number | string) => `${CALENDAR_MODULE_URL}/${calendarSequence}`;
 
 const REPORT_MODULE_URL = `${API_DOMAIN}/api/v1/report`;
 const GET_PROCESSED_REPORTS_URL = `${REPORT_MODULE_URL}/processed`;
@@ -121,6 +149,7 @@ const PATCH_REPORT_URL = (reportSequence: number | string) => `${REPORT_MODULE_U
 const GET_ALERTED_COUNT_URL = (reportedId: string) => `${REPORT_MODULE_URL}/alerted-count?reported-id=${reportedId}`;
 
 const GET_NICKNAME_MODULE_URL = (userId: string) => `${USER_MODULE_URL}/?nickname=${userId}`;
+const GET_IS_ADMIN_MODULE_URL = `${USER_MODULE_URL}/is-admin`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
@@ -143,7 +172,7 @@ const responseErrorHandler = (error: AxiosError<ResponseDto>) => {
 export const getProductCategoryRequest = async (category:Category, name: string, accessToken:string) => {
   const responseBody = await axios.get(GET_PRODUCT_CATEGORY_NAME_URL(category, name), bearerAuthorization(accessToken)
   ).then(responseSuccessHandler<GetProductResponseDto>)
-   .catch(responseErrorHandler);
+  .catch(responseErrorHandler);
   return responseBody;
 }
 
@@ -236,6 +265,23 @@ export const getSignInUserRequest = async (accessToken: string) => {
     .catch(responseErrorHandler);
   return responseBody;
 }
+
+// function: find id API 요청 함수 //
+export const findIdRequest = async (requestBody: FindIdRequestDto) => {
+  const responseBody = await axios.post(FIND_ID_URL, requestBody)
+    .then(responseSuccessHandler<FindIdResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: find Password API 요청 함수 //
+export const findPasswordRequest = async (requestBody: FindPasswordRequestDto) => {
+  const responseBody = await axios.post(FIND_PASSWORD_URL, requestBody)
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
 // function: get product list API 요청 함수 //
 export const getProductRequest = async (accessToken: string) => {
   const responseBody = await axios.get(PRODUCT_MODULE_URL, bearerAuthorization(accessToken))
@@ -244,10 +290,17 @@ export const getProductRequest = async (accessToken: string) => {
   return responseBody;
 }
     
-// function: write product API 요청 함수 //
+// function: post product API 요청 함수 //
 export const postProductRequest = async (requestBody: PostProductRequestDto, accessToken: string) => {
-  const responseBody = await axios.post(POST_PRODUCT_URL, requestBody, bearerAuthorization(accessToken)
-  )
+  const responseBody = await axios.post(POST_PRODUCT_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: patch product quantity API 요청 함수 //
+export const patchProductRequest = async (requestBody: PatchProductQuantityRequestDto, sequence: number, accessToken:string) => {
+  const responseBody = await axios.post(PATCH_PRODUCT_QUANTITY_URL(sequence), requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;
@@ -261,6 +314,37 @@ export const fileUploadRequest = async (requestBody: FormData) => {
   return responseBody;
 };
 
+// function: post wish API 요청 함수//
+export const postWishRequest = async(postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.post(POST_WISHLIST_URL(postSequence), null , bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get wish API 요청 함수//
+export const getWishRequest = async(postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.get(GET_WISH_URL(postSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetWishResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get wish list API 요청 함수//
+export const getWishListRequest = async(accessToken: string) => {
+  const responseBody = await axios.post(GET_WISHLIST_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetWishListResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: delete wish API 요청 함수//
+export const deleteWishRequest = async(postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_WISH_URL(postSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
 // function: get community post API 요청 함수 //
 export const getCommunityPostRequest = async (postSequence:number | string) => {
   const responseBody = await axios.get(GET_COMMUNITY_POST_URL(postSequence))
@@ -342,6 +426,30 @@ export const deleteShoppingCartRequest = async (shoppingCartSequence: number, ac
 export const postOrderRequest = async (requestBody: PostOrderRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_ORDER_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post order items API 요청 함수 //
+export const postOrderItemsRequest = async (requestBody: PostOrderItemRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_ORDER_ITEM_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post stock reserve API 요청 함수 //
+export const postReserveRequest = async (requestBody: PostStockReservationRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_STOCK_RESERVE_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get stock API 요청 함수 //
+export const getReserveRequest = async(sequence: number | string) => {
+  const responseBody = await axios.get(GET_STOCK_RESERVE_URL(sequence))
+    .then(responseSuccessHandler<GetOrderResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 }
@@ -517,7 +625,7 @@ export const deleteLikeKeywordRequest = async (requestBody: DeleteLikeKeywordReq
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;
-};
+}
 
 // function: get user introductrion API 요청 함수 //
 export const getUserIntroductionRequest = async (accessToken: string) => {
@@ -572,6 +680,43 @@ export const getAlertRequest = async (accessToken: string) => {
   .then(responseSuccessHandler<GetAlertResponseDto>)
   .catch(responseErrorHandler);
   return responseBody;
+}
+
+// function: post Schedule API 요청 함수 //
+export const postScheduleRequest = async (requestBody:PostScheduleRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_SCHEDULE_URL, requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  console.log("📤 저장 요청 바디:", requestBody);
+  return responseBody;
+} 
+
+// function: get Schedule API 요청 함수 //
+export const getAllScheduleRequest = async (
+  accessToken: string
+): Promise<GetAllScheduleResponseDto | ResponseDto | null> => {
+  const responseBody = await axios
+    .get(GET_SCHEDULE_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetAllScheduleResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: patch Schedule API 요청 함수 //
+export const patchScheduleRequest = async (calendarSequence: number, requestBody:PatchCalendarRequestDto, accessToken: string) => {
+  const responseBody = await axios.patch(PATCH_SCHEDULE_URL(calendarSequence), requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: delete schedule API 요청 함수 //
+export const deleteScheduleRequest = async (calendarSequence: number, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_SCHEDULE_URL(calendarSequence), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+
 };
 
 // function: patch alert read API 요청 함수 //
@@ -645,3 +790,11 @@ export const getUserNicknameRequest = async (reportedId: string, accessToken: st
   .catch(responseErrorHandler);
   return responseBody;
 }
+
+// function: get is admin API 요청 함수 //
+export const getIsAdminRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(GET_IS_ADMIN_MODULE_URL, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;  
+};

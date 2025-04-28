@@ -5,7 +5,7 @@ import { usePagination } from 'src/hooks';
 import Pagination from 'src/components/Pagination';
 import { useCookies } from 'react-cookie';
 import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH, ROOT_PATH } from 'src/constants';
-import { getAlertedCountRequest, getProcessedReportsRequest, getReportRequest, getReportsRequest, getUserNicknameRequest, patchReportProcessRequest, patchResignRequest, postAlertRequest } from 'src/apis';
+import { getAlertedCountRequest, getIsAdminRequest, getProcessedReportsRequest, getReportRequest, getReportsRequest, getUserNicknameRequest, patchReportProcessRequest, patchResignRequest, postAlertRequest } from 'src/apis';
 import { ResponseDto } from 'src/apis/dto/response';
 import GetUserNicknameResponseDto from 'src/apis/dto/response/user/get-user-nickname.response.dto';
 import GetReportsResponseDto from 'src/apis/dto/response/report/get-reports.response.dto';
@@ -18,6 +18,7 @@ import PatchResignRequestDto from 'src/apis/dto/request/user/patch-resign.reques
 import PostAlertRequestDto from 'src/apis/dto/request/alert/post-alert.request.dto';
 import { useSignInUserStore } from 'src/stores';
 import { useNavigate } from 'react-router';
+import GetIsAdminResponseDto from 'src/apis/dto/response/admin/get-is-admin.response.dto';
 
 // interface: 신고 내용 모달 컴포넌트 속성 //
 interface ReportContentProps {
@@ -366,9 +367,6 @@ export default function ReportBoard() {
     totalSection, setTotalList, viewList, pageList
   } = usePagination<ReportEntity>();
 
-  // state: 로그인 사용자 아이디 상태 //
-  const { admin } = useSignInUserStore();
-
   // state: 신고 처리 내역 표시 여부 상태 //
   const [isProcessedPage, setProcessedPage] = useState<boolean>(false);
 
@@ -408,6 +406,30 @@ export default function ReportBoard() {
     fetcher(accessToken).then(getReportsResponse);
   };
 
+  // function: get is admin response 처리 함수 //
+  const getIsAdminResponse = (responseBody: GetIsAdminResponseDto | ResponseDto | null) => {
+    const message =
+    !responseBody ? '서버에 문제가 있습니다.'
+    : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
+    : responseBody.code === 'AF' ? '인증에 실패했습니다.'
+    : responseBody.code === 'ARU' ? '탈퇴한 사용자입니다.' : '';
+
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+    if (!isSuccess) {
+      alert(message);
+      return;
+    }
+
+    const { isAdmin } = responseBody as GetIsAdminResponseDto;
+    console.log(isAdmin);
+
+    if (!isAdmin) {
+      alert('권한이 없습니다.');
+      navigator(ROOT_PATH);
+    }
+
+  };
+
   // event handler: 신고 내역 클릭 시 이벤트 처리 //
   const onReportListClickHandler = () => {
     setProcessedPage(false);
@@ -420,10 +442,7 @@ export default function ReportBoard() {
 
   // effect: 컴포넌트 로드 시 실행할 함수 //
   useEffect(() => {
-    if (!admin) {
-      alert('접근 권한이 없습니다.');
-      navigator(ROOT_PATH);
-    }
+    getIsAdminRequest(accessToken).then(getIsAdminResponse);
     fecthReports();
   }, [isProcessedPage]);
 

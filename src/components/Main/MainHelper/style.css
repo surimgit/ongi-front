@@ -1,0 +1,134 @@
+#helper-of-main-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 1134px;
+    margin: 100px auto 0;
+}
+
+.hm-container-title {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    width: 100%;
+    margin-bottom: 10px;
+
+    font-size: 30px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.hm-container-subtitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 1134px
+}
+
+.hm-container-subtitle.s2 {
+    margin-top: 70px;
+}
+
+.hm-subtitle-hot {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.hm-subtitle-hot img {
+    width: 23px;
+    vertical-align: middle;
+}
+
+.hm-more {
+    font-size: 17px;
+    color: var(--Lightmode-Grey2);
+    cursor: pointer;
+}
+
+.helper-of-main-container {
+}
+
+.hm-tob-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 1140px;
+    height: 60px;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    margin-top: 10px;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.hm-tob-bar .title {
+    display: flex;
+    justify-content: center;
+    width: 785px;
+}
+
+.hm-tob-bar .when { 
+    display: flex;
+    justify-content: center;
+    width: 100px;
+}
+
+.hm-tob-bar .reward {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+    padding-right: 155px;
+}
+
+.helper-of-main-container .contents-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 1140px;
+    height: 40px;
+    border-bottom: 1px solid black;
+    padding: 10px 0;
+
+    font-size: 17px;
+}
+
+.contents-box .sequence {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+}
+
+.contents-box .title {
+    display: flex;
+    width: 685px;
+}
+
+.contents-box .when {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+}
+
+.contents-box .reward {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+}
+
+.contents-box .application {    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95px;
+    height: 35px;
+
+    border: 1px solid rgb(0, 0, 0, 0.8);
+    border-radius: 10px;
+    background-color: rgb(93, 254, 6, 0.5);
+    cursor: pointer;
+}

@@ -1,8 +1,9 @@
 import { useCookies } from "react-cookie"
+import { useLocation } from "react-router";
 import { getSignInUserRequest } from "src/apis";
 import { ResponseDto } from "src/apis/dto/response";
 import { GetSignInUserResponseDto } from "src/apis/dto/response/user";
-import { ACCESS_TOKEN, ROOT_PATH } from "src/constants";
+import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH, ROOT_PATH } from "src/constants";
 import { useSignInUserStore } from "src/stores";
 
 const useSignInUser = () => {
@@ -15,6 +16,9 @@ const useSignInUser = () => {
         setUserId, setNickname, setAdmin, setProfileImage, resetSignInUser
     } = useSignInUserStore();
 
+    // state: 경로 상태 //
+    const { pathname } = useLocation();
+
     // function: get sign in user response 처리 함수 //
     const getSignInUserResponse = (responseBody: GetSignInUserResponseDto | ResponseDto | null) => {
         const message =
@@ -24,7 +28,8 @@ const useSignInUser = () => {
 
         const isSuccess = responseBody !== null && responseBody.code === 'SU';
         if (!isSuccess) {
-            alert(message);
+            if (pathname !== MAIN_ABSOLUTE_PATH && pathname !== AUTH_ABSOLUTE_PATH)
+                {alert(message);}
             removeCookie(ACCESS_TOKEN, { path: ROOT_PATH });
             resetSignInUser();
             return;

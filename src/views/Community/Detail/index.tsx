@@ -13,7 +13,7 @@ import patchCommunityViewCountResponse from 'src/hooks/viewcount.hook';
 import GetCommunityLikedResponseDto from 'src/apis/dto/response/community/get-community-liked.response.dto';
 import { useSignInUserStore } from 'src/stores';
 import PostAlertRequestDto from 'src/apis/dto/request/alert/post-alert.request.dto';
-import DefaultProfile from 'src/assets/images/default_profile.png';
+import DefaultProfile from 'src/assets/images/default-profile.png';
 import useCommentCountStore from 'src/stores/comment-count.store';
 import PatchCommunityCommentRequestDto from 'src/apis/dto/request/community/patch-community-comment.request.dto';
 import ReportCategory from 'src/types/aliases/report-category.alias';
@@ -593,7 +593,6 @@ export default function PostDetail() {
         if (!accessToken || !postSequence) return;
 
         putCommunityLikedRequest(postSequence, accessToken).then(putCommunityLikedResponse);
-        getCommunityCommentsRequest(postSequence).then(getCommunityCommentsResponse);
     }
 
     // event handler: 신고 버튼 클릭 이벤트 처리 //
@@ -625,7 +624,6 @@ export default function PostDetail() {
                 senderId, receiverId, alertEntitySequence, alertType, reason: null
             };
             if (senderId === receiverId) return;
-
             postAlertRequest(requestBody, accessToken).then(postAlertResponse);
             setNewCommentTriger(false);
         }

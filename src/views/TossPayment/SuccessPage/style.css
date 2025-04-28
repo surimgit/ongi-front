@@ -37,24 +37,23 @@
 .box-section .success-content-box {
   display: flex;
   flex-direction: column;
-  width: 600px;
+  width: 800px;
   gap: 20px;
 }
 
 .box-section .success-content {
-  width: 600px;
+  width: 800px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  font-size: 26px;
-  
 }
 
 .box-section .success-content .title {
+  font-size: 26px;
   font-weight: 500;
 }
 
 .box-section .success-content .content {
+  font-size: 18px;
   font-weight: 400;
 }

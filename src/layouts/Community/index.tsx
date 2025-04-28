@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import './style.css';
 import { Link, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router';
-import { ACCESS_TOKEN, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_CATEGORY_ABSOLUTE_PATH, COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH, COMMUNITY_HOTBOARD_ABSOLUTE_PATH, COMMUNITY_INFOBOARD_ABSOLUTE_PATH, COMMUNITY_POST_ABSOLUTE_PATH, COMMUNITY_WRITE_ABSOLUTE_PATH, REPORT_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_CATEGORY_ABSOLUTE_PATH, COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH, COMMUNITY_HOTBOARD_ABSOLUTE_PATH, COMMUNITY_INFOBOARD_ABSOLUTE_PATH, COMMUNITY_POST_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_WRITE_ABSOLUTE_PATH, REPORT_ABSOLUTE_PATH } from 'src/constants';
 import { useCookies } from 'react-cookie';
-import { Board, CommunityCategory } from 'src/types/aliases';
+import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import { useSignInUserStore } from 'src/stores';
 
 // component: 커뮤니티 사이드바 레이아웃 컴포넌트 //
@@ -21,8 +21,17 @@ export default function CommunityLayout() {
     // state: 카테고리 상태 //
     const categoryType = searchParams.get('category') as CommunityCategory;
 
+    // state: 검색 키워드 주소 상태 //
+    const keywordKey = searchParams.get('keyword') as string;
+
     // state: 로그인 사용자 정보 //
     const { admin } = useSignInUserStore();
+
+    // state: 검색 카테고리 상태 //
+    const [searchCategory, setSearchCategory] = useState<SearchCategory>('선택');
+
+    // state: 검색 키워드 상태 //
+    const [keyword, setKeyword] = useState<string>('');
 
     // variable: 게시판 상수 //
     const infoBoard = '정보 게시판';
@@ -71,6 +80,24 @@ export default function CommunityLayout() {
         navigator(COMMUNITY_CATEGORY_ABSOLUTE_PATH(targetBoard, category));
     };
 
+    // event handler: 검색어 변경 이벤트 처리 //
+    const onKeywordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setKeyword(value);
+    };
+    
+    // event handler: 검색 이벤트 처리 //
+    const onSearchClickHandler = () => {
+    if (!searchCategory || !keyword) return;
+
+    navigator(COMMUNITY_SEARCH_ABSOLUTE_PATH(searchCategory, keyword));
+    };
+
+    useEffect(() => {
+        setSearchCategory('선택');
+        setKeyword('');
+    }, [searchParams]);
+
     // render: 커뮤니티 사이드바 레이아웃 컴포넌트 렌더링 //
     return (
         <div id='community-layout-wrapper'>
@@ -112,6 +139,18 @@ export default function CommunityLayout() {
             </div>
             <div id='board-format'>
                 <Outlet />
+                {(boardType || keywordKey) &&
+                    <div className='search-container'>
+                        <select className='search-category' value={searchCategory} onChange={(event) => setSearchCategory(event.target.value as SearchCategory)}>
+                            <option value="선택">선택</option>
+                            <option value="writer">작성자</option>
+                            <option value="title">제목</option>
+                            <option value="content">내용</option>
+                        </select>
+                        <input className='search-box' value={keyword} placeholder='검색 키워드를 입력해주세요.' onChange={onKeywordChangeHandler}/>
+                        <div className='search-button' onClick={onSearchClickHandler}></div>
+                    </div>
+                }
             </div>
         </div>
         

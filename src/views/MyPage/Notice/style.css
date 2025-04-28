@@ -1,0 +1,114 @@
+#notice-main-wrapper {
+  padding-top: 50px;
+  display: flex;
+  gap:60px;
+  width: 1260px;
+  margin: 0 auto;
+}
+
+#notice-main-wrapper .contents-wrapper{
+  display: flex;
+  width: 1020px;
+  flex-direction: column;
+}
+
+#notice-main-wrapper .contents-wrapper .title-area{
+  display: flex;
+  align-items: center;
+  gap:24px;
+}
+
+#notice-main-wrapper .contents-wrapper .title-area .title{
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#notice-main-wrapper .contents-wrapper .title-area .current{
+  border-top: 4px solid;
+  padding: 2px;
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#notice-main-wrapper .contents-wrapper .title-area .current.active{
+  border-top: 4px solid var(--Primary);
+  color: var(--Primary);
+}
+
+.notice-hr {
+  height: 2px;           
+  width: 100%;            
+  background-color: #333; 
+  border: none;         
+  margin: 13px auto;    
+  border-radius: 2px;  
+}
+#notice-main-wrapper .contents-wrapper .notice-header{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+
+#notice-main-wrapper .contents-wrapper .notice-amount{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#notice-main-wrapper .contents-wrapper .write-button{
+  margin-right: 27px;
+  color: gray;
+}
+
+#notice-main-wrapper .contents-wrapper .notice-list{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#notice-main-wrapper .contents-wrapper .notice-list .tr{
+  display: flex;
+  width: 100%;
+  text-align: center;
+  height: 55px;
+  align-items: center;
+  border-top: 1px solid grey;
+}
+
+#notice-main-wrapper .contents-wrapper .notice-list .tr:first-child{
+  background-color: green;
+  height: 40px;
+}
+
+#notice-main-wrapper .contents-wrapper .notice-list .tr:last-child {
+  border-bottom: 1px solid grey;
+}
+
+#notice-main-wrapper .contents-wrapper .notice-list .tr .sequence{
+  min-width: 150px;
+}
+
+#notice-main-wrapper .contents-wrapper .notice-list .tr .title{
+  min-width: 630px;
+}
+
+#notice-main-wrapper .contents-wrapper .notice-list .tr .postdate{
+  min-width: 240px;
+}
+
+#notice-main-wrapper .contents-wrapper .notice-list .tr .th.title{
+  text-align: center;
+}
+
+
+#notice-main-wrapper .contents-wrapper .notice-list .tr .title{
+  text-align: left;
+}
+
+#notice-main-wrapper .contents-wrapper .pagination-box{
+  margin-top: 30px;
+  text-align: center;
+}
+
+
+

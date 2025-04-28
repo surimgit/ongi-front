@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie';
-import { deleteShoppingCartRequest, getProductDetailRequest, getShoppingCartRequest } from 'src/apis';
+import { deleteShoppingCartRequest, getProductDetailRequest, getShoppingCartRequest, postReserveRequest } from 'src/apis';
 import { ResponseDto } from 'src/apis/dto/response';
 import { GetShoppingCartResponseDto } from 'src/apis/dto/response/shoppingCart';
 import { ACCESS_TOKEN, SHOPPING_CART_ADDRESS_ABSOLUTE_PATH } from 'src/constants';
-import { ShoppingCart } from 'src/types/interfaces';
+import { ShoppingCart, StockReservation } from 'src/types/interfaces';
 import { responseMessage } from 'src/utils';
 import useShoppingCartSelectStore from 'src/hooks/cart-select.hook';
 
 import "./style.css"
 import { useNavigate } from 'react-router';
 import ShoppingCartLayout from 'src/components/ShoppingCart';
+import { PostStockReservationRequestDto } from 'src/apis/dto/request/shopping-cart';
 
 
 interface TableItemProps {
@@ -18,16 +19,16 @@ interface TableItemProps {
   isSelectAll: boolean;
   accessToken: string
   fetchShoppingCart: () => void;
+  productQuantity: number;
+  onQuantityChange: (newQuantity: number) => void;
 }
 
 // component: 장바구니 테이블 레코드 컴포넌트 //
-function ShoppingCartContent({shoppingCart, isSelectAll, accessToken, fetchShoppingCart} : TableItemProps) {
+function ShoppingCartContent({shoppingCart, isSelectAll, accessToken, fetchShoppingCart, productQuantity, onQuantityChange} : TableItemProps) {
 
   const { name, price, quantity, image, shoppingCartSequence } = shoppingCart;
   const { selectedMap, toggle } = useShoppingCartSelectStore();
 
-  // state: 상품 개수 상태 //
-  const [productQuantity, setProductQuantity] = useState<number>(quantity);
   // state: 총 가격 상태 //
   const [totalPrice, setTotalPrice] = useState<number>(price * quantity);
   
@@ -50,12 +51,12 @@ function ShoppingCartContent({shoppingCart, isSelectAll, accessToken, fetchShopp
 
   // event handler: 개수 증가 버튼 클릭 핸들러 //
   const onQuantityIncreaseButtonClickHandler = () => {
-    setProductQuantity(productQuantity + 1);
+    onQuantityChange(productQuantity + 1);
   }
 
   // event handler: 개수 감소 버튼 클릭 핸들러 //
   const onQuantityDecreaseButtonClickHandler = () => {
-    if(productQuantity > 1) setProductQuantity(productQuantity - 1);
+    if(productQuantity > 1) onQuantityChange(productQuantity - 1);
   }
 
   // event handler: 장바구니 개별 삭제 버튼 클릭 핸들러 //
@@ -69,6 +70,7 @@ function ShoppingCartContent({shoppingCart, isSelectAll, accessToken, fetchShopp
 
   useEffect(() => {
     setTotalPrice(price * productQuantity);
+    // onQuantityChange(productQuantity);
   },[productQuantity])
 
   // render: 장바구니 테이블 레코드 컴포넌트 렌더링 //
@@ -103,15 +105,19 @@ function ShoppingCartContent({shoppingCart, isSelectAll, accessToken, fetchShopp
 // component: 장바구니 메인 화면 컴포넌트 //
 export default function ShoppingCartMain() {
 
-  const { shoppingCart, setShoppingCart, getSelectedIds, setSelectAll, clear } = useShoppingCartSelectStore();
+  const { shoppingCart, totalProductPrice, setTotalProductPrice, setShoppingCart, getSelectedIds, setSelectAll, clear } = useShoppingCartSelectStore();
 
   // state: 쿠키 상태 //
   const [cookies] = useCookies();
   
   // state: 전체 선택 상태 //
   const [isSelectAll, setIsSelectAll] = useState<boolean>(false);
+  // state: 상품 수량 상태//
+  const [productQuantities, setProductQuantities] = useState<Map<number, number>>(new Map());
   // state: 전체 결제 금액 상태 //
   const [selectedTotalPrice, setSelectedTotalPrice] = useState<number>(0);
+  // state: 저장될 장바구니 상태 //
+  const [storedShoppingCart, setStoredShoppingCart] = useState<ShoppingCart[]>([]);
 
   // variable: navigator 함수 //
   const navigator = useNavigate();
@@ -125,11 +131,40 @@ export default function ShoppingCartMain() {
   // variable: 선택된 상품 sequence 배열 //
   const selectedIds = getSelectedIds();
 
+  // function: 수량 변경 함수 //
+  const updateQuantity = (sequence: number, quantity: number) => {
+    setProductQuantities(prev => new Map(prev.set(sequence, quantity)));
+  };
 
   // function: 장바구니 삭제 처리 함수 //
   const fetchShoppingCart = () => {
     getShoppingCartRequest(accessToken).then(GetShoppingCartResponse);
   };
+  
+  // function: 결제하기 버튼 클릭 처리 함수 //
+  const postReserveResponse = (responseBody: ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+
+    if(!isSuccess) {
+      alert(message);
+      return;
+    }
+    
+    navigator(SHOPPING_CART_ADDRESS_ABSOLUTE_PATH);
+  }
+
+  // function: get shopping cart response 함수 //
+  const GetShoppingCartResponse = (responseBody: GetShoppingCartResponseDto | ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+
+    if(!isSuccess) {
+      alert(message);
+      return;
+    }
+
+    const { shoppingCarts } = responseBody as GetShoppingCartResponseDto;
+    setShoppingCart(shoppingCarts); 
+  }
 
   // event handler: 전체 선택 버튼 클릭 이벤트 핸들러 //
   const onSelectAllClickHandler = () => {
@@ -155,20 +190,25 @@ export default function ShoppingCartMain() {
 
   // event handler: 결제하기 버튼 클릭 이벤트 핸들러 //
   const onPaymentClickHandler = () => {
-    navigator(SHOPPING_CART_ADDRESS_ABSOLUTE_PATH);
-  }
+    const storedData = localStorage.getItem("storedShoppingCart");
 
-  // function: get shopping cart response 함수 //
-  const GetShoppingCartResponse = (responseBody: GetShoppingCartResponseDto | ResponseDto | null) => {
-    const { isSuccess, message } = responseMessage(responseBody);
-
-    if(!isSuccess) {
-      alert(message);
-      return;
+    if (storedData) {
+      const cartList = JSON.parse(storedData);
+    
+      const reserves: StockReservation[] = cartList.map((item: { productSequence: number; quantity: number }) => ({
+        productSequence: item.productSequence,
+        quantity: item.quantity,
+      }));
+    
+      const dto: PostStockReservationRequestDto = {
+        list: reserves
+      };
+    
+      console.log(JSON.stringify(dto, null, 2));
+      postReserveRequest(dto, accessToken).then(postReserveResponse);
+      console.log(reserves.toString());
     }
-
-    const { shoppingCarts } = responseBody as GetShoppingCartResponseDto;
-    setShoppingCart(shoppingCarts); 
+    
   }
 
   // effect: 컴포넌트 렌더시 실행할 함수 //
@@ -178,11 +218,27 @@ export default function ShoppingCartMain() {
 
   // effect: 상품 선택시 실행할 함수 //
   useEffect(() => {
-    setSelectedTotalPrice(shoppingCart
-                              .filter((cart) => selectedIds.includes(cart.shoppingCartSequence))
-                              .reduce((acc, cart) => acc + cart.price * cart.quantity, 0));
-  },[selectedIds]);
+    const total = shoppingCart.reduce((acc, cart) => {
+      const quantity = productQuantities.get(cart.shoppingCartSequence) ?? cart.quantity;
+      if (selectedIds.includes(cart.shoppingCartSequence)) {
+        return acc + cart.price * quantity;
+      }
+      return acc;
+    }, 0);
 
+    const newShoppingCart = shoppingCart
+    .filter((cart) => selectedIds.includes(cart.shoppingCartSequence))
+    .map((cart) => {
+      const quantity = productQuantities.get(cart.shoppingCartSequence) ?? cart.quantity;
+      return {
+        ...cart,
+        quantity,
+      };
+    });
+
+    localStorage.setItem('storedShoppingCart', JSON.stringify(newShoppingCart));
+    setTotalProductPrice(total);
+  }, [selectedIds, productQuantities]);
   
   const cartContent = (
     <div className='cart-content-container'>
@@ -200,6 +256,8 @@ export default function ShoppingCartMain() {
           accessToken={accessToken}
           isSelectAll={isSelectAll}
           fetchShoppingCart={fetchShoppingCart}
+          productQuantity={productQuantities.get(cart.shoppingCartSequence) ?? cart.quantity}
+          onQuantityChange={(q) => updateQuantity(cart.shoppingCartSequence, q)}
         />
       ))}
     </div>
@@ -208,5 +266,5 @@ export default function ShoppingCartMain() {
   
 
   // render: 장바구니 메인 화면 컴포넌트 렌더링 //
-  return <ShoppingCartLayout cartContent={cartContent} selectedTotalPrice={selectedTotalPrice} onPaymentClickHandler={onPaymentClickHandler} productQuantity={selectedIds.length} />;
+  return <ShoppingCartLayout cartContent={cartContent} onPaymentClickHandler={onPaymentClickHandler} productQuantity={selectedIds.length} />;
 }

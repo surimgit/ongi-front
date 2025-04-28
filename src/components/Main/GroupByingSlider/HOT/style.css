@@ -1,42 +1,34 @@
-#group-bying-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    width: 1134px;
-    margin: 100px auto 0;
-}
-
-.gb-container-title {
-    display: flex;
-    align-items: start;
-    justify-content: start;
-    width: 100%;
-
-    font-size: 30px;
-    font-weight: 700;
-}
-
-.gb-subtext {
+.main-subtext {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 1134px
-
 }
 
-.gb-subtitle-hot {
+.main-subtitle {
     font-size: 20px;
+    cursor: pointer;
 }
 
-.gb-more {
+.main-subtitle img {
+    width: 23px;
+    vertical-align: middle;
+}
+
+.main-more {
     font-size: 17px;
     color: var(--Lightmode-Grey2);
+    cursor: pointer;
 }
+
 .gb-slider-wrapper {
     position: relative;
-    overflow-x: hidden;
+    overflow: hidden;
+    width: 1134px;
+}
+
+.gb-slider-wrapper-btn{
+    position: relative;
     width: 1134px;
 }
 
@@ -44,6 +36,7 @@
     display: flex;
     flex-direction: row;
     transition: transform 0.5s ease-in-out;
+    width: max-content;
 }
 
 .group-bying-inner {
@@ -54,6 +47,7 @@
     margin: 5px;
     padding: 8px 10px;
     flex-shrink: 0;
+    width: 185px;
 }
 
 .group-bying-inner:hover {
@@ -116,20 +110,19 @@
     color: var(--Lightmode-Grey2);
 }
 
-.ad-slide-btn img {
-    width: 100px;
+.gb-slide-btn img {
+    width: 40px;
+    border-radius: 50%;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
+    transition: box-shadow 0.1s ease-in-out;
+    cursor: pointer;
 }
 
-.gb-slider-wrapper {
+.gb-slide-btn {
     position: relative;
-    overflow-x: hidden;
-    width: 1134px;
-}
-
-.ad-slide-btn {
-    position: absolute;
-    top: 50%;
-    width: 100%;
+    top: -150px;
+    width: 105%;
+    left: -35px;
     display: flex;
     justify-content: space-between;
     transform: translateY(-50%);
@@ -137,10 +130,9 @@
     pointer-events: none; 
 }
 
-.ad-slide-btn button {
-    background: none;
+.gb-slide-btn button {
+    background-color: transparent;
     border: none;
-    cursor: pointer;
     pointer-events: auto;
 }
 

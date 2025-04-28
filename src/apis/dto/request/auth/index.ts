@@ -4,6 +4,8 @@ import ResignedCheckRequestDto from "./resigned-check.request.dto"
 import VerificationRequestDto from "./verification.request.dto"
 import SignUpRequestDto from "./sign-up.request.dto"
 import SendVerificationRequestDto from "./send-verification.request.dto"
+import { FindIdRequestDto } from "./find-id.request.dto"
+import { FindPasswordRequestDto } from "./find-password.request.dto"
 
 export type {
     SignInRequestDto,
@@ -11,5 +13,7 @@ export type {
     ResignedCheckRequestDto,
     VerificationRequestDto,
     SignUpRequestDto,
-    SendVerificationRequestDto
+    SendVerificationRequestDto,
+    FindIdRequestDto,
+    FindPasswordRequestDto
 }
