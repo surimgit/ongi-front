@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import './style.css'
-import { deleteWishRequest, getProductDetailRequest, getReserveRequest, getWishRequest, patchProductRequest, postShoppingCartRequest, postWishRequest } from 'src/apis';
+import { deleteWishRequest, getProductDetailRequest, getProductReviewsRequest, getReserveRequest, getWishRequest, patchProductRequest, postShoppingCartRequest, postWishRequest } from 'src/apis';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { ACCESS_TOKEN, PRODUCT_ABSOLUTE_PATH, SHOPPING_CART_ABSOLUTE_PATH } from 'src/constants';
 import { Category } from 'src/types/aliases';
@@ -10,8 +10,9 @@ import { GetWishResponseDto, ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import Modal from 'src/components/Modal';
 import { PostShoppingCartRequestDto } from 'src/apis/dto/request/shopping-cart';
-import { ShoppingCart } from 'src/types/interfaces';
-import { GetReserveResponseDto } from 'src/apis/dto/response/product';
+import { Product, ProductReviews, ShoppingCart } from 'src/types/interfaces';
+import { GetProductReviewsResponseDto, GetReserveResponseDto } from 'src/apis/dto/response/product';
+import { usePagination } from 'src/hooks';
 
 
 interface CartUpdateProps {
@@ -19,6 +20,13 @@ interface CartUpdateProps {
   name:string;
   sequence: string;
 }
+
+// function: 현재 날짜 구하기 함수 //
+const getToday = () => {
+  const today = new Date();
+  return today.toISOString().split("T")[0];
+};
+
 
 // component: 장바구니 담기 컴포넌트 //
 function CartUpdate({onModalViewChange, name, sequence}: CartUpdateProps) {
@@ -88,15 +96,18 @@ function CartUpdate({onModalViewChange, name, sequence}: CartUpdateProps) {
 }
 
 // component: 상품 후기 컴포넌트 //
-function ProductReview() {
+function ProductReview(review: ProductReviews) {
+
+  const { userId, postDate, rating, content } = review;
+
   return(
     <div className='review-list-wrapper'>
       <ul className='review-list'>
         <li>
           <div className='info'>
-            
+            <div className='user'>{userId}</div>
           </div>
-          <div className='review-content'></div>
+          <div className='review-content'>{content}</div>
         </li>
       </ul>
       <div className='review-content'></div>
@@ -106,6 +117,12 @@ function ProductReview() {
 
 // component: 상품 상세보기 페이지 컴포넌트 //
 export default function DetailProduct() {
+
+  // state: 페이지네이션 상태 //
+  const { 
+    currentPage, setCurrentPage, currentSection, setCurrentSection,
+    totalSection, setTotalList, viewList, pageList, totalList
+  } = usePagination<ProductReviews>();
 
   // state: cookie 상태 //
   const [cookies] = useCookies();
@@ -130,6 +147,8 @@ export default function DetailProduct() {
   const [boughtAmount, setBoughtAmount] = useState<number>(0);
   // state: 마감 기한 상태 //
   const [deadline, setDeadline] = useState<string>('');
+  // state: 오픈예정 일자 상태 //
+  const [openDate, setOpenDate] = useState<string>('');
   // state: 마감 여부 상태 //
   const [isSoldOut, setIsSoldOut] = useState<boolean>(false);
   // state: 평점 상태 //
@@ -160,7 +179,8 @@ export default function DetailProduct() {
   const descriptionClass = tabMenu === '설명' ? 'content active' : 'content';
   const reviewClass = tabMenu === '후기' ? 'content active' : 'content';
 
-  console.log(descriptionClass)
+  // variable: 오픈 예정 여부 클래스 //
+  const isOpen = openDate === null ? true : openDate <= getToday() ? true : false;
   
   // function: navigate 함수 //
   const navigate = useNavigate();
@@ -189,6 +209,7 @@ export default function DetailProduct() {
     setDeadline(deadline);
     setIsSoldOut(isSoldOut);
     setProductContent(content);
+    setOpenDate(openDate);
   }
 
   // function: post shopping cart 처리 함수 //
@@ -220,8 +241,24 @@ export default function DetailProduct() {
   const getWishResponse = (responseBody: GetWishResponseDto | ResponseDto | null) => {
     const { isSuccess, message } = responseMessage(responseBody);
 
-    if(isSuccess && responseBody && 'productSequence' in responseBody) setIsLiked(true);
+    const {wishListEntity} = responseBody as GetWishResponseDto;
+    console.log(wishListEntity);
 
+    if(isSuccess && responseBody && 'productSequence' in wishListEntity) setIsLiked(true);
+
+  }
+
+  // function: get product reviews 처리 함수 //
+  const getProductReviewsResponse = (responseBody: GetProductReviewsResponseDto | ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+    const { reviews } = responseBody as GetProductReviewsResponseDto;
+    setTotalList(reviews);
   }
 
   // event handler: 상품 설명, 후기 변경 이벤트 핸들러 //
@@ -231,6 +268,10 @@ export default function DetailProduct() {
 
   // event handler: 장바구니 클릭 이벤트 핸들러 //
   const onUpdateShoppingCartClickHandler = () => {
+    if(!isOpen){
+      alert('오픈 예정 상품입니다.');
+      return;
+    }
     setIsCartOpen(!isCartOpen);
   }
 
@@ -260,6 +301,11 @@ export default function DetailProduct() {
   // event handler: 공동구매 참여 버튼 클릭 이벤트 핸들러 //
   const onParticipationButtonClickHandler = () => {
 
+    if(!isOpen){
+      alert('오픈 예정 상품입니다.');
+      return;
+    }
+    
     const requestBody: PostShoppingCartRequestDto = {
       productSequence: parseInt(sequence), quantity:1
     }
@@ -292,6 +338,7 @@ export default function DetailProduct() {
     getProductDetailRequest(sequence, accessToken).then(getProductDetailResponse);
     getReserveRequest(sequence).then(getReserveResponse);
     getWishRequest(sequence, accessToken).then(getWishResponse);
+    getProductReviewsRequest(sequence).then(getProductReviewsResponse);
   },[]);
 
   return (
@@ -302,7 +349,11 @@ export default function DetailProduct() {
             <img src={image} alt='상품 이미지' style={{backgroundSize:'cover'}}/>
           </div>
           <div className='detail-product-info'>
-            <div className='content category bold'>{category}</div>
+            {openDate && openDate > getToday() && (
+              <div className='content category bold'>
+                {category} &nbsp; {openDate} 오픈 예정
+              </div>
+            )}
             <div className='info-box'>
               <div className='content sub'>{userId}</div>
               <div className='title bold'>{name}</div>
@@ -323,7 +374,13 @@ export default function DetailProduct() {
                 <div className='content'>5.0점</div>
               </div>
             </div>
-            <div className='button black' onClick={onParticipationButtonClickHandler}>참여하기</div>
+            <div className='button-box'>
+              <div className='button black' onClick={onParticipationButtonClickHandler}>참여하기</div>
+              {
+              
+              }
+              <div className='button cancel' onClick={onParticipationButtonClickHandler}>공동구매 삭제하기</div>
+            </div>
           </div>
         </div>
         <div className='product-detail'>
@@ -343,7 +400,9 @@ export default function DetailProduct() {
           <div className='jumbotron'>
             <div className='jumbotron-box'>
               {descriptionClass === 'content active' && productContent}
-              {reviewClass}
+              {/* {reviewClass === 'content active' && 
+                totalList.map((review, index) => <ProductReview review={review}/>)
+              } */}
             </div>
           </div>
         </div>

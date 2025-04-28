@@ -59,5 +59,6 @@
 }
 
 #modal-wrapper .modal-body {
-  max-height: 800px;
+  max-height: 1000px;
+  overflow: scroll;
 }

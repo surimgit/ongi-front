@@ -10,4 +10,5 @@ export default interface Product {
   boughtAmount: number;
   productQuantity: number;
   image: string;
+  openDate: string;
 }

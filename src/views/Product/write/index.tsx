@@ -28,6 +28,8 @@ export default function ProductWrite() {
   const [category, setCategory] = useState<'' | Category>('');
   // state: 마감일자 상태 //
   const [deadline, setDeadLine] = useState<string>(getToday());
+  // state: 오픈예정 일자 상태 //
+  const [openDate, setOpenDate] = useState<string>(getToday());
   // state: 판매가 상태 //
   const [price, setPrice] = useState<number>(0);
   // state: 판매 개수 상태 //
@@ -47,7 +49,6 @@ export default function ProductWrite() {
   // variable: 상품 작성 가능 여부 //
   const isActive = name !== '' && category !== '' && deadline !== '' && price !== 0 && productQuantity !== 0 && content !== '';
 
-  
 
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
@@ -87,6 +88,9 @@ export default function ProductWrite() {
     setDeadLine(e.target.value);
   }
 
+  const onOpenDateChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setOpenDate(e.target.value);
+  }
   // event handler: 마감기한 변경 이벤트 처리 //
   const onPriceChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
@@ -133,13 +137,19 @@ export default function ProductWrite() {
     if(imageFile){
       const formData = new FormData();
       formData.append('file', imageFile);
-      productImage = await fileUploadRequest(formData);
-    }
 
+      formData.forEach((value, key) => {
+        console.log(`${key}:`, value);
+      });
+      
+      productImage = await fileUploadRequest(formData);
+      console.log(formData);
+    }
+    
     if(!productImage) return;
 
     const requestBody: PostProductRequestDto = {
-      name, price, category, content, productQuantity, deadline, image: productImage
+      name, price, category, content, productQuantity, deadline, image: productImage, openDate
     }
 
     postProductRequest(requestBody, accessToken).then(postProductResponse);
@@ -162,8 +172,8 @@ export default function ProductWrite() {
               </div>
             <div className='product-img-content'>
               <div className='title'>판매 이미지 등록</div>
-              <div className='button' onClick={onFileUploadButtonClickHandler}>이미지 선택</div>
-              <input ref={fileRef} style={{ display: 'none' }} type='file' accept='image/png, image/jpeg' onChange={onFileChangeHandler} />
+              <div className='button middle' onClick={onFileUploadButtonClickHandler}>이미지 선택</div>
+              <input ref={fileRef} type='file' accept='image/png, image/jpeg' onChange={onFileChangeHandler} />
             </div>
           </div>
           <div className='input-box'>
@@ -178,16 +188,30 @@ export default function ProductWrite() {
                 <option value="기타">기타</option>
               </select>
             </div>
-            <div className='due-date-box'>
-              <div className='title'>모집 마감일자</div>
-              <input
-                type='date'
-                id='start'
-                name='trip-start'
-                value={deadline}
-                onChange={onDueDateChangeHandler}
-                min='2025-04-11'  
-              />
+            <div className='date-box'>
+              <div className='due-date-box'>
+                <div className='title'>모집 마감일자</div>
+                <input
+                  type='date'
+                  id='start'
+                  name='trip-start'
+                  value={deadline}
+                  onChange={onDueDateChangeHandler}
+                  min={getToday()}  
+                />
+              </div>
+              <div className='due-date-box'>
+                <div className='title'>오픈예정 일자</div>
+                <input
+                  type='date'
+                  id='start'
+                  name='trip-end'
+                  value={openDate}
+                  onChange={onOpenDateChangeHandler}
+                  min={getToday()}
+                  max={deadline}  
+                />
+              </div>
             </div>
             <div className='price-box'>
               <div className='title'>개당 판매가</div>
