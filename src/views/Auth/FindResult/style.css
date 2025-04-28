@@ -1,0 +1,65 @@
+#find-user-wrapper .result-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 15px;
+    height: 320px;
+    padding: 30px;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    box-shadow: rgba(9, 30, 66, 0.55) 0px 1px 1px, rgba(9, 30, 66, 0.4) 0px 0px 1px 1px;    
+}
+
+#find-user-wrapper .result-title {
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 30px;
+
+    border-bottom: 3px solid var(--Black);
+    font-size: 27px;
+    font-weight: 700;
+}
+
+#find-user-wrapper .result-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 430px;
+    padding: 50px 0;
+    margin-bottom: 10px;
+
+    color: var(--Lightmode-Grey);
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.result-container .button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    
+}
+
+.result-container .button-container .login,
+.result-container .button-container .return {
+    width: 130px;
+    height: 34px;
+    border: none;
+    border-radius: 7px;
+    background-color: var(--Lightmode-Grey4);
+    color: white;
+
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.result-container .button-container .return {
+    width: 140px;
+    background-color: var(--Primary);
+}

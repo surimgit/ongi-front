@@ -10,6 +10,8 @@ import StockReservation from "./stock-reservation.interface"
 import Wish from "./wish.interface"
 import MyBuying from "./my-buying-interface"
 import ProductReviews from "./ProductReviews.interface"
+import Schedule from "./Schedule.interface"
+
 
 export type {
   Product,
@@ -23,5 +25,6 @@ export type {
   StockReservation,
   Wish,
   MyBuying,
-  ProductReviews
+  ProductReviews,
+  Schedule
 }

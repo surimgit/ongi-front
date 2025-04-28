@@ -1,0 +1,58 @@
+#fullcalendar-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    width: 1165px;
+
+    margin-top: 50px;
+    padding: 10px 10px 10px 10px;
+    box-sizing: border-box;
+    background-color: transparent;
+}
+
+.fc {
+    width: 100%;
+    height: auto;
+}
+
+.fc-day-sun a {
+    color: red;
+    text-decoration: none;
+}
+
+.fc-day-sat a {
+    color: blue;
+    text-decoration: none;
+}
+
+/* Tody Cell에 배경색 주기 */
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #5784e624;
+}
+
+.fc-event {
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.fc .fc-button {
+  background-color: var(--Primary) !important;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.menu-item {
+  padding: 8px;
+  cursor: pointer; 
+}
+
+.fc-event.korea-holiday {
+  background-color: transparent !important;
+  border: none !important;
+  color: var(--Cancel);
+  font-weight: normal;
+  cursor: default;
+}

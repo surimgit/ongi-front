@@ -1,20 +1,17 @@
 import { Routes, Route, useNavigate, Outlet } from 'react-router';
 import Layout from './layouts/Layout';
+
 import './App.css';
 import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, 
     SHOPPING_CART_PATH, WRITE_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH, NEEDHELPER_PATH, 
-    MAIN_PATH,
-    MY_GROUPBUYING_PATH,
-    MY_GROUPBUYING_WISH_LIST_PATH,
-    MY_REVIEW_PATH,
-    MY_NEEDHELLPER_PATH,
-    MY_NEEDHELLPER_ASK_PATH,
-    MY_NEEDHELLPER_LIKED_PATH,
-    MY_NEEDHELLPER_APPLY_PATH,
-    MY_COMMUNITY_PATH,
-    FAQ_PATH,
-    NOTICE_PATH,
-    MY_GROUPBUYING_BUY_PATH} from './constants';
+    MY_GROUPBUYING_BUY_PATH
+    MY_GROUPBUYING_PATH, MY_GROUPBUYING_WISH_LIST_PATH, MY_REVIEW_PATH, MY_NEEDHELLPER_PATH, MY_NEEDHELLPER_ASK_PATH, MY_NEEDHELLPER_APPLY_PATH,
+    MY_NEEDHELLPER_LIKED_PATH, MY_COMMUNITY_PATH, FAQ_PATH, NOTICE_PATH, MAIN_PATH, AUTH_PATH, AUTH_FIND_ID_PATH, AUTH_FIND_PASSWORD_PATH,
+    AUTH_FIND_USER_RESULT_PATH,
+    COMMUNITY_EDIT_PATH,
+    REPORT_PATH,
+    COMMUNITY_SEARCH_PATH} from './constants';
+
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
@@ -34,30 +31,43 @@ import MyNeedHelper from './views/MyPage/Activity/MyNeedHelper';
 import MyCommunity from './views/MyPage/Activity/MyCommunity';
 import './App.css';
 import CommunityLayout from './layouts/Community';
-import { COMMUNITY_COUNTYBOARD_PATH, COMMUNITY_HOTBOARD_PATH, COMMUNITY_INFOBOARD_PATH, COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
+import { COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
 import PostWrite from './views/Community/Write';
 // import HotBoard from './views/Community/HotBoard';
 // import InfoBoard from './views/Community/InfoBoard';
 // import CountyBoard from './views/Community/CountyBoard';
-import { useEffect } from 'react';
-import Main from './views/Main';
 import SuccessPage from './views/TossPayment/SuccessPage';
 import FailPage from './views/TossPayment/FailPage';
 import CheckoutPage from './views/TossPayment/CheckoutPage';
 import ShoppingCart from './views/ShoppingCart';
 import CommunityMain from './views/Community';
 import PostDetail from './views/Community/Detail';
-import ShoppingCartAddress from './views/ShoppingCart/Address';
 import Question from './views/MyPage/Question';
 import Account from './views/MyPage/Account';
 import WishLists from './views/MyPage/GroupBuying/WishList';
 
 
+import { useEffect } from 'react';
+import Main from './views/Main';
+import ShoppingCartAddress from './views/ShoppingCart/Address';
+import Calendar from './views/Calendar';
+import FindId from './views/Auth/FindId';
+import FindPassword from './views/Auth/FindPassword';
+import FindResult from './views/Auth/FindResult';
+import PostEdit from './views/Community/Edit';
+import ReportBoard from './views/Report';
+import CommunitySearch from './views/Community/Search';
 
 function App() {
   return (
-    <Routes>      
-      <Route path='/auth' element={<Auth />} />
+    <Routes> 
+      <Route index element={<Index />} />     
+      <Route path={AUTH_PATH}>
+        <Route index element={<Auth />} />
+        <Route path={AUTH_FIND_ID_PATH} element={<FindId />}/>
+        <Route path={AUTH_FIND_PASSWORD_PATH} element={<FindPassword/>}/>
+        <Route path={AUTH_FIND_USER_RESULT_PATH} element={<FindResult />}/>
+      </Route>
       
       <Route path={PAYMENTS_PATH} element={<CheckoutPage/>}/>
       <Route path='success' element={<SuccessPage/>}/>
@@ -70,7 +80,7 @@ function App() {
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
         </Route>
-
+        <Route path='/calendar' element={<Calendar/>}/>
         <Route path={PRODUCT_PATH}>
           <Route index element={<ProductMain />} />
           <Route path={WRITE_PATH} element={<ProductWrite />} />
@@ -112,12 +122,21 @@ function App() {
         </Route> 
         <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
           <Route index element={<CommunityMain />} />
+          <Route path={COMMUNITY_SEARCH_PATH}>
+            <Route index element={<CommunitySearch />} />
+          </Route>
           <Route path={COMMUNITY_VIEW_PATH}>
             <Route index element={<PostDetail />} />
+            <Route path={COMMUNITY_EDIT_PATH}>
+              <Route index element={<PostEdit />} />
+            </Route>
           </Route>
           <Route path={COMMUNITY_WRITE_PATH}>
             <Route index element={<PostWrite />} />
           </Route>
+        </Route>
+        <Route path={REPORT_PATH} element={<CommunityLayout />}>
+          <Route index element={<ReportBoard />} />
         </Route>
       </Route>
     </Routes>

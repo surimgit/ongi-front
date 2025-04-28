@@ -7,15 +7,94 @@ import { useCookies } from 'react-cookie';
 import { GetUserIntroductionResponseDto } from 'src/apis/dto/response/user';
 import { LikeKeyword } from 'src/types/interfaces';
 import { Gender, Mbti } from 'src/types/aliases';
-import { fileUploadRequest, getUserIntroductionRequest, patchUserIntroductionRequest } from 'src/apis';
+import { addLikeKeywordRequest, deleteLikeKeywordRequest, fileUploadRequest, getUserIntroductionRequest, patchUserIntroductionRequest } from 'src/apis';
 import { ResponseDto } from 'src/apis/dto/response';
-import { PatchUserIntroductionRequestDto } from 'src/apis/dto/request/user';
+import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchUserIntroductionRequestDto } from 'src/apis/dto/request/user';
 import DefaultProfile from 'src/assets/images/default-profile.png';
-
-
+import Modal from 'src/components/Modal';
 
 // component: 마이 페이지 메인 화면 컴포넌트 //
 export default function MyPage() {
+
+  // state: 추가 삭제 키워드 상태 //
+  const [addKeyword, setAddKeyword] = useState<string>('');
+  const [deleteMode, setDeleteMode] = useState<boolean>(false);
+
+
+  // function: add liked keyword response 처리 함수 //
+  const addLikeKeywordResopnse = (responseBody: ResponseDto | null) => {
+    const message =
+      !responseBody ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' : 
+      responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+    
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+    if (!isSuccess) {
+      alert(message);
+      return;
+    }
+
+    setLikeKeywords((likeKeywords) => [...(likeKeywords || []), { userId: accessToken, keyword: addKeyword }]);
+    setAddKeyword('');
+    setModalOpen(true);
+  };
+
+  // function: delete liked keyword response 처리 함수 //
+  const deleteLikeKeywordResponse = (responseBody: ResponseDto | null, keyword: string) => {
+    const message =
+      !responseBody ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' : 
+      responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+    
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+    if (!isSuccess) {
+      alert(message);
+      return;
+    }
+
+    setLikeKeywords(prev => prev.filter(k => k.keyword !== keyword));
+  };
+
+  // event handler: 키워드 추가 이벤트 처리 //
+  const addKeywordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setAddKeyword(value);
+  };
+
+  // event handler: 키워드 삭제 버튼 클릭 이벤트 처리
+  const deleteKeywordClickHandler = () => {
+    setDeleteMode(prev => !prev);
+  }
+
+  // event handler: 키워드 추가 버튼 클릭 이벤트 처리 //
+  const onAddKeywordClickHandler = async () => {
+    if (!addKeyword.trim()) {
+      alert('키워드를 입력해주세요!');
+      return;
+    }
+
+    const requestBody: AddLikeKeywordRequestDto = {
+      keyword: addKeyword
+    };
+
+    if(likeKeywords !== null && likeKeywords.length > 10){
+      alert('키워드를 삭제해주세요!');
+    }
+
+    addLikeKeywordRequest(requestBody, accessToken).then(addLikeKeywordResopnse);
+
+  };
+
+  // event handler: 키워드 삭제 버튼 클릭 이벤트 처리 //
+  const onDeleteKeywordClickHandler = async (keyword: string) => {
+
+    const requestBody: DeleteLikeKeywordRequestDto = {
+      keyword: keyword
+    };
+
+    deleteLikeKeywordRequest(requestBody, accessToken).then((res) => deleteLikeKeywordResponse(res, keyword));
+
+  };
 
   // state: cookie 상태 //
   const [cookies] = useCookies();
@@ -31,13 +110,22 @@ export default function MyPage() {
   const [mbti, setMbti] = useState<Mbti | null>(null);
   const [job, setJob] = useState<string>('');
   const [selfIntro, setSelfIntro] = useState<string>('');
-  const [likeKeywords, setLikeKeywords] = useState<LikeKeyword[] | null>(null);
+  const [likeKeywords, setLikeKeywords] = useState<LikeKeyword[]>([]);
 
   // state: 수정 가능 상태 // 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   // state: 사용자 프로필 이미지 상태 //
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+
+  // state: 키워드 추가 모달 오픈 상태 //
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+
+  
+  // event handler: 수정 버튼 클릭 이벤트 처리 //
+  const onModalOpenButtonClickHandler = () => {
+    setModalOpen(!isModalOpen);
+  };
 
   // variable: access Token //
   const accessToken = cookies[ACCESS_TOKEN];
@@ -55,6 +143,7 @@ export default function MyPage() {
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
 
+  
   // function: get User Indroduction response 처리 함수 //
   const getUserIntroductionResponse = (responseBody: GetUserIntroductionResponseDto | ResponseDto | null) => {
     const message = 
@@ -96,6 +185,12 @@ export default function MyPage() {
     }
   }
 
+  // event handler: 프로필 사진 클릭 이벤트 처리 //
+  const onProfileClickHandler = () => {
+    if (!fileRef.current) return;
+    fileRef.current.click();
+  };
+
   // event handler: 내 활동 클릭 이벤트 처리 //
   const onClick = () => {
     navigator(MYPAGE_ACCOUNT_ABSOLUTE_PATH);
@@ -132,7 +227,8 @@ export default function MyPage() {
   };
 
   // event handler: 자기소개 변경 이벤트 처리 //
-  const onSelfIntroductionChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const onSelfIntroductionChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
+
     const { value } = event.target;
     setSelfIntro(value);
   };
@@ -152,10 +248,10 @@ export default function MyPage() {
     };
   };
 
-  // event handler: 프로필 사진 클릭 이벤트 처리 //
-  const onProfileClickHandler = () => {
-    if (!fileRef.current) return;
-    fileRef.current.click();
+  // event handler: 프로필 이미지 삭제 처리 //
+  const onProfileImageDeleteHandler = () => {
+    setProfileImage(''); // 프로필 이미지 삭제
+    setProfileImageFile(null); // 파일 상태 초기화
   };
 
   // event handler: 수정 버튼 클릭 이벤트 처리 //
@@ -180,7 +276,6 @@ export default function MyPage() {
       finalProfileImage = uploadedImageUrl;
     }
 
-
     const requestBody: PatchUserIntroductionRequestDto = {
       birth, gender: gender as Gender, job, mbti: mbti as Mbti, nickname, selfIntro, profileImage: finalProfileImage
     };
@@ -195,6 +290,7 @@ export default function MyPage() {
     if(!accessToken) return;
     
     getUserIntroductionRequest(accessToken).then(getUserIntroductionResponse);
+
   }, [])
  
   // render: 마이 페이지 메인 화면 컴포넌트 렌더링 //
@@ -215,17 +311,22 @@ export default function MyPage() {
         <div className='body'>
           <div className='profile-area'>
             <div className='profile-container'>
-              <div className='profile-image' style={{ backgroundImage: `url(${profileImage || DefaultProfile})`, cursor: 'pointer' }}
-                onClick={onProfileClickHandler}>
-                {isEditMode && <div className="image-edit-button">수정</div>} {/* 수정 버튼 */}
+              <div className='profile-image'>
+              {isEditMode ? (
+                <>
+                  <img 
+                    src={profileImage || DefaultProfile} 
+                    alt="프로필 이미지" 
+                    style={{ cursor: 'pointer' }} 
+                    onClick={onProfileClickHandler}
+                  />
+                  <div className='profile-delete-button' onClick={onProfileImageDeleteHandler}></div>
+                  <input ref={fileRef} style={{ display: 'none' }} type='file' accept='image/png, image/jpeg' onChange={onProfileImageChangeHandler} />
+                </>
+              ) : (
+                <img src={profileImage || DefaultProfile} alt="프로필 이미지" />
+              )}
               </div>
-              <input
-                ref={fileRef}
-                style={{ display: 'none' }} // 파일 선택 창이 보이지 않도록
-                type='file'
-                accept='image/png, image/jpeg'
-                onChange={onProfileImageChangeHandler} // 파일이 선택되었을 때 핸들러
-              />
               <div className='name'>{nickname}</div>
             </div>
           </div>  
@@ -261,13 +362,13 @@ export default function MyPage() {
                     <input type="text" value={birth} onChange={onBirthChangeHandler} />
 
                     {/* 성별 드롭다운 */}
-                    <select value={gender || ''} onChange={onGenderChangeHandler}>
+                    <select className='drop gender' value={gender || ''} onChange={onGenderChangeHandler}>
                       <option value="남">남</option>
                       <option value="여">여</option>
                     </select>
 
                     {/* MBTI 드롭다운 */}
-                    <select value={mbti || ''} onChange={onMbtiChangeHandler}>
+                    <select className='drop mbti' value={mbti || ''} onChange={onMbtiChangeHandler}>
                       <option value="ISTJ">ISTJ</option>
                       <option value="ISFJ">ISFJ</option>
                       <option value="INFJ">INFJ</option>
@@ -300,18 +401,45 @@ export default function MyPage() {
                 </div>
               </div>
               <div className='specialty-box'>
-                <div className='text'>#잘해요</div>
+                <div className='tag-button-wrapper'>
+                  <div className='plus-tag-button' onClick={onModalOpenButtonClickHandler}></div>
+                  {isModalOpen && 
+                  <Modal 
+                    title='키워드를 추가해보세요!' 
+                    onClose={onModalOpenButtonClickHandler} 
+                  >
+                    <input 
+                      className='keyword-input' 
+                      type='text' 
+                      value={addKeyword} 
+                      onChange={addKeywordChangeHandler} 
+                      placeholder="추가할 키워드를 입력하세요"
+                    />
+                    <div onClick={onAddKeywordClickHandler}>추가</div>
+                  </Modal>}
+                  <div className='text'>#잘해요</div>
+                  <div className='minus-tag-button' onClick={deleteKeywordClickHandler}></div>
+                </div>
                 <div className='tag-container'>
-                  <div className='tag-box'>
-                    {Array.isArray(likeKeywords) && likeKeywords.slice(0, 5).map((item, index) => (
-                    <div key={index} className='tag'>#{item.keyword}</div>
-                    ))}
-                  </div>
-                  <div className='tag-box'>
-                    {Array.isArray(likeKeywords) && likeKeywords.slice(5, 10).map((item, index) => (
-                    <div key={index} className='tag'>#{item.keyword}</div>
-                    ))}
-                  </div>
+                  {Array.isArray(likeKeywords) &&
+                    Array.from({ length: 5 }).map((_, i) => (
+                    <div key={i} className="tag-box">
+                      {likeKeywords.slice(i * 2, i * 2 + 2).map((item, j) => (
+                        <div key={j} className="tag-wrapper">
+                          <div className="tag">#{item.keyword}</div>
+                          {deleteMode && (
+                            <div 
+                              className="minus-button" 
+                              onClick={() => {
+                                onDeleteKeywordClickHandler(item.keyword)
+                              }}>
+                              -
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -319,7 +447,18 @@ export default function MyPage() {
         </div>
         <div className='introduce-box'>
           <div className='introduce-title'>자기소개</div>
-          <div className='introduce-datail'>{isEditMode ? <input type="text" value={selfIntro} onChange={onSelfIntroductionChangeHandler} /> : <div className='sub-text'>{selfIntro}</div>}</div>
+          <div className='introduce-datail'>{isEditMode ? (
+            <div className='textarea-wrapper'>
+              <textarea
+              className='self-intro-textarea'
+              value={selfIntro}
+              onChange={onSelfIntroductionChangeHandler}
+              maxLength={250}
+              /> 
+              <div className='char-count'>{selfIntro.length} / 250</div>
+            </div>
+            ): (<div className='sub-text'>{selfIntro}</div>)}
+          </div>
         </div>
         
       </div>

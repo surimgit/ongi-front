@@ -47,7 +47,7 @@
   }
   
   .error-message {
-    color: var(--Error);
+    color: var(--Cancel);
     font-size: 12px;
     margin-top: 6px;
   }
