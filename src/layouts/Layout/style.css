@@ -25,10 +25,11 @@
 #top-bar .navigation>.logo {
   margin: 0;
   background-image: url(src/assets/images/logo.png);
-  background-size: 50px 60px;
+  background-size: 50px 70px;
   background-repeat: no-repeat;
   width: 50px;
-  height: 60px;
+  height: 70px;
+  cursor: pointer;
 }
 
 #top-bar .navigation>.navigation-list {
@@ -59,14 +60,73 @@
 }
 
 #top-bar .my-content .my-alert-list {
-  position: absolute;
+  position: relative;
+  z-index: 9999;
+
+  border-radius: 5px;
   
-  width: 300px;
-  height: 100px;
+  gap: 10px;
+
+  top: 40px;
+  right: 0;
+  
+  width: 255px;
+  height: auto;
 
   border: 1px solid;
 
   background-color: var(--White);
+
+  cursor: default;
+}
+
+#top-bar .my-alert-list .alert-container {
+  display: flex;
+  justify-content: space-between;
+
+  margin: 5px 5px;
+  padding: 5px 5px;
+
+  border-bottom: 1px solid var(--Lightmode-Grey3);
+}
+
+#top-bar .my-alert-list .alert-content {
+  cursor: pointer;
+}
+
+#top-bar .my-alert-list .alert-content.read {
+  color: var(--Lightmode-Grey5);
+}
+
+#top-bar .my-alert-list .alert-delete {
+  font-size: 14px;
+  color: var(--Lightmode-Grey2);
+
+  cursor: pointer;
+}
+
+#top-bar .my-alert-list .no-alert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 5px;
+
+  font-size: 15px;
+  color: var(--Lightmode-Grey5);
+}
+
+#top-bar .my-alert-list .all-alert-delete {
+  display: flex;
+  justify-content: center;
+
+  margin-bottom: 5px;
+
+  font-size: 14px;
+  color: var(--Lightmode-Grey2);
+  text-decoration: underline;
+
+  cursor: pointer;
 }
 
 

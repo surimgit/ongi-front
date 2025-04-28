@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import AdSlider from "src/components/AdSlider";
-import GroupBuyingSlider from "src/components/GroupByingSlider";
+import AdSlider from "src/components/Main/AdSlider";
+import GroupBuyingSlider from "src/components/Main/GroupByingSlider";
+import MainHelper from "src/components/Main/MainHelper";
+import MainCommunity from "src/components/Main/MainCommunity";
+
 import './style.css';
+import Calendar from "../Calendar";
 
 export default function Main() {
 
@@ -9,12 +13,12 @@ export default function Main() {
         <div id="main-wrapper">
             <AdSlider />
             <GroupBuyingSlider />            
-            <div className="helper-container"></div>
-            <div className="community-container"></div>
-            <div className="hot-community-container"></div>
-            <div className="popular-user-container"></div>
-            <div className="local-community-container"></div>
-            <div className="calaedar-container"></div>
+            <MainHelper />
+            <MainCommunity />
+            <div className="calendar-container">
+                <span className="calendar-title">청년달력</span>
+                <Calendar />
+            </div>
             
             <footer></footer>
         </div>

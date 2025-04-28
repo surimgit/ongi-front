@@ -1,0 +1,27 @@
+.find-password-navigator {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 24px;
+}
+
+.find-password-navigator .id,
+.find-password-navigator .password {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 700;
+    width: 240px;
+    height: 60px;
+    border-bottom: 3px solid black;
+}
+
+.find-password-navigator .id {
+    cursor: pointer;
+}
+
+.find-password-navigator .password {
+    border: 3px solid black;
+    border-bottom: none;
+}
