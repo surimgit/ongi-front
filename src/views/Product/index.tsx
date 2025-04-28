@@ -242,7 +242,13 @@ export default function ProductMain() {
         return timeA - timeB;
       })
     } else {
-      sortedProducts.sort((a, b) => b.boughtAmount - a.boughtAmount);
+      sortedProducts.sort((a, b) => {
+        const timeA = getTimeUntilDeadLine(a.deadline);
+        const timeB = getTimeUntilDeadLine(b.deadline);
+
+        if(timeA === 0 && timeB !== 0) return 1;
+        if(timeA !== 0 && timeB === 0) return -1;
+        return b.boughtAmount - a.boughtAmount});
     }
 
     setTotalList(sortedProducts);

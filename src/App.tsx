@@ -50,6 +50,7 @@ import PostDetail from './views/Community/Detail';
 import ShoppingCartAddress from './views/ShoppingCart/Address';
 import Question from './views/MyPage/Question';
 import Account from './views/MyPage/Account';
+import WishLists from './views/MyPage/GroupBuying/WishList';
 
 
 
@@ -88,6 +89,7 @@ function App() {
           <Route path={MYPAGE_ACCOUNT_PATH} element={<Account/>}/>
           <Route path={MY_GROUPBUYING_PATH}>
             <Route path={MY_GROUPBUYING_BUY_PATH} element={<GroupBuying/>} />
+            <Route path={MY_GROUPBUYING_WISH_LIST_PATH} element={<WishLists/>} />
             <Route path='my-needHelper' element={<MyNeedHelper/>} />
             <Route path='my-community' element={<MyCommunity/>} />
           </Route>

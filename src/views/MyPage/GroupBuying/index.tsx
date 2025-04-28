@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import './style.css'
 import MypageSidebar from 'src/layouts/MypageSidebar';
-import { fileUploadsRequest, getMyBuyingRequest, postProductReviewRequest } from 'src/apis';
+import { fileUploadsRequest, getMyBuyingRequest, postPaymentCancelRequest, postProductReviewRequest } from 'src/apis';
 import { useCookies } from 'react-cookie';
-import { ACCESS_TOKEN } from 'src/constants';
+import { ACCESS_TOKEN, MY_GROUPBUYING_BUY_ABSOLUTE_PATH, MY_GROUPBUYING_SELL_ABSOLUTE_PATH, MY_GROUPBUYING_WISH_LIST_ABSOLUTE_PATH } from 'src/constants';
 import { GetMyBuyingResponseDto } from 'src/apis/dto/response/user';
 import { ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
@@ -12,15 +12,17 @@ import Pagination from 'src/components/Pagination';
 import { usePagination } from 'src/hooks';
 import Modal from 'src/components/Modal';
 import { PostProductReviewRequestDto } from 'src/apis/dto/request/user';
+import { PostPaymentCancelRequestDto } from 'src/apis/dto/request/payment';
+import { useNavigate } from 'react-router';
 
 interface ProductItemProps {
   buyingContent: MyBuying
 }
 
 // component: 리뷰작성 모달 컴포넌트 //
-function ProductReview({buyingContent}: ProductItemProps) {
+function ProductReview({buyingContent, onClose}: {buyingContent:ProductItemProps['buyingContent'], onClose:()=>void}) {
 
-  const { name, image, orderItemSequence } = buyingContent;
+  const { name, image, productSequence, orderItemSequence } = buyingContent;
 
   // state: 쿠키 상태 //
   const [cookies] = useCookies();
@@ -76,28 +78,26 @@ function ProductReview({buyingContent}: ProductItemProps) {
   }
 
   // event handler: 사진 등록 이벤트 핸들러 //
-  // event handler: 사진 등록 이벤트 핸들러 //
-const onFileChangeHandler = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0]; // 선택한 파일을 가져옵니다.
-  if (file) {
-    // 새 이미지 배열을 만들고 선택한 파일을 해당 인덱스에 할당합니다.
-    const newImageFiles = [...imageFiles];
-    newImageFiles[index] = file;
-    setImageFiles(newImageFiles); // imageFiles 상태를 업데이트합니다.
+  const onFileChangeHandler = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]; 
+    if (file) {
+      const newImageFiles = [...imageFiles];
+      newImageFiles[index] = file;
+      setImageFiles(newImageFiles); 
 
-    // FileReader로 미리보기 이미지를 생성합니다.
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file); // 파일을 읽어 data URL로 변환합니다.
+      // FileReader로 미리보기 이미지를 생성합니다.
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file); // 파일을 읽어 data URL로 변환합니다.
 
-    fileReader.onloadend = () => {
-      // 파일 읽기가 끝나면, 미리보기 이미지를 상태로 저장합니다.
-      const newPreviewImages = [...previewImages];
-      newPreviewImages[index] = fileReader.result as string; // 미리보기 이미지 URL을 저장
-      setPreviewImages(newPreviewImages); // previewImages 상태를 업데이트합니다.
-    };
+      fileReader.onloadend = () => {
+        // 파일 읽기가 끝나면, 미리보기 이미지를 상태로 저장합니다.
+        const newPreviewImages = [...previewImages];
+        newPreviewImages[index] = fileReader.result as string; // 미리보기 이미지 URL을 저장
+        setPreviewImages(newPreviewImages); // previewImages 상태를 업데이트합니다.
+      };
     }
 
-    console.log(imageFiles); // 이미지 파일 목록 출력 (디버깅용)
+    console.log(imageFiles); 
   };
 
 
@@ -124,12 +124,13 @@ const onFileChangeHandler = (index: number, e: React.ChangeEvent<HTMLInputElemen
     }
 
     const requestBody: PostProductReviewRequestDto = {
-      productSequence: orderItemSequence, rating, content , reviewImages
+      productSequence, orderItemSequence, rating, content , reviewImages
     }
 
     console.log(imageFiles);
 
     postProductReviewRequest(requestBody, accessToken).then(postProductReviewResponse);
+    onClose();
   }
   
   return (
@@ -195,11 +196,87 @@ const onFileChangeHandler = (index: number, e: React.ChangeEvent<HTMLInputElemen
           ))}
         </ul>
       </div>
-      <div className='button primary fullwidth' style={{cursor: 'pointer'}} onClick={onClickReviewPost}>리뷰 등록하기</div>
+      <div className='button primary fullwidth' style={{cursor: 'pointer'}} onClick={onClickReviewPost} >리뷰 등록하기</div>
     </div>
   )
+}
 
+// component: 구매 취소 모달 컴포넌트 //
+function PaymentCancel({buyingContent, onClose}: {buyingContent:ProductItemProps['buyingContent'], onClose:()=>void}){
+
+  const {paymentKey, productSequence, orderItemSequence, price, name, image, quantity} = buyingContent;
+
+  // state: 쿠키 상태 //
+  const [cookies] = useCookies();
+  // state: 환불사유 옵션 상태 //
+  const [cancelReason, setCancelReason] = useState<string>('단순 변심');
   
+  // variable: access token //
+  const accessToken = cookies[ACCESS_TOKEN];
+  // variable: 총 환불금액 //
+  const totalPrice = price * quantity;
+
+  // function: post payment cancel 처리 함수 //
+  const postPaymentCancelResponse = (responseBody: ResponseDto | null) => {
+    const { isSuccess, message  } = responseMessage(responseBody);
+
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+    alert('결제가 취소되었습니다!');
+  }
+
+  // event handler: 취소사유 변경 이벤트 핸들러 //
+  const onCancelReasonChangeHandler = (e:ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.currentTarget;
+
+    setCancelReason(value);
+  }
+
+  // event handler: 환불요청 버튼 클릭 이벤트 핸들러 //
+  const onCancelClickHandler = () => {
+
+    const requestBody: PostPaymentCancelRequestDto = {
+      paymentKey, cancelAmount: totalPrice, cancelReason, productSequence: productSequence, orderItemSequence
+    }
+    
+    postPaymentCancelRequest(requestBody, accessToken).then(postPaymentCancelResponse);
+    onClose();
+  }
+  return(
+    <div className='cancel-container'>
+      <div className='product-box'>
+        <img src={image} alt='상품 사진'/>
+        <div className='product-content-box'>
+          <div className='title'>{name}</div>
+          <div className='sub-title'>구매 개수: {quantity * quantity}개</div>
+          <div className='sub-title'>총 가격: {price.toLocaleString()}원</div>
+        </div>
+      </div>
+      <div className='cancel-reason-box'>
+        <div className='title'>환불을 요청하시는 이유는 무엇인가요?</div>
+        <div className='cancel-content'>
+          <select onChange={onCancelReasonChangeHandler}>
+            <option value={'단순 변심'}>단순 변심</option>
+            <option value={'수량 오류'}>수량 오류로 인한 환불</option>
+            <option value={'상품 옵션'}>상품 옵션 선택 실수</option>
+            <option value={'제품 불량'}>제품 불량으로 인한 환불</option>
+            <option value={'주문과 다른 상품'}>주문과 다른 상품이 배송됨</option>
+            <option value={'기타 사유'}>기타 사유 (상세히 기재)</option>
+          </select>
+          {cancelReason === '기타 사유' &&
+            <textarea placeholder='환불 요청 사유를 상세히 작성해주세요.'></textarea>
+          }
+          
+        </div>
+      </div>
+      
+      <div className='button primary fullwidth' onClick={onCancelClickHandler}>환불하기</div>
+
+    </div>
+  )
 }
 
 
@@ -210,8 +287,10 @@ function ProductItem({
 
   // state: 리뷰작성 버튼 클릭 상타 //
   const [isReviewClick, setIsReviewClick] = useState<boolean>(false);
+  // state: 결제 취소 버튼 클릭 상태 //
+  const [isCancelClick, setIsCancelClick] = useState<boolean>(false);
 
-  const { orderItemSequence, name, image, quantity, price, approvedTime } = buyingContent;
+  const { paymentKey, orderItemSequence, name, image, quantity, price, approvedTime } = buyingContent;
 
   // variable: 구매일자 변수 //
   const buyingDay = approvedTime.slice(0,10);
@@ -223,6 +302,17 @@ function ProductItem({
     setIsReviewClick(!isReviewClick);
   }
 
+  // event handler: 결제취소 버튼 클릭 이벤트 핸들러 //
+  const onCancelClickHandler = () => {
+    setIsCancelClick(!isCancelClick);
+  }
+
+  // event handler: 모달 닫기 핸들러 //
+  const closeModal = () => {
+    setIsReviewClick(false);
+    setIsCancelClick(false);
+  }
+
   // render: 구매목록 상품 컴포넌트 렌더링 //
   return (
     <div className='tr'>
@@ -232,14 +322,20 @@ function ProductItem({
         <div className='text-box'>
           <div className='title'>{name}</div>
           <div className='review-button' onClick={onReviewClickHandler}>리뷰 작성</div>
+          <div className='cancel-button' onClick={onCancelClickHandler}>구매 취소</div>
         </div>
       </div>
       <div className='td quantity'>{quantity}</div>
       <div className='td amount'>{totalPrice.toLocaleString()}원</div>
       <div className='td order-number'>F45242Sx</div>
       {isReviewClick &&
-        <Modal title='리뷰 작성' onClose={onReviewClickHandler}>
-          <ProductReview buyingContent={buyingContent}/>
+        <Modal title='리뷰 작성' onClose={closeModal}>
+          <ProductReview buyingContent={buyingContent} onClose={onReviewClickHandler}/>
+        </Modal>
+      }
+      {isCancelClick && 
+        <Modal title='환불 요청' onClose={closeModal}>
+          <PaymentCancel buyingContent={buyingContent} onClose={onCancelClickHandler}/>
         </Modal>
       }
     </div>
@@ -247,6 +343,7 @@ function ProductItem({
 }
 
 
+// component: 사용자 구매목록 컴포넌트 //
 export default function GroupBuying() {
 
   // state: 페이지네이션 상태 //
@@ -263,6 +360,9 @@ export default function GroupBuying() {
 
   // variable: access token //
   const accessToken = cookies[ACCESS_TOKEN];
+
+  // function: navigator 함수 //
+  const navigator = useNavigate();
   
   // function: get my buying response 함수 //
   const getMyBuyingResponse = (responseBody: GetMyBuyingResponseDto | ResponseDto | null) => {
@@ -278,6 +378,21 @@ export default function GroupBuying() {
     setTotalList(buyList);
   }
 
+  // event handler: 찜 목록 클릭 이벤트 핸들러 //
+  const onWishListClickHandler = () => {
+    navigator(MY_GROUPBUYING_WISH_LIST_ABSOLUTE_PATH);
+  }
+  // event handler: 구매 목록 클릭 이벤트 핸들러 //
+  const onMyBuyClickHandler = () => {
+    navigator(MY_GROUPBUYING_BUY_ABSOLUTE_PATH);
+  }
+  // event handler: 판매 목록 클릭 이벤트 핸들러 //
+  const onMySellClickHandler = () => {
+    navigator(MY_GROUPBUYING_SELL_ABSOLUTE_PATH);
+  }
+
+
+  // effect: 컴포넌트 렌더링 시 실행할 함수 //
   useEffect(() => {
     getMyBuyingRequest(accessToken).then(getMyBuyingResponse);
   },[])
@@ -287,9 +402,9 @@ export default function GroupBuying() {
       <MypageSidebar/>
       <div className='body'>
           <div className='select-bar'>
-            <div className='content'>찜한 목록</div>
-            <div className='content active'>구매목록</div>
-            <div className='content'>판매목록</div>
+            <div className='content active' onClick={onWishListClickHandler}>찜한 목록</div>
+            <div className='content' onClick={onMyBuyClickHandler}>구매목록</div>
+            <div className='content' onClick={onMySellClickHandler}>판매목록</div>
           </div>
           <div className='product-list-table'>
             <div className='tr'>

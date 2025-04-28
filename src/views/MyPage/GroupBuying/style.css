@@ -43,6 +43,7 @@
   align-items: center;
   text-align: center;
   border-bottom: 2px solid rgb(197, 193, 193);
+  cursor: default;
 }
 
 #group-buying-main-wrapper .body .product-list-table .tr:first-child{
@@ -135,6 +136,18 @@
   height: 22px;
   background-color: brown;
   border-radius: 10px;
+  cursor: pointer;
+}
+
+.cancel-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 22px;
+  background-color: brown;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 .review-container {
@@ -286,3 +299,82 @@
   z-index: 1;
 }
 
+
+
+.cancel-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  align-items: start;
+
+  gap: 16px;
+}
+
+.cancel-container .product-box {
+  display: flex;
+  
+  gap: 8px;
+}
+
+.cancel-container .product-box img {
+  width: 150px;
+}
+
+.cancel-container .product-box .product-content-box {
+  display: flex;
+  flex-direction: column;
+
+  align-items: start;
+  gap: 10px;
+}
+
+.cancel-container .product-box .product-content-box .title {
+  text-align: start;
+}
+
+.cancel-container .product-box .product-content-box .sub-title {
+  text-align: start;
+
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.cancel-container .cancel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  width: 100%;
+}
+
+.cancel-container .cancel-reason-box {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  align-items: start;
+  gap: 16px;
+}
+
+.cancel-container .title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.cancel-container .cancel-content select {
+  padding: 8px;
+
+  font-size: 16px;
+}
+
+.cancel-container .cancel-content textarea{
+  width: 100%;
+  height: 200px;
+
+  box-sizing: border-box;
+
+  padding: 12px;
+  
+  font-size: 16px;
+}

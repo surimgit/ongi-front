@@ -217,6 +217,13 @@
   text-overflow: ellipsis;
 }
 
+#detail-product-wrapper .button-box {
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+}
+
 #detail-product-wrapper .cart-update-box {
   display: flex;
   justify-content: center;

@@ -26,7 +26,8 @@ import { GetNoticeListResponseDto, GetNoticeResponseDto } from './dto/response/n
 import { GetQuestionListResponseDto, GetQuestionResponseDto } from './dto/response/question';
 import PostAlertRequestDto from './dto/request/alert/post-alert.request.dto';
 import GetAlertResponseDto from './dto/response/alert/get-alert.response.dto';
-import { PostOrderItemRequestDto } from './dto/request/payment';
+import { PostOrderItemRequestDto, PostPaymentCancelRequestDto } from './dto/request/payment';
+import { GetProductReviewsResponseDto } from './dto/response/product';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -54,6 +55,7 @@ const PATCH_PRODUCT_QUANTITY_URL = (sequence: number | string) => `${PRODUCT_MOD
 
 const GET_PRODUCT_CATEGORY_NAME_URL = (category: Category, name:string) =>  `${PRODUCT_MODULE_URL}?category=${category}&name=${name}`;
 const GET_PRODUCT_DETAIL_URL = (sequence:number | string) => `${PRODUCT_MODULE_URL}/${sequence}`; 
+const GET_PRODUCT_REVIEWS_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/review`;
 
 // 찜목록 API 경로
 const WISHLIST_MODULE_URL = `${API_DOMAIN}/api/v1/wish`;
@@ -88,6 +90,7 @@ const POST_ORDER_URL = `${PAYMENT_URL}/`;
 const GET_ORDER_URL = `${PAYMENT_URL}/`;
 const POST_PAYMENT_CONFIRM_URL =  `${PAYMENT_URL}/confirm`;
 const POST_ORDER_ITEM_URL = `${PAYMENT_URL}/order-items`;
+const POST_PAYMENT_CANCEL_URL = `${PAYMENT_URL}/cancel`
 
 
 const GET_COMMUNITY_SEARCH_URL = (searchCategory: SearchCategory, keyword: string) => `${COMMUNITY_MODULE_URL}/search?type=${searchCategory}&keyword=${keyword}`;
@@ -154,6 +157,14 @@ export const getProductCategoryRequest = async (category:Category, name: string,
 export const getProductDetailRequest = async (sequence: number | string, accessToken:string) => {
   const responseBody = await axios.get(GET_PRODUCT_DETAIL_URL(sequence), bearerAuthorization(accessToken))
   .then(responseSuccessHandler<GetProductDetailResponseDto>)
+  .catch(responseErrorHandler);
+return responseBody;
+}
+
+// function: get product reviews API 요청 함수 //
+export const getProductReviewsRequest = async (sequence: number | string) => {
+  const responseBody = await axios.get(GET_PRODUCT_REVIEWS_URL(sequence))
+  .then(responseSuccessHandler<GetProductReviewsResponseDto>)
   .catch(responseErrorHandler);
 return responseBody;
 }
@@ -266,7 +277,7 @@ export const fileUploadRequest = async (requestBody: FormData) => {
 
 // function: file uploads 요청 함수 //
 export const fileUploadsRequest = async (requestBody: FormData) => {
-  const responseBody = await axios.post(FILE_UPLOADS_URL, requestBody, multipartFormData)
+  const responseBody = await axios.post(FILE_UPLOADS_URL, requestBody)
     .then(responseSuccessHandler<string[]>)
     .catch(error => null);
   return responseBody;
@@ -290,7 +301,7 @@ export const getWishRequest = async(postSequence: number | string, accessToken: 
 
 // function: get wish list API 요청 함수//
 export const getWishListRequest = async(accessToken: string) => {
-  const responseBody = await axios.post(GET_WISHLIST_URL, bearerAuthorization(accessToken))
+  const responseBody = await axios.get(GET_WISHLIST_URL, bearerAuthorization(accessToken))
     .then(responseSuccessHandler<GetWishListResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
@@ -413,10 +424,19 @@ export const getOrderRequest = async(accessToken: string) => {
 }
 
 // function: post payment confirm API 요청 함수 //
-export const postPaymentConfirm = async(requestBody: PostPaymentConfirmRequestDto, accessToken: string) => {
+export const postPaymentConfirmRequest = async(requestBody: PostPaymentConfirmRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_PAYMENT_CONFIRM_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post payment cancel API 요청 함수 //
+export const postPaymentCancelRequest = async(requestBody: PostPaymentCancelRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_PAYMENT_CANCEL_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
 }
 
 // function: get community search API 요청 함수 //
@@ -627,7 +647,7 @@ export const getMyBuyingRequest = async (accessToken: string) => {
 
 // function: post product review API 요청 함수 //
 export const postProductReviewRequest = async (requestBody: PostProductReviewRequestDto, accessToken: string) => {
-  const responseBody = await axios.post(POST_PRODUCT_REVIEW_URL, JSON.stringify(requestBody), bearerAuthorization(accessToken))
+  const responseBody = await axios.post(POST_PRODUCT_REVIEW_URL, (requestBody), bearerAuthorization(accessToken))
   .then(responseSuccessHandler)
   .catch(responseErrorHandler);
   return responseBody;
