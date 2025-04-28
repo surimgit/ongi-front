@@ -51,7 +51,7 @@ export default function PostWrite() {
   const onTitleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setTitle(value);
-};
+  };
 
   // event handler: 내용 변경 이벤트 처리 //
   const onContentChangeHandler = (content: string) => {
@@ -118,7 +118,6 @@ export default function PostWrite() {
         <div className='btn cancel'>취소</div>
         <div className='btn write' onClick={onWriteButtonClickHandler}>작성</div>
       </div>
-      
     </div>
   )
 }

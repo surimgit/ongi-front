@@ -6,7 +6,7 @@
     min-height: 1800px;
 }
 
-.search-container {
+#policy-wrapper .search-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -18,7 +18,7 @@
     gap: 20px;
 }
 
-.search-bar {
+#policy-wrapper .search-bar {
     width: 560px;
     height: 45px;
     border: 1px solid #ddd;
@@ -27,7 +27,7 @@
     padding: 0 10px;
 }
 
-.search-bar::-webkit-input-placeholder{
+#policy-wrapper .search-bar::-webkit-input-placeholder{
     background-image: url(src/assets/images/search-icon-black.png);
     background-size: 17px;
     background-position:  530px 2px;
@@ -35,7 +35,7 @@
     text-indent: 10px;
 }
 
-.search-container .category {
+#policy-wrapper .search-container .category {
     display: flex;
     align-items: center;
     width: 180px;
@@ -154,7 +154,7 @@
     margin-top: 30px;
 }
 
-.pagination-box {
+#policy-wrapper .pagination-box {
     display: flex;
     justify-content: center;
     margin-top: 45px;

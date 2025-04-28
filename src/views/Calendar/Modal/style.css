@@ -32,7 +32,7 @@
   }
   
   .calendar-modal .row input,
-  select {
+  #fullcalendar-wrapper select {
     flex: 1;
     padding: 8px;
     border: 1px solid #ddd;

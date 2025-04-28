@@ -4,10 +4,12 @@ import { create } from "zustand";
 interface SignInUserStore {
     userId: string;
     nickname: string;
+    admin: boolean;
     profileImage: string | null;
 
     setUserId: (userId: string) => void;
     setNickname: (nickname: string) => void;
+    setAdmin: (admin: boolean) => void;
     setProfileImage: (profileImage: string | null) => void;
 
     resetSignInUser: () => void;
@@ -17,16 +19,19 @@ interface SignInUserStore {
 const useStore = create<SignInUserStore>(set => ({
     userId: '',
     nickname: '',
+    admin: false,
     profileImage: null,
 
     setUserId: (userId: string) => set(state => ({ ...state, userId })),
     setNickname: (nickname: string) => set(state => ({ ... state, nickname })),
+    setAdmin: (admin: boolean) => set(state => ({ ...state, admin })),
     setProfileImage: (profileImage: string | null) => set(state => ({ ...state, profileImage })),
 
     resetSignInUser: () => set(state => ({ 
         ...state, 
         userId: '',
         nickname: '',
+        admin: false,
         profileImage: null,
     }))
 }));

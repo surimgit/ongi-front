@@ -1,10 +1,15 @@
 import { Routes, Route, useNavigate, Outlet } from 'react-router';
 import Layout from './layouts/Layout';
+
+import './App.css';
 import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, 
     SHOPPING_CART_PATH, WRITE_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH, NEEDHELPER_PATH, 
     MY_GROUPBUYING_PATH, MY_GROUPBUYING_WISH_LIST_PATH, MY_REVIEW_PATH, MY_NEEDHELLPER_PATH, MY_NEEDHELLPER_ASK_PATH, MY_NEEDHELLPER_APPLY_PATH,
     MY_NEEDHELLPER_LIKED_PATH, MY_COMMUNITY_PATH, FAQ_PATH, NOTICE_PATH, MAIN_PATH, AUTH_PATH, AUTH_FIND_ID_PATH, AUTH_FIND_PASSWORD_PATH,
-    AUTH_FIND_USER_RESULT_PATH} from './constants';
+    AUTH_FIND_USER_RESULT_PATH,
+    COMMUNITY_EDIT_PATH,
+    REPORT_PATH,
+    COMMUNITY_SEARCH_PATH} from './constants';
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
 import ProductMain from './views/Product';
@@ -45,6 +50,9 @@ import Calendar from './views/Calendar';
 import FindId from './views/Auth/FindId';
 import FindPassword from './views/Auth/FindPassword';
 import FindResult from './views/Auth/FindResult';
+import PostEdit from './views/Community/Edit';
+import ReportBoard from './views/Report';
+import CommunitySearch from './views/Community/Search';
 
 function App() {
   return (
@@ -109,12 +117,21 @@ function App() {
         </Route> 
         <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
           <Route index element={<CommunityMain />} />
+          <Route path={COMMUNITY_SEARCH_PATH}>
+            <Route index element={<CommunitySearch />} />
+          </Route>
           <Route path={COMMUNITY_VIEW_PATH}>
             <Route index element={<PostDetail />} />
+            <Route path={COMMUNITY_EDIT_PATH}>
+              <Route index element={<PostEdit />} />
+            </Route>
           </Route>
           <Route path={COMMUNITY_WRITE_PATH}>
             <Route index element={<PostWrite />} />
           </Route>
+        </Route>
+        <Route path={REPORT_PATH} element={<CommunityLayout />}>
+          <Route index element={<ReportBoard />} />
         </Route>
       </Route>
     </Routes>
