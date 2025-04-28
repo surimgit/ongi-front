@@ -789,7 +789,7 @@ export const getUserNicknameRequest = async (reportedId: string, accessToken: st
   .then(responseSuccessHandler)
   .catch(responseErrorHandler);
   return responseBody;
-}
+};
 
 // function: get is admin API 요청 함수 //
 export const getIsAdminRequest = async (accessToken: string) => {
