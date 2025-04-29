@@ -1,0 +1,79 @@
+.schedule-view-wrapper {
+    position: absolute;
+    top: 150px;
+    left: 150px;
+    width: 550px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid var(--Lightmode-Grey4);
+    z-index: 9999;
+    font-family: 'Pretendard', sans-serif;
+    overflow: hidden;
+  }
+  
+  .schedule-view-title {
+    margin: 10px 15px 0px;
+    padding: 12px 16px 0;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: move;
+    user-select: none;
+  }
+  
+  .schedule-view-content {
+    display: flex;
+    flex-direction: column;
+
+    margin: 0px 15px 10px;
+    padding: 15px 16px;
+    gap: 5px;
+
+    font-size: 15px;
+    color: var(--Lightmode-Grey4);
+    border-bottom: 2px solid #e0e0e0;
+  }
+  
+  .schedule-view-descripiton {
+    display: flex;
+    justify-self: center;
+
+    width: 480px;
+    min-height: 100px;
+    padding: 15px;
+    margin: 20px 16px;
+    
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Pretendard', sans-serif;
+  }
+  
+  .buttons {
+    display: flex;
+    justify-self: flex-end;
+    justify-content: center;
+    margin-bottom: 15px;
+    margin-right: 10px;
+  }
+  
+  button.cancel {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    background-color: var(--Lightmode-Grey4);
+    color: var(--White);
+    width: 140px;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+  
+  button.submit {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    background-color: var(--Primary);
+    color: var(--White);
+    width: 140px;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+  

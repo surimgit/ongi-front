@@ -11,6 +11,8 @@
   flex-direction: column;
   width: 100%;
   padding-right: 70px;
+
+  gap: 20px;
 }
 
 #wish-list-main-wrapper .body .select-bar{
@@ -21,6 +23,8 @@
   border-radius: 12px;
   margin-bottom: 50px;
   overflow: hidden;
+
+  cursor: pointer;
 }
 
 
@@ -47,8 +51,36 @@
   display: flex;
   align-items: center;
   text-align: center;
+
+  padding: 20px 0px;
   border-bottom: 2px solid rgb(164, 164, 164);
+  cursor: pointer;
 }
+
+#wish-list-main-wrapper .body .product-list-table .tr:first-child{
+  cursor: default;
+}
+
+.product-list-table .tr .td.name-box.expired {
+  position: relative; 
+}
+
+.product-list-table .tr .td.td.name-box.expired .img-text {
+  position: absolute;
+  top: 0; 
+  left: 0;
+  width: 100px;
+  transform: translateX(20%); 
+  font-size: 40px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.product-list-table .tr .td.td.name-box.expired img {
+  width: 100%;
+  opacity: 0.4;
+}
+
 
 #wish-list-main-wrapper .body .product-list-table .th{
   background-color: antiquewhite;
@@ -59,25 +91,19 @@
 }
 
 #wish-list-main-wrapper .body .product-list-table .name-box{
-  flex: 6.7;
+  flex: 7;
 }
 
-#wish-list-main-wrapper .body .product-list-table .purchased-people{
-  flex: 0.8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 #wish-list-main-wrapper .body .product-list-table .quantity{
-  flex: 0.8;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 #wish-list-main-wrapper .body .product-list-table .tr .date{
-  flex: 1.3;
+  flex: 1.5;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,8 +121,7 @@
   gap: 20px;
 }
 
-#wish-list-main-wrapper .body .product-list-table .td .picture{
-  background-color: aqua;
+#wish-list-main-wrapper .body .product-list-table .td.name-box img{
   height: 100px;
   width: 100px;
   padding-left: 20px;

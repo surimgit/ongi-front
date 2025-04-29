@@ -20,6 +20,7 @@ interface SignInUserStore {
 const useStore = create<SignInUserStore>(set => ({
     userId: '',
     nickname: '',
+    admin: false,
     profileImage: null,
     isAdmin: false,
 
@@ -32,6 +33,7 @@ const useStore = create<SignInUserStore>(set => ({
         ...state, 
         userId: '',
         nickname: '',
+        admin: false,
         profileImage: null,
         isAdmin: false
     }))

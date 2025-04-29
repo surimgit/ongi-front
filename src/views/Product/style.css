@@ -125,23 +125,17 @@
   cursor: pointer;
 }
 
-.product-list-table .tr .td.image{
-  flex: 1;
-  width: 150px;
-}
-
 .product-list-table .tr .td.image img {
-  width: 100%;
+  width: 200px;
+  height: 200px;
 }
 
 .product-list-table .tr .td.image.expired{
   flex: 1;
-  width: 100px;
   position: relative;
 }
 
 .product-list-table .tr .td.image.expired img {
-  width: 100%;
   opacity: 0.4;
 }
 
@@ -155,6 +149,7 @@
   font-weight: 600;
   text-align: center;
 }
+
 
 .product-list-table .tr .td.content-box{
   flex: 4;

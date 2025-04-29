@@ -8,6 +8,10 @@ import Notice from "./notice.interface"
 import Question from "./question.interface"
 import StockReservation from "./stock-reservation.interface"
 import Wish from "./wish.interface"
+import MyBuying from "./my-buying-interface"
+import ProductReviews from "./ProductReviews.interface"
+import Schedule from "./Schedule.interface"
+
 
 export type {
   Product,
@@ -20,4 +24,7 @@ export type {
   ShoppingCart,
   StockReservation,
   Wish,
+  MyBuying,
+  ProductReviews,
+  Schedule
 }
