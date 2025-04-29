@@ -3,6 +3,7 @@
   margin: 0 auto;
 }
 
+
 #product-main-wrapper .main-container {
   display: flex;
   flex-direction: column;
@@ -18,7 +19,7 @@
   font-weight: 700;
 }
 
-#product-main-wrapper .main-container .main-title.color {
+#product-main-wrapper .main-container .main-title.color-title {
   color: var(--Red);
 }
 
@@ -125,9 +126,12 @@
   cursor: pointer;
 }
 
-.product-list-table .tr .td.image img {
+.product-list-table .tr .td.image {
   width: 200px;
   height: 200px;
+}
+.product-list-table .tr .td.image img{
+  width: 100%;
 }
 
 .product-list-table .tr .td.image.expired{
@@ -201,7 +205,7 @@
   text-align: end;
 }
 
-.td.deadline-box .deadline-title.color{
+.td.deadline-box .deadline-title.color-title{
   color: #008CFF;
   font-size: 24px;
 }

@@ -37,7 +37,7 @@ import GetReportResponseDto from './dto/response/report/get-report.response.dto'
 import PatchReportProcessRequestDto from './dto/request/report/patch-report-process.request.dto';
 import PatchResignRequestDto from './dto/request/user/patch-resign.request.dto';
 import GetAlertedCountResponseDto from './dto/response/report/get-alerted-count.response.dto';
-import { GetProductReviewsResponseDto } from './dto/response/product';
+import { GetProductReviewsResponseDto, GetReviewImagesResponseDto } from './dto/response/product';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -69,7 +69,9 @@ const PATCH_PRODUCT_QUANTITY_URL = (sequence: number | string) => `${PRODUCT_MOD
 const GET_PRODUCT_CATEGORY_NAME_URL = (category: Category, name:string) =>  `${PRODUCT_MODULE_URL}?category=${category}&name=${name}`;
 const GET_PRODUCT_DETAIL_URL = (sequence:number | string) => `${PRODUCT_MODULE_URL}/${sequence}`; 
 const GET_PRODUCT_REVIEWS_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/review`;
+const GET_PRODUCT_REVIEW_IMAGES_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/review-images`;
 
+const DELETE_PRODUCT_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}`;
 // 찜목록 API 경로
 const WISHLIST_MODULE_URL = `${API_DOMAIN}/api/v1/wish`;
 const POST_WISHLIST_URL = (postSequence: number | string) => `${WISHLIST_MODULE_URL}/${postSequence}`;
@@ -136,6 +138,9 @@ const GET_QUESTION_POST_URL= (questionSequence: number | string) => `${QUESTION_
 const PATCH_QUESTION_POST_URL= (questionSequence: number | string) => `${QUESTION_MODULE_URL}/${questionSequence}`;
 const PATCH_QUESTION_ANSWER_URL = (questionSequence: number | string) => `${QUESTION_MODULE_URL}/${questionSequence}`;
 
+const GET_MY_BUYING_URL = `${API_DOMAIN}/api/v1/mypage/buy/my`;
+const POST_PRODUCT_REVIEW_URL = `${API_DOMAIN}/api/v1/mypage/buy/my/review`;
+
 const NOTICE_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/notice`;
 const GET_NOTICE_LIST_URL = `${NOTICE_MODULE_URL}`;
 const POST_NOTICE_URL = `${NOTICE_MODULE_URL}`;
@@ -192,6 +197,14 @@ return responseBody;
 export const getProductReviewsRequest = async (sequence: number | string) => {
   const responseBody = await axios.get(GET_PRODUCT_REVIEWS_URL(sequence))
   .then(responseSuccessHandler<GetProductReviewsResponseDto>)
+  .catch(responseErrorHandler);
+return responseBody;
+}
+
+// function: get product reviews images API 요청 함수 //
+export const getProductReviewImagesRequest = async (sequence: number | string) => {
+  const responseBody = await axios.get(GET_PRODUCT_REVIEW_IMAGES_URL(sequence))
+  .then(responseSuccessHandler<GetReviewImagesResponseDto>)
   .catch(responseErrorHandler);
 return responseBody;
 }
@@ -313,6 +326,14 @@ export const postProductRequest = async (requestBody: PostProductRequestDto, acc
 // function: patch product quantity API 요청 함수 //
 export const patchProductRequest = async (requestBody: PatchProductQuantityRequestDto, sequence: number, accessToken:string) => {
   const responseBody = await axios.post(PATCH_PRODUCT_QUANTITY_URL(sequence), requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: delete product API 요청 함수 //
+export const deleteProductRequest = async (sequence: number | string, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_PRODUCT_URL(sequence), bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;

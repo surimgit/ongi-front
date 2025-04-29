@@ -125,13 +125,13 @@ function TableItem({product, index}: TableItemProps & {index: number}){
       </div>
       {isOpen && 
         <div className='td deadline-box'>
-          <div className='deadline-title color'>마감까지</div>
+          <div className='deadline-title color-title'>마감까지</div>
           <div className='deadline-title normal'>{changeDateFormat(remainingTime)}</div>
         </div>
       }
       {!isOpen &&
         <div className='td deadline-box'>
-          <div className='deadline-title color'>오픈예정</div>
+          <div className='deadline-title color-title'>오픈예정</div>
           <div className='deadline-title normal'>{openDate}</div>
         </div>
       }
@@ -264,7 +264,7 @@ export default function ProductMain() {
     <div id='product-main-wrapper'>
       <div className='main-container'>
         <div className='main-title'>
-          <div className='main-title color'>공동구매</div>
+          <div className='main-title color-title'>공동구매</div>
           <div className='main-title normal'>게시판</div>
         </div>
         <div className='filter-container'>

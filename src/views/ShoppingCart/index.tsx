@@ -36,6 +36,8 @@ function ShoppingCartContent({shoppingCart, isSelectAll, accessToken, fetchShopp
   const isSelected = selectedMap[shoppingCartSequence] ?? false;
   // variable: select button 클래스 //
   const selectClass = isSelected ? 'select-button active' : 'select-button';
+  // variable: 상품 존재 여부 //
+  const isDeleted = name === null;
 
   // function: delete shopping cart response 함수 //
   const deleteShoppingCartResponse = (responseBody: ResponseDto | null) => {
@@ -75,28 +77,40 @@ function ShoppingCartContent({shoppingCart, isSelectAll, accessToken, fetchShopp
 
   // render: 장바구니 테이블 레코드 컴포넌트 렌더링 //
   return (
-    <div className='product-container'>
+    <div className={`product-container ${isDeleted ? 'deleted' : ''}`}>
       <div className='product-banner'>
-        <div className={selectClass} onClick={() => toggle(shoppingCartSequence)}></div>
+        {!isDeleted && <div className={selectClass} onClick={() => toggle(shoppingCartSequence)}></div>}
         <div className='close-button' onClick={onCartItemDeleteButtonClickHandler}></div>
       </div>
       
       <div className='product-content-container'>
         <div className='product-img'>
-         <img src={image} alt='상품 이미지' style={{backgroundSize:'cover'}}/>
+          { isDeleted  ? (<div className='deleted-image-placeholder'>이미지 없음</div>)
+            : (<img src={image} alt='상품 이미지' style={{backgroundSize:'cover'}}/>)
+          }
         </div>
         <div className='product-content-box'>
-          <div className='product-title'>{name}</div>
-          <div className='product-update-box'>
-            <div className='minus-button' onClick={onQuantityDecreaseButtonClickHandler}></div>
-            <div className='product-quantity'>{productQuantity}</div>
-            <div className='plus-button' onClick={onQuantityIncreaseButtonClickHandler}></div>
-          </div>
+          <div className='product-title'>{isDeleted ? '삭제된 상품입니다.' : name}</div>
+          {name ? (
+            <div className='product-update-box'>
+              <div className='minus-button' onClick={onQuantityDecreaseButtonClickHandler}></div>
+              <div className='product-quantity'>{productQuantity}</div>
+              <div className='plus-button' onClick={onQuantityIncreaseButtonClickHandler}></div>
+            </div>
+          ) : (
+            <div className='product-warning'>구매할 수 없는 상품입니다.</div>
+          )}
         </div>
         <div className='price-box'>
-            <div className='price'>개당 {price.toLocaleString()}원</div>
-            <div className='price'>총 {(totalPrice).toLocaleString()}원</div>
-          </div>
+          {price ? (
+            <>
+              <div className='price'>개당 {price.toLocaleString()}원</div>
+              <div className='price'>총 {(totalPrice).toLocaleString()}원</div>
+            </>
+          ) : (
+            <div className='price'>가격 정보 없음</div>
+          )}
+        </div>
       </div>
     </div>
   )

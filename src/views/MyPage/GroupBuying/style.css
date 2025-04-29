@@ -21,6 +21,8 @@
   background-color: grey;
   border-radius: 12px;
   overflow: hidden; /* 자식이 radius 밖으로 나가는 것 방지 */
+
+  cursor: pointer;
 }
 
 
@@ -150,57 +152,60 @@
   cursor: pointer;
 }
 
-.review-container {
+.mypage-review-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
 
-  width: 100%s;
+  padding: 20px;
 }
 
-.review-container .question {
+.mypage-review-container .question {
   font-size: 18px;
   font-weight: 700;
 }
 
-.review-container .product-info{
+.mypage-review-container .product-info{
   display: flex;
 
   gap: 10px;
   padding: 20px 0;
 
-  border-top: 3px solid #000;
   border-bottom: 2px solid #666666;
 }
 
-.review-container .product-info img {
+.mypage-review-container .product-info img {
   width: 130px;
   height: 130px;
 }
 
-.review-container .product-info .product-name {
+.mypage-review-container .product-info .product-name {
   font-size: 18px;
   font-weight: 700;
 }
 
-.review-container .rating-box{
+.mypage-review-container .rating-box{
   display: flex;
 
   align-items: center;
   gap: 20px;
 }
 
-.review-container .rating-box ul{
+.mypage-review-container .rating-box ul{
   display: flex;
   
   gap: 5px;
 }
 
-.review-container .rating-box ul .on{
+.mypage-review-container .rating-box ul>li{
+  cursor: pointer;
+}
+
+.mypage-review-container .rating-box ul .on{
   list-style: none;
 }
 
-.review-container .rating-box ul .on .star {
+.mypage-review-container .rating-box ul .on .star {
   width: 30px;
   height: 30px;
 
@@ -208,7 +213,7 @@
   background-size: cover;
 }
 
-.review-container .rating-box ul .on .star.active {
+.mypage-review-container .rating-box ul .on .star.active {
   width: 30px;
   height: 30px;
 
@@ -216,7 +221,7 @@
   background-size: cover;
 }
 
-.review-container .review-text-box {
+.mypage-review-container .review-text-box {
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -237,19 +242,19 @@
 
 }
 
-.review-container .review-image-list{
+.mypage-review-container .review-image-list{
   display: flex;
   flex-direction: column;
   gap: 10px;
   align-items: start;
 }
 
-.review-container .review-image-list ul{
+.mypage-review-container .review-image-list ul{
   display: flex;
   gap: 8px;
 }
 
-.review-container .review-image-list ul .review-image{
+.mypage-review-container .review-image-list ul .review-image{
   list-style: none;
   width: 80px;
   height: 80px;
@@ -270,7 +275,7 @@
   cursor: pointer;
 }
 
-.review-container .review-image-list ul .review-image .image-container {
+.mypage-review-container .review-image-list ul .review-image .image-container {
   position: relative;
 
   width: 80px;
@@ -304,9 +309,9 @@
 .cancel-container {
   display: flex;
   flex-direction: column;
-  width: 100%;
 
   align-items: start;
+  padding: 20px;
 
   gap: 16px;
 }

@@ -134,7 +134,7 @@ function ProductReview({buyingContent, onClose}: {buyingContent:ProductItemProps
   }
   
   return (
-    <div className='review-container'>
+    <div className='mypage-review-container'>
       <div className='product-info'>
         <img src={image} alt='제품 이미지'/>
         <div className='product-name'>{name}</div>
@@ -251,7 +251,7 @@ function PaymentCancel({buyingContent, onClose}: {buyingContent:ProductItemProps
         <img src={image} alt='상품 사진'/>
         <div className='product-content-box'>
           <div className='title'>{name}</div>
-          <div className='sub-title'>구매 개수: {quantity * quantity}개</div>
+          <div className='sub-title'>구매 개수: {quantity}개</div>
           <div className='sub-title'>총 가격: {price.toLocaleString()}원</div>
         </div>
       </div>
@@ -402,8 +402,8 @@ export default function GroupBuying() {
       <MypageSidebar/>
       <div className='body'>
           <div className='select-bar'>
-            <div className='content active' onClick={onWishListClickHandler}>찜한 목록</div>
-            <div className='content' onClick={onMyBuyClickHandler}>구매목록</div>
+            <div className='content' onClick={onWishListClickHandler}>찜한 목록</div>
+            <div className='content active' onClick={onMyBuyClickHandler}>구매목록</div>
             <div className='content' onClick={onMySellClickHandler}>판매목록</div>
           </div>
           <div className='product-list-table'>
