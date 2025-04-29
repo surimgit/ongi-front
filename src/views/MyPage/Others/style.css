@@ -6,51 +6,6 @@
   margin: 0 auto;
 }
 
-.sidebar-container {
-  display: flex;
-  flex-direction: column;
-  width: 180px;
-}
-
-.sidebar-container .button {
-  width: 180px;
-  height: 40px;
-  background-color: rgba(24, 50, 81, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--White);
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.sidebar-container .categories {
-  display: flex;
-  padding: 29px 22px;
-  flex-direction: column;
-  gap: 18px;
-  letter-spacing: 0.3px;
-}
-
-.sidebar-container .categories .title {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.sidebar-container .categories .sub-title {
-  display: flex;
-  margin-bottom: 2px;
-  flex-direction: column;
-  gap: 7px;
-  font-size: 13px;
-}
-
-.sidebar-container .categories .sub-text {
-  margin-left: 10px;
-  cursor: pointer;
-}
-
-
 #others-main-wrapper .contents-wrapper{
   display: flex;
   flex-direction: column;
@@ -112,15 +67,23 @@
   text-align: center;
 }
 
-#others-main-wrapper .contents-wrapper .body .profile-container .profile-image{
-  width: 210px;
-  height: 280px;
-  background-color: rgb(123, 123, 168)
-}
-
 #others-main-wrapper .contents-wrapper .body .profile-container .name{
   font-size: 25px;
   font-weight: bold;
+}
+
+#others-main-wrapper .contents-wrapper .body .profile-container .profile-image{
+  width: 210px;
+  height: 280px;
+  background-size: 100% 100%;
+  position: relative;
+}
+
+#others-main-wrapper .contents-wrapper .body .profile-container .profile-image img{
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+  border-radius: 10px;
 }
 
 #others-main-wrapper .contents-wrapper .body .user-info-area{
@@ -182,12 +145,13 @@
 #others-main-wrapper .contents-wrapper .body .user-info-area .detail{
   display: flex;
   width: 100%;
-  height: 100%;
+  height: 240px;
   justify-content: space-around;
-  padding: 30px 37px;
+  padding: 30px 60px;
   border: 1px solid black;
   box-sizing: border-box;
   align-items: center;
+  gap: 30px
 }
 
 #others-main-wrapper .contents-wrapper .body .user-info-area .personal-info-box{
@@ -203,38 +167,77 @@
 #others-main-wrapper .contents-wrapper .body .user-info-area .title-box{
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 17px;
 }
 
 #others-main-wrapper .contents-wrapper .body .user-info-area .info-box{
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 17px;
 }
 
 #others-main-wrapper .contents-wrapper .body .user-info-area .specialty-box{
   display: flex;
   flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  width: 400px;
+  gap: 20px;
+  border-radius: 20px;
+  height: 100%;
+  border: 1px solid #45a049;
 }
 
-#others-main-wrapper .contents-wrapper .body .user-info-area .tag-container{
-  display: flex;
-  gap: 150px;
+#others-main-wrapper .contents-wrapper .body .user-info-area .specialty-box .text{
+  margin-top: 5px;
 }
 
-#others-main-wrapper .contents-wrapper .body .user-info-area .tag-box{
+/* tag-container 스타일링 */
+#others-main-wrapper .contents-wrapper .body .user-info-area .specialty-box .tag-container {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  color: blue;
+  flex-wrap: wrap;  /* 키워드가 한 줄을 넘어가면 다음 줄로 */
+  border: 2px solid #ccc; /* border 추가 */
+  background-color: #f9f9f9;
+  margin: 0px 40px 10px 40px;
+}
+
+#others-main-wrapper .contents-wrapper .body .user-info-area .specialty-box .tag-container:empty {
+  border: none;
+}
+
+/* tag-box 스타일링 */
+#others-main-wrapper .contents-wrapper .body .user-info-area .specialty-box .tag-container .tag-box {
+  display: flex;
+  gap: 8px;  /* 태그 간 간격 */
+}
+
+/* tag-wrapper 스타일링 */
+#others-main-wrapper .contents-wrapper .body .user-info-area .specialty-box .tag-container .tag-box .tag-wrapper {
+  display: flex;
+  align-items: center; /* 태그와 마이너스 버튼이 일렬로 나열되도록 */
+  height: 100%;
+  gap: 5px;
+  padding: 5px 5px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* tag 스타일링 */
+#others-main-wrapper .contents-wrapper .body .user-info-area .specialty-box .tag-container .tag-box .tag-wrapper .tag {
+  font-weight: bold;
+  color: #3f51b5;
+  height: 20px;
+  background-color: #9add9d;
+  display: flex;
+  align-items: center;
+  padding: 0px 5px;
+  border-radius: 10px;
+  justify-content: center;
 }
 
 #others-main-wrapper .contents-wrapper .introduce-box{
-  padding: 50px 0px
+  padding: 50px 0px;
 }
 
 #others-main-wrapper .contents-wrapper .introduce-box .introduce-title{
@@ -251,11 +254,15 @@
 }
 
 #others-main-wrapper .contents-wrapper .introduce-box .introduce-datail{
-  padding: 17px;
+  display: flex;
+  padding: 15px 40px;
   border: 1px solid grey;
-  background-color: rgb(214, 214, 214);
-  height: 70px;
+  min-height: 80px;
+  align-items: center;
+  white-space: pre-wrap;
+  line-height: 1.3;
 }
+
 
 
 

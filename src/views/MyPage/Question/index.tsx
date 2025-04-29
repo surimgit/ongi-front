@@ -19,7 +19,7 @@ interface QuestionItemProps{
 // component: 문의사항 테이블 레코드 컴포넌트 //
 function QuestionItem({ question }: QuestionItemProps){
 
-  const {category, isAnswered, postDate, questionSequence, title} = question;
+  const {category, answered, postDate, questionSequence, title} = question;
 
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
@@ -35,7 +35,7 @@ function QuestionItem({ question }: QuestionItemProps){
       <div className='td date'>{postDate}</div>
       <div className='td category'>{category}</div>
       <div className='td title'>{title}</div>
-      <div className='td is-answered'>{isAnswered === true ? "답변완료" : "접수중"}</div>
+      <div className='td is-answered'>{answered === true ? "답변완료" : "접수중"}</div>
     </div>
   )
 }

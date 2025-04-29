@@ -12,7 +12,7 @@ const useSignInUser = () => {
 
     // state: 로그인 유저 정보 상태 //
     const {
-        setUserId, setNickname, setProfileImage, resetSignInUser
+        setUserId, setNickname, setProfileImage, setIsAdmin, resetSignInUser
     } = useSignInUserStore();
 
     // function: get sign in user response 처리 함수 //
@@ -30,11 +30,12 @@ const useSignInUser = () => {
             return;
         }
 
-        const { userId, nickname, profileImage } = responseBody as GetSignInUserResponseDto;
+        const { userId, nickname, profileImage, isAdmin } = responseBody as GetSignInUserResponseDto;
 
         setUserId(userId);
         setNickname(nickname);
         setProfileImage(profileImage);
+        setIsAdmin(isAdmin);
     }
 
     // function: 로그인 사용자 정보 불러오기 //

@@ -18,7 +18,6 @@ export default function MyPage() {
 
   // state: 추가 삭제 키워드 상태 //
   const [addKeyword, setAddKeyword] = useState<string>('');
-  const [deleteMode, setDeleteMode] = useState<boolean>(false);
   const [addedKeywords, setAddedKeywords] = useState<string[]>([]);
   const [likeKeywords, setLikeKeywords] = useState<LikeKeyword[]>([]);
 
@@ -483,7 +482,7 @@ export default function MyPage() {
               onChange={onSelfIntroductionChangeHandler}
               maxLength={250}
               /> 
-              <div className='char-count'>{selfIntro.length} / 250</div>
+              <div className='char-count'>{selfIntro ? selfIntro.length : 0} / 250</div>
             </div>
             ): (<div className='sub-text'>{selfIntro}</div>)}
           </div>

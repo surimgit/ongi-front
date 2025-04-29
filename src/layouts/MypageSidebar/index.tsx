@@ -65,7 +65,6 @@ export default function MypageSidebar() {
     new SubTitleItem('내 공동구매', [
       new SubTextItem('판매 내역', '/mypage/group-buying/sell'),
       new SubTextItem('구매 내역', '/mypage/group-buying/buy'),
-      new SubTextItem('장바구니', '/mypage/group-buying/wish-list'),
       new SubTextItem('찜한 목록', '/mypage/group-buying/wish-list'),
     ]),
     new SubTitleItem('도우미', [
@@ -79,7 +78,7 @@ export default function MypageSidebar() {
       new SubTextItem('좋아요 누른 글', '/mypage/community/liked'),
     ]),
     new SubTitleItem('고객센터',[
-      new SubTextItem('문의사항', '/mypage/question'),
+      new SubTextItem('문의사항', '/mypage/question/'),
       new SubTextItem('FAQ', '/mypage/faq'),
       new SubTextItem('공지사항', '/mypage/notice'),
     ]),
@@ -92,15 +91,18 @@ export default function MypageSidebar() {
   };
 
   // event handler: 현재 위치가 일치하는지 확인하는 이벤트 처리
-  const isActive = (path: string) => location.pathname === path;
-  const isAccount = (path:string) => location.pathname === '/mypage/account';
+  const isActive = (path: string) => {
+    if (path === '/mypage') return location.pathname === '/mypage';
+    return location.pathname.startsWith(path);
+  };
+  const isAccount = (path: string) => location.pathname === '/mypage/account';
   return (
     <div id='sidebar-container'>
     <div className='button'>카테고리</div>
     <div className='categories'>
     {menuItems.map((item, index) => {
       if (item instanceof TitleItem) {
-        const isActivePath = isActive(item.path) || (item.path === '/mypage' && isAccount(location.pathname));           
+        const isActivePath = isActive(item.path) || (item.path === '/mypage' && isAccount(location.pathname));
         return( 
           <div
           key={index}
