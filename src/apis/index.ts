@@ -26,7 +26,9 @@ import { GetNoticeListResponseDto, GetNoticeResponseDto } from './dto/response/n
 import { GetQuestionListResponseDto, GetQuestionResponseDto } from './dto/response/question';
 import PostAlertRequestDto from './dto/request/alert/post-alert.request.dto';
 import GetAlertResponseDto from './dto/response/alert/get-alert.response.dto';
+
 import { PostOrderItemRequestDto, PostPaymentCancelRequestDto } from './dto/request/payment';
+import { GetProductReviewsResponseDto } from './dto/response/product';
 import { PatchCalendarRequestDto, PostScheduleRequestDto } from './dto/request/calendar';
 import { GetAllScheduleResponseDto } from './dto/response/calendar';
 import { FindIdResponseDto } from './dto/response/auth/find-id.response.dto';
@@ -37,7 +39,7 @@ import GetReportResponseDto from './dto/response/report/get-report.response.dto'
 import PatchReportProcessRequestDto from './dto/request/report/patch-report-process.request.dto';
 import PatchResignRequestDto from './dto/request/user/patch-resign.request.dto';
 import GetAlertedCountResponseDto from './dto/response/report/get-alerted-count.response.dto';
-import { GetProductReviewsResponseDto, GetReviewImagesResponseDto } from './dto/response/product';
+import { GetReviewImagesResponseDto } from './dto/response/product';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -508,6 +510,7 @@ export const postPaymentConfirmRequest = async(requestBody: PostPaymentConfirmRe
   const responseBody = await axios.post(POST_PAYMENT_CONFIRM_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
+
   return responseBody;
 }
 
@@ -518,6 +521,7 @@ export const postPaymentCancelRequest = async(requestBody: PostPaymentCancelRequ
     .catch(responseErrorHandler);
   return responseBody;
 }
+
 
 // function: get community search API 요청 함수 //
 export const getCommunitySearchRequest = async (searchCategory: SearchCategory, keyword: string) => {
@@ -732,6 +736,14 @@ export const getAlertRequest = async (accessToken: string) => {
   return responseBody;
 }
 
+
+// function: get my buying API 요청 함수 //
+export const getMyBuyingRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(GET_MY_BUYING_URL, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler<GetMyBuyingResponseDto>)
+  .catch(responseErrorHandler)
+}
+
 // function: post Schedule API 요청 함수 //
 export const postScheduleRequest = async (requestBody:PostScheduleRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_SCHEDULE_URL, requestBody, bearerAuthorization(accessToken))
@@ -755,6 +767,15 @@ export const getAllScheduleRequest = async (
 // function: patch Schedule API 요청 함수 //
 export const patchScheduleRequest = async (calendarSequence: number, requestBody:PatchCalendarRequestDto, accessToken: string) => {
   const responseBody = await axios.patch(PATCH_SCHEDULE_URL(calendarSequence), requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+}
+
+
+// function: post product review API 요청 함수 //
+export const postProductReviewRequest = async (requestBody: PostProductReviewRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_PRODUCT_REVIEW_URL, (requestBody), bearerAuthorization(accessToken))
   .then(responseSuccessHandler)
   .catch(responseErrorHandler);
   return responseBody;
