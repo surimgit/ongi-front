@@ -1,88 +1,69 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './style.css';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import OtherSidebar from 'src/layouts/OtherUserSidebar';
+import { Gender, Mbti } from 'src/types/aliases';
+import { GetUserIntroductionResponseDto } from 'src/apis/dto/response/user';
+import { ResponseDto } from 'src/apis/dto/response';
+import { LikeKeyword } from 'src/types/interfaces';
+import { getOtherUserIntroductionRequest } from 'src/apis';
+import DefaultProfile from 'src/assets/images/default-profile.png';
 
-// component: 다른 사용자 사이드바 컴포넌트 //
-function OtherSidebar(){
-  const navigator = useNavigate();
-
-  const onSidebarClickHandler = (path: string) => {
-    navigator(path);
-  };
-
-  return (
-    <div className='sidebar-container'>
-      <div className='button'>카테고리</div>
-      <div className='categories'>
-        <div
-          className='title'
-          style={{ cursor: 'pointer' }}
-          onClick={() => onSidebarClickHandler('/mypage/need-helper')}
-        >
-          도우미
-        </div>
-
-        <div
-          className='sub-title'
-          style={{ cursor: 'pointer' }}
-          onClick={() => onSidebarClickHandler('/mypage/review')}
-        >
-          후기
-        </div>
-
-        <div
-          className='title'
-          style={{ cursor: 'pointer' }}
-          onClick={() => onSidebarClickHandler('/mypage/community')}
-        >
-          커뮤니티
-        </div>
-
-        <div
-          className='sub-title'
-          style={{ cursor: 'pointer' }}
-          onClick={() => onSidebarClickHandler('/mypage/community/post')}
-        >
-          작성 글
-        </div>
-
-        <div
-          className='title'
-          style={{ cursor: 'pointer' }}
-          onClick={() => onSidebarClickHandler('/mypage/group-buying')}
-        >
-          공동 구매
-        </div>
-
-        <div className='sub-title-group'>
-          <div
-            className='sub-title'
-            style={{ cursor: 'pointer' }}
-            onClick={() => onSidebarClickHandler('/mypage/group-buying/sell/pending')}
-          >
-            판매 대기
-          </div>
-          <div
-            className='sub-title'
-            style={{ cursor: 'pointer' }}
-            onClick={() => onSidebarClickHandler('/mypage/group-buying/sell/completed')}
-          >
-            판매 완료
-          </div>
-          <div
-            className='sub-title'
-            style={{ cursor: 'pointer' }}
-            onClick={() => onSidebarClickHandler('/mypage/group-buying/sell/review')}
-          >
-            후기
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function Others() {
+
+  // state: 경로 변수 상태
+  const { userId } = useParams();
+
+  // state: 해당 사용자 상태 
+  const [nickname, setNickname] = useState<string>('');
+  const [birth, setBirth] = useState<string>('');
+  const [gender, setGender] = useState<Gender | null>(null);
+  const [profileImage, setProfileImage] = useState<string>('');
+  const [mbti, setMbti] = useState<Mbti | null>(null);
+  const [job, setJob] = useState<string>('');
+  const [selfIntro, setSelfIntro] = useState<string>('');
+  const [likeKeywords, setLikeKeywords] = useState<LikeKeyword[]>([]);
+  
+  // function: 
+
+  // function: get Other User Indroduction response 처리 함수 //
+  const getOtherUserIntroductionResponse = (responseBody: GetUserIntroductionResponseDto | ResponseDto | null) => {
+    const message = 
+      !responseBody ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'AF' ? '인증에 실패했습니다.' :
+      responseBody.code === 'NU' ? '존재하지 않는 유저입니다.' : '';
+
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+
+    if(!isSuccess) {
+      alert(message);
+      return;
+    }
+
+    const {nickname, birth, gender, profileImage, mbti, job, selfIntro, likeKeywords} = responseBody as GetUserIntroductionResponseDto;
+    setNickname(nickname);
+    setBirth(birth);
+    setGender(gender);
+    setProfileImage(profileImage);
+    setMbti(mbti);
+    setJob(job);
+    setSelfIntro(selfIntro);
+    setLikeKeywords(likeKeywords);
+  }
+  
+  // function: 네비게이터 함수 //
+  const navigator = useNavigate();
+    
+  // effect: 컴포넌트 로드시 실행할 함수 //
+  useEffect(() => {
+    if(!userId) return;
+    
+    getOtherUserIntroductionRequest(userId).then(getOtherUserIntroductionResponse);
+
+  }, [])
+
   return (
     <div id='others-main-wrapper'>
       <OtherSidebar/>
@@ -111,8 +92,8 @@ export default function Others() {
         <div className='body'>
           <div className='profile-area'>
             <div className='profile-container'>
-              <div className='profile-image'>사진</div>
-              <div className='name'>고길동</div>
+              <div className='profile-image'>{<img src={profileImage || DefaultProfile} alt="프로필 이미지" />}</div>
+              <div className='name'>{nickname}</div>
             </div>
           </div>  
           <div className='user-info-area'>
@@ -141,30 +122,24 @@ export default function Others() {
                   <div className='text'>직업</div>
                 </div>
                 <div className='info-box'>
-                  <div className='sub-text'>고길동</div>
-                  <div className='sub-text'>32</div>
-                  <div className='sub-text'>남성</div>
-                  <div className='sub-text'>ISTP</div>
-                  <div className='sub-text'>패션 디자이너</div>
+                  <div className='sub-text'>{nickname}</div>
+                  <div className='sub-text'>{birth}</div>
+                  <div className='sub-text'>{gender}</div>
+                  <div className='sub-text'>{mbti}</div>
+                  <div className='sub-text'>{job}</div>
                 </div>
               </div>
               <div className='specialty-box'>
                 <div className='text'>#잘해요</div>
                 <div className='tag-container'>
-                  <div className='tag-box'>
-                    <div className='tag'>#컴퓨터</div>
-                    <div className='tag'>#패션</div>
-                    <div className='tag'>#패션</div>
-                    <div className='tag'>#패션</div>
-                    <div className='tag'>#패션</div>
-                  </div>
-                  <div className='tag-box'>
-                    <div className='tag'>#패션</div>
-                    <div className='tag'>#패션</div>
-                    <div className='tag'>#패션</div>
-                    <div className='tag'>#패션</div>
-                    <div className='tag'>#패션</div>
-                  </div>
+                  {Array.isArray(likeKeywords) &&
+                    likeKeywords.map((item, i) => (
+                      <div key={i} className="tag-box">
+                        <div className="tag-wrapper">
+                          <div className="tag">#{item.keyword}</div>
+                        </div>
+                      </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -172,9 +147,10 @@ export default function Others() {
         </div>
         <div className='introduce-box'>
           <div className='introduce-title'>자기소개</div>
-          <div className='introduce-datail'>재산권의 행사는 공공복리에 적합하도록 하여야 한다. 국채를 모집하거나 예산외에 국가의 부담이 될 계약을 체결하려 할 때에는 정부는 미리 국회의 의결을 얻어야 한다. 대통령의 국법상 행위는 문서로써 하며, 이 문서에는 국무총리와 관계 국무위원이 부서한다. 군사에 관한 것도 또한 같다. 국가는 주택개발정책등을 통하여 모든 국민이 쾌적한 주거생활을 할 수 있도록</div>
+          <div className='introduce-datail'>
+            <div className='sub-text'>{selfIntro}</div>
+          </div>
         </div>
-        
       </div>
 
     </div>

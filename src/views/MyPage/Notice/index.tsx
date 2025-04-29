@@ -14,16 +14,23 @@ import MypageSidebar from 'src/layouts/MypageSidebar';
 // interface: 공지사항 테이블 레코드 컴포넌트 속성 //
 interface NoticeItemProps{
   notice: Notice;
+  index: number;
+  total: number;
+  currentPage: number;
+  itemCountPerPage: number;
 }
 
 
 // component: 공지사항 테이블 레코드 컴포넌트 //
-function NoticeItem({ notice }: NoticeItemProps){
+function NoticeItem({ notice, index, total, currentPage, itemCountPerPage }: NoticeItemProps){
 
   const {postDate, sequence, title} = notice;
 
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
+
+  // variable: UI용 sequence //
+  const displayNumber = total - ((currentPage - 1) * itemCountPerPage + index);
 
   // event handler: 레코드 클릭 이벤트 처리 //
   const onClick = () => {
@@ -33,7 +40,7 @@ function NoticeItem({ notice }: NoticeItemProps){
   // render: 문의사항 테이블 레코드 컴포넌트 렌더링 //
   return(
     <div className='tr' onClick={onClick}>
-      <div className='td sequence'>{sequence}</div>
+      <div className='td sequence'>{displayNumber}</div>
       <div className='td title'>{title}</div>
       <div className='td postdate'>{postDate}</div>
     </div>
@@ -49,7 +56,7 @@ export default function Notice() {
   // state: pagination 상태 //
   const{
     currentPage, setCurrentPage, currentSection, setCurrentSection, 
-    totalSection, setTotalList, viewList, pageList
+    totalSection, setTotalList, viewList, pageList, totalList
   } = usePagination<Notice>();
 
   // variable: access Token //
@@ -58,50 +65,50 @@ export default function Notice() {
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
 
-   // function: get notice List response 처리 함수 //
-    const GetNoticeListResponse = (responseBody: GetNoticeListResponseDto | ResponseDto | null) => {
-      const message = 
-        !responseBody ? '서버에 문제가 있습니다.' :
-        responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' :
-        responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+  // function: get notice List response 처리 함수 //
+  const getNoticeListResponse = (responseBody: GetNoticeListResponseDto | ResponseDto | null) => {
+    const message = 
+      !responseBody ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+    const {notices} = responseBody as GetNoticeListResponseDto;
+    setTotalList(notices);
+  }
+
+  // event handler: 작성하기 버튼 클릭 이벤트 처리 //
+  const onWriteButtonClickHandler = () => {
+    navigator(NOTICE_WRITE_ABSOLUTE_PATH);
+  }
+
+  // event handler: faq 버튼 클릭 이벤트 처리 //
+  const onFaqButtonClickHandler = () => {
+    navigator(FAQ_ABSOLUTE_PATH);
+  }
+
+  // event handler: question 버튼 클릭 이벤트 처리 //
+  const onQuestionButtonClickHandler = () => {
+    navigator(QUESTION_ABSOLUTE_PATH);
+  }
   
-      const isSuccess = responseBody !== null && responseBody.code === 'SU';
-      if(!isSuccess){
-        alert(message);
-        return;
-      }
-  
-      const {notices} = responseBody as GetNoticeListResponseDto;
-      setTotalList(notices);
-    }
-
-    // event handler: 작성하기 버튼 클릭 이벤트 처리 //
-    const onWriteButtonClickHandler = () => {
-      navigator(NOTICE_WRITE_ABSOLUTE_PATH);
-    }
-
-    // event handler: faq 버튼 클릭 이벤트 처리 //
-    const onFaqButtonClickHandler = () => {
-      navigator(FAQ_ABSOLUTE_PATH);
-    }
-
-    // event handler: question 버튼 클릭 이벤트 처리 //
-    const onQuestionButtonClickHandler = () => {
-      navigator(QUESTION_ABSOLUTE_PATH);
-    }
-    
-    // effect: 컴포넌트 로드시 실행할 함수 //
-    useEffect(() => {
-      if(!accessToken) return;
-      getNoticeListRequest(accessToken).then(GetNoticeListResponse);
-    }, [])
+  // effect: 컴포넌트 로드시 실행할 함수 //
+  useEffect(() => {
+    if(!accessToken) return;
+    getNoticeListRequest(accessToken).then(getNoticeListResponse);
+  }, [])
 
   return (
     <div id='notice-main-wrapper'>
       <MypageSidebar/>
       <div className='contents-wrapper'>
         <div className='title-area'>
-          <div className='title'>공지사항</div>
+          <div className='title'>고객센터</div>
           <div className='current' onClick={onQuestionButtonClickHandler}>문의 내역</div>
           <div className='current' onClick={onFaqButtonClickHandler}>FAQ</div>
           <div className='current active'>공지사항</div>
@@ -118,7 +125,14 @@ export default function Notice() {
               <div className='th postdate'>등록일</div>
           </div>
           {viewList.map((notice, index) => (
-          <NoticeItem key={index} notice={notice}/>
+            <NoticeItem 
+            key={index} 
+            notice={notice}
+            index={index}
+            total={totalList.length}  // ✅ 이렇게
+            currentPage={currentPage}
+            itemCountPerPage={10} // ✅ 항상 10개로 고정 (ITEMS_PER_PAGE)
+            />
           ))}
         </div>
         <div className='pagination-container'>

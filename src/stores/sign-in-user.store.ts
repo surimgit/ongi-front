@@ -1,16 +1,17 @@
+import { stat } from "fs";
 import { create } from "zustand";
 
 // interface: 로그인 유저 정보 상태 구조 //
 interface SignInUserStore {
     userId: string;
     nickname: string;
-    admin: boolean;
     profileImage: string | null;
+    isAdmin: boolean;
 
     setUserId: (userId: string) => void;
     setNickname: (nickname: string) => void;
-    setAdmin: (admin: boolean) => void;
     setProfileImage: (profileImage: string | null) => void;
+    setIsAdmin: (isAdmin: boolean) => void;
 
     resetSignInUser: () => void;
 }
@@ -21,11 +22,12 @@ const useStore = create<SignInUserStore>(set => ({
     nickname: '',
     admin: false,
     profileImage: null,
+    isAdmin: false,
 
     setUserId: (userId: string) => set(state => ({ ...state, userId })),
     setNickname: (nickname: string) => set(state => ({ ... state, nickname })),
-    setAdmin: (admin: boolean) => set(state => ({ ...state, admin })),
     setProfileImage: (profileImage: string | null) => set(state => ({ ...state, profileImage })),
+    setIsAdmin: (isAdmin: boolean) => set(state => ({...state, isAdmin})),
 
     resetSignInUser: () => set(state => ({ 
         ...state, 
@@ -33,6 +35,7 @@ const useStore = create<SignInUserStore>(set => ({
         nickname: '',
         admin: false,
         profileImage: null,
+        isAdmin: false
     }))
 }));
 

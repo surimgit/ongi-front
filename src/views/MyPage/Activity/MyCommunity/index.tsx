@@ -1,107 +1,246 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './style.css';
 import MypageSidebar from 'src/layouts/MypageSidebar';
+import { useNavigate } from 'react-router';
+import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
+import { CommunityComment, CommunityPost } from 'src/types/interfaces';
+import { usePagination } from 'src/hooks';
+import { useCookies } from 'react-cookie';
+import { getMyCommunityCommentRequest, getMyCommunityLikedPostComment, getMyCommunityPostRequest, getNoticeListRequest } from 'src/apis';
+import { GetCommunityResponseDto } from 'src/apis/dto/response/community';
+import { ResponseDto } from 'src/apis/dto/response';
+import GetCommunityCommentResponse from 'src/apis/dto/response/community/get-community-comment.response.dto';
+import Pagination from 'src/components/Pagination';
 
+// interface: 내 커뮤니티 게시글 테이블 레코드 컴포넌트 속성 //
 interface CommunityProps{
-  category: string;
-  title: string;
-  liked: number;
-  views: number;
-  date: string;
+  communityPost: CommunityPost;
 }
 
-const communityPosts = [
-  {
-    category: '운동',
-    title: '다이아 찍어주실 분 구합니다 제발요',
-    liked: 3,
-    views: 5,
-    date: '2025-04-11'
-  },
-  {
-    category: '운동',
-    title: '다이아 찍어주실 분 구합니다 제발요',
-    liked: 3,
-    views: 5,
-    date: '2025-04-11'
-  },
-  {
-    category: '운동',
-    title: '다이아 찍어주실 분 구합니다 제발요',
-    liked: 3,
-    views: 5,
-    date: '2025-04-11'
-  },
-  {
-    category: '운동',
-    title: '다이아 찍어주실 분 구합니다 제발요',
-    liked: 3,
-    views: 5,
-    date: '2025-04-11'
-  },
-  {
-    category: '운동',
-    title: '다이아 찍어주실 분 구합니다 제발요',
-    liked: 3,
-    views: 5,
-    date: '2025-04-11'
-  },
-  {
-    category: '운동',
-    title: '다이아 찍어주실 분 구합니다 제발요',
-    liked: 3,
-    views: 5,
-    date: '2025-04-11'
-  },
-  {
-    category: '운동',
-    title: '다이아 찍어주실 분 구합니다 제발요',
-    liked: 3,
-    views: 5,
-    date: '2025-04-11'
-  },
-]
+// interface: 내 커뮤니티 댓글 테이블 레코드 컴포넌트 속성 //
+interface CommentProps{
+  communityComment: CommunityComment;
+}
 
+// interface: 게시글, 댓글, 좋아요 플래그 속성 //
+
+interface Props {
+  type: 'post' | 'comment' | 'liked';
+}
+
+// component: 커뮤니티 게시글 테이블 레코드 컴포넌트 //
 function CommunityItem({
-  category, title, liked, views, date
+  communityPost
 }: CommunityProps) {
+
+  const {category, liked, postDate, postSequence, title, viewCount} = communityPost;
+
+  // function: 네비게이터 함수 //
+  const navigator = useNavigate();
+
+  // event handler: 레코드 클릭 이벤트 처리 //
+  const onClick = () => {
+    navigator(COMMUNITY_VIEW_ABSOLUTE_PATH(postSequence));
+  }
+
   return(
     <div className='tr'>
       <div className='td category'>{category}</div>
-      <div className='td title'>{title}[{views}]</div>
-      <div className='td liked'>❤ㅇ{liked}</div>
-      <div className='td views'>ㅇㅇ{views}</div>
-      <div className='td date'>{date}</div>
+      <div className='td title'>
+        <span onClick={onClick}>
+          {title}[{viewCount}]
+        </span>
+      </div>
+      <div className='td liked'>❤{liked}</div>
+      <div className='td views'>ㅇㅇ{viewCount}</div>
+      <div className='td date'>{postDate}</div>
     </div>
   )
 }
 
+// component: 커뮤니티 댓글 테이블 레코드 컴포넌트 //
+function CommentItem({
+  communityComment
+}: CommentProps){
+  const {comment, commentPostDate, postSequence} = communityComment;
+
+  
+  // function: 네비게이터 함수 //
+  const navigator = useNavigate();
+
+  // event handler: 레코드 클릭 이벤트 처리 //
+  const onClick = () => {
+    navigator(COMMUNITY_VIEW_ABSOLUTE_PATH(postSequence));
+  }
+
+  return(
+    <div className='tr'>
+      <div className='td category'>{postSequence}</div>
+      <div className='td title' >
+        <span onClick={onClick}>
+          {comment}
+        </span>
+      </div>
+      <div className='td date'>{commentPostDate}</div>
+    </div>
+  )
+
+}
+
+// component: 내 커뮤니티 메인 화면 컴포넌트 //
+export default function MyCommunity( { type }: Props) {
+  
+  console.log('MyCommunity 렌더링됨, type:', type);
+  
+  // state: cookie 상태 //
+  const [cookies] = useCookies();
+
+  // variable: access Token //
+  const accessToken = cookies[ACCESS_TOKEN];
+  
+  // state: title 상태 //
+  const [title, setTitle] = useState<string>('');
+
+  // state: pagination 상태 //
+  const{
+    currentPage, setCurrentPage, currentSection, setCurrentSection, 
+    totalSection, setTotalList, viewList, pageList, totalList
+  } = usePagination<CommunityPost | CommunityComment>();
+
+  // function: get my commnutiy post List response 처리 함수 //
+  const getMyCommunityPostResponse = (responseBody: GetCommunityResponseDto | ResponseDto | null) => {
+    const message = 
+      !responseBody ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+    const {posts} = responseBody as GetCommunityResponseDto;
+    setTotalList(posts);
+  }
+  
+  // function: get my commnet List response 처리 함수 //
+  const getMyCommunityCommentResponse = (responseBody: GetCommunityCommentResponse | ResponseDto | null) => {
+    const message = 
+      !responseBody ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+    const {comments} = responseBody as GetCommunityCommentResponse;
+
+    if (!comments) {
+      setTotalList([]);
+      return;
+    }
+
+    setTotalList(comments);
+  }
+
+    
+  // function: get my commnutiy liked post List response 처리 함수 //
+  const getMyCommunityLikedPostResponse = (responseBody: GetCommunityResponseDto | ResponseDto | null) => {
+    const message = 
+      !responseBody ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+    if(!isSuccess){
+      alert(message);
+      return;
+    } 
+
+    const {posts} = responseBody as GetCommunityResponseDto;
+    setTotalList(posts);
+  }
 
 
-export default function MyCommunity() {
+  // effect: 타입 변경 함수 //
+  useEffect(() => {
+    if(!accessToken) return;
+
+    const changeType = async () => {
+    
+      if(type === 'post'){
+        setTitle('내가 작성한 게시글')
+        getMyCommunityPostRequest(accessToken).then(getMyCommunityPostResponse);
+      }
+
+      if(type === 'comment'){
+        setTitle('내가 작성한 댓글')
+        getMyCommunityCommentRequest(accessToken).then(getMyCommunityCommentResponse);
+      }
+
+      if(type === 'liked'){
+        setTitle('내가 좋아요한 게시글')
+        getMyCommunityLikedPostComment(accessToken).then(getMyCommunityLikedPostResponse);
+      }
+    };
+    changeType();
+  }, [type]);
+
+
+
+
+
   return (
     <div id='my-community-main-wrapper'>
       <MypageSidebar/>
       <div className='contents-wrapper'>
         <div className='title-area'>
-          <div className='title'>내가 요청한 도움 12개</div>
+          {totalList && 
+          <div className='title'>{title}
+            <div className='title-number'>{totalList.length}개</div>
+          </div>}
         </div>
         <hr className='my-community-hr'/>
         <div className='my-community-list'>
+        {type === 'comment' ? (
           <div className='tr'>
             <div className='th category'>카테고리</div>
-            <div className='th title'>제목</div>
-            <div className='th liked'>좋아요</div>
-            <div className='th views'>조회수</div>
+            <div className='th title'>내용</div>
             <div className='th date'>작성일</div>
+          </div>  
+          ) : (
+            <div className='tr'>
+              <div className='th category'>카테고리</div>
+              <div className='th title'>제목</div>
+              <div className='th liked'>좋아요</div>
+              <div className='th views'>조회수</div>
+              <div className='th date'>작성일</div>
+            </div>
+          )}
+            {viewList.map((item, index) =>
+            type === 'comment' ? (
+              <CommentItem communityComment={item as CommunityComment} />
+            ) : (
+              <CommunityItem communityPost={item as CommunityPost} />
+            )
+          )}
           </div>
-          {communityPosts.map((communityPost, index) => (
-            <CommunityItem key={index} {...communityPost}/>
-          ))}
+          <div className='pagination-box'>
+          {totalSection !== 0 &&
+            <Pagination 
+              currentPage={currentPage}
+              currentSection={currentSection}
+              totalSection={totalSection}
+              pageList={pageList}
+              setCurrentPage={setCurrentPage}
+              setCurrentSection={setCurrentSection}
+            />
+          }
+          </div>
         </div>
-        <div className='pagination'>1 2 3 4 5 6 7 8 9 10 --</div>
       </div>
-
-    </div>
   )
 }

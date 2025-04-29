@@ -1,16 +1,28 @@
 import React from 'react'
 import './style.css'
 import MypageSidebar from 'src/layouts/MypageSidebar'
+import { useNavigate } from 'react-router'
+import { MYPAGE_ABSOLUTE_PATH } from 'src/constants';
 
 export default function Activity() {
+
+  // function: 네비게이터 함수 //
+  const navigator = useNavigate();
+
+
+  // event handler: 내 정보 버튼 클릭 이벤트 처리 //
+    const onMyInfoButtonClickHandler = () => {
+      navigator(MYPAGE_ABSOLUTE_PATH);
+    }
+
   return (
     <div id='my-activity-main-wrapper'>
       <MypageSidebar/>
       <div className='contents-wrapper'>
         <div className='title-area'>
           <div className='title'>마이페이지</div>
-          <div className='current active'>내 정보</div>
-          <div className='current'>내 활동</div>
+          <div className='current' onClick={onMyInfoButtonClickHandler}>내 정보</div>
+          <div className='current active'>내 활동</div>
         </div>  
         <div className='body'>
           <div className='my-container'>
