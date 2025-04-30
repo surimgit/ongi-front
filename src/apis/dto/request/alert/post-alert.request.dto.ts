@@ -3,5 +3,6 @@ export default interface PostAlertRequestDto {
     alertType: string;
     senderId: string;
     receiverId: string;
-    alertEntitySequence: number;
+    alertEntitySequence: number | string;
+    reason: string | null;
 }

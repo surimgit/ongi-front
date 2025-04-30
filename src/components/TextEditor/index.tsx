@@ -105,17 +105,22 @@ export default function TextEditor({ content, setContent }: Props) {
     extensions,
     content,
     onUpdate: ({ editor }) => {
-      setContent(editor.getText())
+      setContent(editor.getHTML())
     }
   })
 
   // effect: content 변경시 실행할 함수 //
-    useEffect(() => {
-      if (editor && content !== editor.getText()) {
-        editor.commands.setContent(content);
-      }
-    }, [content, editor]);
+  //  useEffect(() => {
+  //    if (editor && content !== editor.getText()) {
+  //      editor.commands.setContent(content);
+  //    }
+  //  }, [content, editor]);
 
+  useEffect(() => {
+    if (editor && content && editor?.getHTML() !== content) {
+      editor.commands.setContent(content);
+    }
+  }, [content, editor]);
 
   // render: tiptap Text Editor 컴포넌트 렌더링 //
   return (

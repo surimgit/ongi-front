@@ -65,7 +65,7 @@
   display: flex;
   flex-direction: column;
   
-  gap: 15px;
+  justify-content: space-between;
 }
 
 .contents-container .img-box .product-img-content .button{
@@ -83,11 +83,16 @@
 }
 
 .contents-container .img-box .product-img-content input{
+  padding: 10px;
+
   border-radius: 3px;
   border: 1px solid #A0A0A0;
   background-color: #f5f5f5;
 }
 
+.contents-container .img-box .product-img-content input::file-selector-button{
+  display: none;
+}
 
 
 .contents-container .input-box {
@@ -96,13 +101,22 @@
   gap: 20px;
 }
 
+.contents-container .input-box .title {
+  line-height: 200%;
+}
+
+.contents-container .input-box .category-box .title {
+  width: 100px;
+}
+
 .contents-container .input-box .category-box {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .contents-container .input-box .category-box select {
-  width: 320px;
+  width: 220px;
   padding: 5px 10px;
 
   font-size: 16px;
@@ -114,9 +128,18 @@
   background:url(src/assets/images/icon-select-arrow.png) no-repeat right 12px center;
 }
   
+input[type="date"] {
+  width: 145px; 
+}
+
 .contents-container .input-box .due-date-box {
   display: flex;
   gap: 10px;
+  align-items: center;
+}
+
+.contents-container .input-box .due-date-box .title {
+  width: 130px;
 }
 
 .contents-container .input-box .price-box {

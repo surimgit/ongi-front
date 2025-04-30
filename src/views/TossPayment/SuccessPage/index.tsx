@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 import axios, { AxiosError } from 'axios';
-import { postOrderItemsRequest, postPaymentConfirm } from 'src/apis';
+import { postOrderItemsRequest, postPaymentConfirmRequest } from 'src/apis';
 import PostPaymentConfirmRequestDto from 'src/apis/dto/request/payment/post-payment-confirm.request.dto';
 import { useCookies } from 'react-cookie';
 import { ACCESS_TOKEN, MAIN_ABSOLUTE_PATH } from 'src/constants';
@@ -51,7 +51,7 @@ export default function SuccessPage() {
     async function confirm(requestData: PostPaymentConfirmRequestDto, orderItemRequestData: PostOrderItemRequestDto, accessToken: string) {
       try {
         // 결제 승인 요청
-        await postPaymentConfirm(requestData, accessToken);
+        await postPaymentConfirmRequest(requestData, accessToken);
         
         await postOrderItemsRequest(orderItemRequestData, accessToken);
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import './style.css'
-import { deleteWishRequest, getProductDetailRequest, getReserveRequest, getWishRequest, patchProductRequest, postShoppingCartRequest, postWishRequest } from 'src/apis';
+import { deleteProductRequest, deleteWishRequest, getProductDetailRequest, getProductReviewImagesRequest, getProductReviewsRequest, getReserveRequest, getWishRequest, patchProductRequest, postShoppingCartRequest, postWishRequest } from 'src/apis';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { ACCESS_TOKEN, PRODUCT_ABSOLUTE_PATH, SHOPPING_CART_ABSOLUTE_PATH } from 'src/constants';
 import { Category } from 'src/types/aliases';
@@ -10,15 +10,30 @@ import { GetWishResponseDto, ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import Modal from 'src/components/Modal';
 import { PostShoppingCartRequestDto } from 'src/apis/dto/request/shopping-cart';
-import { ShoppingCart } from 'src/types/interfaces';
-import { GetReserveResponseDto } from 'src/apis/dto/response/product';
-
+import { Product, ProductReviewImages, ProductReviews, ShoppingCart } from 'src/types/interfaces';
+import { GetProductReviewsResponseDto, GetReserveResponseDto, GetReviewImagesResponseDto } from 'src/apis/dto/response/product';
+import { usePagination } from 'src/hooks';
+import activeStar from 'src/assets/images/icon-star-active.png';
+import emptyStar from 'src/assets/images/icon-star-none.png';
+import { useSignInUserStore } from 'src/stores';
 
 interface CartUpdateProps {
   onModalViewChange: () => void;
   name:string;
   sequence: string;
 }
+
+interface ReviewProps {
+  review: ProductReviews;
+  reviewImages: ProductReviewImages[];
+}
+
+// function: 현재 날짜 구하기 함수 //
+const getToday = () => {
+  const today = new Date();
+  return today.toISOString().split("T")[0];
+};
+
 
 // component: 장바구니 담기 컴포넌트 //
 function CartUpdate({onModalViewChange, name, sequence}: CartUpdateProps) {
@@ -88,29 +103,58 @@ function CartUpdate({onModalViewChange, name, sequence}: CartUpdateProps) {
 }
 
 // component: 상품 후기 컴포넌트 //
-function ProductReview() {
+function ProductReview({review, reviewImages}: ReviewProps) {
+
+  const { reviewSequence, userId, postDate, rating, content } = review;
+  
+  const imagesForReview = reviewImages.filter(
+    (img) => img.reviewSequence === reviewSequence
+  );
+
   return(
-    <div className='review-list-wrapper'>
-      <ul className='review-list'>
-        <li>
-          <div className='info'>
-            
+    <li>
+      <div className='info'>
+        <div className='profile-image'>
+        
+        </div>
+        <div className='user'>{userId}</div>
+      </div>
+      <div className='content'>
+        <div className='content-top'>
+          <div className='review-rating'>
+            {[...Array(5)].map((_,index) => (
+              <img key={index} src={index < rating ? activeStar : emptyStar} alt='star' className='star'/>
+            ))}
           </div>
-          <div className='review-content'></div>
-        </li>
-      </ul>
-      <div className='review-content'></div>
-    </div>
+          <div className='review-date'>{postDate.slice(0,10)}</div>
+        </div>
+        <div className='review-content'>{content}</div>
+        <div className='review-images'>
+          {imagesForReview.map(
+            (image, index) => <div key={index} className='review-image'><img src={image.reviewImage}/></div>
+          )}
+        </div>
+      </div>
+      
+    </li>
   )
 }
 
 // component: 상품 상세보기 페이지 컴포넌트 //
 export default function DetailProduct() {
 
+  // state: 페이지네이션 상태 //
+  const { 
+    currentPage, setCurrentPage, currentSection, setCurrentSection,
+    totalSection, setTotalList, viewList, pageList, totalList
+  } = usePagination<ProductReviews>();
+
   // state: cookie 상태 //
   const [cookies] = useCookies();
   // state: 경로 변수 상태 //
-  const { sequence = "default" } = useParams<{sequence:string}>();
+  const { productNumber = "default" } = useParams<{productNumber:string}>();
+  // state: 로그인 사용자 아이디 상태 //
+  const { userId } = useSignInUserStore();
 
   // state: 이미지 상태 //
   const [image, setImage] = useState<string>('');
@@ -119,7 +163,7 @@ export default function DetailProduct() {
   // state: 제목 상태 //
   const [name, setName] = useState<string>('');
   // state: 게시자 아이디 상태 //
-  const [userId, setUserId] = useState<string>('');
+  const [writerId, setWriterId] = useState<string>('');
   // state: 가격 상태 //
   const [price, setPrice] = useState<number>(0);
   // state: 판매 제한 수량 상태 //
@@ -130,6 +174,8 @@ export default function DetailProduct() {
   const [boughtAmount, setBoughtAmount] = useState<number>(0);
   // state: 마감 기한 상태 //
   const [deadline, setDeadline] = useState<string>('');
+  // state: 오픈예정 일자 상태 //
+  const [openDate, setOpenDate] = useState<string>('');
   // state: 마감 여부 상태 //
   const [isSoldOut, setIsSoldOut] = useState<boolean>(false);
   // state: 평점 상태 //
@@ -142,6 +188,8 @@ export default function DetailProduct() {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   // state: 주문 예약 상품 개수 상태 //
   const [quantity, setQuantity] = useState<number>(0);
+  // state: review 이미지 상태 //
+  const [reviewImages, setReviewImages] = useState<ProductReviewImages[]>([]);
 
   // state: 장바구니 모달 오픈 상태 //
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
@@ -160,8 +208,37 @@ export default function DetailProduct() {
   const descriptionClass = tabMenu === '설명' ? 'content active' : 'content';
   const reviewClass = tabMenu === '후기' ? 'content active' : 'content';
 
-  console.log(descriptionClass)
-  
+  // variable: 오픈 예정 여부 클래스 //
+  const isOpen = openDate === null ? true : openDate <= getToday() ? true : false;
+
+  // function: 평점 라벨 구하는 함수 //
+  const getRatingLabel = (rating: number):string => {
+    switch(true) {
+      case rating > 0 && rating < 1:
+        return 'grade Bad';
+      case rating >= 1 && rating < 2:
+        return 'grade Soso';
+      case rating >= 2 && rating < 3:
+        return 'grade Good';
+      case rating >= 3 && rating < 4:
+        return 'grade Great';
+      case rating >= 4 && rating <= 5:
+        return 'grade Excellent';
+      default:
+        return 'grade Unknown';
+    }
+  }
+
+  // variable: 리뷰 아이콘 클래스//
+  const reviewIcon = getRatingLabel(rating);
+  // variable: 리뷰 아이콘 변수 //
+  const reviewFace = 
+    reviewIcon === 'grade Bad' ? '정말 안 좋음' : 
+    reviewIcon === 'grade Soso' ? '별로' :
+    reviewIcon === 'grade Good' ? '평범함' : 
+    reviewIcon === 'grade Great' ? '좋음' :
+    reviewIcon === 'grade Excellent' ? '최고' : '아직 등록된 리뷰가 없습니다.';
+
   // function: navigate 함수 //
   const navigate = useNavigate();
 
@@ -180,7 +257,7 @@ export default function DetailProduct() {
 
     setImage(image);
     setName(name);
-    setUserId(userId);
+    setWriterId(userId);
     setPrice(price);
     setCategory(category);
     setProductQuantity(productQuantity);
@@ -189,6 +266,7 @@ export default function DetailProduct() {
     setDeadline(deadline);
     setIsSoldOut(isSoldOut);
     setProductContent(content);
+    setOpenDate(openDate);
   }
 
   // function: post shopping cart 처리 함수 //
@@ -220,9 +298,48 @@ export default function DetailProduct() {
   const getWishResponse = (responseBody: GetWishResponseDto | ResponseDto | null) => {
     const { isSuccess, message } = responseMessage(responseBody);
 
-    if(isSuccess && responseBody && 'productSequence' in responseBody) setIsLiked(true);
+    const {wishListEntity} = responseBody as GetWishResponseDto;
 
+    if(isSuccess && responseBody && 'productSequence' in wishListEntity) setIsLiked(true);
   }
+
+  // function: get product reviews 처리 함수 //
+  const getProductReviewsResponse = (responseBody: GetProductReviewsResponseDto | ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+    const { productReviews } = responseBody as GetProductReviewsResponseDto;
+    if(productReviews) setTotalList(productReviews);
+  }
+
+  // function: get product review Images 처리 함수 //
+  const getProductReviewImagesResponse = (responseBody: GetReviewImagesResponseDto | ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+
+    const { reviewImages } = responseBody as GetReviewImagesResponseDto;
+    setReviewImages(reviewImages);
+  }
+
+  // function: delete product 처리 함수 //
+  const deleteProductResponse = (responseBody: ResponseDto | null) => {
+    const { isSuccess, message } = responseMessage(responseBody);
+
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+  }
+
 
   // event handler: 상품 설명, 후기 변경 이벤트 핸들러 //
   const onChangeProductHandler = (click: string) => {
@@ -231,6 +348,10 @@ export default function DetailProduct() {
 
   // event handler: 장바구니 클릭 이벤트 핸들러 //
   const onUpdateShoppingCartClickHandler = () => {
+    if(!isOpen){
+      alert('오픈 예정 상품입니다.');
+      return;
+    }
     setIsCartOpen(!isCartOpen);
   }
 
@@ -238,9 +359,9 @@ export default function DetailProduct() {
   const onChangeLikedHandler = () => {
 
     if(isLiked) {
-      deleteWishRequest(+sequence, accessToken);
+      deleteWishRequest(+productNumber, accessToken);
     }else{
-      postWishRequest(+sequence, accessToken);
+      postWishRequest(+productNumber, accessToken);
     }
 
     setIsLiked(!isLiked);
@@ -260,11 +381,21 @@ export default function DetailProduct() {
   // event handler: 공동구매 참여 버튼 클릭 이벤트 핸들러 //
   const onParticipationButtonClickHandler = () => {
 
+    if(!isOpen){
+      alert('오픈 예정 상품입니다.');
+      return;
+    }
+    
     const requestBody: PostShoppingCartRequestDto = {
-      productSequence: parseInt(sequence), quantity:1
+      productSequence: parseInt(productNumber), quantity:1
     }
 
     postShoppingCartRequest(requestBody, accessToken).then(postShoppingCartResponse);
+  }
+
+  // event handler: 공동구매 삭제 버튼 클릭 이벤트 핸들러 //
+  const onRemoveProductClickHandler = () => {
+    deleteProductRequest(productNumber, accessToken).then(deleteProductResponse);
   }
 
   const unitPrice = useMemo(() => {
@@ -282,16 +413,25 @@ export default function DetailProduct() {
     return Math.floor(productQuantity - boughtAmount);
   }, [productQuantity, boughtAmount]);
 
+  // effect: 제품 리뷰 리스트 변경시 실행할 함수 //
+  useEffect(() => {
+    if(totalList.length === 0) return;
+    const avgRating = totalList.map(review => review.rating).reduce((sum, rating) => sum + rating, 0) / totalList.length;
+    setRating(avgRating);
+  }, [totalList]);
+
   // effect: 컴포넌트 렌더링 시 실행할 함수 //
   useEffect(() => {
-    if(!sequence){
+    if(!productNumber){
       navigate(PRODUCT_ABSOLUTE_PATH);
       return;
     }
 
-    getProductDetailRequest(sequence, accessToken).then(getProductDetailResponse);
-    getReserveRequest(sequence).then(getReserveResponse);
-    getWishRequest(sequence, accessToken).then(getWishResponse);
+    getProductDetailRequest(productNumber, accessToken).then(getProductDetailResponse);
+    getReserveRequest(productNumber).then(getReserveResponse);
+    getWishRequest(productNumber, accessToken).then(getWishResponse);
+    getProductReviewsRequest(productNumber).then(getProductReviewsResponse);
+    getProductReviewImagesRequest(productNumber).then(getProductReviewImagesResponse);
   },[]);
 
   return (
@@ -302,9 +442,13 @@ export default function DetailProduct() {
             <img src={image} alt='상품 이미지' style={{backgroundSize:'cover'}}/>
           </div>
           <div className='detail-product-info'>
-            <div className='content category bold'>{category}</div>
+            {openDate && openDate > getToday() && (
+              <div className='content category bold'>
+                {category} &nbsp; {openDate} 오픈 예정
+              </div>
+            )}
             <div className='info-box'>
-              <div className='content sub'>{userId}</div>
+              <div className='content sub'>{writerId}</div>
               <div className='title bold'>{name}</div>
               <div className='price-box'>
                 <div className='title bold'>{price.toLocaleString()}원</div>
@@ -312,18 +456,24 @@ export default function DetailProduct() {
               </div>
             </div>
             <div className='participation-box'>
-              <div className='content bold'>{boughtAmount}명 구매</div>
-              <div className='content bold red'>{achievement}% 달성</div>
+              <div className='content sub'>구매수량</div>
+              <div className='content bold'>{boughtAmount.toLocaleString()}개</div>
+              <div className='content bold red-title'>{achievement}% 달성</div>
               <div className='content-box'>
-                <div className='content sub'>{}잔여 수량</div>
-                <div className='content bold'>{remainingQuantity - quantity} 개</div>
+                <div className='content sub'>잔여 수량</div>
+                <div className='content bold'>{(remainingQuantity - quantity).toLocaleString()} 개</div>
               </div>
               <div className='rating-box'>
                 <div className='star'></div>
                 <div className='content'>5.0점</div>
               </div>
             </div>
-            <div className='button black' onClick={onParticipationButtonClickHandler}>참여하기</div>
+            <div className='button-box'>
+              <div className='button black' onClick={onParticipationButtonClickHandler}>참여하기</div>
+              {writerId === userId &&
+              <div className='button cancel' onClick={onRemoveProductClickHandler}>공동구매 삭제하기</div>
+              }
+            </div>
           </div>
         </div>
         <div className='product-detail'>
@@ -340,19 +490,52 @@ export default function DetailProduct() {
               <div className='button ask'>문의하기</div>
             </div>
           </div>
-          <div className='jumbotron'>
-            <div className='jumbotron-box'>
-              {descriptionClass === 'content active' && productContent}
-              {reviewClass}
+          {descriptionClass === 'content active' && 
+            <div className='jumbotron'>
+              <div className='jumbotron-box'>
+                {productContent} 
+              </div>
             </div>
-          </div>
+          }
+          {reviewClass === 'content active' && 
+            <div className='review-container'>
+
+              <div className='review-box'>
+                <div className='grade-img'>
+                  <div className={reviewIcon}></div>
+                  <div className='img-face'>{reviewFace}</div>
+                </div>
+                <div className='review-info'>
+                  <div className='review-len'>총 {totalList.length.toLocaleString()}건</div>
+                  <div className='review-rating'>{rating} 점</div>
+                  <div className='star-image'>
+                    {[...Array(5)].map((_,index) => (
+                      <img key={index} src={index < rating ? activeStar : emptyStar} alt='star' className='star'/>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className='review-sort'>
+                <div className='date'></div>
+                <div className=''></div>
+              </div>
+              <div className='review-images-box'>
+                {reviewImages.map((image, index) => <div className='review-image'><img src={image.reviewImage} alt={`리뷰 이미지${index}`}/></div>)}
+              </div>
+              <div className='review-list-container'>
+                <ul className='review-list'>
+                    {totalList.map((review, index) => <ProductReview key={index} review={review} reviewImages={reviewImages} />)}
+                </ul>
+              </div>
+            </div>
+          }
         </div>
         {isCartOpen && 
           <Modal 
             title='장바구니 담기'
             onClose={onUpdateShoppingCartClickHandler}
           >
-            <CartUpdate onModalViewChange={onUpdateShoppingCartClickHandler} name={name} sequence={sequence} />
+            <CartUpdate onModalViewChange={onUpdateShoppingCartClickHandler} name={name} sequence={productNumber} />
           </Modal>
         }
         <div className='detail-product-similar'>

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { SignInRequestDto } from 'src/apis/dto/request/auth';
 import { ResponseDto } from 'src/apis/dto/response';
 import { SignInResponseDto } from 'src/apis/dto/response/auth';
-import { ACCESS_TOKEN } from 'src/constants';
+import { ACCESS_TOKEN, AUTH_FIND_ID_ABSOLUTE_PATH } from 'src/constants';
 import AuthPage from 'src/types/aliases/auth-page.alias';
 
 import './style.css'
@@ -83,15 +83,16 @@ export default function SignIn({ onPageChange }: Props) {
     }
   };
 
-  
-  
-
   // event handler: 로고 클릭 이벤트 처리 //
   const onLogoClickHandler = () => {
     navigator('/main');
   };
-  
 
+  // event handler: 아이디/비밀번호 클릭 이벤트 처리 //
+  const onFindUserClickHandler = () => {
+    navigator(AUTH_FIND_ID_ABSOLUTE_PATH);
+  };
+  
   return (
     <div className="login-wrapper">
       <div className="logo" onClick={onLogoClickHandler}></div>
@@ -115,7 +116,7 @@ export default function SignIn({ onPageChange }: Props) {
             }} 
           />
           {userPasswordMessage && <div className="error-message">{userPasswordMessage}</div>}
-          <div className="find-link">아이디/비밀번호 찾기</div>
+          <div className="find-link" onClick={onFindUserClickHandler}>아이디/비밀번호 찾기</div>
         </div>
         <button className="login-btn" onClick={onLoginClick}>로그인</button>
         <div className="bottom-link">
