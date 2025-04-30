@@ -1,0 +1,49 @@
+.other-sidebar-container {
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+}
+
+.other-sidebar-container .button {
+  width: 180px;
+  height: 40px;
+  background-color: rgba(24, 50, 81, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--White);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.other-sidebar-container .categories {
+  display: flex;
+  padding: 29px 22px;
+  flex-direction: column;
+  gap: 20px;
+  letter-spacing: 0.3px;
+}
+
+.other-sidebar-container .categories .title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.other-sidebar-container .categories .sub-title {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-left: 15px;
+  font-size: 13px;
+}
+
+.other-sidebar-container .categories .sub-title:hover {
+  color: #007bff; 
+  cursor: pointer;
+}
+
+.other-sidebar-container .categories .active {
+  color: #007bff;
+  font-weight: bold; 
+  cursor: default !important
+}

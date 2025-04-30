@@ -24,7 +24,7 @@ export default function Faq() {
       <MypageSidebar/>
       <div className='contents-wrapper'>
         <div className='title-area'>
-          <div className='title'>FAQ</div>
+          <div className='title'>고객센터</div>
           <div className='current' onClick={onQuestionButtonClickHandler}>문의 내역</div>
           <div className='current active'>FAQ</div>
           <div className='current' onClick={onNoticeButtonClickHandler}>공지사항</div>

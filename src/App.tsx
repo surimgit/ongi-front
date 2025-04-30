@@ -5,8 +5,32 @@ import './App.css';
 import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, 
     SHOPPING_CART_PATH, WRITE_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH, NEEDHELPER_PATH, 
     MY_GROUPBUYING_BUY_PATH,
-    MY_GROUPBUYING_PATH, MY_GROUPBUYING_WISH_LIST_PATH, MY_REVIEW_PATH, MY_NEEDHELLPER_PATH, MY_NEEDHELLPER_ASK_PATH, MY_NEEDHELLPER_APPLY_PATH,
-    MY_NEEDHELLPER_LIKED_PATH, MY_COMMUNITY_PATH, FAQ_PATH, NOTICE_PATH, MAIN_PATH, AUTH_PATH, AUTH_FIND_ID_PATH, AUTH_FIND_PASSWORD_PATH,
+    MY_GROUPBUYING_PATH,
+    MY_GROUPBUYING_WISH_LIST_PATH,
+    MY_REVIEW_PATH,
+    MY_NEEDHELLPER_PATH,
+    MY_NEEDHELLPER_ASK_PATH,
+    MY_NEEDHELLPER_APPLY_PATH,
+    MY_NEEDHELLPER_LIKED_PATH,
+    MY_COMMUNITY_PATH,
+    FAQ_PATH,
+    NOTICE_PATH,
+    MAIN_PATH,
+    MY_ACTIVITY_PATH,
+    MY_GROUPBUYING_SELL_PATH,
+    MY_GROUPBUYING_BUY_PATH,
+    MY_COMMUNITY_POST_PATH,
+    MY_COMMUNITY_COMMENT_PATH,
+    MY_COMMUNITY_LIKED_PATH,
+    QUESTION_WRTIE_ABSOLUTE_PATH,
+    QUESTION_WRTIE_PATH,
+    QUESTION_VIEW_PATH,
+    QUESTION_PATCH_PATH,
+    NOTICE_WRITE_PATH,
+    NOTICE_PATCH_PATH,
+    NOTICE_VIEW_PATH
+    AUTH_PATH, AUTH_FIND_ID_PATH, AUTH_FIND_PASSWORD_PATH,
+
     AUTH_FIND_USER_RESULT_PATH,
     COMMUNITY_EDIT_PATH,
     REPORT_PATH,
@@ -44,7 +68,15 @@ import CommunityMain from './views/Community';
 import PostDetail from './views/Community/Detail';
 import Question from './views/MyPage/Question';
 import Account from './views/MyPage/Account';
+import QuestionWrite from './views/MyPage/Question/Write';
+import QuestionView from './views/MyPage/Question/Detail';
+import QuestionUpdate from './views/MyPage/Question/Update';
+import NoticeWrite from './views/MyPage/Notice/Write';
+import NoticeUpdate from './views/MyPage/Notice/Update';
+import NoticeDetail from './views/MyPage/Notice/Detail';
+import NoticeView from './views/MyPage/Notice/Detail';
 import WishLists from './views/MyPage/GroupBuying/WishList';
+
 
 
 import { useEffect } from 'react';
@@ -91,17 +123,18 @@ function App() {
           <Route index element={<ShoppingCart/>}></Route>
           <Route path={ADDRESS_PATH} element={<ShoppingCartAddress/>}/>
         </Route>
-        <Route path={OTHER_MYPAGE_PATH}>
-          <Route path='user' element={<Others/>} />
-        </Route>
+
         <Route path={MYPAGE_PATH}>          
+          <Route path={OTHER_MYPAGE_PATH}>
+            <Route path={OTHER_MYPAGE_VIEW_PATH} element={<Others/>} />
+          </Route>
           <Route index element={<MyPage/>}/>
+          <Route path={MY_ACTIVITY_PATH} element={<MyActivity/>}/>
           <Route path={MYPAGE_ACCOUNT_PATH} element={<Account/>}/>
           <Route path={MY_GROUPBUYING_PATH}>
+            <Route path={MY_GROUPBUYING_SELL_PATH} element={<GroupBuying/>} />
             <Route path={MY_GROUPBUYING_BUY_PATH} element={<GroupBuying/>} />
-            <Route path={MY_GROUPBUYING_WISH_LIST_PATH} element={<WishLists/>} />
-            <Route path='my-needHelper' element={<MyNeedHelper/>} />
-            <Route path='my-community' element={<MyCommunity/>} />
+            <Route path={MY_GROUPBUYING_WISH_LIST_PATH} element={<WishList/>} />
           </Route>
           <Route path={MY_REVIEW_PATH}>
             <Route index element={<MyReview/>} />
@@ -112,13 +145,27 @@ function App() {
             <Route path={MY_NEEDHELLPER_LIKED_PATH} element={<MyNeedHelper/>} />
           </Route>
           <Route path={MY_COMMUNITY_PATH}>
-            <Route path={MY_NEEDHELLPER_ASK_PATH} element={<MyCommunity/>} />
-            <Route path={MY_NEEDHELLPER_APPLY_PATH} element={<MyCommunity/>} />
-            <Route path={MY_NEEDHELLPER_LIKED_PATH} element={<MyCommunity/>} />
+            <Route path={MY_COMMUNITY_POST_PATH} element={<MyCommunity type='post'/>} />
+            <Route path={MY_COMMUNITY_COMMENT_PATH} element={<MyCommunity type='comment'/>} />
+            <Route path={MY_COMMUNITY_LIKED_PATH} element={<MyCommunity type='liked'/>} />
           </Route>
-          <Route path={QUESTION_PATH} element={<Question/>}/>
+          <Route path={QUESTION_PATH}>
+            <Route index element={<Question/>}/>
+            <Route path={QUESTION_WRTIE_PATH} element={<QuestionWrite />}/>
+            <Route path={QUESTION_VIEW_PATH}>
+              <Route index element={<QuestionView/>}/>
+              <Route path={QUESTION_PATCH_PATH} element={<QuestionUpdate />}/>
+            </Route>
+          </Route>
           <Route path={FAQ_PATH} element={<Faq/>} />
-          <Route path={NOTICE_PATH} element={<Notice/>}/>
+          <Route path={NOTICE_PATH}>
+            <Route index element={<Notice/>}/>
+            <Route path={NOTICE_WRITE_PATH} element={<NoticeWrite/>}/>
+            <Route path={NOTICE_VIEW_PATH}>
+              <Route index element={<NoticeView/>}/>
+              <Route path={NOTICE_PATCH_PATH} element={<NoticeUpdate />}/>
+            </Route>
+          </Route>
         </Route> 
         <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
           <Route index element={<CommunityMain />} />

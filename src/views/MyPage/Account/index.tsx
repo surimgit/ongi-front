@@ -2,16 +2,23 @@ import React from 'react'
 import './style.css'
 import MypageSidebar from 'src/layouts/MypageSidebar'
 import { useNavigate } from 'react-router';
-import { MYPAGE_ABSOLUTE_PATH } from 'src/constants';
+import { MY_ACTIVITY_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH } from 'src/constants';
 export default function Account() {
 
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
 
   // event handler: 내 활동 클릭 이벤트 처리 //
-  const onClick = () => {
+  const onMyPageButtonClickHandler = () => {
     navigator(MYPAGE_ABSOLUTE_PATH);
   }
+
+  // event handler: 내 활동 클릭 이벤트 처리 //
+  const onMyActivityButtonClickHandler= () => {
+    navigator(MY_ACTIVITY_ABSOLUTE_PATH);
+  }
+
+  
 
   return (
     <div id='setting-main-wrapper'>
@@ -19,8 +26,8 @@ export default function Account() {
       <div className='contents-wrapper'>
         <div className='title-area'>
           <div className='title'>마이페이지</div>
-          <div className='current' onClick={onClick}>내 정보</div>
-          <div className='current active'>내 활동</div>
+          <div className='current active' onClick={onMyPageButtonClickHandler}>내 정보</div>
+          <div className='current' onClick={onMyActivityButtonClickHandler}>내 활동</div>
         </div>  
         <div className='body'>
           <div className='title'>계정 설정</div>

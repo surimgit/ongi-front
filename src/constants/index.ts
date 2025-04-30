@@ -40,6 +40,8 @@ export const MY_GROUPBUYING_SELL_PATH = 'sell';
 
 export const MY_REVIEW_PATH = 'review';
 
+export const MY_ACTIVITY_PATH = 'activity';
+
 export const MY_NEEDHELLPER_PATH = 'need-helper';
 export const MY_NEEDHELLPER_ASK_PATH = 'ask';
 export const MY_NEEDHELLPER_APPLY_PATH = 'apply';
@@ -60,8 +62,9 @@ export const QUESTION_VIEW_PATH = ':questionSequence';
 export const QUESTION_ANSWER_PATH = 'answer';
 
 export const NOTICE_PATH = 'notice';
-export const NOTICE_WRITE_PATH = 'notice';
-export const NOTICE_VIEW_PATH = 'sequence';
+export const NOTICE_WRITE_PATH = 'write';
+export const NOTICE_PATCH_PATH = 'patch';
+export const NOTICE_VIEW_PATH = ':sequence';
 
 export const FAQ_PATH = 'faq';
 
@@ -114,17 +117,20 @@ export const OTHER_MYPAGE_VIEW_ABSOULTE_PATH = (userId : string) => `${ROOT_PATH
 
 export const QUESTION_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}`;
 export const QUESTION_WRTIE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${QUESTION_WRTIE_PATH}`;
-export const QUESTION_PATCH_ABSOLUTE_PATH =  `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${QUESTION_WRTIE_PATH}`;
-export const QUESTION_VIEW_ABSOLUTE_PATH = (questionSequence: number | string) => `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${questionSequence}/${QUESTION_PATCH_PATH}`;
-export const QUESTION_ANSWER_ABSOLUTE_PATH = (questionSequence: number | string) => `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${questionSequence}/${QUESTION_ANSWER_PATH}`;
+export const QUESTION_PATCH_ABSOLUTE_PATH =  (questionSequence: number | string) => `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${questionSequence}/${QUESTION_PATCH_PATH}`;
+export const QUESTION_VIEW_ABSOLUTE_PATH = (questionSequence: number | string) => `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${questionSequence}`;
+export const QUESTION_ANSWER_ABSOLUTE_PATH = (questionSequence: number | string) => `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${questionSequence}`;
 
 export const NOTICE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${NOTICE_PATH}`;
 export const NOTICE_WRITE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${NOTICE_PATH}/${NOTICE_WRITE_PATH}`;
-export const NOTICE_VIEW_ABSOLUTE_PATH = (sequence: number | string) =>  `${ROOT_PATH}${MYPAGE_PATH}/${NOTICE_PATH}`;
+export const NOTICE_PATCH_ABSOLUTE_PATH = (sequence: number | string) => `${ROOT_PATH}${MYPAGE_PATH}/${NOTICE_PATH}/${sequence}/${NOTICE_PATCH_PATH}`;
+export const NOTICE_VIEW_ABSOLUTE_PATH = (sequence: number | string) =>  `${ROOT_PATH}${MYPAGE_PATH}/${NOTICE_PATH}/${sequence}`;
 
 export const FAQ_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${FAQ_PATH}`;
 
 export const MY_REVIEW_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_REVIEW_PATH}`;
+
+export const MY_ACTIVITY_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_ACTIVITY_PATH}`;
 
 export const MY_NEEDHELLPER_ASK_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_NEEDHELLPER_PATH}/${MY_NEEDHELLPER_ASK_PATH}`;
 export const MY_NEEDHELLPER_APPLY_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_NEEDHELLPER_PATH}/${MY_NEEDHELLPER_APPLY_PATH}`;

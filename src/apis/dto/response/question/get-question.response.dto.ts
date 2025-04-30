@@ -1,11 +1,13 @@
+import { QuestionCategory } from "src/types/aliases";
 import ResponseDto from "../response.dto";
 
 export default interface GetQuestionResponseDto extends ResponseDto{
   questionSequence: number;
   userId: string;
+  postDate: string;
   title: string;
   content: string;
-  category: string;
+  category: QuestionCategory;
   answer: string;
-  inAnswered: boolean;
+  answered: boolean;
 }

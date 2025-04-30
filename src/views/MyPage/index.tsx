@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import './style.css';
 import { useNavigate } from 'react-router';
 import MypageSidebar from 'src/layouts/MypageSidebar';
-import { ACCESS_TOKEN, MYPAGE_ACCOUNT_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, MY_ACTIVITY_ABSOLUTE_PATH, MYPAGE_ACCOUNT_ABSOLUTE_PATH } from 'src/constants';
 import { useCookies } from 'react-cookie';
 import { GetUserIntroductionResponseDto } from 'src/apis/dto/response/user';
 import { LikeKeyword } from 'src/types/interfaces';
@@ -18,11 +18,11 @@ export default function MyPage() {
 
   // state: 추가 삭제 키워드 상태 //
   const [addKeyword, setAddKeyword] = useState<string>('');
-  const [deleteMode, setDeleteMode] = useState<boolean>(false);
-
+  const [addedKeywords, setAddedKeywords] = useState<string[]>([]);
+  const [likeKeywords, setLikeKeywords] = useState<LikeKeyword[]>([]);
 
   // function: add liked keyword response 처리 함수 //
-  const addLikeKeywordResopnse = (responseBody: ResponseDto | null) => {
+  const addLikeKeywordResopnse = (responseBody: ResponseDto | null, keyword:string) => {
     const message =
       !responseBody ? '서버에 문제가 있습니다.' :
       responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' : 
@@ -34,25 +34,10 @@ export default function MyPage() {
       return;
     }
 
-    setLikeKeywords((likeKeywords) => [...(likeKeywords || []), { userId: accessToken, keyword: addKeyword }]);
-    setAddKeyword('');
-    setModalOpen(true);
-  };
 
-  // function: delete liked keyword response 처리 함수 //
-  const deleteLikeKeywordResponse = (responseBody: ResponseDto | null, keyword: string) => {
-    const message =
-      !responseBody ? '서버에 문제가 있습니다.' :
-      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' : 
-      responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
-    
-    const isSuccess = responseBody !== null && responseBody.code === 'SU';
-    if (!isSuccess) {
-      alert(message);
-      return;
-    }
-
-    setLikeKeywords(prev => prev.filter(k => k.keyword !== keyword));
+    setLikeKeywords((likeKeywords) => [...(likeKeywords || []), { userId: accessToken, keyword}]);
+    setModalOpen(false);
+    setAddedKeywords([]);
   };
 
   // event handler: 키워드 추가 이벤트 처리 //
@@ -61,28 +46,64 @@ export default function MyPage() {
     setAddKeyword(value);
   };
 
-  // event handler: 키워드 삭제 버튼 클릭 이벤트 처리
-  const deleteKeywordClickHandler = () => {
-    setDeleteMode(prev => !prev);
-  }
 
-  // event handler: 키워드 추가 버튼 클릭 이벤트 처리 //
-  const onAddKeywordClickHandler = async () => {
-    if (!addKeyword.trim()) {
+  // event handler: 키워드 선택 버튼 클릭 이벤트 처리 //
+  const onSelectKeywordClickHandler = async () => {
+    const keyword = addKeyword.trim();
+    if (!keyword) {
       alert('키워드를 입력해주세요!');
       return;
     }
 
-    const requestBody: AddLikeKeywordRequestDto = {
-      keyword: addKeyword
-    };
-
-    if(likeKeywords !== null && likeKeywords.length > 10){
+    if(addedKeywords.length == 10){
       alert('키워드를 삭제해주세요!');
+      return;
     }
 
-    addLikeKeywordRequest(requestBody, accessToken).then(addLikeKeywordResopnse);
+    if (addedKeywords.includes(keyword)) {
+    alert('이미 선택된 키워드입니다!');
+    return;
+    }
 
+    setAddedKeywords(prev => [...prev, keyword]);
+    setAddKeyword('');
+  }
+
+  // event handler: 키워드 추가 버튼 클릭 이벤트 처리 //
+  const onAddKeywordClickHandler = async () => {
+
+    if (addedKeywords.length === 0) {
+      alert('추가할 키워드를 선택해주세요!');
+      return;
+    }
+
+    for (const keyword of addedKeywords) {
+      // 이미 추가된 키워드가 있는지 확인
+      if (likeKeywords.some(k => k.keyword === keyword)) {
+        continue; 
+      }
+      const requestBody: AddLikeKeywordRequestDto = { keyword };
+      await addLikeKeywordRequest(requestBody, accessToken).then((res) =>
+        addLikeKeywordResopnse(res, keyword)
+      );
+    };
+
+    setAddKeyword('');
+  };
+
+  // function: delete liked keyword response 처리 함수 //
+  const deleteLikeKeywordResponse = (responseBody: ResponseDto | null, keyword:string) => {
+    const message =
+      !responseBody ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' : 
+      responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+    
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+    if (!isSuccess) {
+      alert(message);
+      return;
+    }
+    setLikeKeywords(prev => prev?.filter(k => k.keyword !== keyword) ?? []);
   };
 
   // event handler: 키워드 삭제 버튼 클릭 이벤트 처리 //
@@ -110,7 +131,7 @@ export default function MyPage() {
   const [mbti, setMbti] = useState<Mbti | null>(null);
   const [job, setJob] = useState<string>('');
   const [selfIntro, setSelfIntro] = useState<string>('');
-  const [likeKeywords, setLikeKeywords] = useState<LikeKeyword[]>([]);
+
 
   // state: 수정 가능 상태 // 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -125,6 +146,7 @@ export default function MyPage() {
   // event handler: 수정 버튼 클릭 이벤트 처리 //
   const onModalOpenButtonClickHandler = () => {
     setModalOpen(!isModalOpen);
+    setAddedKeywords(likeKeywords.map((item) => item.keyword));
   };
 
   // variable: access Token //
@@ -193,7 +215,7 @@ export default function MyPage() {
 
   // event handler: 내 활동 클릭 이벤트 처리 //
   const onClick = () => {
-    navigator(MYPAGE_ACCOUNT_ABSOLUTE_PATH);
+    navigator(MY_ACTIVITY_ABSOLUTE_PATH);
   }
 
   // event handler: 닉네임 변경 이벤트 처리 //
@@ -254,6 +276,11 @@ export default function MyPage() {
     setProfileImageFile(null); // 파일 상태 초기화
   };
 
+  // event handler: 계정설정 버튼 클릭 이벤트 처리 //
+  const onAccountButtonClickHandler = () => {
+    navigator(MYPAGE_ACCOUNT_ABSOLUTE_PATH);
+  }
+
   // event handler: 수정 버튼 클릭 이벤트 처리 //
   const onEditButtonClickHandler = async () => {
     if(isEditMode && !isActive) {
@@ -306,7 +333,7 @@ export default function MyPage() {
         <div className='correction-area'>
           <div className={updateButtonClass} onClick={onEditButtonClickHandler}>{buttonText}</div>
           <div className='bridge'>|</div>
-          <div className='correction'>계정 설정</div>
+          <div className='correction' onClick={onAccountButtonClickHandler}>계정 설정</div>
         </div>
         <div className='body'>
           <div className='profile-area'>
@@ -402,43 +429,43 @@ export default function MyPage() {
               </div>
               <div className='specialty-box'>
                 <div className='tag-button-wrapper'>
-                  <div className='plus-tag-button' onClick={onModalOpenButtonClickHandler}></div>
+                  <div className='tag-button plus' onClick={onModalOpenButtonClickHandler}></div>
                   {isModalOpen && 
-                  <Modal 
-                    title='키워드를 추가해보세요!' 
-                    onClose={onModalOpenButtonClickHandler} 
-                  >
-                    <input 
-                      className='keyword-input' 
-                      type='text' 
-                      value={addKeyword} 
-                      onChange={addKeywordChangeHandler} 
-                      placeholder="추가할 키워드를 입력하세요"
-                    />
-                    <div onClick={onAddKeywordClickHandler}>추가</div>
-                  </Modal>}
+                    <Modal 
+                      title='키워드를 추가해보세요!' 
+                      onClose={onModalOpenButtonClickHandler} 
+                    > <div className='modal-input-wrapper'>
+                        <input 
+                        className='modal-keyword-input' 
+                        type='text' 
+                        value={addKeyword} 
+                        onChange={addKeywordChangeHandler} 
+                        placeholder="추가할 키워드를 입력하세요"
+                        />
+                        <div className='modal-select-button' onClick={onSelectKeywordClickHandler}>선택</div></div>
+                      <div className='modal-keywords-wrapper'>
+                        {addedKeywords.map((index, key) => (<div className='modal-keyword-items'>{index}</div>))}
+                      </div>
+                      <div className="modal-add-button"onClick={onAddKeywordClickHandler}>추가</div>
+                    </Modal>
+                  }
                   <div className='text'>#잘해요</div>
-                  <div className='minus-tag-button' onClick={deleteKeywordClickHandler}></div>
                 </div>
                 <div className='tag-container'>
                   {Array.isArray(likeKeywords) &&
-                    Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className="tag-box">
-                      {likeKeywords.slice(i * 2, i * 2 + 2).map((item, j) => (
-                        <div key={j} className="tag-wrapper">
+                    likeKeywords.map((item, i) => (
+                      <div key={i} className="tag-box">
+                        <div className="tag-wrapper">
                           <div className="tag">#{item.keyword}</div>
-                          {deleteMode && (
+                          {isEditMode && (
                             <div 
                               className="minus-button" 
-                              onClick={() => {
-                                onDeleteKeywordClickHandler(item.keyword)
-                              }}>
+                              onClick={() => onDeleteKeywordClickHandler(item.keyword)}>
                               -
                             </div>
                           )}
                         </div>
-                      ))}
-                    </div>
+                      </div>
                   ))}
                 </div>
               </div>
@@ -455,7 +482,7 @@ export default function MyPage() {
               onChange={onSelfIntroductionChangeHandler}
               maxLength={250}
               /> 
-              <div className='char-count'>{selfIntro.length} / 250</div>
+              <div className='char-count'>{selfIntro ? selfIntro.length : 0} / 250</div>
             </div>
             ): (<div className='sub-text'>{selfIntro}</div>)}
           </div>
