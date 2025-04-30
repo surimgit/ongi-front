@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import './style.css';
-import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH } from 'src/constants';
 import { Board } from 'src/types/aliases';
 import useSignInUser from 'src/hooks/sign-in-user.hook';
 import { useEffect, useRef, useState } from 'react';
@@ -89,6 +89,11 @@ export default function Layout() {
     navigator(MYPAGE_ABSOLUTE_PATH);
   }
 
+  // event handler: 로고 이미지 클릭 이벤트 처리 //
+  const onLogoClickHandler = () => {
+    navigator(MAIN_ABSOLUTE_PATH);
+  }
+
   // effect: cookie의 accessToken이 변경될 시 실행할 함수 //
   useEffect(() => {
     if (!cookies[ACCESS_TOKEN]) return;
@@ -121,7 +126,7 @@ export default function Layout() {
     <div id='layout-wrapper'>
       <div id='top-bar'>
         <div className='navigation'>
-          <div className='logo'></div>
+          <div className='logo' onClick={onLogoClickHandler}></div>
           <div className='navigation-list'>
             <div className='navigation-list-item' onClick={() => onBoardClickHandler('전체 글')}>커뮤니티</div>
             <div className='navigation-list-item'>공구</div>
