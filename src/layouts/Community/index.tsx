@@ -25,7 +25,7 @@ export default function CommunityLayout() {
     const keywordKey = searchParams.get('keyword') as string;
 
     // state: 로그인 사용자 정보 //
-    const { admin } = useSignInUserStore();
+    const { isAdmin } = useSignInUserStore();
 
     // state: 검색 카테고리 상태 //
     const [searchCategory, setSearchCategory] = useState<SearchCategory>('선택');
@@ -128,7 +128,7 @@ export default function CommunityLayout() {
                     <div className={meetingBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '모임')}>ㄴ모임</div>
                     <div className={etcCountyBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '우리동네기타')}>ㄴ우리 동네 기타</div>
                 </div>
-                {admin &&
+                {isAdmin &&
                 <>
                     <div className='divider'></div>
                     <div className='category-container'>
