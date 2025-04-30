@@ -3,7 +3,7 @@ import './style.css';
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { ACCESS_TOKEN } from "src/constants";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, useSearchParams } from "react-router";
 import PolicyView from "src/types/interfaces/policy-view.interface";
 import { GetPolicyViewResponseDto } from "src/apis/dto/response/calendar";
 
@@ -21,12 +21,17 @@ export default function PolicyViewPage() {
   // state: query 상태 //
   const query = new URLSearchParams(location.search);
 
+  // state: search Param //
+  const [searchParams] = useSearchParams();
+
   // state: 조회 키 //
   const plcyNo = query.get('plcyNo') || '';
   const plcyNm = query.get('plcyNm') || '';  
   const keyword = query.get('keyword') || '';
-  const page = query.get('page') || '1';
-  const section = query.get('section') || '1';
+  const regions = query.get('regions') || '';
+  const categories = query.get('categories') || '';
+  const page = searchParams.get('page') || '1';
+  const section = searchParams.get('section') || '1';
 
   // state: D-day //
   const remain = query.get('remain') || '';
@@ -133,11 +138,13 @@ export default function PolicyViewPage() {
   // event handler: 목록으로 버튼 클릭 이벤트 처리 //
   const onListLinkClickHandler = () => {
     const queryParams = new URLSearchParams({
-      keyword,
+      keyword ,
+      regions,
+      categories,
       page,
       section
     }).toString();
-    navigator(`/calnedar?${queryParams}`);
+    navigator(`/calendar?${queryParams}`);
   };
 
   // effect: 화면 렌더 시 실행 함수 //
@@ -168,6 +175,7 @@ export default function PolicyViewPage() {
         console.error('정책 조회 오류:', error); 
       }
     };
+    console.log(location.search);
     if(plcyNo && plcyNm) fetchPolicy();
   }, [plcyNo, plcyNm, accessToken]);
 

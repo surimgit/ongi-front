@@ -7,7 +7,7 @@ import ScheduleModal from "./Modal/ScheduleModal";
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
 
 import './style.css';
-import { useLocation } from "react-router";
+import { useLocation, useSearchParams } from "react-router";
 import { ACCESS_TOKEN, MAIN_ABSOLUTE_PATH } from "src/constants";
 import { GetAllScheduleResponseDto } from "src/apis/dto/response/calendar";
 import { ResponseDto } from "src/apis/dto/response";
@@ -52,6 +52,15 @@ export default function Calendar() {
 
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, event: any } | null>(null);
   const contextMenuRef = useRef<HTMLDivElement>(null);
+
+  // state: 검색 상태 //
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get('keyword') || '';
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const section = parseInt(searchParams.get('section') || '1', 10);
+
+  // state: 검색 실행 여부 //
+  const [autoSearch, setAutoSearch] = useState(false);
 
   // state: scrap 상태 //
   const [isScrap, setIsScrap] = useState<boolean>(false);
@@ -212,6 +221,12 @@ export default function Calendar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (keyword) {
+      setAutoSearch(true);
+    }
+  }, [keyword]);
+
   return (
     <div id="fullcalendar-wrapper">
       <FullCalendar
@@ -337,7 +352,7 @@ export default function Calendar() {
         </div>
       </div>
     )}
-      {pathname === MAIN_ABSOLUTE_PATH ? undefined : <Policy items={[]} onScrap={onScrapPolicy}/>}
+      {pathname === MAIN_ABSOLUTE_PATH ? undefined : <Policy searchKeyword={keyword} page={page} section={section} autoSearch={true} items={[]} onScrap={onScrapPolicy}/>}
     </div>
   );
 }
