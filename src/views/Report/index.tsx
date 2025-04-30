@@ -204,7 +204,6 @@ function Report({ onClose, reportSequence, onProcessed }: ReportContentProps) {
       
       const { alertedCount } = responseBody as GetAlertedCountResponseDto;
       if (alertedCount >= 5) {
-        console.log('5회 이상');
         const resignRequestBody: PatchResignRequestDto = { userId: reportedId, isAdmin: true, reason: '경고 5회 이상 누적' };
         patchResignRequest(resignRequestBody, accessToken).then(patchResignResponse);
       }
@@ -421,7 +420,6 @@ export default function ReportBoard() {
     }
 
     const { isAdmin } = responseBody as GetIsAdminResponseDto;
-    console.log(isAdmin);
 
     if (!isAdmin) {
       alert('권한이 없습니다.');
