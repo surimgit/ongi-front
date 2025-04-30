@@ -1,4 +1,5 @@
 export default interface ProductReviews {
+  reviewSequence: number;
   productSequence: number;
   userId: string;
   postDate: string;

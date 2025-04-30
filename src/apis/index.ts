@@ -39,7 +39,7 @@ import GetReportResponseDto from './dto/response/report/get-report.response.dto'
 import PatchReportProcessRequestDto from './dto/request/report/patch-report-process.request.dto';
 import PatchResignRequestDto from './dto/request/user/patch-resign.request.dto';
 import GetAlertedCountResponseDto from './dto/response/report/get-alerted-count.response.dto';
-
+import { GetReviewImagesResponseDto } from './dto/response/product';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -71,7 +71,9 @@ const PATCH_PRODUCT_QUANTITY_URL = (sequence: number | string) => `${PRODUCT_MOD
 const GET_PRODUCT_CATEGORY_NAME_URL = (category: Category, name:string) =>  `${PRODUCT_MODULE_URL}?category=${category}&name=${name}`;
 const GET_PRODUCT_DETAIL_URL = (sequence:number | string) => `${PRODUCT_MODULE_URL}/${sequence}`; 
 const GET_PRODUCT_REVIEWS_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/review`;
+const GET_PRODUCT_REVIEW_IMAGES_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/review-images`;
 
+const DELETE_PRODUCT_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}`;
 // 찜목록 API 경로
 const WISHLIST_MODULE_URL = `${API_DOMAIN}/api/v1/wish`;
 const POST_WISHLIST_URL = (postSequence: number | string) => `${WISHLIST_MODULE_URL}/${postSequence}`;
@@ -168,6 +170,7 @@ const GET_MY_COMMUNTY_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/post`;
 const GET_MY_COMMUNTY_COMMENT_URL = `${API_DOMAIN}/api/v1/mypage/community/comment`;
 const GET_MY_COMMUNTY_LIKED_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/liked`;
 
+
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
 
@@ -205,6 +208,14 @@ return responseBody;
 export const getProductReviewsRequest = async (sequence: number | string) => {
   const responseBody = await axios.get(GET_PRODUCT_REVIEWS_URL(sequence))
   .then(responseSuccessHandler<GetProductReviewsResponseDto>)
+  .catch(responseErrorHandler);
+return responseBody;
+}
+
+// function: get product reviews images API 요청 함수 //
+export const getProductReviewImagesRequest = async (sequence: number | string) => {
+  const responseBody = await axios.get(GET_PRODUCT_REVIEW_IMAGES_URL(sequence))
+  .then(responseSuccessHandler<GetReviewImagesResponseDto>)
   .catch(responseErrorHandler);
 return responseBody;
 }
@@ -326,6 +337,14 @@ export const postProductRequest = async (requestBody: PostProductRequestDto, acc
 // function: patch product quantity API 요청 함수 //
 export const patchProductRequest = async (requestBody: PatchProductQuantityRequestDto, sequence: number, accessToken:string) => {
   const responseBody = await axios.post(PATCH_PRODUCT_QUANTITY_URL(sequence), requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: delete product API 요청 함수 //
+export const deleteProductRequest = async (sequence: number | string, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_PRODUCT_URL(sequence), bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;
@@ -782,12 +801,6 @@ export const getAlertRequest = async (accessToken: string) => {
   return responseBody;
 }
 
-
-// function: get my buying API 요청 함수 //
-export const getMyBuyingRequest = async (accessToken: string) => {
-  const responseBody = await axios.get(GET_MY_BUYING_URL, bearerAuthorization(accessToken))
-  .then(responseSuccessHandler<GetMyBuyingResponseDto>)
-
 // function: post Schedule API 요청 함수 //
 export const postScheduleRequest = async (requestBody:PostScheduleRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_SCHEDULE_URL, requestBody, bearerAuthorization(accessToken))
@@ -914,3 +927,10 @@ export const getIsAdminRequest = async (accessToken: string) => {
   return responseBody;  
 };
 
+// function: get my buying API 요청 함수 //
+export const getMyBuyingRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(GET_MY_BUYING_URL, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler<GetMyBuyingResponseDto>)
+  .catch(responseErrorHandler);
+  return responseBody;
+}

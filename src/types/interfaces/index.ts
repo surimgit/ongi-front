@@ -11,6 +11,7 @@ import Wish from "./wish.interface"
 import MyBuying from "./my-buying-interface"
 import ProductReviews from "./ProductReviews.interface"
 import Schedule from "./Schedule.interface"
+import ProductReviewImages from "./product-review-images.interface"
 
 
 export type {
@@ -26,5 +27,6 @@ export type {
   Wish,
   MyBuying,
   ProductReviews,
-  Schedule
+  Schedule,
+  ProductReviewImages
 }

@@ -101,6 +101,7 @@ export default function WishLists() {
   const onMySellClickHandler = () => {
     navigator(MY_GROUPBUYING_SELL_ABSOLUTE_PATH);
   }
+  
   // effect: 컴포넌트 로드시 실행할 함수 //
   useEffect(() => {
     getWishListRequest(accessToken).then(getWishListResponse);

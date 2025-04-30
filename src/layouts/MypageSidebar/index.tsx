@@ -65,6 +65,7 @@ export default function MypageSidebar() {
     new SubTitleItem('내 공동구매', [
       new SubTextItem('판매 내역', '/mypage/group-buying/sell'),
       new SubTextItem('구매 내역', '/mypage/group-buying/buy'),
+      new SubTextItem('장바구니', '/ShoppingCart'),
       new SubTextItem('찜한 목록', '/mypage/group-buying/wish-list'),
     ]),
     new SubTitleItem('도우미', [
