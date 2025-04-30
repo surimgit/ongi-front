@@ -12,10 +12,11 @@
     justify-content: center;
     align-items: center;
 
-    height: 80px;
+    height: auto;
+    padding: 15px 0;
     border: 1px solid #ddd;
     border-radius: 10px;
-    gap: 20px;
+    gap: 10px;
 }
 
 #policy-wrapper .search-bar {
@@ -31,18 +32,25 @@
 #policy-wrapper .search-bar::-webkit-input-placeholder{
     background-image: url(src/assets/images/search-icon-black.png);
     background-size: 17px;
-    background-position:  470px 2px;
+    background-position:  527px 2px;
     background-repeat: no-repeat;
     text-indent: 10px;
 }
 
-#policy-wrapper .search-container .category {
+.search-container .category-container {
     display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#policy-wrapper .search-container .filter {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    width: 180px;
+    width: 150px;
     height: 45px;
-    padding: 0 10px;
-    text-indent: 10px;
+    padding: 0 20px;
     border: 1px solid #ddd;
     border-radius: 10px;
 
@@ -50,9 +58,69 @@
     font-weight: 600;
 }
 
-.category img {
+details { 
+    margin:5px 0 10px; 
+}
+
+details > summary {
+    position: relative;
+    z-index: 10; 
+    cursor:pointer; 
+    transition: 0.2s;
+}
+details > summary::-webkit-details-marker { background:#444; color:#fff; background-size:contain; transform:rotate3d(0, 0, 1, 90deg); transition:transform 0.25s;}
+details[open] > summary::-webkit-details-marker { transform:rotate3d(0, 0, 1, 180deg);}
+details[open] > summary ~ * { animation:reveal 0.5s;}
+
+.filter-panel {
+    position: relative;
+    width: 100%;
+}
+
+.filter-panel .filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 160px;
+    height: 45px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: var(--White);
+}
+
+.filter.selected {
+    color: white;
+    background-color: #1D56BC;
+}
+
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 80%;
+    left: 0;
+    z-index: 0;
+
+    width: 150px;
+    height: 120px;
+    overflow: auto;
+
+    gap: 3px;
+    padding: 20px;
+
+    background: white;
+    border: 1px solid #ddd;
+}
+
+.ml-2 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.filter img {
     width: 17px;
-    margin-left: 90px;
     cursor: pointer;
 }
 
@@ -155,7 +223,7 @@
 .policy-card-box .content {
     width: 310px;
     text-align: left;
-    height: 31px;
+    height: 30px;
     font-size: 13px;
     padding-top: 15px;
     text-overflow: ellipsis;

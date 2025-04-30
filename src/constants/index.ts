@@ -148,8 +148,8 @@ export const MY_GROUPBUYING_SELL_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${M
 
 export const NEEDHELPER_ABSOLUTE_PATH = `${ROOT_PATH}${NEEDHELPER_PATH}`;
 export const CALENDAR_ABSOLUTE_PATH = `${ROOT_PATH}${CALENDAR_PATH}`;
-export const POLICY_ABSOLUTE_PATH = (plcyNo: string, plcyNm: string, keyword?: string, page?: string, section?: string) => {
-    const queryString = buildQueryString({ plcyNo, plcyNm: plcyNm, keyword, page, section }); return `/${POLICY_PATH}?${queryString}`;};
+export const POLICY_ABSOLUTE_PATH = (plcyNo: string, plcyNm: string, keyword?: string, regions?: string, categories?: string, page?: string, section?: string) => {
+    const queryString = buildQueryString({ plcyNo, plcyNm: plcyNm, keyword, regions, categories, page, section }); return `/${POLICY_PATH}?${queryString}`;};
 
 export const REPORT_ABSOLUTE_PATH = `${ROOT_PATH}${REPORT_PATH}`;
 
