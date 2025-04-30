@@ -72,7 +72,8 @@
 #mypage-main-wrapper .contents-wrapper .body .profile-container .profile-image img{
   width: 100%;
   height: 100%;
-  background-size: 100% 100%;
+  object-fit: cover;         /* 비율 유지하면서 자르기 */
+  object-position: center;
   border-radius: 10px;
 }
 
@@ -148,7 +149,7 @@
 }
 
 
-#mypage-main-wrapper .contents-wrapper .body .user-info-area .outline .button-change{
+#mypage-main-wrapper .contents-wrapper .body .user-info-area .outline .button-change-achievements{
   border: 1px solid blue;
   width: 15px;
   height: 15px;

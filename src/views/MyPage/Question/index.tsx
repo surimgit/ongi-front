@@ -50,7 +50,7 @@ export default function Question() {
   // state: pagination 상태 //
   const{
     currentPage, setCurrentPage, currentSection, setCurrentSection, 
-    totalSection, setTotalList, viewList, pageList
+    totalSection, setTotalList, viewList, pageList, totalList
   } = usePagination<Question>();
 
   // variable: access Token //
@@ -110,7 +110,7 @@ export default function Question() {
         </div>
         <hr className='question-hr'/>
         <div className='question-header'>
-          <div className='question-amount'>총 15건</div>
+          <div className='question-amount'>{QuestionItem.length} 건</div>
           <div className='write-button' onClick={onWriteButtonClickHandler}>작성</div>
         </div>
         <div className='question-list'>

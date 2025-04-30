@@ -40,6 +40,7 @@ import PatchReportProcessRequestDto from './dto/request/report/patch-report-proc
 import PatchResignRequestDto from './dto/request/user/patch-resign.request.dto';
 import GetAlertedCountResponseDto from './dto/response/report/get-alerted-count.response.dto';
 import { GetReviewImagesResponseDto } from './dto/response/product';
+import GetCommunityCommentsResponse from './dto/response/community/get-community-comments.response.dto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -764,7 +765,7 @@ export const getMyCommunityPostRequest = async (accessToken: string) => {
 // function: get my community comment API 요청 함수 //
 export const getMyCommunityCommentRequest = async (accessToken: string) => {
   const responseBody = await axios.get(GET_MY_COMMUNTY_COMMENT_URL, bearerAuthorization(accessToken))
-    .then(responseSuccessHandler<GetCommunityCommentResponse>)
+    .then(responseSuccessHandler<GetCommunityCommentsResponse>)
     .catch(responseErrorHandler);
   return responseBody;
 }
