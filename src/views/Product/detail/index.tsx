@@ -269,6 +269,8 @@ export default function DetailProduct() {
     setOpenDate(openDate);
   }
 
+  console.log(isSoldOut);
+
   // function: post shopping cart 처리 함수 //
   const postShoppingCartResponse = (responseBody: ResponseDto | null) => {
     const { isSuccess, message } = responseMessage(responseBody);
@@ -380,6 +382,12 @@ export default function DetailProduct() {
 
   // event handler: 공동구매 참여 버튼 클릭 이벤트 핸들러 //
   const onParticipationButtonClickHandler = () => {
+
+    console.log(isSoldOut);
+    if(isSoldOut){
+      alert('모두 판매된 상품입니다.');
+      return;
+    }
 
     if(!isOpen){
       alert('오픈 예정 상품입니다.');

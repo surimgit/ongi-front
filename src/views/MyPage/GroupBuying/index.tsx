@@ -281,7 +281,7 @@ function PaymentCancel({buyingContent, onClose}: {buyingContent:ProductItemProps
 
 
 // component: 구매목록 상품 컴포넌트 //
-function ProductItem({
+export function ProductItem({
   buyingContent
 }: ProductItemProps) {
 

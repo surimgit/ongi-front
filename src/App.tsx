@@ -88,6 +88,7 @@ import FindResult from './views/Auth/FindResult';
 import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
 import CommunitySearch from './views/Community/Search';
+import MySell from './views/MyPage/GroupBuying/MySell';
 
 function App() {
   return (
@@ -131,7 +132,7 @@ function App() {
           <Route path={MY_ACTIVITY_PATH} element={<MyActivity/>}/>
           <Route path={MYPAGE_ACCOUNT_PATH} element={<Account/>}/>
           <Route path={MY_GROUPBUYING_PATH}>
-            <Route path={MY_GROUPBUYING_SELL_PATH} element={<GroupBuying/>} />
+            <Route path={MY_GROUPBUYING_SELL_PATH} element={<MySell/>} />
             <Route path={MY_GROUPBUYING_BUY_PATH} element={<GroupBuying/>} />
             <Route path={MY_GROUPBUYING_WISH_LIST_PATH} element={<WishList/>} />
           </Route>

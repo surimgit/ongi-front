@@ -11,6 +11,7 @@ import { GetCommunityResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
 import GetCommunityCommentResponse from 'src/apis/dto/response/community/get-community-comment.response.dto';
 import Pagination from 'src/components/Pagination';
+import GetCommunityCommentsResponse from 'src/apis/dto/response/community/get-community-comments.response.dto';
 
 // interface: 내 커뮤니티 게시글 테이블 레코드 컴포넌트 속성 //
 interface CommunityProps{
@@ -136,7 +137,7 @@ export default function MyCommunity( { type }: Props) {
       alert(message);
       return;
     }
-    const {comments} = responseBody as GetCommunityCommentResponse;
+    const {comments} = responseBody as GetCommunityCommentsResponse;
 
     if (!comments) {
       setTotalList([]);

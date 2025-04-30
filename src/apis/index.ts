@@ -40,6 +40,8 @@ import PatchReportProcessRequestDto from './dto/request/report/patch-report-proc
 import PatchResignRequestDto from './dto/request/user/patch-resign.request.dto';
 import GetAlertedCountResponseDto from './dto/response/report/get-alerted-count.response.dto';
 import { GetReviewImagesResponseDto } from './dto/response/product';
+import GetMySalesResponseDto from './dto/response/user/get-my-sales.response.dto';
+import GetOrderItemsResponseDto from './dto/response/user/get-order-items.response.dto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -162,9 +164,12 @@ const GET_ALERTED_COUNT_URL = (reportedId: string) => `${REPORT_MODULE_URL}/aler
 const GET_NICKNAME_MODULE_URL = (userId: string) => `${USER_MODULE_URL}/?nickname=${userId}`;
 const GET_IS_ADMIN_MODULE_URL = `${USER_MODULE_URL}/is-admin`;
 
-const BUYING_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/buy`;
-const GET_MY_BUYING_URL = `${BUYING_MODULE_URL}/my`;
-const POST_PRODUCT_REVIEW_URL = `${BUYING_MODULE_URL}/my/review`;
+const BUYING_MODULE_URL = `${API_DOMAIN}/api/v1/mypage`;
+const GET_MY_BUYING_URL = `${BUYING_MODULE_URL}/buy/my`;
+const GET_MY_SALES_URL = `${BUYING_MODULE_URL}/sales`;
+const POST_PRODUCT_REVIEW_URL = `${BUYING_MODULE_URL}/buy/my/review`;
+const GET_PRODUCT_ORDER_ITEMS_URL = (sequence: number | string) =>  `${BUYING_MODULE_URL}/product-sequence?productSequence=${sequence}`;
+
 
 const GET_MY_COMMUNTY_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/post`;
 const GET_MY_COMMUNTY_COMMENT_URL = `${API_DOMAIN}/api/v1/mypage/community/comment`;
@@ -924,5 +929,21 @@ export const getMyBuyingRequest = async (accessToken: string) => {
   const responseBody = await axios.get(GET_MY_BUYING_URL, bearerAuthorization(accessToken))
   .then(responseSuccessHandler<GetMyBuyingResponseDto>)
   .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get my sales API 요청 함수 //
+export const getMySalesRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(GET_MY_SALES_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetMySalesResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get order items APi 요청 함수 //
+export const getProductOrderItemsRequest = async (sequence: number | string) => {
+  const responseBody = await axios.get(GET_PRODUCT_ORDER_ITEMS_URL(sequence))
+    .then(responseSuccessHandler<GetOrderItemsResponseDto>)
+    .catch(responseErrorHandler);
   return responseBody;
 }

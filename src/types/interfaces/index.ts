@@ -12,7 +12,8 @@ import MyBuying from "./my-buying-interface"
 import ProductReviews from "./ProductReviews.interface"
 import Schedule from "./Schedule.interface"
 import ProductReviewImages from "./product-review-images.interface"
-
+import MySale from "./my-sale-interface"
+import OrderItems from "./order-items.interface"
 
 export type {
   Product,
@@ -26,6 +27,8 @@ export type {
   StockReservation,
   Wish,
   MyBuying,
+  MySale,
+  OrderItems,
   ProductReviews,
   Schedule,
   ProductReviewImages
