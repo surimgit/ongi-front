@@ -53,6 +53,10 @@ export default function Calendar() {
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, event: any } | null>(null);
   const contextMenuRef = useRef<HTMLDivElement>(null);
 
+  // state: scrap 상태 //
+  const [isScrap, setIsScrap] = useState<boolean>(false);
+  const [scrapedScheduleId, setScrapedScheduleId] = useState<number | null>(null);
+
   // variable: access Token //
   const accessToken = cookies[ACCESS_TOKEN];
 
@@ -133,6 +137,67 @@ export default function Calendar() {
   };
   const closeContextMenu = () => {
     setContextMenu(null);
+  };
+
+  // function: 정책 스크랩 저장 함수 //
+  const onScrapPolicy = async (policy: { title: string; category: string; content: string; period: string }) => {
+    if (!accessToken) return;
+  
+    let start = '';
+    let end = '';
+  
+    const formatToLocalDateTime = (dateString: string) => {
+      return `${dateString} 00:00:00`;
+    };
+
+    if (policy.period === '상시') {
+      start = '2000-01-01';
+      end = '2099-12-31';
+    } else {
+      [start, end] = policy.period.split(' ~ ').map(date => date.replace(/\./g, '-'));
+    }
+  
+    if (!isScrap) {
+      const dto: PostScheduleRequestDto = {
+        calendarTitle: policy.title,
+        calendarCategory: policy.category,
+        calendarMemo: policy.content,
+        calendarStart: formatToLocalDateTime(start),
+        calendarEnd: formatToLocalDateTime(end),
+        calendarRepeat: '반복 없음',
+        color: 'blue'
+      };
+
+      console.log(dto);
+      const response = await postScheduleRequest(dto, accessToken);
+      if (!response || response.code !== 'SU') {
+        alert("스크랩 실패");
+        return;
+      }
+
+      if ('calendarSequence' in response) {
+        console.log(response);
+        setScrapedScheduleId(response.calendarSequence);
+        setIsScrap(true);
+      } else {
+        alert('calendarSequence가 없습니다.');
+      }
+  
+    } else {
+      if (scrapedScheduleId === null) {
+        alert("삭제할 스크랩 ID가 없습니다.");
+        return;
+      }
+  
+      const res = await deleteScheduleRequest(scrapedScheduleId, accessToken);
+      if (!res || res.code !== 'SU') {
+        alert("스크랩 해제 실패");
+        return;
+      }
+      
+      setScrapedScheduleId(null);
+      setIsScrap(false); 
+    }
   };
 
   // effect: 메뉴 바깥 클릭 시 닫히도록 처리 //
@@ -272,7 +337,7 @@ export default function Calendar() {
         </div>
       </div>
     )}
-      {pathname === MAIN_ABSOLUTE_PATH ? undefined : <Policy items={[]} />}
+      {pathname === MAIN_ABSOLUTE_PATH ? undefined : <Policy items={[]} onScrap={onScrapPolicy}/>}
     </div>
   );
 }

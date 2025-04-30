@@ -30,7 +30,7 @@ import GetAlertResponseDto from './dto/response/alert/get-alert.response.dto';
 import { PostOrderItemRequestDto, PostPaymentCancelRequestDto } from './dto/request/payment';
 import { GetProductReviewsResponseDto } from './dto/response/product';
 import { PatchCalendarRequestDto, PostScheduleRequestDto } from './dto/request/calendar';
-import { GetAllScheduleResponseDto } from './dto/response/calendar';
+import { GetAllScheduleResponseDto, PostScheduleResponseDto } from './dto/response/calendar';
 import { FindIdResponseDto } from './dto/response/auth/find-id.response.dto';
 import PatchCommunityCommentRequestDto from './dto/request/community/patch-community-comment.request.dto';
 import PostReportRequestDto from './dto/request/report/post-report.request.dto';
@@ -794,11 +794,12 @@ export const getAlertRequest = async (accessToken: string) => {
 }
 
 // function: post Schedule API 요청 함수 //
-export const postScheduleRequest = async (requestBody:PostScheduleRequestDto, accessToken: string) => {
+export const postScheduleRequest = async (
+  requestBody:PostScheduleRequestDto, accessToken: string
+): Promise<PostScheduleResponseDto | ResponseDto | null> => {
   const responseBody = await axios.post(POST_SCHEDULE_URL, requestBody, bearerAuthorization(accessToken))
-  .then(responseSuccessHandler)
+  .then(responseSuccessHandler<PostScheduleResponseDto>)
   .catch(responseErrorHandler);
-  console.log("📤 저장 요청 바디:", requestBody);
   return responseBody;
 } 
 
