@@ -596,14 +596,6 @@ export const getCommunityLikedRequest = async (postSequence: number | string) =>
   return responseBody;
 };
 
-// function: patch question answer API 요청 함수 //
-export const patchAnswerRequest = async (questionSequence: number | string, requestBody: PatchAnswerRequestDto, accessToken: string) => {
-  const responseBody = await axios.patch(PATCH_QUESTION_ANSWER_URL(questionSequence), requestBody, bearerAuthorization(accessToken))
-    .then(responseSuccessHandler)
-    .catch(responseErrorHandler)
-  return responseBody;
-};
-
 // function: post notice API 요청 함수 //
 export const postNoticeRequest = async (requestBody: PostNoticeRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_NOTICE_URL, requestBody, bearerAuthorization(accessToken))

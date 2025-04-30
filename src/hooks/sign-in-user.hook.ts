@@ -39,7 +39,6 @@ const useSignInUser = () => {
 
         setUserId(userId);
         setNickname(nickname);
-        setAdmin(admin);
         setProfileImage(profileImage);
         setIsAdmin(isAdmin);
     }
