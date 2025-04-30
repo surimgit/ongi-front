@@ -151,7 +151,7 @@ export default function CommunityMain() {
     <div id='info-community-main-wrapper'>
       <div className='board-header-container'>
         <div className='board-name'>
-          <span className='board-type'>
+          <div className='board-type'>
           {
           boardType === 
           '전체 글' ? '전체 글'
@@ -159,8 +159,8 @@ export default function CommunityMain() {
           : boardType === '정보 게시판' ? '정보 '
           : boardType === '우리 동네 게시판' ? '우리 동네 ' : ''
           }
-          </span>
-          <span>게시판</span>
+          </div>
+          <div>게시판</div>
         </div>
         { categoryType &&
           <div className='category-name'>

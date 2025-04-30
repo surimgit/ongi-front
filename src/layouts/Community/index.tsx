@@ -109,9 +109,15 @@ export default function CommunityLayout() {
                 </div>
                 <div className='divider'></div>
                 <div className='category-container'>
-                    <div className={infoBoardClass} onClick={() => onBoardClickHandler('정보 게시판')}>💡정보 게시판</div>
-                    <div className={studyBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '공부')}>ㄴ공부</div>
-                    <div className={beautyBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '미용')}>ㄴ미용</div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>💡</div>
+                        <div className={infoBoardClass} onClick={() => onBoardClickHandler('정보 게시판')}>정보 게시판</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={studyBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '공부')}>공부</div>
+                    </div>
+                    <div className={beautyBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '미용')}>미용</div>
                     <div className={travleBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '여행')}>ㄴ여행</div>
                     <div className={mediaBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '영화/드라마')}>ㄴ영화/드라마</div>
                     <div className={exerciseBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '운동')}>ㄴ운동</div>

@@ -77,9 +77,17 @@
     text-decoration: underline;
 }
 
+#community-layout-wrapper .category-item-box,
+#community-layout-wrapper .item-icon {
+    display: flex;
+    align-items: center;
+}
+
+#community-layout-wrapper .large-category,
 #community-layout-wrapper .category-item {
-    padding: 0px 22px;
-    
+    display: flex;
+    align-items: bottom;
+
     cursor: pointer;
 }
 
