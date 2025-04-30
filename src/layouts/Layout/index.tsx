@@ -135,9 +135,6 @@ export default function Layout() {
     setAlerts(alerts);
   }
 
-  // event handler: 로고 이미지 클릭 이벤트 처리 //
-  const onLogoClickHandler = () => {navigator(MAIN_ABSOLUTE_PATH);};
-
   // function: delete all alert response 처리 함수 //
   const deleteAlertResponse = (responseBody: ResponseDto | null) => {
     const message =
@@ -200,6 +197,11 @@ export default function Layout() {
   const onDeleteAlertClickHandler = () => {
     deleteAlertRequest('', accessToken).then(deleteAlertResponse);
   };
+
+  // event handler: 로고 이미지 클릭 이벤트 처리 //
+  const onLogoClickHandler = () => {
+    navigator(MAIN_ABSOLUTE_PATH);
+  }
 
   // effect: cookie의 accessToken이 변경될 시 실행할 함수 //
   useEffect(() => {
