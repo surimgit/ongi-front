@@ -1,97 +1,218 @@
-import React, { useEffect, useState } from "react"
-import './style.css'
+import React, { useEffect, useState } from "react";
+import './style.css';
 
-import Plus from 'src/assets/images/plus-icon.png'
-import Minus from 'src/assets/images/minus-icon.png'
-import Scrap from 'src/assets/images/scrap.png'
-import ScrapActive from 'src/assets/images/scrap-active.png'
-import { i } from "react-router/dist/development/fog-of-war-oa9CGk10"
-import { usePagination } from "src/hooks"
-import Pagination from "src/components/Pagination"
-import { useNavigate } from "react-router"
+import Plus from 'src/assets/images/plus-icon.png';
+import Minus from 'src/assets/images/minus-icon.png';
+import Scrap from 'src/assets/images/scrap.png';
+import ScrapActive from 'src/assets/images/scrap-active.png';
+import { usePagination } from "src/hooks";
+import Pagination from "src/components/Pagination";
+import { useLocation, useNavigate } from "react-router";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { ACCESS_TOKEN, POLICY_ABSOLUTE_PATH } from "src/constants";
+import { PolicyList } from "src/types/interfaces";
+import { GetPolicyListResponseDto } from "src/apis/dto/response/calendar/get-policy-list.response.dto";
 
 type PolicyResult = {
     id: number;
+    plcyNo: string;
     title: string;
     content: string;
     category: string;
     region: string;
     period: string;
+    aplyPrdSeCd: string;
+    startDate: string;
+    endDate: string;
 };
 
 type Props = {
+    // searchKeyword: string;
+    // page: number;
+    // section: number;
+    // autoSearch: boolean;
     items: PolicyResult[];
-    onScrap?: (item: { title: string; period: string }) => void;
-}
+    onScrap?: (item: 
+        { title: string; 
+          category: string;
+          content: string;
+          period: string;
+        }) => void;
+};
 
-export default function Policy({items, onScrap}: Props) {
+export default function Policy({ /*searchKeyword, page, section, autoSearch,*/ items, onScrap} : Props) {
 
-    // state: calendar event 상태 //
-    const [calendarEvents, setCalendarEvents] = useState<{title: string, start: string, end: string}[]>([]);
+    // state: cookie 상태 //
+    const [cookies] = useCookies();
 
-    // state: scrap 상태 //
-    const [isScrap, setIsScrap] = useState<boolean>(false);
+    // state: navigator 상태 //
+    const navigator = useNavigate();
 
-    // state: 임시값 //
-    const exampleItems: PolicyResult[] = Array.from({ length: 20 }, (_, i) => ({
-        id: i + 1,
-        title: `청년정책 제목 ${i + 1}`,
-        content: `이것은 정책 ${i + 1}에 대한 간단한 설명입니다.`,
-        category: i % 2 === 0 ? '주거지원' : '취업지원',
-        region: i % 3 === 0 ? '서울' : i % 3 === 1 ? '부산' : '대구',
-        period: '2025.04.01 ~ 2025.04.30'
-    }));
+    // state: location 상태 //
+    const location = useLocation();
     
-    // state: card pagination //
+    // state: calendar 연결 //
+    const [calendarEvents, setCalendarEvents] = useState<{ title: string; start: string; end: string }[]>([]);
+    const [scrapStates, setScrapStates] = useState<{ [id: number]: boolean }>({});
+    
+    // state: 키워드 상태 //
+    const [keyword, setKeyword] = useState<string>('');
+    
+    // state: 검색 결과 //
+    const [searchResults, setSearchResults] = useState<PolicyResult[]>([]);
+    
+    // state: page, section 상태 //
     const itemsPerPage = 9;
     const [currentPage, setCurrentPage] = useState(1);
     const [currentSection, setCurrentSection] = useState(1);
 
-    const totalPages = Math.ceil(exampleItems.length / itemsPerPage);
-    const pagedItems = exampleItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-    
+    const totalPages = Math.ceil(searchResults.length / itemsPerPage);
+    const pagedItems = searchResults.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
     const pageList = Array.from({ length: totalPages }, (_, i) => i + 1);
-    // state: -------------- //
+    const sectionSize = 10;
 
-    // function: 네비게이터 함수 //
-    const navigator = useNavigate();
+    const sectionStartPage = (currentSection - 1) * sectionSize + 1;
+    const sectionEndPage = Math.min(currentSection * sectionSize, totalPages);
 
-    // function: 날짜 파싱 함수 //
-    const parsePeriod = (period: string) => {
-        const [start, end] = period.split(' ~ ').map(date => date.replace(/\./g, '-'));
-        return { start, end };
+    const sectionPageList = pageList.filter(page => page >= sectionStartPage && page <= sectionEndPage);
+    // state: --------------------- //
+    
+    // variable: access token //
+    const accessToken = cookies[ACCESS_TOKEN];
+    
+    // function: 기간 format 변경 //
+    const formatPeriod = (period: string | undefined): { startDate: string; endDate: string;} => {
+        if(!period || period.trim() === '') {
+            return {startDate: '', endDate: ''};
+        }
+
+        const [startRaw, endRaw] = period.split(' ~ ');
+
+        const formatDate = (dateStr: string) => {
+            if(!dateStr || dateStr.length !== 8) return '';
+            return `${dateStr.slice(0,4)}-${dateStr.slice(4,6)}-${dateStr.slice(6,8)}`;
+        };
+
+        const startDate = formatDate(startRaw);
+        const endDate = formatDate(endRaw);
+
+        return { startDate, endDate };
+    };
+
+    // function: D-Day 계산 //
+    const calculateDDay = (endDate: string): string => {
+        if(!endDate) return '상시';
+        
+        const today = new Date();
+        const targetDate = new Date(endDate);
+
+        const diffTime = targetDate.getTime() - today.getTime();
+
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays > 0) return `D-${diffDays}`;
+        if (diffDays === 0) return 'D-Day';
+        if (diffDays < 0) return '마감'; 
+        return '';
     };
 
     // event handler: 이전 섹션 클릭 이벤트 처리 //
     const onPreSectionClickHandler = () => {
         if (currentSection <= 1) return;
         setCurrentSection(currentSection - 1);
-        setCurrentPage((currentSection - 1) * 10);
+        setCurrentPage((currentSection - 2) * 10 + 1);
     };
 
-    // event handler: 다음 섹션 클릭 이벤트 처리 //
+    // event handler: 다음 섹션 클릭 이벤트 처리//
     const onNextSectionClickHandler = () => {
-        if (currentSection === totalPages) return;
+        if (currentSection * 10 >= totalPages) return;
         setCurrentSection(currentSection + 1);
         setCurrentPage(currentSection * 10 + 1);
     };
 
-    // event handler: 정책 카드 클릭 이벤트 처리 //
-    const onPolicyCardClickHandler = () => {
-        navigator('/policy');
-    };
+    // event handler: 정책 더보기 클릭 이벤트 처리 //
+    const onPolicyCardClickHandler = (plcyNo: string, plcyNm: string) => {
+        navigator(POLICY_ABSOLUTE_PATH(plcyNo, plcyNm, keyword, String(currentPage), String(currentSection)));
+    }; 
 
-    // event handler: 정책 스크랩 //
+    // event handler: 스크랩 클릭 이벤트 처리 //
     const onScrapClickHandler = (item: PolicyResult) => {
-        setIsScrap(prev => !prev);
-        onScrap?.({ title: item.title, period: item.period });
+        let periodFormat = `${item.startDate} ~ ${item.endDate}`;
+        if(item.aplyPrdSeCd === '0057002' || item.aplyPrdSeCd === '0057003') {periodFormat = '상시';}
+        setScrapStates(prev => ({
+            ...prev,
+            [item.id]: !prev[item.id]
+        }));
+        console.log('aplyPrdSeCd: ', item.aplyPrdSeCd);
+        onScrap?.({ title: item.title, category: item.category, content: item.content, period: periodFormat  });
     };
 
+    // event handler: 검색어 변경 이벤트 처리 //
+    const onKeywordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setKeyword(e.target.value);
+    };
+
+    // event handler: 검색버튼 클릭 이벤트 처리 //
+    const onSearchClickHandler = async () => {
+        try {
+            const response = await axios.get<GetPolicyListResponseDto>('http://localhost:4000/api/v1/policy-list', {
+                params: { keyword },
+                headers: { Authorization: `Bearer ${accessToken}` }
+            });
+            
+            const resultList = response.data || [];
+            
+            const mappedResults: PolicyResult[] = resultList.map((item: PolicyList, index: number) => {
+                const { startDate, endDate } = formatPeriod(item.aplyYmd);
+
+                return {
+                    id: index,
+                    plcyNo: item.plcyNo,
+                    title: item.plcyNm || '',
+                    content: item.plcyExplnCn || '',
+                    category: item.lclsfNm || '-',
+                    region: item.zipCd || '',
+                    period: item.aplyYmd || '상시',
+                    aplyPrdSeCd: item.aplyPrdSeCd,
+                    startDate,
+                    endDate
+                };
+            });              
+            setSearchResults(mappedResults);
+            setCurrentPage(1);
+            setCurrentSection(1);
+
+            const queryParams = new URLSearchParams({
+              keyword,
+              page: '1',
+              section: '1'
+            }).toString();
+            navigator(`?${queryParams}`);
+        } catch (error) {
+            console.error('검색 오류:', error);
+        }
+    };
+
+    // effect: 렌더 시 실행 함수 //
+    useEffect(() => {
+        const query = new URLSearchParams(location.search);
+        const keyword = query.get('keyword') || '';
+        const page = query.get('page') || '1';
+        const section = query.get('section') || '1';
+        
+        setKeyword(keyword);
+        setCurrentPage(Number(page));
+        setCurrentSection(Number(section));
+
+        // if (keyword) fetchPolicies(keyword);
+    }, []);
 
     return (
         <div id="policy-wrapper">
             <div className="search-container">
-                <input type="text" className="search-bar" placeholder="검색어 입력"/>
+                <input type="text" className="search-bar" placeholder="검색어 입력" value={keyword} 
+                onChange={onKeywordChangeHandler} onKeyDown={(e) => {if (e.key === 'Enter') {onSearchClickHandler();}}} />
                 <div className="category organization">
                     담당기관
                     <img src={Plus} alt="plus" />
@@ -100,34 +221,38 @@ export default function Policy({items, onScrap}: Props) {
                     정책분야
                     <img src={Plus} alt="plus" />
                 </div>
+                <button className='button' onClick={onSearchClickHandler}>검색</button>
             </div>
-            <div className="search-result">총 {exampleItems.length.toLocaleString()}건의 정책정보가 있습니다.</div>
+            <div className="search-result">총 {searchResults.length.toLocaleString()}건의 정책정보가 있습니다.</div>
 
-            <div className="grid policy-card-container" >
+            <div className="grid policy-card-container">
                 {pagedItems.map((item) => (
-                <div key={item.id} className="policy-card-box" >
-                    <div className="remain">{item.period}
-                        <img
-                        src={isScrap ? ScrapActive : Scrap}
-                        onClick={() => onScrapClickHandler(item)}
-                        style={{ cursor: 'pointer' }}
-                        />
+                    <div key={item.id} className="policy-card-box">
+                        <div className="remain">{calculateDDay(item.endDate)}
+                            <img
+                                src={scrapStates[item.id] ? ScrapActive : Scrap}
+                                onClick={() => onScrapClickHandler(item)}
+                                style={{ cursor: 'pointer' }}
+                                alt="스크랩"
+                            />
+                        </div>
+                        <div className="category">{item.category}</div>
+                        <div className="region">{item.region}</div>
+                        <div className="title">{item.title}</div>
+                        <div className="content">{item.content}</div>
+                        <div className="period">
+                            <span className="period span">
+                                신청기간&nbsp;&nbsp;&nbsp;</span>|&nbsp;&nbsp;&nbsp;
+                                {(!item.startDate && !item.endDate) ? '상시' : `${item.startDate} ~ ${item.endDate}`}
+                        </div>
+                        <button className="more" onClick={() => onPolicyCardClickHandler(item.plcyNo, item.title)}>자세히보기</button>
                     </div>
-                    <div className="category">{item.category}</div>
-                    <div className="region">{item.region}</div>
-                    <div className="title">{item.title}</div>
-                    <div className="content">{item.content}</div>
-                    <div className="period">
-                        <span className="period span">신청기간&nbsp;&nbsp;&nbsp;</span>|&nbsp;&nbsp;&nbsp;{item.period}
-                    </div>
-                    <button className="more" onClick={onPolicyCardClickHandler}>자세히보기</button>
-                </div>
                 ))}
-            </div>            
+            </div>
             <div className='pagination-container'>
                 <div className="pagination-box">
-                <div className='pagination-button left' onClick={onPreSectionClickHandler}></div>
-                    {pageList.map((page) => (
+                    <div className='pagination-button left' onClick={onPreSectionClickHandler}></div>
+                    {sectionPageList.map((page) => (
                         <div
                             key={page}
                             className={`page ${page === currentPage ? "active" : ""}`}
@@ -140,5 +265,5 @@ export default function Policy({items, onScrap}: Props) {
                 </div>
             </div>
         </div>
-    )
+    );
 }

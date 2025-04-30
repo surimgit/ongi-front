@@ -34,7 +34,8 @@ import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_
     COMMUNITY_EDIT_PATH,
     REPORT_PATH,
     COMMUNITY_SEARCH_PATH,
-    CALENDAR_PATH} from './constants';
+    CALENDAR_PATH,
+    POLICY_PATH} from './constants';
 
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
@@ -86,10 +87,11 @@ import Calendar from './views/Calendar';
 import FindId from './views/Auth/FindId';
 import FindPassword from './views/Auth/FindPassword';
 import FindResult from './views/Auth/FindResult';
+import PolicyView from './views/Policy/PolicyView';
+import PolicyViewPage from './views/Policy/PolicyView';
+import CommunitySearch from './views/Community/Search';
 import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
-import CommunitySearch from './views/Community/Search';
-import PolicyView from './views/Policy/PolicyView';
 
 function App() {
   return (
@@ -114,7 +116,7 @@ function App() {
           <Route index element={<NeedHelper />} />
         </Route>
         <Route path={CALENDAR_PATH} element={<Calendar/>}/>
-        <Route path='policy' element={<PolicyView />}/>
+        <Route path={POLICY_PATH} element={<PolicyViewPage />} />
 
         <Route path={PRODUCT_PATH}>
           <Route index element={<ProductMain />} />

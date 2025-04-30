@@ -102,7 +102,6 @@
     display: flex;
     align-items: center;
     padding: 25px 0;
-    margin-bottom: 12px;
     border-bottom: 0.5px solid #ddd;
   }
   
@@ -117,8 +116,11 @@
   
   .content-detail {
     display: inline-block;
+    width: 610px;
     font-size: 16px;
     line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: normal;
   }
 
 .policy-move-container {
@@ -161,6 +163,11 @@
     border-radius: 10px;
     background-color: var(--Primary);
     color: white;
+    cursor: pointer;
+}
+
+.policy-move-container .hyperlink:hover {
+    background-color: #43baff;
 }
 
 .policy-move-container .list {
@@ -171,4 +178,5 @@
     height: 40px;
     border: none;
     border-radius: 10px;
+    cursor: pointer;
 }

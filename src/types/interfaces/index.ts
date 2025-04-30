@@ -13,6 +13,7 @@ import ProductReviews from "./ProductReviews.interface"
 import Schedule from "./Schedule.interface"
 import ProductReviewImages from "./product-review-images.interface"
 
+import PolicyList from "./policy-list.interface"
 
 export type {
   Product,
@@ -28,5 +29,6 @@ export type {
   MyBuying,
   ProductReviews,
   Schedule,
+  PolicyList,
   ProductReviewImages
 }
