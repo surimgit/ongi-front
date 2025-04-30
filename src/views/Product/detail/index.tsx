@@ -13,7 +13,6 @@ import { PostShoppingCartRequestDto } from 'src/apis/dto/request/shopping-cart';
 import { Product, ProductReviewImages, ProductReviews, ShoppingCart } from 'src/types/interfaces';
 import { GetProductReviewsResponseDto, GetReserveResponseDto, GetReviewImagesResponseDto } from 'src/apis/dto/response/product';
 import { usePagination } from 'src/hooks';
-import { Console } from 'console';
 import activeStar from 'src/assets/images/icon-star-active.png';
 import emptyStar from 'src/assets/images/icon-star-none.png';
 import { useSignInUserStore } from 'src/stores';
@@ -326,6 +325,7 @@ export default function DetailProduct() {
       return;
     }
 
+
     const { reviewImages } = responseBody as GetReviewImagesResponseDto;
     setReviewImages(reviewImages);
   }
@@ -448,7 +448,7 @@ export default function DetailProduct() {
               </div>
             )}
             <div className='info-box'>
-              <div className='content sub'>{userId}</div>
+              <div className='content sub'>{writerId}</div>
               <div className='title bold'>{name}</div>
               <div className='price-box'>
                 <div className='title bold'>{price.toLocaleString()}원</div>
@@ -456,11 +456,12 @@ export default function DetailProduct() {
               </div>
             </div>
             <div className='participation-box'>
-              <div className='content bold'>{boughtAmount}명 구매</div>
+              <div className='content sub'>구매수량</div>
+              <div className='content bold'>{boughtAmount.toLocaleString()}개</div>
               <div className='content bold red-title'>{achievement}% 달성</div>
               <div className='content-box'>
-                <div className='content sub'>{}잔여 수량</div>
-                <div className='content bold'>{remainingQuantity - quantity} 개</div>
+                <div className='content sub'>잔여 수량</div>
+                <div className='content bold'>{(remainingQuantity - quantity).toLocaleString()} 개</div>
               </div>
               <div className='rating-box'>
                 <div className='star'></div>

@@ -88,6 +88,7 @@ function ShoppingCartContent({shoppingCart, isSelectAll, accessToken, fetchShopp
           { isDeleted  ? (<div className='deleted-image-placeholder'>이미지 없음</div>)
             : (<img src={image} alt='상품 이미지' style={{backgroundSize:'cover'}}/>)
           }
+          
         </div>
         <div className='product-content-box'>
           <div className='product-title'>{isDeleted ? '삭제된 상품입니다.' : name}</div>

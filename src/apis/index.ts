@@ -736,14 +736,6 @@ export const getAlertRequest = async (accessToken: string) => {
   return responseBody;
 }
 
-
-// function: get my buying API 요청 함수 //
-export const getMyBuyingRequest = async (accessToken: string) => {
-  const responseBody = await axios.get(GET_MY_BUYING_URL, bearerAuthorization(accessToken))
-  .then(responseSuccessHandler<GetMyBuyingResponseDto>)
-  .catch(responseErrorHandler)
-}
-
 // function: post Schedule API 요청 함수 //
 export const postScheduleRequest = async (requestBody:PostScheduleRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_SCHEDULE_URL, requestBody, bearerAuthorization(accessToken))
@@ -869,18 +861,11 @@ export const getIsAdminRequest = async (accessToken: string) => {
   .catch(responseErrorHandler);
   return responseBody;  
 };
+
 // function: get my buying API 요청 함수 //
 export const getMyBuyingRequest = async (accessToken: string) => {
   const responseBody = await axios.get(GET_MY_BUYING_URL, bearerAuthorization(accessToken))
   .then(responseSuccessHandler<GetMyBuyingResponseDto>)
-  .catch(responseErrorHandler);
-  return responseBody;
-}
-
-// function: post product review API 요청 함수 //
-export const postProductReviewRequest = async (requestBody: PostProductReviewRequestDto, accessToken: string) => {
-  const responseBody = await axios.post(POST_PRODUCT_REVIEW_URL, (requestBody), bearerAuthorization(accessToken))
-  .then(responseSuccessHandler)
   .catch(responseErrorHandler);
   return responseBody;
 }
