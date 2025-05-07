@@ -104,6 +104,10 @@ function CommentItem({
   // state: 해당 게시글 제목 상태 //
   const [communityTitle, setCommunityTitle] = useState<string>('');
 
+  // state: 해당 게시글 제목 상태 //
+  const [communityCategory, setCommunityCategory] = useState<string>('');
+
+
   // state: cookie 상태 //
   const [cookies] = useCookies();
 
@@ -123,8 +127,9 @@ function CommentItem({
       return;
     }
 
-    const {title} = responseBody as GetCommunityPostResponseDto;
+    const {title, category} = responseBody as GetCommunityPostResponseDto;
     setCommunityTitle(title);
+    setCommunityCategory(category);
   }
 
   // effect: 컴포넌트 로드시 실행할 함수 //
@@ -141,7 +146,7 @@ function CommentItem({
 
   return(
     <div className='tr comment'>
-      <div className='td category'>{postSequence}</div> 
+      <div className='td category'>{communityCategory}</div> 
       <div className='td comment-title-box' onClick={onClick}>
         <span className='td content' >{comment}</span>
         <span className='td title' >{communityTitle}</span>

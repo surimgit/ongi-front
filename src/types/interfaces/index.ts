@@ -12,7 +12,7 @@ import MyBuying from "./my-buying-interface"
 import ProductReviews from "./ProductReviews.interface"
 import Schedule from "./Schedule.interface"
 import ProductReviewImages from "./product-review-images.interface"
-
+import Badge from "./badge.interface"
 import PolicyList from "./policy-list.interface"
 
 export type {
@@ -30,5 +30,6 @@ export type {
   ProductReviews,
   Schedule,
   PolicyList,
-  ProductReviewImages
+  ProductReviewImages,
+  Badge
 }

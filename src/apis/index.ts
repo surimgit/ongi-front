@@ -21,7 +21,7 @@ import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import PatchCommunityPostRequestDto from './dto/request/community/patch-community-post.request.dto';
 import { PatchAnswerRequestDto, PatchNoticeRequestDto, PostNoticeRequestDto } from './dto/request/admin';
 import { PatchQuestionRequestDto, PostQuestionRequestDto } from './dto/request/question';
-import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchUserIntroductionRequestDto, PostProductReviewRequestDto } from './dto/request/user';
+import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchUserAddressRequestDto, PatchUserPasswordRequestDto, PatchUserIntroductionRequestDto, PostProductReviewRequestDto } from './dto/request/user';
 import { GetNoticeListResponseDto, GetNoticeResponseDto } from './dto/response/notice';
 import { GetQuestionListResponseDto, GetQuestionResponseDto } from './dto/response/question';
 import PostAlertRequestDto from './dto/request/alert/post-alert.request.dto';
@@ -41,6 +41,8 @@ import PatchResignRequestDto from './dto/request/user/patch-resign.request.dto';
 import GetAlertedCountResponseDto from './dto/response/report/get-alerted-count.response.dto';
 import { GetReviewImagesResponseDto } from './dto/response/product';
 import GetCommunityCommentsResponse from './dto/response/community/get-community-comments.response.dto';
+import { access } from 'fs';
+import GetBadgeListResponseDto from './dto/response/user/get-badge-list.responseDto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -129,10 +131,13 @@ const OTHER_MYPAGE_MODULE_URL =  `${API_DOMAIN}/api/v1/mypage/other`;
 const OTHER_MYPAGE_VIEW_URL = (userId: string) => `${OTHER_MYPAGE_MODULE_URL}/${userId}`;
 const PATCH_MYPAGE_URL = `${MYPAGE_MODULE_URL}`;
 const MYPAGE_ACCOUNT_URL = `${API_DOMAIN}/api/v1/mypage/account`;
-const PATCH_MYPAGE_ACCOUNT_URL = `${MYPAGE_ACCOUNT_URL}`;
+const PATCH_MYPAGE_PASSWORD_URL = `${MYPAGE_ACCOUNT_URL}/patch`;
+const PATCH_MYPAGE_ADDRESS_URL = `${MYPAGE_ACCOUNT_URL}`;
 const MYPAGE_KEYWORD_URL = `${MYPAGE_MODULE_URL}/keyword`;
 const ADD_MYPAGE_KEYWORD_URL =  `${MYPAGE_KEYWORD_URL}`;
 const DELETE_MYPAGE_KEYWORD_URL =  `${MYPAGE_KEYWORD_URL}`;
+const ADD_BADGE_URL = `${MYPAGE_MODULE_URL}/badge`;
+const GET_BADGE_URL = `${MYPAGE_MODULE_URL}/badge`;
 
 const QUESTION_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/question`;
 const POST_QUESTION_URL = `${QUESTION_MODULE_URL}`;
@@ -738,9 +743,17 @@ export const patchUserIntroductionRequest = async (requestBody: PatchUserIntrodu
   return responseBody;
 };
 
-// function: patch user account API 요청 함수 //
-export const patchUserAccountRequest = async (requestBody: PatchQuestionRequestDto, accessToken: string) => {
-  const responseBody = await axios.patch(PATCH_MYPAGE_ACCOUNT_URL, requestBody, bearerAuthorization(accessToken))
+// function: patch user password API 요청 함수 //
+export const patchUserPasswordRequest = async (requestBody: PatchUserPasswordRequestDto, accessToken: string) => {
+  const responseBody = await axios.patch(PATCH_MYPAGE_PASSWORD_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler)
+  return responseBody;
+};
+
+// function: patch user password API 요청 함수 //
+export const patchUserAddressRequest = async (requestBody: PatchUserAddressRequestDto, accessToken: string) => {
+  const responseBody = await axios.patch(PATCH_MYPAGE_ADDRESS_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler)
   return responseBody;
@@ -927,4 +940,20 @@ export const getMyBuyingRequest = async (accessToken: string) => {
   .then(responseSuccessHandler<GetMyBuyingResponseDto>)
   .catch(responseErrorHandler);
   return responseBody;
+}
+
+// function: add badge API 요청 함수 //
+export const addBadgeRequest = async (accessToken: string) => {
+  const reseponseBody = await axios.post(ADD_BADGE_URL, {}, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return reseponseBody;
+}
+
+// function: get badge list API 요청 함수 //
+export const getBadgeListRequest = async (accessToken: string) => {
+  const reseponseBody = await axios.get(GET_BADGE_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetBadgeListResponseDto>)
+    .catch(responseErrorHandler);
+  return reseponseBody;
 }
