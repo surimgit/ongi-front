@@ -3,4 +3,6 @@ export default interface OrderItems {
   productSequence: number;
   quantity: number;
   waybillNumber: string;
+  deliveryAddressSnapshot: string;
+  approvedTime: string;
 }

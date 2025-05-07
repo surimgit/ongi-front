@@ -74,6 +74,7 @@ export default function ProductWrite() {
   // event handler: 내용 변경 이벤트 처리 //
   const onContentChangeHandler = (content: string) => {
     setContent(content);
+    console.log(content);
   };
 
   // event handler: 카테고리 변경 이벤트 처리 //
@@ -192,7 +193,7 @@ export default function ProductWrite() {
               <div className='due-date-box'>
                 <div className='title'>모집 마감일자</div>
                 <input
-                  type='date'
+                  type='datetime-local'
                   id='start'
                   name='trip-start'
                   value={deadline}
@@ -203,7 +204,7 @@ export default function ProductWrite() {
               <div className='due-date-box'>
                 <div className='title'>오픈예정 일자</div>
                 <input
-                  type='date'
+                  type='datetime-local'
                   id='start'
                   name='trip-end'
                   value={openDate}

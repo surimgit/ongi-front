@@ -8,5 +8,5 @@ export default interface MySale{
   deadline: string;
   openDate: string;
   image: string;
-  isSoldOut: boolean;
+  status: string;
 }

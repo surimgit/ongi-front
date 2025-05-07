@@ -133,7 +133,7 @@
   
 }
 
-/* #group-buying-main-wrapper .body .order-list-table .tr:not(:first-child){
+#group-buying-main-wrapper .body .order-list-table .tr:not(:first-child){
   display: flex;
   align-items: stretch;
   
@@ -151,12 +151,12 @@
   height: 100%;
   box-sizing: border-box;
 
-  cursor: pointer;
+  cursor: default;
 }
 
 #group-buying-main-wrapper .body .order-list-table .tr:first-child{
   background-color: antiquewhite;
-  padding: 15px 20px;
+  padding: 15px 30px;
   font-size: 20px;
   font-weight: bold;
 }
@@ -167,20 +167,55 @@
   align-items: center;
   
   padding: 15px 30px;
+  text-align: center;
 }
 
-.order-list-table .tr .th.detail-box {
-
+.order-list-table .tr .date {
+  flex: 1;
+  border-right: 2px solid rgb(197, 193, 193);
+  padding: 0px 8px;
 }
 
-.order-list-table .tr .th.quantity{
-
+.order-list-table .tr .detail-box {
+  flex: 4;
+  border-right: 2px solid rgb(197, 193, 193);
 }
 
-.order-list-table .tr .th.delivery{
-  
+.order-list-table .tr .detail-box .product-box {
+  display: flex;
+  align-items: center;
+
+  height: 100%;
+
+  padding: 12px;
+}
+.order-list-table .tr .quantity{
+  flex: 1;
+  border-right: 2px solid rgb(197, 193, 193);
 }
 
-.order-list-table .tr .th.waybill-address{
-  
-} */
+.order-list-table .tr .delivery{
+  flex: 1.6;
+  border-right: 2px solid rgb(197, 193, 193);
+}
+
+.order-list-table .tr .waybill-number{
+  flex: 1.6;
+}
+
+.order-list-table .tr .td.waybill-number{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+.td.waybill-number .waybill-button {
+  border: 2px solid var(--Primary);
+  border-radius: 5px;
+
+  padding: 8px;
+  cursor: pointer;
+}

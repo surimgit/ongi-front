@@ -132,10 +132,12 @@
 }
 .product-list-table .tr .td.image img{
   width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .product-list-table .tr .td.image.expired{
-  flex: 1;
+  
   position: relative;
 }
 
@@ -165,10 +167,9 @@
 }
 
 .product-list-table .tr .td.content-box .content-title {
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 28px;
+  font-weight: 700;
 }
-
 .product-list-table .tr .td.content-box .content-price {
   font-size: 24px;
   font-weight: 500;

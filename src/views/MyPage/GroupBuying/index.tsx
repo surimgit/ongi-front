@@ -290,7 +290,7 @@ export function ProductItem({
   // state: 결제 취소 버튼 클릭 상태 //
   const [isCancelClick, setIsCancelClick] = useState<boolean>(false);
 
-  const { paymentKey, orderItemSequence, name, image, quantity, price, approvedTime } = buyingContent;
+  const { paymentKey, orderItemSequence, name, image, quantity, price, approvedTime, waybillNumber, deliveryAddressSnapshot } = buyingContent;
 
   // variable: 구매일자 변수 //
   const buyingDay = approvedTime.slice(0,10);
@@ -304,7 +304,7 @@ export function ProductItem({
 
   // event handler: 결제취소 버튼 클릭 이벤트 핸들러 //
   const onCancelClickHandler = () => {
-    setIsCancelClick(!isCancelClick);
+    if(window.confirm("구매를 취소하시겠습니까?")) setIsCancelClick(!isCancelClick);
   }
 
   // event handler: 모달 닫기 핸들러 //
@@ -322,12 +322,18 @@ export function ProductItem({
         <div className='text-box'>
           <div className='title'>{name}</div>
           <div className='review-button' onClick={onReviewClickHandler}>리뷰 작성</div>
+          {!waybillNumber &&
           <div className='cancel-button' onClick={onCancelClickHandler}>구매 취소</div>
+          }
+          
         </div>
       </div>
       <div className='td quantity'>{quantity}</div>
       <div className='td amount'>{totalPrice.toLocaleString()}원</div>
-      <div className='td order-number'>F45242Sx</div>
+      <div className='td order-number'>
+        {waybillNumber && <div>{waybillNumber}</div>}
+        {!waybillNumber && <div>아직 배송을 시작하지 않았습니다.</div>}
+      </div>
       {isReviewClick &&
         <Modal title='리뷰 작성' onClose={closeModal}>
           <ProductReview buyingContent={buyingContent} onClose={onReviewClickHandler}/>

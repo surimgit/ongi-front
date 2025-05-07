@@ -176,8 +176,8 @@ export default function DetailProduct() {
   const [deadline, setDeadline] = useState<string>('');
   // state: 오픈예정 일자 상태 //
   const [openDate, setOpenDate] = useState<string>('');
-  // state: 마감 여부 상태 //
-  const [isSoldOut, setIsSoldOut] = useState<boolean>(false);
+  // state: 상품 상태 //
+  const [status, setStatus] = useState<string>('');
   // state: 평점 상태 //
   const [rating, setRating] = useState<number>(0.0);
   // state: 상품 설명 상태 //
@@ -210,6 +210,9 @@ export default function DetailProduct() {
 
   // variable: 오픈 예정 여부 클래스 //
   const isOpen = openDate === null ? true : openDate <= getToday() ? true : false;
+
+  // variable: 리뷰 평점 변수 //
+  const ratingVariable = rating === 0 ? "리뷰 없음" : `${rating}점`;
 
   // function: 평점 라벨 구하는 함수 //
   const getRatingLabel = (rating: number):string => {
@@ -252,24 +255,22 @@ export default function DetailProduct() {
     }
 
     const { image, name, userId, price, category, productQuantity,
-            boughtAmount, purchasedPeople, deadline, isSoldOut, content, openDate
+            boughtAmount, purchasedPeople, deadline, isSoldOut, content, openDate, status
     } = responseBody as GetProductDetailResponseDto;
 
     setImage(image);
     setName(name);
     setWriterId(userId);
-    setPrice(price);
+    setPrice(price * productQuantity);
     setCategory(category);
     setProductQuantity(productQuantity);
     setBoughtAmount(boughtAmount);
     setPurchasedPeople(purchasedPeople);
     setDeadline(deadline);
-    setIsSoldOut(isSoldOut);
     setProductContent(content);
     setOpenDate(openDate);
+    setStatus(status);
   }
-
-  console.log(isSoldOut);
 
   // function: post shopping cart 처리 함수 //
   const postShoppingCartResponse = (responseBody: ResponseDto | null) => {
@@ -359,6 +360,10 @@ export default function DetailProduct() {
 
   // event handler: 찜 상태 변경 처리 핸들러 //
   const onChangeLikedHandler = () => {
+    if(status === "CLOSE") {
+      alert("마감된 상품은 찜할 수 없습니다.");
+      return;
+    }
 
     if(isLiked) {
       deleteWishRequest(+productNumber, accessToken);
@@ -383,13 +388,12 @@ export default function DetailProduct() {
   // event handler: 공동구매 참여 버튼 클릭 이벤트 핸들러 //
   const onParticipationButtonClickHandler = () => {
 
-    console.log(isSoldOut);
-    if(isSoldOut){
+    if(status === 'CLOSE'){
       alert('모두 판매된 상품입니다.');
       return;
     }
 
-    if(!isOpen){
+    if(status === "WAIT"){
       alert('오픈 예정 상품입니다.');
       return;
     }
@@ -450,7 +454,7 @@ export default function DetailProduct() {
             <img src={image} alt='상품 이미지' style={{backgroundSize:'cover'}}/>
           </div>
           <div className='detail-product-info'>
-            {openDate && openDate > getToday() && (
+            {status === "WAIT" && (
               <div className='content category bold'>
                 {category} &nbsp; {openDate} 오픈 예정
               </div>
@@ -459,7 +463,7 @@ export default function DetailProduct() {
               <div className='content sub'>{writerId}</div>
               <div className='title bold'>{name}</div>
               <div className='price-box'>
-                <div className='title bold'>{price.toLocaleString()}원</div>
+                <div className='title bold'>총 {price.toLocaleString()}원</div>
                 <div className='title sub'>(개당 {unitPrice.toLocaleString()}원)</div>
               </div>
             </div>
@@ -473,7 +477,7 @@ export default function DetailProduct() {
               </div>
               <div className='rating-box'>
                 <div className='star'></div>
-                <div className='content'>5.0점</div>
+                <div className='content'>{ratingVariable}</div>
               </div>
             </div>
             <div className='button-box'>

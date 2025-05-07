@@ -7,4 +7,6 @@ export default interface MyBuying {
   quantity: number;
   price: number;
   approvedTime: string;
+  waybillNumber: string;
+  deliveryAddressSnapshot: string;
 }

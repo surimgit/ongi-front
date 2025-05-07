@@ -623,7 +623,7 @@ export default function PostDetail() {
             const requestBody: PostAlertRequestDto = {
                 senderId, receiverId, alertEntitySequence, alertType, reason: null
             };
-            if (senderId === receiverId) return;
+            // if (senderId === receiverId) return;
             postAlertRequest(requestBody, accessToken).then(postAlertResponse);
             setNewCommentTriger(false);
         }

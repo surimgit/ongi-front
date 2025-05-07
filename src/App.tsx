@@ -86,7 +86,6 @@ import FindPassword from './views/Auth/FindPassword';
 import FindResult from './views/Auth/FindResult';
 import PolicyView from './views/Policy/PolicyView';
 import PolicyViewPage from './views/Policy/PolicyView';
-import CommunitySearch from './views/Community/Search';
 import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
 import CommunitySearch from './views/Community/Search';

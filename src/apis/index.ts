@@ -21,7 +21,7 @@ import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import PatchCommunityPostRequestDto from './dto/request/community/patch-community-post.request.dto';
 import { PatchAnswerRequestDto, PatchNoticeRequestDto, PostNoticeRequestDto } from './dto/request/admin';
 import { PatchQuestionRequestDto, PostQuestionRequestDto } from './dto/request/question';
-import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchUserIntroductionRequestDto, PostProductReviewRequestDto } from './dto/request/user';
+import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchUserIntroductionRequestDto, PostProductReviewRequestDto, PostWaybillNumberRequestDto } from './dto/request/user';
 import { GetNoticeListResponseDto, GetNoticeResponseDto } from './dto/response/notice';
 import { GetQuestionListResponseDto, GetQuestionResponseDto } from './dto/response/question';
 import PostAlertRequestDto from './dto/request/alert/post-alert.request.dto';
@@ -170,7 +170,7 @@ const GET_MY_BUYING_URL = `${BUYING_MODULE_URL}/buy/my`;
 const GET_MY_SALES_URL = `${BUYING_MODULE_URL}/sales`;
 const POST_PRODUCT_REVIEW_URL = `${BUYING_MODULE_URL}/buy/my/review`;
 const GET_PRODUCT_ORDER_ITEMS_URL = (sequence: number | string) =>  `${BUYING_MODULE_URL}/product-sequence?productSequence=${sequence}`;
-
+const POST_WAYBILL_NUMBER_URL = `${BUYING_MODULE_URL}/waybill`;
 
 const GET_MY_COMMUNTY_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/post`;
 const GET_MY_COMMUNTY_COMMENT_URL = `${API_DOMAIN}/api/v1/mypage/community/comment`;
@@ -946,6 +946,14 @@ export const getMySalesRequest = async (accessToken: string) => {
 export const getProductOrderItemsRequest = async (sequence: number | string) => {
   const responseBody = await axios.get(GET_PRODUCT_ORDER_ITEMS_URL(sequence))
     .then(responseSuccessHandler<GetOrderItemsResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post waybill number APi 요청 함수 //
+export const postWaybillNumberRequest = async (requestBody: PostWaybillNumberRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_WAYBILL_NUMBER_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;
 }

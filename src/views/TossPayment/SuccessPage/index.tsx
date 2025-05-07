@@ -45,7 +45,7 @@ export default function SuccessPage() {
     };
     
     const orderItemRequestData: PostOrderItemRequestDto = {
-      paymentKey
+      paymentKey, 
     }
 
     async function confirm(requestData: PostPaymentConfirmRequestDto, orderItemRequestData: PostOrderItemRequestDto, accessToken: string) {

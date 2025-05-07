@@ -219,9 +219,7 @@ export default function ShoppingCartMain() {
         list: reserves
       };
     
-      console.log(JSON.stringify(dto, null, 2));
       postReserveRequest(dto, accessToken).then(postReserveResponse);
-      console.log(reserves.toString());
     }
     
   }

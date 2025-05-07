@@ -18,7 +18,9 @@
   display: flex;
   justify-content: space-around;
   height: 60px;
-  background-color: grey;
+
+  color: #666;
+  background-color: #F0F0F0;
   border-radius: 12px;
   overflow: hidden; /* 자식이 radius 밖으로 나가는 것 방지 */
 
@@ -35,9 +37,9 @@
 }
 
 #group-buying-main-wrapper .body .select-bar .content.active{
-  color: var(--Primary);
   font-weight: bold;
-  background-color: white;
+  background-color: #D97C38;
+  color: white;
 }
 
 #group-buying-main-wrapper .body .product-list-table .tr{
