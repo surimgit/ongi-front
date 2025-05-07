@@ -7,6 +7,7 @@
 
 #info-community-main-wrapper .board-header-container {
     display: flex;
+    align-items: center;
     gap: 20px;
 
     margin: 40px 0 10px;
@@ -15,11 +16,20 @@
     font-weight: 700;
 }
 
+#info-community-main-wrapper .board-name {
+    display: flex;
+    gap: 10px;
+}
+
 #info-community-main-wrapper .board-type {
     color: var(--Cancel);
 }
 
 #info-community-main-wrapper .board-header-container .category-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
     padding-left: 20px;
     border-left: 4px solid;
 }

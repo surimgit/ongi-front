@@ -30,7 +30,7 @@ import GetAlertResponseDto from './dto/response/alert/get-alert.response.dto';
 import { PostOrderItemRequestDto, PostPaymentCancelRequestDto } from './dto/request/payment';
 import { GetProductReviewsResponseDto } from './dto/response/product';
 import { PatchCalendarRequestDto, PostScheduleRequestDto } from './dto/request/calendar';
-import { GetAllScheduleResponseDto } from './dto/response/calendar';
+import { GetAllScheduleResponseDto, PostScheduleResponseDto } from './dto/response/calendar';
 import { FindIdResponseDto } from './dto/response/auth/find-id.response.dto';
 import PatchCommunityCommentRequestDto from './dto/request/community/patch-community-comment.request.dto';
 import PostReportRequestDto from './dto/request/report/post-report.request.dto';
@@ -40,6 +40,7 @@ import PatchReportProcessRequestDto from './dto/request/report/patch-report-proc
 import PatchResignRequestDto from './dto/request/user/patch-resign.request.dto';
 import GetAlertedCountResponseDto from './dto/response/report/get-alerted-count.response.dto';
 import { GetReviewImagesResponseDto } from './dto/response/product';
+import GetCommunityCommentsResponse from './dto/response/community/get-community-comments.response.dto';
 import GetMySalesResponseDto from './dto/response/user/get-my-sales.response.dto';
 import GetOrderItemsResponseDto from './dto/response/user/get-order-items.response.dto';
 
@@ -769,7 +770,7 @@ export const getMyCommunityPostRequest = async (accessToken: string) => {
 // function: get my community comment API 요청 함수 //
 export const getMyCommunityCommentRequest = async (accessToken: string) => {
   const responseBody = await axios.get(GET_MY_COMMUNTY_COMMENT_URL, bearerAuthorization(accessToken))
-    .then(responseSuccessHandler<GetCommunityCommentResponse>)
+    .then(responseSuccessHandler<GetCommunityCommentsResponse>)
     .catch(responseErrorHandler);
   return responseBody;
 }
@@ -799,11 +800,12 @@ export const getAlertRequest = async (accessToken: string) => {
 }
 
 // function: post Schedule API 요청 함수 //
-export const postScheduleRequest = async (requestBody:PostScheduleRequestDto, accessToken: string) => {
+export const postScheduleRequest = async (
+  requestBody:PostScheduleRequestDto, accessToken: string
+): Promise<PostScheduleResponseDto | ResponseDto | null> => {
   const responseBody = await axios.post(POST_SCHEDULE_URL, requestBody, bearerAuthorization(accessToken))
-  .then(responseSuccessHandler)
+  .then(responseSuccessHandler<PostScheduleResponseDto>)
   .catch(responseErrorHandler);
-  console.log("📤 저장 요청 바디:", requestBody);
   return responseBody;
 } 
 

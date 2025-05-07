@@ -207,12 +207,6 @@ export default function MyPage() {
     }
   }
 
-  // event handler: 프로필 사진 클릭 이벤트 처리 //
-  const onProfileClickHandler = () => {
-    if (!fileRef.current) return;
-    fileRef.current.click();
-  };
-
   // event handler: 내 활동 클릭 이벤트 처리 //
   const onClick = () => {
     navigator(MY_ACTIVITY_ABSOLUTE_PATH);
@@ -254,6 +248,12 @@ export default function MyPage() {
     const { value } = event.target;
     setSelfIntro(value);
   };
+  
+  // event handler: 프로필 사진 클릭 이벤트 처리 //
+  const onProfileClickHandler = () => {
+    if (!fileRef.current) return;
+    fileRef.current.click();
+  };
 
   // event handler: 프로필 이미지 변경 처리 //
   const onProfileImageChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -269,17 +269,6 @@ export default function MyPage() {
       setProfileImage(reader.result as string);
     };
   };
-
-  // event handler: 프로필 이미지 삭제 처리 //
-  const onProfileImageDeleteHandler = () => {
-    setProfileImage(''); // 프로필 이미지 삭제
-    setProfileImageFile(null); // 파일 상태 초기화
-  };
-
-  // event handler: 계정설정 버튼 클릭 이벤트 처리 //
-  const onAccountButtonClickHandler = () => {
-    navigator(MYPAGE_ACCOUNT_ABSOLUTE_PATH);
-  }
 
   // event handler: 수정 버튼 클릭 이벤트 처리 //
   const onEditButtonClickHandler = async () => {
@@ -310,6 +299,17 @@ export default function MyPage() {
     patchUserIntroductionRequest(requestBody, accessToken).then(patchUserIntroductionResponse);
 
     setIsEditMode(!isEditMode);
+  }
+  
+  // event handler: 프로필 이미지 삭제 처리 //
+  const onProfileImageDeleteHandler = () => {
+    setProfileImage(''); // 프로필 이미지 삭제
+    setProfileImageFile(null); // 파일 상태 초기화
+  };
+
+  // event handler: 계정설정 버튼 클릭 이벤트 처리 //
+  const onAccountButtonClickHandler = () => {
+    navigator(MYPAGE_ACCOUNT_ABSOLUTE_PATH);
   }
 
   // effect: 컴포넌트 로드시 실행할 함수 //
@@ -370,7 +370,7 @@ export default function MyPage() {
               <div className='achievements-box'>
                 <div className='text'>업적</div>
                 <div className='button-select'>✨자기소개 작성 완료</div>
-                <div className='button change'>+</div>
+                <div className='button-change-achievements'>+</div>
               </div>
             </div>
             <div className='detail'>

@@ -76,7 +76,7 @@
 }
 
 #need-helper-main-wrapper .contents-wrapper .need-helper-list .tr:first-child{
-  background-color: rgb(199, 199, 199);
+  background-color: var(--Lightmode-Grey4);
   height: 40px;
   border-top: 2px solid rgb(71, 71, 71);
 }

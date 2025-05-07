@@ -76,7 +76,7 @@
 }
 
 #notice-main-wrapper .contents-wrapper .notice-list .tr:first-child{
-  background-color: green;
+  background-color: var(--Lightmode-Grey4);
   height: 40px;
 }
 
