@@ -2,9 +2,14 @@ import React, { ChangeEvent, useState } from "react";
 
 import "./style.css";
 import Pagination from "src/components/Pagination";
+import { useCookies } from "react-cookie";
+import { useLocation, useNavigate, useSearchParams } from "react-router";
+import { usePagination } from "src/hooks";
+import { NeedHelperInterface } from "src/types/interfaces";
 
 // component: 도우미 게시판 화면 컴포넌트 //
 export default function NeedHelper() {
+
   // variable: 더미 지역 데이터 //
   const DUMMY_REGIONS: Record<string, string[]> = {
     서울특별시: ["강남구", "강북구", "마포구"],
@@ -76,6 +81,18 @@ export default function NeedHelper() {
     },
   ];
 
+  // state: cookie 상태 //
+  const [cookies] = useCookies();
+
+  // state: navigator 상태 //
+  const navigator = useNavigate();
+
+  // state: location 상태 //
+  const location = useLocation();
+
+  // state: 게시판 parameter 상태 //
+  const [searchParams] = useSearchParams();
+
   // state: 선택된 시/도
   const [city, setCity] = useState("");
 
@@ -86,10 +103,10 @@ export default function NeedHelper() {
   const [meetingType, setMeetingType] = useState("");
 
   // state: 페이지네이션 상태 //
-  // const { 
-  //   currentPage, setCurrentPage, currentSection, setCurrentSection,
-  //   totalSection, setTotalList, viewList, pageList
-  // } = usePagination<NeedHelper>();
+  const { 
+    currentPage, setCurrentPage, currentSection, setCurrentSection,
+    totalSection, setTotalList, viewList, pageList
+  } = usePagination<NeedHelperInterface>();
 
   // event handler: 체크박스 클릭 처리
   const onMettingTypeChangeHandler = (type: string) => {
@@ -106,6 +123,11 @@ export default function NeedHelper() {
   // event handler: 시/군/구 선택 이벤트 처리 //
   const onDistrictSelectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
     setDistrict(e.target.value);
+  };
+
+  // event handler: 글쓰기 버튼 클릭 이벤트 처리 //
+  const onWriterClickHandler = () => {
+    navigator('/needHelper/write')
   };
 
   // render: 도우미 게시판 화면 컴포넌트 렌더링 //
@@ -202,20 +224,20 @@ export default function NeedHelper() {
         </div>
       </div>
         <div className="write-button-box">
-          <button className="write-button">글쓰기</button>
+          <button className="write-button" onClick={onWriterClickHandler}>글쓰기</button>
         </div>
-      <div className="pagination-container">
-      {/* {totalSection !== 0 &&
+        <div className='pagination-container'>
+          {totalSection !== 0 &&
           <Pagination 
-            currentPage={currentPage}
-            currentSection={currentSection}
-            totalSection={totalSection}
-            pageList={pageList}
-            setCurrentPage={setCurrentPage}
-            setCurrentSection={setCurrentSection}
+              currentPage={currentPage}
+              currentSection={currentSection}
+              totalSection={totalSection}
+              pageList={pageList}
+              setCurrentPage={setCurrentPage}
+              setCurrentSection={setCurrentSection}
           />
-          } */}
-      </div>
+          }
+        </div>
     </div>
   );
 }
