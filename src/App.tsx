@@ -88,6 +88,7 @@ import FindResult from './views/Auth/FindResult';
 import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
 import CommunitySearch from './views/Community/Search';
+import CountyMain from './views/Community/County';
 
 function App() {
   return (

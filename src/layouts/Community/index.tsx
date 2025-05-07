@@ -1,10 +1,12 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import './style.css';
 import { Link, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router';
-import { ACCESS_TOKEN, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_CATEGORY_ABSOLUTE_PATH, COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH, COMMUNITY_HOTBOARD_ABSOLUTE_PATH, COMMUNITY_INFOBOARD_ABSOLUTE_PATH, COMMUNITY_POST_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_WRITE_ABSOLUTE_PATH, REPORT_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_CATEGORY_ABSOLUTE_PATH, COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH, COMMUNITY_HOTBOARD_ABSOLUTE_PATH, COMMUNITY_INFOBOARD_ABSOLUTE_PATH, COMMUNITY_POST_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_WRITE_ABSOLUTE_PATH, COUNTY_ABSOLUTE_PATH, COUNTY_MAIN_ABSOLUTE_PATH, REPORT_ABSOLUTE_PATH } from 'src/constants';
 import { useCookies } from 'react-cookie';
 import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import { useSignInUserStore } from 'src/stores';
+import County from 'src/types/aliases/community-county.alias';
+import CountyMain from 'src/views/Community/County';
 
 // component: 커뮤니티 사이드바 레이아웃 컴포넌트 //
 export default function CommunityLayout() {
@@ -23,6 +25,9 @@ export default function CommunityLayout() {
 
     // state: 검색 키워드 주소 상태 //
     const keywordKey = searchParams.get('keyword') as string;
+
+    // state: 우리 동네 주소 상태 //
+    const county = searchParams.get('county') as County;
 
     // state: 로그인 사용자 정보 //
     const { isAdmin } = useSignInUserStore();
@@ -45,6 +50,9 @@ export default function CommunityLayout() {
     
     // variable: 우리 동네 게시판 클래스 //
     const countyBoardClass = boardType === '우리 동네 게시판' && categoryType === null ? 'large-category active' : 'large-category';
+
+    // variable: 신고 게시판 클래스 //
+    const reportBoardClass = boardType === '신고 게시판' && categoryType === null ? 'large-category active' : 'large-category';
     
     // variable: 각 카테고리 클래스 //
     const studyBoardClass = categoryType === '공부' ? 'category-item active' : 'category-item';
@@ -72,6 +80,7 @@ export default function CommunityLayout() {
     // event handler: 게시판 클릭 이벤트 처리 //
     const onBoardClickHandler = (targetBoard: Board) => {
         if (targetBoard === '신고 게시판') navigator(REPORT_ABSOLUTE_PATH);
+        else if (targetBoard === '우리 동네 게시판') navigator(COUNTY_MAIN_ABSOLUTE_PATH(targetBoard));
         else navigator(COMMUNITY_BOARD_ABSOLUTE_PATH(targetBoard));
     };
 
@@ -98,6 +107,11 @@ export default function CommunityLayout() {
         setKeyword('');
     }, [searchParams]);
 
+    // render: 우리 동네 게시판 메인 화면 컴포넌트 렌더링 //
+    if (boardType === '우리 동네 게시판') {
+        return <CountyMain />;
+    }
+
     // render: 커뮤니티 사이드바 레이아웃 컴포넌트 렌더링 //
     return (
         <div id='community-layout-wrapper'>
@@ -105,7 +119,10 @@ export default function CommunityLayout() {
                 <div className='community-post-button' onClick={onPostClickHandler}>커뮤니티 글쓰기</div>
                 <div className='divider'></div>
                 <div className='category-container'>
-                    <div className={hotBoardClass} onClick={() => onBoardClickHandler('인기 게시판')}>🔥인기 게시판</div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>🔥</div>
+                        <div className={hotBoardClass} onClick={() => onBoardClickHandler('인기 게시판')}>인기 게시판</div>
+                    </div>
                 </div>
                 <div className='divider'></div>
                 <div className='category-container'>
@@ -117,30 +134,71 @@ export default function CommunityLayout() {
                         <div className='item-icon'>📄</div>
                         <div className={studyBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '공부')}>공부</div>
                     </div>
-                    <div className={beautyBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '미용')}>미용</div>
-                    <div className={travleBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '여행')}>ㄴ여행</div>
-                    <div className={mediaBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '영화/드라마')}>ㄴ영화/드라마</div>
-                    <div className={exerciseBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '운동')}>ㄴ운동</div>
-                    <div className={livingBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '자취꿀팁')}>ㄴ자취꿀팁</div>
-                    <div className={investBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '재테크')}>ㄴ재테크</div>
-                    <div className={fashionBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '패션')}>ㄴ패션</div>
-                    <div className={hotdealBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '핫딜')}>ㄴ핫딜</div>
-                    <div className={etcInfoBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '정보기타')}>ㄴ정보 기타</div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={beautyBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '미용')}>미용</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={travleBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '여행')}>여행</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={mediaBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '영화/드라마')}>영화/드라마</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={exerciseBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '운동')}>운동</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={livingBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '자취꿀팁')}>자취꿀팁</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={investBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '재테크')}>재테크</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={fashionBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '패션')}>패션</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={hotdealBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '핫딜')}>핫딜</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={etcInfoBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '정보기타')}>정보 기타</div>
+                    </div>
                 </div>
                 <div className='divider'></div>
                 <div className='category-container'>
-                    <div className={countyBoardClass} onClick={() => onBoardClickHandler('우리 동네 게시판')}>🏙️ 우리 동네 게시판</div>
-                    <div className={hometownBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '동네생활')}>ㄴ동네 생활</div>
-                    <div className={meetingBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '모임')}>ㄴ모임</div>
-                    <div className={etcCountyBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '우리동네기타')}>ㄴ우리 동네 기타</div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>🏙️</div>
+                        <div className={countyBoardClass} onClick={() => onBoardClickHandler('우리 동네 게시판')}>우리 동네 게시판</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={hometownBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '동네생활')}>동네 생활</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={meetingBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '모임')}>모임</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={etcCountyBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '우리동네기타')}>우리 동네 기타</div>
+                    </div> 
                 </div>
                 {isAdmin &&
-                <>
+                <div className='category-container'>
                     <div className='divider'></div>
-                    <div className='category-container'>
-                        <div className={countyBoardClass} onClick={() => onBoardClickHandler('신고 게시판')}>🔔 신고 게시판</div>
-                    </div>
-                </>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>🔔</div>
+                        <div className={reportBoardClass} onClick={() => onBoardClickHandler('신고 게시판')}>신고 게시판</div>
+                    </div> 
+                </div>
+                    
                 }
             </div>
             <div id='board-format'>

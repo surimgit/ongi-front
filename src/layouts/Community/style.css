@@ -86,9 +86,10 @@
 #community-layout-wrapper .large-category,
 #community-layout-wrapper .category-item {
     display: flex;
-    align-items: bottom;
 
     cursor: pointer;
+
+    margin-left: 3px;
 }
 
 #community-layout-wrapper .category-item:hover {

@@ -1,4 +1,5 @@
 import { Board, CommunityCategory, SearchCategory } from "src/types/aliases";
+import County from "src/types/aliases/community-county.alias";
 
 // variable: 상대 path 변수 //
 export const ROOT_PATH = '/';
@@ -104,6 +105,9 @@ export const COMMUNITY_SEARCH_ABSOLUTE_PATH = (searchCategory: SearchCategory, k
 export const COMMUNITY_INFOBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_INFOBOARD_PATH}`;
 export const COMMUNITY_HOTBOARD_ABSOLUTE_PATH = (boardType: Board) => `${ROOT_PATH}${COMMUNITY_PATH}?board=${boardType}`;
 export const COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_COUNTYBOARD_PATH}`;
+
+export const COUNTY_MAIN_ABSOLUTE_PATH = (boardType: Board) => `${COMMUNITY_BOARD_ABSOLUTE_PATH(boardType)}`;
+export const COUNTY_ABSOLUTE_PATH = (boardType: Board, county: County) => `${COMMUNITY_BOARD_ABSOLUTE_PATH(boardType)}&county=${county}`;
 
 export const MYPAGE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}`;
 export const MYPAGE_PATCH_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_PATCH_PATH}`;

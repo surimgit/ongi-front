@@ -99,9 +99,13 @@
     color: var(--Lightmode-Grey);
 }
 
-#report-page-wrapper .rpt-ti.category,
-#report-page-wrapper .rpt-tc.category {
+#report-page-wrapper .category {
     width: 25%;
+}
+
+#report-page-wrapper .rpt-tc.category {
+    font-weight: 700;
+    color: var(--Cancel);
 }
 
 #report-page-wrapper .rpt-tc.content {
