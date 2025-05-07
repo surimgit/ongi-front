@@ -34,7 +34,8 @@ import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_
     REPORT_PATH,
     COMMUNITY_SEARCH_PATH,
     CALENDAR_PATH,
-    POLICY_PATH} from './constants';
+    POLICY_PATH,
+    NEEDHELPER_WRITE_PATH} from './constants';
 
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
@@ -73,7 +74,6 @@ import QuestionUpdate from './views/MyPage/Question/Update';
 import NoticeWrite from './views/MyPage/Notice/Write';
 import NoticeUpdate from './views/MyPage/Notice/Update';
 import NoticeView from './views/MyPage/Notice/Detail';
-import WishLists from './views/MyPage/GroupBuying/WishList';
 
 
 
@@ -84,11 +84,11 @@ import Calendar from './views/Calendar';
 import FindId from './views/Auth/FindId';
 import FindPassword from './views/Auth/FindPassword';
 import FindResult from './views/Auth/FindResult';
-import PolicyView from './views/Policy/PolicyView';
 import PolicyViewPage from './views/Policy/PolicyView';
 import CommunitySearch from './views/Community/Search';
 import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
+import HelperWrite from './views/NeedHelper/Write';
 
 function App() {
   return (
@@ -111,6 +111,7 @@ function App() {
         </Route>
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
+          <Route path={NEEDHELPER_WRITE_PATH} element={<HelperWrite />} />
         </Route>
         <Route path={CALENDAR_PATH} element={<Calendar/>}/>
         <Route path={POLICY_PATH} element={<PolicyViewPage />} />
