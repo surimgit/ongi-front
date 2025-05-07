@@ -35,7 +35,8 @@ import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_
     COMMUNITY_SEARCH_PATH,
     CALENDAR_PATH,
     POLICY_PATH,
-  } from './constants';
+    NEEDHELPER_WRITE_PATH} from './constants';
+
 
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
@@ -89,6 +90,7 @@ import CommunitySearch from './views/Community/Search';
 import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
 import AccountUpdate from './views/MyPage/Account/Update';
+import HelperWrite from './views/NeedHelper/Write';
 
 function App() {
   return (
@@ -113,6 +115,7 @@ function App() {
         </Route>
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
+          <Route path={NEEDHELPER_WRITE_PATH} element={<HelperWrite />} />
         </Route>
         <Route path={CALENDAR_PATH} element={<Calendar/>}/>
         <Route path={POLICY_PATH} element={<PolicyViewPage />} />
