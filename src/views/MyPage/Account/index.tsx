@@ -4,7 +4,6 @@ import MypageSidebar from 'src/layouts/MypageSidebar'
 import { useNavigate } from 'react-router';
 import { ACCESS_TOKEN, MY_ACTIVITY_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, MYPAGE_ACCOUNT_PATCH_ABSOLUTE_PATH } from 'src/constants';
 import { useCookies } from 'react-cookie';
-import { useSignInUserStore } from 'src/stores';
 import { getUserAccountRequest } from 'src/apis';
 import { GetUserAccountResponseDto } from 'src/apis/dto/response/user';
 import { ResponseDto } from 'src/apis/dto/response';
