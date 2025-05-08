@@ -1,85 +1,19 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 
 import "./style.css";
 import Pagination from "src/components/Pagination";
 import { useCookies } from "react-cookie";
 import { useLocation, useNavigate, useSearchParams } from "react-router";
 import { usePagination } from "src/hooks";
-import { NeedHelperInterface } from "src/types/interfaces";
+import { useLocationSelector } from "src/hooks/select-box.hook";
+import GetHelperPostListResponseDto from "src/apis/dto/response/needhelper/get-helper-post-list.response.dto";
+import { ResponseDto } from "src/apis/dto/response";
+import NeedHelperPost from "src/types/interfaces/need-helper-post.interface";
+import { getHelperPostListRequest } from "src/apis";
+import { ACCESS_TOKEN } from "src/constants";
 
 // component: 도우미 게시판 화면 컴포넌트 //
 export default function NeedHelper() {
-
-  // variable: 더미 지역 데이터 //
-  const DUMMY_REGIONS: Record<string, string[]> = {
-    서울특별시: ["강남구", "강북구", "마포구"],
-    경기도: ["수원시", "성남시", "용인시"],
-    부산광역시: ["해운대구", "중구", "사하구"],
-  };
-
-  // variable: 도우미 게시글 더미 데이터 //
-  const DUMMY_HELPER_LIST = [
-    {
-      title: "벌레가 들어왔어요ㅠ 제발 도와주세요ㅠㅠㅠ",
-      location: "부산광역시 동래구",
-      pay: 10000,
-      deadline: "3일 2시간 남음",
-    },
-    {
-      title: "문이 안 열려요",
-      location: "서울특별시 마포구",
-      pay: 15000,
-      deadline: "1일 4시간 남음",
-    },
-    {
-      title: "세탁기 고장났어요",
-      location: "경기도 수원시",
-      pay: 20000,
-      deadline: "2일 1시간 남음",
-    },
-    {
-      title: "컴퓨터 설치 도와주세요",
-      location: "서울특별시 강남구",
-      pay: 30000,
-      deadline: "4시간 남음",
-    },
-    {
-      title: "짐 옮기는 거 도와주세요",
-      location: "경기도 성남시",
-      pay: 25000,
-      deadline: "1일 남음",
-    },
-    {
-      title: "인터넷 연결 안 돼요",
-      location: "부산광역시 해운대구",
-      pay: 12000,
-      deadline: "3시간 남음",
-    },
-    {
-      title: "TV가 안 나와요",
-      location: "서울특별시 강북구",
-      pay: 13000,
-      deadline: "5시간 남음",
-    },
-    {
-      title: "가스레인지 고장났어요",
-      location: "경기도 용인시",
-      pay: 17000,
-      deadline: "2일 남음",
-    },
-    {
-      title: "전등 갈아주세요",
-      location: "부산광역시 중구",
-      pay: 8000,
-      deadline: "1시간 남음",
-    },
-    {
-      title: "장보는 거 도와주세요",
-      location: "서울특별시 마포구",
-      pay: 9000,
-      deadline: "2시간 남음",
-    },
-  ];
 
   // state: cookie 상태 //
   const [cookies] = useCookies();
@@ -93,12 +27,9 @@ export default function NeedHelper() {
   // state: 게시판 parameter 상태 //
   const [searchParams] = useSearchParams();
 
-  // state: 선택된 시/도
-  const [city, setCity] = useState("");
-
-  // state: 선택된 시/군/구
-  const [district, setDistrict] = useState("");
-
+  // state: 지역 선택 //
+  const {areaList, sido, gugun, gugunList, onSidoChange, onGugunChange} = useLocationSelector();
+  
   // state: 선택된 만남 방식
   const [meetingType, setMeetingType] = useState("");
 
@@ -106,23 +37,53 @@ export default function NeedHelper() {
   const { 
     currentPage, setCurrentPage, currentSection, setCurrentSection,
     totalSection, setTotalList, viewList, pageList
-  } = usePagination<NeedHelperInterface>();
+  } = usePagination<NeedHelperPost>();
+
+  // variable: access Token //
+  const accessToken = cookies[ACCESS_TOKEN];
+
+  // function: get helper post list 함수 // 
+  const getHelerPostListResponse = (responseBody: GetHelperPostListResponseDto | ResponseDto | null) => {
+    const message = !responseBody ? '서버에 문제가 있습니다.'
+    : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
+    : responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+    if(!isSuccess) {
+      alert(message);
+      
+      return;
+    }
+
+    const { posts } = responseBody as GetHelperPostListResponseDto;
+    const validPosts = posts.filter(post => new Date(post.schedule).getTime() > Date.now());
+
+    setTotalList(validPosts);
+  };
+
+  // function: 남은 시간 계산 함수 //
+  function getRemainingTimeString(schedule: string): string {
+
+    const targetDate = new Date(schedule);
+    const now = new Date();
+
+    const diffMs = targetDate.getTime() - now.getTime();
+
+    if (diffMs <= 0) return "마감됨";
+
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+
+    if (diffDays > 0) {
+      return `${diffDays}일 ${diffHours}시간`;
+    }
+
+    return `${diffHours}시간`;
+  }
 
   // event handler: 체크박스 클릭 처리
   const onMettingTypeChangeHandler = (type: string) => {
     setMeetingType((prev) => (prev === type ? "" : type));
-  };
-
-  // event handler: 시/도 선택 이벤트 처리 //
-  const onCitySelectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
-    const city = e.target.value;
-    setCity(city);
-    setDistrict("");
-  };
-
-  // event handler: 시/군/구 선택 이벤트 처리 //
-  const onDistrictSelectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
-    setDistrict(e.target.value);
   };
 
   // event handler: 글쓰기 버튼 클릭 이벤트 처리 //
@@ -130,6 +91,16 @@ export default function NeedHelper() {
     navigator('/needHelper/write')
   };
 
+  // event handler: 게시글 클릭 이벤트 처리 //
+  const onPostClickHandler = (sequence: number) => {
+    navigator(`/needHelper/${sequence}`);
+  };  
+
+  // effect: 서버 데이터 불러오기 //
+  useEffect(() => {
+    getHelperPostListRequest(accessToken).then(getHelerPostListResponse);
+  }, [accessToken]);
+  
   // render: 도우미 게시판 화면 컴포넌트 렌더링 //
   return (
     <div id="need-helper-wrapper">
@@ -160,35 +131,19 @@ export default function NeedHelper() {
             </div>
           </div>
           <div className="vertical-bar">|</div>
-          {/* // todo: DB 작업 후 다시 */}
           <div className="option-location-select">
             <div className="sub-title">지역</div>
             <div className="option-location-box">
-              <div className="city">
-                <select value={city} onChange={onCitySelectHandler}>
-                  <option value="">시/도 선택</option>
-                  {Object.keys(DUMMY_REGIONS).map((cityName) => (
-                    <option key={cityName} value={cityName}>
-                      {cityName}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="district">
-                <select
-                  value={district}
-                  onChange={onDistrictSelectHandler}
-                  disabled={!city}
-                >
-                  <option value="">시/군/구 선택</option>
-                  {city &&
-                    DUMMY_REGIONS[city].map((districtName: string) => (
-                      <option key={districtName} value={districtName}>
-                        {districtName}
-                      </option>
+              <select className='select-box' value={sido} onChange={onSidoChange}>
+                    {areaList.map((sido, index) => (
+                        <option key={index} value={sido}>{sido}</option>
                     ))}
                 </select>
-              </div>
+                <select className='select-box' value={gugun} onChange={onGugunChange}>
+                    {gugunList.map((gugun, index) => (
+                        <option key={index} value={gugun}>{gugun}</option>
+                    ))}
+                </select>
             </div>
           </div>
           <div className="vertical-bar">|</div>
@@ -208,17 +163,15 @@ export default function NeedHelper() {
       </div>
       <div className="helper-list-container">
         <div className="helper-list-table">
-          {/* {viewList.map((helper, index) => ( */}
-          {DUMMY_HELPER_LIST.map((helper, index) => (
-            <div className="tr" key={index}>
+          {viewList.map((helper, index) => (
+            <div className="tr" key={index} onClick={() => onPostClickHandler(helper.sequence)}>
               <div className="td content">
                 <div className="title">{helper.title}</div>
                 <div className="summary">
-                  {helper.location} •{" "}
-                  <div className="pay">{helper.pay.toLocaleString()}</div>원
+                  {helper.city} {helper.district} • <div className="pay">{Number(helper.reward).toLocaleString()}원</div>
                 </div>
               </div>
-              <div className="td deadline">{helper.deadline}</div>
+              <div className="td deadline">{getRemainingTimeString(helper.schedule)}</div>
             </div>
           ))}
         </div>

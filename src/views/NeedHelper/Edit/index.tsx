@@ -1,18 +1,18 @@
-import React, { ChangeEvent, useState } from 'react';
-import './style.css';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { ACCESS_TOKEN, NEEDHELPER_ABSOLUTE_PATH } from 'src/constants';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import TextEditor from 'src/components/TextEditor';
-import { postHelperRequest } from 'src/apis';
+import { getHelperPostRequest, patchHelperPostRequest } from 'src/apis';
 import { ResponseDto } from 'src/apis/dto/response';
 import DatePicker from 'react-datepicker';
 import CalendarIcon from 'src/assets/images/calendar.png';
 import { useLocationSelector } from 'src/hooks/select-box.hook';
 import PostHelperRequestDto from 'src/apis/dto/request/needhelper/post-helper.request.dto';
+import GetHelperPostResponseDto from 'src/apis/dto/response/needhelper/get-helper-post.response.dto';
 
 // component: 게시글 작성 화면 컴포넌트 //
-    export default function HelperWrite() {
+    export default function HelperEdit() {
 
     // state: cookie 상태 //
     const [cookies] = useCookies();
@@ -25,15 +25,22 @@ import PostHelperRequestDto from 'src/apis/dto/request/needhelper/post-helper.re
     const [reward, setReward] = useState<string>('');
 
     // state: 지역 선택 //
-    const {areaList, sido, gugun, gugunList, onSidoChange, onGugunChange} = useLocationSelector();
+    const {areaList, sido, gugun, gugunList, onSidoChange, onGugunChange, setSido, setGugun } = useLocationSelector();
 
     // state: 대면 방식 //
     const meetingTypeValue =
     meetingType === "face" ? "대면" : meetingType === "non-face" ? "비대면" : "";
+
+    // state: 게시글 번호 //
+    const { sequence } = useParams();
     
+    // state: 시도와 구군 데이터 상태 //
+    const [initCity, setInitCity] = useState<string>('');
+    const [initDistrict, setInitDistrict] = useState<string>('');
+
     // state: 작성 시각 //
-    const writeTime = new Date();   
-    
+    const writeTime = new Date();
+
     // variable: access Token //
     const accessToken = cookies[ACCESS_TOKEN];
 
@@ -96,16 +103,41 @@ import PostHelperRequestDto from 'src/apis/dto/request/needhelper/post-helper.re
             date: writeTime.toISOString()
         };
     
-        postHelperRequest(requestBody, accessToken).then(postHelperResponse);
-        navigator(NEEDHELPER_ABSOLUTE_PATH);
+        patchHelperPostRequest(requestBody, Number(sequence), accessToken).then((response) => {
+            postHelperResponse(response);
+            if (response && response.code === 'SU') {
+                navigator(NEEDHELPER_ABSOLUTE_PATH);
+            }
+        });
     };
+    
+    // effect: 수정화면 로드 시 기존 값 받아오기 //
+    useEffect(() => {
+        if (!sequence || !accessToken) return;
+      
+        getHelperPostRequest(Number(sequence), accessToken).then(response => {
+            if (!response || response.code !== "SU") return;
+        
+            const data = response as GetHelperPostResponseDto;
+    
+            setTitle(data.title);
+            setContent(data.content);
+            setMeetingType(data.meetingType === "대면" ? "face" : "non-face");
+            setSelectDate(new Date(data.schedule));
+            setReward(data.reward);
+    
+            setSido(data.city); // 바로 상태를 강제로 셋팅
+            setGugun(data.district); // 바로 상태를 강제로 셋팅
+        });
+    }, []);
+    
     
 
     // render: 게시글 작성 화면 컴포넌트 렌더링 //
     return (
     <div id='helper-write-wrapper'>
         <div className='write-header'>
-        <div className='headline'>도우미 게시글 작성</div>
+        <div className='headline'>도우미 게시글 수정</div>
         </div>
         <div className='write-container'>
         <div className='input-box'>
@@ -183,7 +215,7 @@ import PostHelperRequestDto from 'src/apis/dto/request/needhelper/post-helper.re
         </div>
         <div className='button-box'>
         <div className='btn cancel' onClick={onCancleButtonClickHandler}>취소</div>
-        <div className='btn write' onClick={onWriteButtonClickHandler}>작성</div>
+        <div className='btn write' onClick={onWriteButtonClickHandler}>수정</div>
         </div>
     </div>
     )
