@@ -10,6 +10,7 @@ import { ResponseDto } from 'src/apis/dto/response';
 import { getNoticeListRequest } from 'src/apis';
 import Pagination from 'src/components/Pagination';
 import MypageSidebar from 'src/layouts/MypageSidebar';
+import { useSignInUserStore } from 'src/stores';
 
 // interface: 공지사항 테이블 레코드 컴포넌트 속성 //
 interface NoticeItemProps{
@@ -52,6 +53,11 @@ export default function Notice() {
 
   // state: cookie 상태 //
   const [cookies] = useCookies();
+
+  // state: 관리자 아이디 상태 //
+  const { isAdmin } = useSignInUserStore();
+
+  // state: 
 
   // state: pagination 상태 //
   const{
@@ -115,8 +121,10 @@ export default function Notice() {
         </div>
         <hr className='notice-hr'/>
         <div className='notice-header'>
-          <div className='notice-amount'>총 15건</div>
-          <div className='write-button' onClick={onWriteButtonClickHandler}>작성</div>
+          <div className='notice-amount'>{totalList.length} 건</div>
+          {isAdmin &&
+            <div className='write-button' onClick={onWriteButtonClickHandler}>작성</div>
+          }
         </div>
         <div className='notice-list'>
           <div className='tr'>

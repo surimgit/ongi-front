@@ -2,18 +2,22 @@ import React, { ChangeEvent, useState } from 'react';
 import './style.css';
 import { Board, CommunityCategory } from 'src/types/aliases';
 import { useCookies } from 'react-cookie';
-import { ACCESS_TOKEN, COMMUNITY_CATEGORY_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, COMMUNITY_CATEGORY_ABSOLUTE_PATH, COUNTY_CATEGORY_ABSOLUTE_PATH } from 'src/constants';
 import { useNavigate } from 'react-router';
 import TextEditor from 'src/components/TextEditor';
 import PostCommunityRequestDto from 'src/apis/dto/request/community/post-community.request.dto';
 import { postCommunityRequest } from 'src/apis';
 import { ResponseDto } from 'src/apis/dto/response';
+import { useSignInUserStore } from 'src/stores';
 
 // component: 게시글 작성 화면 컴포넌트 //
 export default function PostWrite() {
 
   // state: cookie 상태 //
   const [cookies] = useCookies();
+
+  // state: 로그인 사용자 정보 //
+  const { county } = useSignInUserStore();
 
   // state: 게시글 내용 상태 //
   const [board, setBoard] = useState<Board | ''>('');
@@ -44,7 +48,16 @@ export default function PostWrite() {
     }
 
     if (!category) return;
-    navigator(COMMUNITY_CATEGORY_ABSOLUTE_PATH(board, category));
+
+    if (!county) {
+      alert('주소를 등록해주세요.');
+      return;
+    }
+    const [region, district] = county;
+    console.log(region, district);
+    if (!region && !district) return;
+    if (board === '우리 동네 게시판') navigator(COUNTY_CATEGORY_ABSOLUTE_PATH(board, category, region, district));
+    else navigator(COMMUNITY_CATEGORY_ABSOLUTE_PATH(board, category));
   };
 
   // event handler: 제목 변경 이벤트 처리 //

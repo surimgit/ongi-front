@@ -5,7 +5,7 @@ import { Board } from 'src/types/aliases';
 import useSignInUser from 'src/hooks/sign-in-user.hook';
 import { useEffect, useRef, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { deleteAlertRequest, getAlertRequest, patchAlertReadRequest } from 'src/apis';
+import { deleteAlertRequest, getAlertRequest, patchAlertReadRequest, patchAllAlertReadRequest } from 'src/apis';
 import GetAlertResponseDto from 'src/apis/dto/response/alert/get-alert.response.dto';
 import { ResponseDto } from 'src/apis/dto/response';
 import Alert from 'src/types/interfaces/Alert.interface';
@@ -135,16 +135,12 @@ export default function Layout() {
     setAlerts(alerts);
   }
 
-  // event handler: 로고 이미지 클릭 이벤트 처리 //
-  const onLogoClickHandler = () => {navigator(MAIN_ABSOLUTE_PATH);};
-
-  // function: delete all alert response 처리 함수 //
-  const deleteAlertResponse = (responseBody: ResponseDto | null) => {
+  // function: patch all alert read response 처리 함수 //
+  const patchAllAlertReadResponse = (responseBody: ResponseDto | null) => {
     const message =
     !responseBody ? '서버에 문제가 있습니다.'
     : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
-    : responseBody.code === 'AF' ? '인증에 실패했습니다.'
-    : responseBody.code === 'NP' ? '권한이 없습니다.' : '';
+    : responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
 
     const isSuccess = responseBody !== null && responseBody.code === 'SU';
     if (!isSuccess) {
@@ -196,10 +192,15 @@ export default function Layout() {
     navigator(MYPAGE_ABSOLUTE_PATH);
   }
 
-  // event handler: 알림 전체 삭제 버튼 클릭 이벤트 처리 //
-  const onDeleteAlertClickHandler = () => {
-    deleteAlertRequest('', accessToken).then(deleteAlertResponse);
+  // event handler: 전체 알림 읽기 버튼 클릭 이벤트 처리 //
+  const onReadAllAlertClickHandler = () => {
+    patchAllAlertReadRequest(accessToken).then(patchAllAlertReadResponse);
   };
+
+  // event handler: 로고 이미지 클릭 이벤트 처리 //
+  const onLogoClickHandler = () => {
+    navigator(MAIN_ABSOLUTE_PATH);
+  }
 
   // effect: cookie의 accessToken이 변경될 시 실행할 함수 //
   useEffect(() => {
@@ -251,7 +252,7 @@ export default function Layout() {
                   <AlertItem key={index} alertItem={alert} />)
                 }
                 {alerts.length > 0 &&
-                  <div className='all-alert-delete' onClick={onDeleteAlertClickHandler}>전체 알림 삭제</div>
+                  <div className='all-alert-delete' onClick={onReadAllAlertClickHandler}>전체 알림 읽음</div>
                 }
                 {alerts.length === 0 &&
                   <div className='no-alert'>받은 알림이 없습니다.</div>
@@ -268,6 +269,9 @@ export default function Layout() {
               <div className='login-content logout' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
             )}
           </div>
+          { accessToken &&
+              <div className='logout-btn' onClick={onLogoutClickHandler}>로그아웃</div>
+          }
         </div>
       </div>
       <div id='main'>

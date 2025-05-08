@@ -30,7 +30,7 @@ import GetAlertResponseDto from './dto/response/alert/get-alert.response.dto';
 import { PostOrderItemRequestDto, PostPaymentCancelRequestDto } from './dto/request/payment';
 import { GetProductReviewsResponseDto } from './dto/response/product';
 import { PatchCalendarRequestDto, PostScheduleRequestDto } from './dto/request/calendar';
-import { GetAllScheduleResponseDto } from './dto/response/calendar';
+import { GetAllScheduleResponseDto, PostScheduleResponseDto } from './dto/response/calendar';
 import { FindIdResponseDto } from './dto/response/auth/find-id.response.dto';
 import PatchCommunityCommentRequestDto from './dto/request/community/patch-community-comment.request.dto';
 import PostReportRequestDto from './dto/request/report/post-report.request.dto';
@@ -40,6 +40,7 @@ import PatchReportProcessRequestDto from './dto/request/report/patch-report-proc
 import PatchResignRequestDto from './dto/request/user/patch-resign.request.dto';
 import GetAlertedCountResponseDto from './dto/response/report/get-alerted-count.response.dto';
 import { GetReviewImagesResponseDto } from './dto/response/product';
+import GetCommunityCommentsResponse from './dto/response/community/get-community-comments.response.dto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -90,6 +91,7 @@ const multipartFormData = { headers: { 'Content-Type': 'multipart/form-data' } }
 
 const ALERT_MODULE_URL = `${API_DOMAIN}/api/v1/alert`;
 const ALERT_READ_URL = (alertSequence: number | string) => `${ALERT_MODULE_URL}/${alertSequence}`;
+const ALERT_READ_ALL_URL = `${ALERT_MODULE_URL}/read-all-alert`;
 const ALERT_DELETE_URL = (alertSequence: number | string | null) => `${ALERT_MODULE_URL}/${alertSequence}`;
 
 const GET_COMMUNITY_MODULE_URL = `${COMMUNITY_MODULE_URL}`;
@@ -406,8 +408,8 @@ export const getCommunityPostRequest = async (postSequence:number | string) => {
 };
 
 // function: get community API 요청 함수 //
-export const getCommunityRequest = async (boardType:Board | string | null, categoryType: CommunityCategory | string | null) => {
-  const responseBody = await axios.get(GET_COMMUNITY_MODULE_URL, { params: { board: boardType, category: categoryType}} )
+export const getCommunityRequest = async (boardType:Board | string | null, categoryType: CommunityCategory | string | null, region: string | null, county: string | null) => {
+  const responseBody = await axios.get(GET_COMMUNITY_MODULE_URL, { params: { board: boardType, category: categoryType, region: region, county: county}} )
   .then(responseSuccessHandler)
   .catch(responseErrorHandler);
   return responseBody;
@@ -764,7 +766,7 @@ export const getMyCommunityPostRequest = async (accessToken: string) => {
 // function: get my community comment API 요청 함수 //
 export const getMyCommunityCommentRequest = async (accessToken: string) => {
   const responseBody = await axios.get(GET_MY_COMMUNTY_COMMENT_URL, bearerAuthorization(accessToken))
-    .then(responseSuccessHandler<GetCommunityCommentResponse>)
+    .then(responseSuccessHandler<GetCommunityCommentsResponse>)
     .catch(responseErrorHandler);
   return responseBody;
 }
@@ -794,11 +796,12 @@ export const getAlertRequest = async (accessToken: string) => {
 }
 
 // function: post Schedule API 요청 함수 //
-export const postScheduleRequest = async (requestBody:PostScheduleRequestDto, accessToken: string) => {
+export const postScheduleRequest = async (
+  requestBody:PostScheduleRequestDto, accessToken: string
+): Promise<PostScheduleResponseDto | ResponseDto | null> => {
   const responseBody = await axios.post(POST_SCHEDULE_URL, requestBody, bearerAuthorization(accessToken))
-  .then(responseSuccessHandler)
+  .then(responseSuccessHandler<PostScheduleResponseDto>)
   .catch(responseErrorHandler);
-  console.log("📤 저장 요청 바디:", requestBody);
   return responseBody;
 } 
 
@@ -842,6 +845,14 @@ export const deleteScheduleRequest = async (calendarSequence: number, accessToke
 // function: patch alert read API 요청 함수 //
 export const patchAlertReadRequest = async (alertSequence: number | string, accessToken: string) => {
   const responseBody = await axios.patch(ALERT_READ_URL(alertSequence), {}, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: patch all alert read API 요청 함수 //
+export const patchAllAlertReadRequest = async (accessToken: string) => {
+  const responseBody = await axios.patch(ALERT_READ_ALL_URL, {}, bearerAuthorization(accessToken))
   .then(responseSuccessHandler)
   .catch(responseErrorHandler);
   return responseBody;

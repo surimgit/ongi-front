@@ -33,11 +33,9 @@ const useStore = create<SignInUserStore>(set => ({
     setCounty: (county: County | null) => set((state) => ({ ...state, county })), 
     setCountyFromAddress: (address: string | null) => {
         if (!address) return;
-        console.log(address);
-        const match = address.match(/([가-힣]+구)/);
-        const county = match ? match[1] as County : null;
+        const match = address.match(/^([가-힣]+시|[가-힣]+도)\s([가-힣]+구|[가-힣]+시|[가-힣]+군)/);
+        const county: County | null = match ? [match[1], match[2]] : null;
         set((state) => ({ ...state, county}));
-        console.log(county);
     },
     setProfileImage: (profileImage: string | null) => set(state => ({ ...state, profileImage })),
     setIsAdmin: (isAdmin: boolean) => set(state => ({...state, isAdmin})),

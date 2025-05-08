@@ -14,9 +14,37 @@
     display: flex;
     flex-direction: column;
 
-    margin: 100px auto 0;
+    margin: 0 auto;
 
     gap: 15px;
+}
+
+#community-layout-wrapper .county-box {
+    display: flex;
+    align-items: center;
+
+    margin-top: 50px;
+    height: 35px;
+
+    gap: 6px;
+}
+
+#community-layout-wrapper .county-box .county-icon {
+    width: 35px;
+    height: 35px;
+
+    background-image: url(src/assets/images/icon-map-place-holder.png);
+    background-size: 100%;
+}
+
+#community-layout-wrapper .county-box .county {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--Cancel);
+}
+
+#community-layout-wrapper .blank {
+    height: 85px;
 }
 
 #community-layout-wrapper .community-post-button {

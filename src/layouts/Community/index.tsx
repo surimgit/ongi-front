@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import './style.css';
 import { Link, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router';
-import { ACCESS_TOKEN, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_CATEGORY_ABSOLUTE_PATH, COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH, COMMUNITY_HOTBOARD_ABSOLUTE_PATH, COMMUNITY_INFOBOARD_ABSOLUTE_PATH, COMMUNITY_POST_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_WRITE_ABSOLUTE_PATH, COUNTY_ABSOLUTE_PATH, COUNTY_MAIN_ABSOLUTE_PATH, REPORT_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_CATEGORY_ABSOLUTE_PATH, COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH, COMMUNITY_HOTBOARD_ABSOLUTE_PATH, COMMUNITY_INFOBOARD_ABSOLUTE_PATH, COMMUNITY_POST_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_WRITE_ABSOLUTE_PATH, COUNTY_ABSOLUTE_PATH, COUNTY_CATEGORY_ABSOLUTE_PATH, COUNTY_MAIN_ABSOLUTE_PATH, REPORT_ABSOLUTE_PATH } from 'src/constants';
 import { useCookies } from 'react-cookie';
 import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import { useSignInUserStore } from 'src/stores';
@@ -26,11 +26,8 @@ export default function CommunityLayout() {
     // state: 검색 키워드 주소 상태 //
     const keywordKey = searchParams.get('keyword') as string;
 
-    // state: 우리 동네 주소 상태 //
-    const county = searchParams.get('county') as County;
-
     // state: 로그인 사용자 정보 //
-    const { isAdmin } = useSignInUserStore();
+    const { isAdmin, county, setCountyFromAddress } = useSignInUserStore();
 
     // state: 검색 카테고리 상태 //
     const [searchCategory, setSearchCategory] = useState<SearchCategory>('선택');
@@ -38,9 +35,13 @@ export default function CommunityLayout() {
     // state: 검색 키워드 상태 //
     const [keyword, setKeyword] = useState<string>('');
 
+    // state: 지역 상태 //
+    const region = searchParams.get('region') as string;
+
     // variable: 게시판 상수 //
     const infoBoard = '정보 게시판';
     const countyBoard = '우리 동네 게시판';
+    const myCountyBoard = county;
 
     // variable: 인기 게시판 클래스 //
     const hotBoardClass = boardType === '인기 게시판' && categoryType === null ? 'large-category active' : 'large-category';
@@ -50,6 +51,9 @@ export default function CommunityLayout() {
     
     // variable: 우리 동네 게시판 클래스 //
     const countyBoardClass = boardType === '우리 동네 게시판' && categoryType === null ? 'large-category active' : 'large-category';
+
+    // variable: 우리 동네 게시판 클래스 //
+    const myCountyBoardClass = boardType === '우리 동네 게시판' && categoryType === null ? 'large-category active' : 'large-category';
 
     // variable: 신고 게시판 클래스 //
     const reportBoardClass = boardType === '신고 게시판' && categoryType === null ? 'large-category active' : 'large-category';
@@ -89,6 +93,22 @@ export default function CommunityLayout() {
         navigator(COMMUNITY_CATEGORY_ABSOLUTE_PATH(targetBoard, category));
     };
 
+    // event handler: 사용자 거주지 게시판 클릭 이벤트 처리 //
+    const onMyCountyClickHandler = (county: County) => {
+        navigator(COUNTY_ABSOLUTE_PATH('우리 동네 게시판', county[0], county[1]));
+    };
+
+    // event handler: 사용자 거주지 카테고리 게시판 클릭 이벤트 처리 //
+    const onMyCountyCategoryClickHandler = (targetBoard: Board, category: CommunityCategory, county: County | null) => {
+        if (!county) {
+            alert('주소를 등록해주세요.');
+            return;
+        }
+        const [region, district] = county;
+        if (!region && !district) return;
+        navigator(COUNTY_CATEGORY_ABSOLUTE_PATH(targetBoard, category, region, district));
+    };
+
     // event handler: 검색어 변경 이벤트 처리 //
     const onKeywordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -108,7 +128,7 @@ export default function CommunityLayout() {
     }, [searchParams]);
 
     // render: 우리 동네 게시판 메인 화면 컴포넌트 렌더링 //
-    if (boardType === '우리 동네 게시판') {
+    if (boardType === '우리 동네 게시판' && !region) {
         return <CountyMain />;
     }
 
@@ -116,6 +136,15 @@ export default function CommunityLayout() {
     return (
         <div id='community-layout-wrapper'>
             <div className='category-list-container'>
+                {boardType === '우리 동네 게시판' &&
+                    <div className='county-box'>
+                        <div className='county-icon'></div>
+                        <div className='county'>{county?.join(' ')}</div>
+                    </div>
+                }
+                {boardType !== '우리 동네 게시판' &&
+                    <div className='blank'></div>
+                }
                 <div className='community-post-button' onClick={onPostClickHandler}>커뮤니티 글쓰기</div>
                 <div className='divider'></div>
                 <div className='category-container'>
@@ -178,16 +207,20 @@ export default function CommunityLayout() {
                         <div className={countyBoardClass} onClick={() => onBoardClickHandler('우리 동네 게시판')}>우리 동네 게시판</div>
                     </div>
                     <div className='category-item-box'>
-                        <div className='item-icon'>📄</div>
-                        <div className={hometownBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '동네생활')}>동네 생활</div>
+                        <div className='item-icon'>🏙️</div>
+                        <div className={myCountyBoardClass} onClick={() => county && onMyCountyClickHandler(county)}>{county?.join(' ')}</div>
                     </div>
                     <div className='category-item-box'>
                         <div className='item-icon'>📄</div>
-                        <div className={meetingBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '모임')}>모임</div>
+                        <div className={hometownBoardClass} onClick={() => onMyCountyCategoryClickHandler(countyBoard, '동네생활', county)}>동네 생활</div>
                     </div>
                     <div className='category-item-box'>
                         <div className='item-icon'>📄</div>
-                        <div className={etcCountyBoardClass} onClick={() => onCategoryClickHandler(infoBoard, '우리동네기타')}>우리 동네 기타</div>
+                        <div className={meetingBoardClass} onClick={() => onMyCountyCategoryClickHandler(countyBoard, '모임', county)}>모임</div>
+                    </div>
+                    <div className='category-item-box'>
+                        <div className='item-icon'>📄</div>
+                        <div className={etcCountyBoardClass} onClick={() => onMyCountyCategoryClickHandler(countyBoard, '우리동네기타', county)}>우리 동네 기타</div>
                     </div> 
                 </div>
                 {isAdmin &&

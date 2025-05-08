@@ -21,7 +21,6 @@ import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_
     MY_COMMUNITY_POST_PATH,
     MY_COMMUNITY_COMMENT_PATH,
     MY_COMMUNITY_LIKED_PATH,
-    QUESTION_WRTIE_ABSOLUTE_PATH,
     QUESTION_WRTIE_PATH,
     QUESTION_VIEW_PATH,
     QUESTION_PATCH_PATH,
@@ -33,7 +32,9 @@ import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_
     AUTH_FIND_USER_RESULT_PATH,
     COMMUNITY_EDIT_PATH,
     REPORT_PATH,
-    COMMUNITY_SEARCH_PATH} from './constants';
+    COMMUNITY_SEARCH_PATH,
+    CALENDAR_PATH,
+    POLICY_PATH} from './constants';
 
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
@@ -41,7 +42,6 @@ import ProductMain from './views/Product';
 import DetailProduct from './views/Product/detail';
 import MyPage from './views/MyPage';
 import Auth from './views/Auth';
-import Inquiry from './views/MyPage/Question';
 import Others from './views/MyPage/Others';
 import MyActivity from './views/MyPage/Activity';
 import GroupBuying from './views/MyPage/GroupBuying';
@@ -72,7 +72,6 @@ import QuestionView from './views/MyPage/Question/Detail';
 import QuestionUpdate from './views/MyPage/Question/Update';
 import NoticeWrite from './views/MyPage/Notice/Write';
 import NoticeUpdate from './views/MyPage/Notice/Update';
-import NoticeDetail from './views/MyPage/Notice/Detail';
 import NoticeView from './views/MyPage/Notice/Detail';
 import WishLists from './views/MyPage/GroupBuying/WishList';
 
@@ -85,9 +84,11 @@ import Calendar from './views/Calendar';
 import FindId from './views/Auth/FindId';
 import FindPassword from './views/Auth/FindPassword';
 import FindResult from './views/Auth/FindResult';
+import PolicyView from './views/Policy/PolicyView';
+import PolicyViewPage from './views/Policy/PolicyView';
+import CommunitySearch from './views/Community/Search';
 import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
-import CommunitySearch from './views/Community/Search';
 import CountyMain from './views/Community/County';
 
 function App() {
@@ -112,7 +113,9 @@ function App() {
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
         </Route>
-        <Route path='/calendar' element={<Calendar/>}/>
+        <Route path={CALENDAR_PATH} element={<Calendar/>}/>
+        <Route path={POLICY_PATH} element={<PolicyViewPage />} />
+
         <Route path={PRODUCT_PATH}>
           <Route index element={<ProductMain />} />
           <Route path={WRITE_PATH} element={<ProductWrite />} />

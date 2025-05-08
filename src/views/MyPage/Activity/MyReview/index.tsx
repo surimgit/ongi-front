@@ -1,5 +1,6 @@
 import React from 'react'
 import './style.css';
+import MypageSidebar from 'src/layouts/MypageSidebar';
 
 interface ReviewProps{
   title: string;
@@ -58,6 +59,7 @@ function ReviewItem({
 export default function MyReview() {
   return (
     <div id='my-review-main-wrapper'>
+      <MypageSidebar/>
       <div className='contents-wrapper'>
         <div className='title-area'>
           <div className='title'>내 후기</div>

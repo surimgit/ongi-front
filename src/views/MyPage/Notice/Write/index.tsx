@@ -25,7 +25,6 @@ export default function NoticeWrite() {
   const isActive = title !== '' && content !== '';
 
   // variable: 문의하기 작성 버튼 클래스 //
-  const writeButtonClass = isActive ? 'button middle primary' : 'button middle disable'; 
 
   // function: 네비게이터 함수 //
   const navigator = useNavigate();

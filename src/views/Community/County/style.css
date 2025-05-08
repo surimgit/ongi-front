@@ -32,7 +32,7 @@
     gap: 10px;
 }
 
-#county-main-wrapper .province-container {
+#county-main-wrapper .region-container {
     display: flex;
     flex-direction: column;
 
@@ -50,7 +50,7 @@
     color: var(--Lightmode-Grey5);
 }
 
-#county-main-wrapper .province-box {
+#county-main-wrapper .region-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -61,7 +61,7 @@
     width: 100%;
 }
 
-#county-main-wrapper .province-container:hover {
+#county-main-wrapper .region-container:hover {
     background-color: var(--Lightmode-Grey3);
 }
 

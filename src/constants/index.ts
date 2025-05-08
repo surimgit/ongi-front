@@ -12,6 +12,7 @@ export const ADDRESS_PATH = 'address';
 export const WRITE_PATH = 'write';
 export const PRODUCT_VIEW_PATH = ':productNumber';
 export const CALENDAR_PATH = 'calendar';
+export const POLICY_PATH = 'policy-view';
 
 export const AUTH_FIND_ID_PATH = 'find-id';
 export const AUTH_FIND_PASSWORD_PATH = 'find-password';
@@ -107,7 +108,8 @@ export const COMMUNITY_HOTBOARD_ABSOLUTE_PATH = (boardType: Board) => `${ROOT_PA
 export const COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_COUNTYBOARD_PATH}`;
 
 export const COUNTY_MAIN_ABSOLUTE_PATH = (boardType: Board) => `${COMMUNITY_BOARD_ABSOLUTE_PATH(boardType)}`;
-export const COUNTY_ABSOLUTE_PATH = (boardType: Board, county: County) => `${COMMUNITY_BOARD_ABSOLUTE_PATH(boardType)}&county=${county}`;
+export const COUNTY_ABSOLUTE_PATH = (boardType: Board, region: string, county: string | undefined) => `${COMMUNITY_BOARD_ABSOLUTE_PATH(boardType)}&region=${region}&county=${county}`;
+export const COUNTY_CATEGORY_ABSOLUTE_PATH = (boardType: Board, categoryType: CommunityCategory, region: string, county: string | undefined) => `${COMMUNITY_CATEGORY_ABSOLUTE_PATH(boardType, categoryType)}&region=${region}&county=${county}`;
 
 export const MYPAGE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}`;
 export const MYPAGE_PATCH_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_PATCH_PATH}`;
@@ -151,9 +153,20 @@ export const MY_GROUPBUYING_SELL_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${M
 
 export const NEEDHELPER_ABSOLUTE_PATH = `${ROOT_PATH}${NEEDHELPER_PATH}`;
 export const CALENDAR_ABSOLUTE_PATH = `${ROOT_PATH}${CALENDAR_PATH}`;
-
+export const POLICY_ABSOLUTE_PATH = (plcyNo: string, plcyNm: string, keyword?: string, regions?: string, categories?: string, page?: string, section?: string) => {
+    const queryString = buildQueryString({ plcyNo, plcyNm: plcyNm, keyword, regions, categories, page, section }); return `/${POLICY_PATH}?${queryString}`;};
 
 export const REPORT_ABSOLUTE_PATH = `${ROOT_PATH}${REPORT_PATH}`;
 
 // variable: access token 속성명 //
 export const ACCESS_TOKEN = 'accessToken';
+
+// function: policy absolute path 쿼리 함수 //
+export const buildQueryString = (params: Record<string, string | undefined>) => {
+    const query = new URLSearchParams();
+    for (const key in params) {
+        const value = params[key];
+        if (value) query.append(key, value);
+    }
+    return query.toString();
+};
