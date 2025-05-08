@@ -190,8 +190,19 @@ export default function ProductMain() {
       else setFilterMessage(`등록된 상품이 없습니다!!`);
     }else setFilterMessage('');
     
+    products.sort(
+      (a,b) => {
+        const aIsClosed = isClosed(a.status);
+        const bIsClosed = isClosed(b.status);
 
+        // 마감된 상품은 항상 뒤로
+        if (aIsClosed && !bIsClosed) return 1;
+        if (!aIsClosed && bIsClosed) return -1;
+        return 0;
+      }
+    )
     setTotalList(products);
+    
   }
 
   // function: filter type 처리 함수 //

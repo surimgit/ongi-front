@@ -2,18 +2,19 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import "./style.css"
 import { usePagination } from 'src/hooks';
 import { useCookies } from 'react-cookie';
-import { ACCESS_TOKEN, MY_GROUPBUYING_BUY_ABSOLUTE_PATH, MY_GROUPBUYING_SELL_ABSOLUTE_PATH, MY_GROUPBUYING_WISH_LIST_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, MY_GROUPBUYING_BUY_ABSOLUTE_PATH, MY_GROUPBUYING_SELL_ABSOLUTE_PATH, MY_GROUPBUYING_WISH_LIST_ABSOLUTE_PATH, PRODUCT_ABSOLUTE_PATH, PRODUCT_VIEW_ABSOLUTE_PATH } from 'src/constants';
 import { useNavigate } from 'react-router';
 import MypageSidebar from 'src/layouts/MypageSidebar';
 import Pagination from 'src/components/Pagination';
 import MySale from 'src/types/interfaces/my-sale-interface';
-import { getMySalesRequest, getProductOrderItemsRequest, postWaybillNumberRequest } from 'src/apis';
+import { getMySalesRequest, getProductOrderItemsRequest, postAlertRequest, postWaybillNumberRequest } from 'src/apis';
 import GetMySalesResponseDto from 'src/apis/dto/response/user/get-my-sales.response.dto';
 import { ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import GetOrderItemsResponseDto from 'src/apis/dto/response/user/get-order-items.response.dto';
 import { OrderItems } from 'src/types/interfaces';
 import { PostWaybillNumberRequestDto } from 'src/apis/dto/request/user';
+import PostAlertRequestDto from 'src/apis/dto/request/alert/post-alert.request.dto';
 
 interface SaleProps{
   sale: MySale;
@@ -23,7 +24,10 @@ interface SaleProps{
 // component: 내 판매 상품 컴포넌트 //
 function SalesItem({sale, onWaybillClick}: SaleProps) {
 
-  const { category, name, price, productQuantity, boughtAmount, deadline, openDate, image, status } = sale;
+  const { sequence, category, name, price, productQuantity, boughtAmount, deadline, openDate, image, status } = sale;
+
+  // variable: navigator 변수 //
+  const navigator = useNavigate();
 
   // variable: 판매율 변수 //
   const saleRate = Math.floor((boughtAmount / productQuantity) * 100).toLocaleString();
@@ -34,10 +38,15 @@ function SalesItem({sale, onWaybillClick}: SaleProps) {
   // variable: 개당 가격 변수 //
   const pricePerPiece = Math.floor(price / productQuantity).toLocaleString();
 
+  // event handler: 판매 목록 상품 클릭 이벤트 핸들러 //
+  const onProductClickHandler = () => {
+    navigator(PRODUCT_VIEW_ABSOLUTE_PATH(sequence))
+  }
+
   // render: 내 판매 상품 컴포넌트 렌더링 //
   return(
     <div className='tr'>
-      <div className='td detail-box'>
+      <div className='td detail-box' onClick={onProductClickHandler}>
         <div className='product-box'>
           <img src={image} alt='상품 이미지'/>
           <div className='product-info'>
@@ -75,10 +84,12 @@ interface OrderItemProps{
 // component: 상품 배송지 입력 컴포넌트 //
 function OrderItem({order, image, name}:OrderItemProps){
 
-  const {orderItemSequence, productSequence, quantity, waybillNumber, deliveryAddressSnapshot, approvedTime} = order;
+  const {orderItemSequence, productSequence, quantity, waybillNumber, deliveryAddressSnapshot, approvedTime, buyerId} = order;
 
   // state: 송장번호 상태 //
   const [waybillNumberInput, setWaybillNumberInput] = useState<string>('');
+  const [localWaybillNumber, setLocalWaybillNumber] = useState<string | null>(waybillNumber);
+
 
   // state: cookie 상태 //
   const [cookies] = useCookies();
@@ -88,6 +99,18 @@ function OrderItem({order, image, name}:OrderItemProps){
 
   // function: post waybill number response 처리 함수 //
   const postWaybillNumberResponse = (responseBody: ResponseDto | null) => {
+    const {isSuccess, message} = responseMessage(responseBody);
+
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+    setLocalWaybillNumber(waybillNumberInput);
+  }
+
+  // function: post alert response 처리 함수 //
+  const postAlertResponse = (responseBody: ResponseDto | null) => {
     const {isSuccess, message} = responseMessage(responseBody);
 
     if(!isSuccess){
@@ -110,7 +133,14 @@ function OrderItem({order, image, name}:OrderItemProps){
       orderItemSequence , waybillNumber: waybillNumberInput
     }
 
+    const alertBody: PostAlertRequestDto = {
+      alertType: 'waybill', receiverId: buyerId, alertEntitySequence: 3, reason: null
+    }
+    // 알람이 발생한 장소
+
     postWaybillNumberRequest(requestBody, accessToken).then(postWaybillNumberResponse);
+    
+    postAlertRequest(alertBody, accessToken).then(postAlertResponse);
   }
 
   // render: 상품 배송지 입력 컴포넌트 렌더링 //
@@ -128,15 +158,14 @@ function OrderItem({order, image, name}:OrderItemProps){
       <div className='td quantity'>{quantity}개</div>
       <div className='td delivery'>{deliveryAddressSnapshot}</div>
       <div className='td waybill-number'>
-        {waybillNumber && 
-          <div>{waybillNumber}</div>
-        }
-        {!waybillNumber && 
+        {localWaybillNumber ? (
+          <div>{localWaybillNumber}</div>
+        ) : (
           <div>
-            <input type='text' minLength={9} maxLength={14} value={waybillNumberInput} onChange={onWaybillNumberChangeHandler}/>
+            <input type='text' minLength={9} maxLength={14} value={waybillNumberInput} onChange={onWaybillNumberChangeHandler} />
             <div className='waybill-button' onClick={onWaybillButtonClickHandler}>입력하기</div>
           </div>
-        }
+        )}
       </div>
     </div>
   )
@@ -208,6 +237,8 @@ export default function MySell() {
   const onMySellClickHandler = () => {
     navigator(MY_GROUPBUYING_SELL_ABSOLUTE_PATH);
   }
+
+  
 
   // event handler: 배송지 입력 버튼 클릭 시 //
   const onWaybillClickHandler = (sale: MySale) => {

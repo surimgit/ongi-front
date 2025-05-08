@@ -9,4 +9,5 @@ export default interface MyBuying {
   approvedTime: string;
   waybillNumber: string;
   deliveryAddressSnapshot: string;
+  userId: string;
 }

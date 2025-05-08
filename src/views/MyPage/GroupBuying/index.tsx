@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import './style.css'
 import MypageSidebar from 'src/layouts/MypageSidebar';
-import { fileUploadsRequest, getMyBuyingRequest, postPaymentCancelRequest, postProductReviewRequest } from 'src/apis';
+import { fileUploadsRequest, getMyBuyingRequest, postAlertRequest, postPaymentCancelRequest, postProductReviewRequest } from 'src/apis';
 import { useCookies } from 'react-cookie';
 import { ACCESS_TOKEN, MY_GROUPBUYING_BUY_ABSOLUTE_PATH, MY_GROUPBUYING_SELL_ABSOLUTE_PATH, MY_GROUPBUYING_WISH_LIST_ABSOLUTE_PATH } from 'src/constants';
 import { GetMyBuyingResponseDto } from 'src/apis/dto/response/user';
@@ -14,6 +14,7 @@ import Modal from 'src/components/Modal';
 import { PostProductReviewRequestDto } from 'src/apis/dto/request/user';
 import { PostPaymentCancelRequestDto } from 'src/apis/dto/request/payment';
 import { useNavigate } from 'react-router';
+import PostAlertRequestDto from 'src/apis/dto/request/alert/post-alert.request.dto';
 
 interface ProductItemProps {
   buyingContent: MyBuying
@@ -204,7 +205,7 @@ function ProductReview({buyingContent, onClose}: {buyingContent:ProductItemProps
 // component: 구매 취소 모달 컴포넌트 //
 function PaymentCancel({buyingContent, onClose}: {buyingContent:ProductItemProps['buyingContent'], onClose:()=>void}){
 
-  const {paymentKey, productSequence, orderItemSequence, price, name, image, quantity} = buyingContent;
+  const {paymentKey, productSequence, orderItemSequence, price, name, image, quantity, userId} = buyingContent;
 
   // state: 쿠키 상태 //
   const [cookies] = useCookies();
@@ -216,6 +217,17 @@ function PaymentCancel({buyingContent, onClose}: {buyingContent:ProductItemProps
   // variable: 총 환불금액 //
   const totalPrice = price * quantity;
 
+  // function: post alert response 처리 함수 //
+  const postAlertResponse = (responseBody: ResponseDto | null) => {
+    const {isSuccess, message} = responseMessage(responseBody);
+
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+  }
+
   // function: post payment cancel 처리 함수 //
   const postPaymentCancelResponse = (responseBody: ResponseDto | null) => {
     const { isSuccess, message  } = responseMessage(responseBody);
@@ -225,7 +237,11 @@ function PaymentCancel({buyingContent, onClose}: {buyingContent:ProductItemProps
       return;
     }
 
-    alert('결제가 취소되었습니다!');
+    const alertBody: PostAlertRequestDto = {
+      alertType: 'payment_cancel', receiverId: userId, alertEntitySequence: 3, reason: null
+    }
+
+    postAlertRequest(alertBody, accessToken).then(postAlertResponse);
   }
 
   // event handler: 취소사유 변경 이벤트 핸들러 //

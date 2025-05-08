@@ -67,6 +67,7 @@ const RESIGN_URL = `${USER_MODULE_URL}/resign`;
 const PRODUCT_MODULE_URL = `${API_DOMAIN}/api/v1/product`
 const POST_PRODUCT_URL = `${PRODUCT_MODULE_URL}/write`;
 const POST_STOCK_RESERVE_URL = `${PRODUCT_MODULE_URL}/reserve`;
+
 const GET_STOCK_RESERVE_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/reserve`;
 
 const PATCH_PRODUCT_QUANTITY_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/quantity`;
@@ -76,13 +77,16 @@ const GET_PRODUCT_DETAIL_URL = (sequence:number | string) => `${PRODUCT_MODULE_U
 const GET_PRODUCT_REVIEWS_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/review`;
 const GET_PRODUCT_REVIEW_IMAGES_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}/review-images`;
 
+
 const DELETE_PRODUCT_URL = (sequence: number | string) => `${PRODUCT_MODULE_URL}/${sequence}`;
+
 // 찜목록 API 경로
 const WISHLIST_MODULE_URL = `${API_DOMAIN}/api/v1/wish`;
 const POST_WISHLIST_URL = (postSequence: number | string) => `${WISHLIST_MODULE_URL}/${postSequence}`;
 const GET_WISHLIST_URL = `${WISHLIST_MODULE_URL}`;
 const GET_WISH_URL = (postSequence: number | string) => `${WISHLIST_MODULE_URL}/${postSequence}`;
 const DELETE_WISH_URL = (postSequence: number | string) => `${WISHLIST_MODULE_URL}/${postSequence}`;
+const GET_COUNT_WISH_URL =`${WISHLIST_MODULE_URL}/count`;
 
 const COMMUNITY_MODULE_URL = `${API_DOMAIN}/api/v1/community`;
 const POST_COMMUNITY_URL = `${COMMUNITY_MODULE_URL}/write`;
@@ -106,6 +110,7 @@ const SHOPPING_CART_MODULE_URL = `${API_DOMAIN}/api/v1/cart`;
 const POST_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
 const GET_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
 const DELETE_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`
+const GET_COUNT_SHOPPINGCART_URL =`${SHOPPING_CART_MODULE_URL}/count`;
 
 // 결제 API 경로
 const POST_ORDER_URL = `${PAYMENT_URL}/`;
@@ -499,6 +504,22 @@ export const postOrderItemsRequest = async (requestBody: PostOrderItemRequestDto
 // function: post stock reserve API 요청 함수 //
 export const postReserveRequest = async (requestBody: PostStockReservationRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_STOCK_RESERVE_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get count shopping cart API 요청 함수 //
+export const getCountShoppingCartRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(GET_COUNT_SHOPPINGCART_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get count wish API 요청 함수 //
+export const getCountWishRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(GET_COUNT_WISH_URL, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;

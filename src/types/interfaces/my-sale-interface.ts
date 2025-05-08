@@ -9,4 +9,5 @@ export default interface MySale{
   openDate: string;
   image: string;
   status: string;
+  userId: string;
 }

@@ -5,4 +5,5 @@ export default interface OrderItems {
   waybillNumber: string;
   deliveryAddressSnapshot: string;
   approvedTime: string;
+  buyerId: string;
 }
