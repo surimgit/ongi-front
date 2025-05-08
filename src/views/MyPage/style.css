@@ -346,7 +346,7 @@
   display: flex;
   padding: 15px 40px;
   border: 1px solid grey;
-  min-height: 80px;
+  min-height: 100px;
   align-items: center;
   white-space: pre-wrap;
   line-height: 1.3;
@@ -362,7 +362,6 @@
 }
 
 #mypage-main-wrapper .introduce-box .introduce-datail .textarea-wrapper textarea {
-  width: 100%;
   height: 115px;
   padding: 18px 16px;
   box-sizing: border-box;
@@ -375,8 +374,8 @@
   outline: none; 
   transition: border-color 0.3s, box-shadow 0.3s;
   white-space: pre-wrap;
-  overflow: hidden;      /* 스크롤바 안 보이게 */
-
+  overflow: hidden; 
+  margin: 0px;
 }
 
 #mypage-main-wrapper .introduce-box .introduce-datail .textarea-wrapper textarea:focus, 
@@ -422,7 +421,6 @@
   align-items: center;
 }
 
-/* "추가" 버튼 스타일 */
 #mypage-main-wrapper .tag-button-wrapper .modal-add-button {
   background-color: #4CAF50;
   color: white;
@@ -449,5 +447,5 @@
 #mypage-main-wrapper .tag-button-wrapper .modal-keywords-wrapper{
   display: flex;
   gap: 10px;
-  flex-wrap: wrap; /* ✅ 줄바꿈 허용 */
+  flex-wrap: wrap; 
 }

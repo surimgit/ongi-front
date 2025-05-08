@@ -32,6 +32,6 @@ export type {
   Schedule,
   PolicyList,
   ProductReviewImages,
-  Badge
+  Badge,
   NeedHelperInterface
 }
