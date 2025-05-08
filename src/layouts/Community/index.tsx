@@ -136,13 +136,13 @@ export default function CommunityLayout() {
     return (
         <div id='community-layout-wrapper'>
             <div className='category-list-container'>
-                {boardType === '우리 동네 게시판' &&
+                {boardType === '우리 동네 게시판' && county &&
                     <div className='county-box'>
                         <div className='county-icon'></div>
                         <div className='county'>{county?.join(' ')}</div>
                     </div>
                 }
-                {boardType !== '우리 동네 게시판' &&
+                {(boardType !== '우리 동네 게시판' || !county) &&
                     <div className='blank'></div>
                 }
                 <div className='community-post-button' onClick={onPostClickHandler}>커뮤니티 글쓰기</div>
@@ -206,22 +206,27 @@ export default function CommunityLayout() {
                         <div className='item-icon'>🏙️</div>
                         <div className={countyBoardClass} onClick={() => onBoardClickHandler('우리 동네 게시판')}>우리 동네 게시판</div>
                     </div>
-                    <div className='category-item-box'>
-                        <div className='item-icon'>🏙️</div>
-                        <div className={myCountyBoardClass} onClick={() => county && onMyCountyClickHandler(county)}>{county?.join(' ')}</div>
-                    </div>
-                    <div className='category-item-box'>
-                        <div className='item-icon'>📄</div>
-                        <div className={hometownBoardClass} onClick={() => onMyCountyCategoryClickHandler(countyBoard, '동네생활', county)}>동네 생활</div>
-                    </div>
-                    <div className='category-item-box'>
-                        <div className='item-icon'>📄</div>
-                        <div className={meetingBoardClass} onClick={() => onMyCountyCategoryClickHandler(countyBoard, '모임', county)}>모임</div>
-                    </div>
-                    <div className='category-item-box'>
-                        <div className='item-icon'>📄</div>
-                        <div className={etcCountyBoardClass} onClick={() => onMyCountyCategoryClickHandler(countyBoard, '우리동네기타', county)}>우리 동네 기타</div>
-                    </div> 
+                    {county &&
+                        <>
+                            <div className='category-item-box'>
+                                <div className='item-icon'>🏙️</div>
+                                <div className={myCountyBoardClass} onClick={() => county && onMyCountyClickHandler(county)}>{county?.join(' ')}</div>
+                            </div>
+                            <div className='category-item-box'>
+                                <div className='item-icon'>📄</div>
+                                <div className={hometownBoardClass} onClick={() => onMyCountyCategoryClickHandler(countyBoard, '동네생활', county)}>동네 생활</div>
+                            </div>
+                            <div className='category-item-box'>
+                                <div className='item-icon'>📄</div>
+                                <div className={meetingBoardClass} onClick={() => onMyCountyCategoryClickHandler(countyBoard, '모임', county)}>모임</div>
+                            </div>
+                            <div className='category-item-box'>
+                                <div className='item-icon'>📄</div>
+                                <div className={etcCountyBoardClass} onClick={() => onMyCountyCategoryClickHandler(countyBoard, '우리동네기타', county)}>우리 동네 기타</div>
+                            </div> 
+                        </>
+                    }
+                    
                 </div>
                 {isAdmin &&
                 <div className='category-container'>

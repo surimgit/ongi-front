@@ -96,7 +96,9 @@ export default function PostWrite() {
           <select className='select board' value={board} onChange={(event) => setBoard(event.target.value as Board)}>
             <option value="">게시판 선택</option>
             <option value="정보 게시판">정보 게시판</option>
-            <option value="우리 동네 게시판">우리 동네 게시판</option>
+            { county &&
+              <option value="우리 동네 게시판">우리 동네 게시판</option>
+            }
           </select>
           <select className='select category' value={category} onChange={(event) => setCategory(event.target.value as CommunityCategory)}>
             <option value="">카테고리 선택</option>

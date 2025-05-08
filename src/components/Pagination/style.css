@@ -45,7 +45,7 @@
 }
 
 .pagination-box .pagination .page.active {
-  color: var(--Lightmode-Grey);
+  color: var(--White);
   font-weight: 700;
   cursor: default;
 }

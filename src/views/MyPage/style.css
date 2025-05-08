@@ -143,18 +143,23 @@
 #mypage-main-wrapper .contents-wrapper .body .user-info-area .outline .button-select{
   border: 2px solid green;
   padding: 5px 10px;
+  width: 200px;
   border-radius: 25px;
+  text-align: center;
   box-sizing: border-box;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--Primary);
   background-color: aquamarine;
 }
 
 
 #mypage-main-wrapper .contents-wrapper .body .user-info-area .outline .button-change-achievements{
-  border: 1px solid blue;
-  width: 15px;
-  height: 15px;
-  text-align: center;
-  background-color: blue;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  background-image: url(src/assets/images/icon-badge-dropdown.png);
 }
 
 #mypage-main-wrapper .contents-wrapper .body .user-info-area .detail{

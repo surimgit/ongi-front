@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import './style.css';
-import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, CALENDAR_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, PRODUCT_ABSOLUTE_PATH, ROOT_PATH } from 'src/constants';
+import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, CALENDAR_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, NEEDHELPER_ABSOLUTE_PATH, PRODUCT_ABSOLUTE_PATH, ROOT_PATH } from 'src/constants';
 import { Board } from 'src/types/aliases';
 import useSignInUser from 'src/hooks/sign-in-user.hook';
 import { useEffect, useRef, useState } from 'react';
@@ -176,6 +176,11 @@ export default function Layout() {
     navigator(PRODUCT_ABSOLUTE_PATH);
   }
 
+  // event handler: 도우미 클릭 이벤트 처리 //
+  const onHelperClickHandler = () => {
+    navigator(NEEDHELPER_ABSOLUTE_PATH);
+  }
+
   // event handler: 알림 아이콘 클릭 이벤트 처리 //
   const onMyAlertClickHandler = () => {
     setShowMyAlert(!showMyAlert);
@@ -237,7 +242,7 @@ export default function Layout() {
           <div className='navigation-list'>
             <div className='navigation-list-item' onClick={() => onBoardClickHandler('전체 글')}>커뮤니티</div>
             <div className='navigation-list-item' onClick={onGroupBuyingClickHandler}>공구</div>
-            <div className='navigation-list-item'>도우미</div>
+            <div className='navigation-list-item' onClick={onHelperClickHandler}>도우미</div>
             <div className='navigation-list-item' onClick={onCalendarClickHandler}>청년달력</div>
             <div className='navigation-list-item' onClick={onMyPageClickHandler}>마이페이지</div>
           </div>

@@ -1,0 +1,111 @@
+#account-update-main-wrapper {
+  position: relative;
+  min-width: 914px;
+  height: 100%;
+  padding-bottom: 30px;
+}
+
+#account-update-main-wrapper .header-container{
+  width: 100%;
+  background-color: rgb(248, 241, 104);
+  margin-bottom: 40px;
+}
+
+#account-update-main-wrapper .top{
+  display: flex;
+  font-size: 23px;
+  height: 80px;
+  font-weight: 700;
+  margin: 0 auto;
+  max-width: 914px;
+  color: var(--Black);
+  align-items: center;
+  gap: 20px;
+}
+
+#account-update-main-wrapper .header-container .logo{
+  background-image: url(src/assets/images/logo.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 50px;
+}
+
+#account-update-main-wrapper .content-wrapper{
+  margin: 0 auto;
+  width: 400px;
+  padding: 30px;
+  border: 1px solid gray;
+  background-color: var(--White);
+}
+
+#account-update-main-wrapper .content-wrapper .title{
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+#account-update-main-wrapper .content-wrapper .notice-box{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+  color: red;
+  margin-bottom: 70px;
+}
+
+#account-update-main-wrapper .content-wrapper .input-box{
+  display: flex;
+  flex-direction: column;
+}
+
+
+#account-update-main-wrapper .content-wrapper .input-box .input{
+  height: 43px;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #d1d5db;
+  box-sizing: border-box;
+}
+
+
+#account-update-main-wrapper .content-wrapper .input-box .input.first{
+  margin-bottom: 10px;
+}
+
+#account-update-main-wrapper .content-wrapper .input-box input::placeholder {
+  color: #a3a3a3;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#account-update-main-wrapper .content-wrapper .input-box input:focus {
+  border: 1px solid black;
+}
+
+#account-update-main-wrapper .content-wrapper .button-wrapper{
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#account-update-main-wrapper .content-wrapper .button-wrapper .button-check{
+  background-color: orange;
+  padding: 16px 0px 15px;
+  width: 100%;
+  font-weight: 700;
+  color: var(--White);
+  text-align: center;
+}
+
+#account-update-main-wrapper .content-wrapper .button-wrapper .button-cancel{
+  padding: 16px 0px 15px;
+  width: 100%;
+  font-weight: 700;
+  color: var(--Black);
+  border: 1px solid rgb(83, 83, 83);
+  text-align: center;
+}
