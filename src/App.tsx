@@ -34,7 +34,8 @@ import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_
     COMMUNITY_SEARCH_PATH,
     CALENDAR_PATH,
     POLICY_PATH,
-    NEEDHELPER_WRITE_PATH} from './constants';
+    NEEDHELPER_WRITE_PATH,
+    NEEDHELPER_VIEW_PATH} from './constants';
 
 
 import NeedHelper from './views/NeedHelper';
@@ -90,6 +91,8 @@ import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
 import AccountUpdate from './views/MyPage/Account/Update';
 import HelperWrite from './views/NeedHelper/Write';
+import NeedHelperPost from './views/NeedHelper/Detail';
+import HelperEdit from './views/NeedHelper/Edit';
 
 function App() {
   return (
@@ -115,6 +118,8 @@ function App() {
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
           <Route path={NEEDHELPER_WRITE_PATH} element={<HelperWrite />} />
+          <Route path={NEEDHELPER_VIEW_PATH} element={<NeedHelperPost />} />
+          <Route path="/needHelper/write/:sequence" element={<HelperEdit />} />
         </Route>
         <Route path={CALENDAR_PATH} element={<Calendar/>}/>
         <Route path={POLICY_PATH} element={<PolicyViewPage />} />

@@ -43,6 +43,10 @@ import { GetReviewImagesResponseDto } from './dto/response/product';
 import GetCommunityCommentsResponse from './dto/response/community/get-community-comments.response.dto';
 import { access } from 'fs';
 import GetBadgeListResponseDto from './dto/response/user/get-badge-list.responseDto';
+import PostHelperRequestDto from './dto/request/needhelper/post-helper.request.dto';
+import GetHelperPostResponseDto from './dto/response/needhelper/get-helper-post.response.dto';
+import PatchHelperPostRequestDto from './dto/request/needhelper/patch-helper.request.dto';
+import PostHelperCommentRequestDto from './dto/request/needhelper/post-helper-comment.request.dto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -176,6 +180,22 @@ const GET_MY_COMMUNTY_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/post`;
 const GET_MY_COMMUNTY_COMMENT_URL = `${API_DOMAIN}/api/v1/mypage/community/comment`;
 const GET_MY_COMMUNTY_LIKED_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/liked`;
 
+// 도우미 관련 경로 
+const HELPER_MODULE_URL = `${API_DOMAIN}/api/v1/needHelper`;
+const POST_HELPER_URL = `${HELPER_MODULE_URL}/write`;
+const GET_HELPER_POST_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}`;
+const PATCH_HELPER_POST_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}`;
+const DELETE_HELPER_POST_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}`;
+
+const POST_HELPER_COMMENT_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/comment`;
+const DELETE_HELPER_COMMENT_URL = (postSequence: number | string, commentSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/comment/${commentSequence}`;
+const GET_HELPER_COMMENTS_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/comment`;
+const GET_HELPER_COMMENT_URL = (postSequence: number | string, commentSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/comment/${commentSequence}`;
+
+const PUT_HELPER_LIKED_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/liked`;
+const GET_HELPER_LIKED_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/liked`;
+const POST_HELPER_APPLY_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/apply`;
+const DELETE_HELPER_APPLY_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/apply`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
@@ -957,3 +977,108 @@ export const getBadgeListRequest = async (accessToken: string) => {
     .catch(responseErrorHandler);
   return reseponseBody;
 }
+
+// function: post Helper API 요청 함수 //
+export const postHelperRequest = async (requestBody: PostHelperRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_HELPER_URL, requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get Helper list API 요청 함수 //
+export const getHelperPostListRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(HELPER_MODULE_URL, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get Helper post API 요청 함수 //
+export const getHelperPostRequest = async (postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.get(GET_HELPER_POST_URL(postSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: patch Helper post API 요청 함수
+export const patchHelperPostRequest = async (requestBody: PatchHelperPostRequestDto, postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.patch(PATCH_HELPER_POST_URL(postSequence), requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: delete Helper post API 요청 함수
+export const deleteHelperPostRequest = async (postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_HELPER_POST_URL(postSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+    console.log("accessToken", accessToken); 
+  return responseBody;
+};
+
+// function: post Helper comment API 요청 함수
+export const postHelperCommentRequest = async (requestBody: PostHelperCommentRequestDto, postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.post(POST_HELPER_COMMENT_URL(postSequence), requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+    return responseBody;
+};
+
+// function: delete Helper comment API 요청 함수
+export const deleteHelperCommentRequest = async (postSequence: number | string, commentSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_HELPER_COMMENT_URL(postSequence, commentSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get Helper comment list API 요청 함수
+export const getHelperCommentsRequest = async (postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.get(GET_HELPER_COMMENTS_URL(postSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get Helper comment API 요청 함수
+export const getHelperCommentRequest = async (postSequence: number | string, commentSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.get(GET_HELPER_COMMENT_URL(postSequence, commentSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: 좋아요 토글
+export const putHelperLikedRequest = async (postSequence: number | string, liked: boolean, accessToken: string) => {
+  const responseBody = await axios.put(PUT_HELPER_LIKED_URL(postSequence), { liked }, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get helper liked API 요청 함수 //
+export const getHelperLikedRequest = async (postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.get(GET_HELPER_LIKED_URL(postSequence), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: 신청하기
+export const postHelperApplyRequest = async (postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.post(POST_HELPER_APPLY_URL(postSequence), {}, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: 신청 취소하기
+export const deleteHelperApplyRequest = async (postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_HELPER_APPLY_URL(postSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};

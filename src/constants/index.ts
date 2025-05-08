@@ -71,6 +71,7 @@ export const FAQ_PATH = 'faq';
 
 export const NEEDHELPER_PATH = 'needHelper';
 export const NEEDHELPER_WRITE_PATH = 'write';
+export const NEEDHELPER_VIEW_PATH = ':sequence';
 
 export const REPORT_PATH = 'report';
 
