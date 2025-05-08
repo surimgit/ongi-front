@@ -751,7 +751,7 @@ export const patchUserPasswordRequest = async (requestBody: PatchUserPasswordReq
   return responseBody;
 };
 
-// function: patch user password API 요청 함수 //
+// function: patch user address API 요청 함수 //
 export const patchUserAddressRequest = async (requestBody: PatchUserAddressRequestDto, accessToken: string) => {
   const responseBody = await axios.patch(PATCH_MYPAGE_ADDRESS_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
