@@ -2,16 +2,29 @@ import React, { useEffect, useState } from 'react'
 import './style.css'
 import MypageSidebar from 'src/layouts/MypageSidebar'
 import { useNavigate } from 'react-router'
+
+import { MYPAGE_ABSOLUTE_PATH } from 'src/constants';
+import { getCountShoppingCartRequest, getCountWishRequest, getShoppingCartRequest, getWishListRequest } from 'src/apis';
+import { useCookies } from 'react-cookie';
+import { GetShoppingCartResponseDto } from 'src/apis/dto/response/shoppingCart';
+import { GetWishListResponseDto, ResponseDto } from 'src/apis/dto/response';
+import { responseMessage } from 'src/utils';
 import { ACCESS_TOKEN, MY_COMMUNITY_COMMENT_ABSOLUTE_PATH, MY_COMMUNITY_POST_ABSOLUTE_PATH, MY_GROUPBUYING_WISH_LIST_ABSOLUTE_PATH, MY_NEEDHELLPER_APPLY_ABSOLUTE_PATH, MY_NEEDHELLPER_ASK_ABSOLUTE_PATH, MY_REVIEW_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, SHOPPING_CART_ABSOLUTE_PATH } from 'src/constants';
 import { useCookies } from 'react-cookie';
 import { getMyActivityCountRequest } from 'src/apis';
 import { GetMyActivityCountResponseDto } from 'src/apis/dto/response/user';
 import { ResponseDto } from 'src/apis/dto/response';
 
+
 export default function Activity() {
 
   // state: cookie 상태 //
   const [cookies] = useCookies();
+  // state: 장바구니 개수 상태 //
+  const [shoppingCartLen, setShoppingCartLen] = useState<number>(0);
+  // state: 찜목록 개수 상태 //
+  const [wishLen, setWishLen] = useState<number>(0);
+
 
   // state: my activity count 상태 //
   const [communityCommentCount, setCommunityCommentCount] = useState<number | string>('0');
@@ -26,6 +39,16 @@ export default function Activity() {
 
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
+
+
+  // function: get shopping cart response 처리 함수 //
+  const getShoppingCartResponse = (responseBody: GetShoppingCartResponseDto | ResponseDto | null) => {
+    const {isSuccess, message} = responseMessage(responseBody);
+
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
 
   // event handler: 내 정보 버튼 클릭 이벤트 처리 //
   const onMyInfoButtonClickHandler = () => {
@@ -94,6 +117,38 @@ export default function Activity() {
 
 
 
+    
+
+  }
+
+  // function: get response 처리 함수 //
+  const getWishListResponse = (responseBody: GetWishListResponseDto | ResponseDto | null) => {
+    const {isSuccess, message} = responseMessage(responseBody);
+
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+  }
+
+  // event handler: 내 정보 버튼 클릭 이벤트 처리 //
+  const onMyInfoButtonClickHandler = () => {
+    navigator(MYPAGE_ABSOLUTE_PATH);
+  }
+
+  useEffect(() => {
+    getCountShoppingCartRequest(accessToken).then((length:number) => {
+      setShoppingCartLen(length);
+    });
+    getCountWishRequest(accessToken).then((length: number) => {
+      setWishLen(length);
+    })
+    getShoppingCartRequest(accessToken).then(getShoppingCartResponse);
+    getWishListRequest(accessToken).then(getWishListResponse);
+  },[])
+
+  
   return (
     <div id='my-activity-main-wrapper'>
       <MypageSidebar/>
@@ -122,11 +177,12 @@ export default function Activity() {
             <div className='category-container'>
               <div className='category-box'>
                 <div className='category'>• 장바구니 상품</div>
-                <div className='category-number' onClick={onShoppingCartClickHandler}>{shoppingCartCount}개</div>
+
+                <div className='category-number'>{shoppingCartLen}개</div>
               </div>
               <div className='category-box'>
                 <div className='category'>• 찜한 상품 수</div>
-                <div className='category-number' onClick={onWishListClickHandler}>{wishListCount}개</div>
+                <div className='category-number'>{wishLen}개</div>
               </div>
             </div>
           </div>

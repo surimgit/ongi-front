@@ -18,7 +18,9 @@
   display: flex;
   justify-content: space-around;
   height: 60px;
-  background-color: grey;
+
+  color: #666;
+  background-color: #F0F0F0;
   border-radius: 12px;
   overflow: hidden; /* 자식이 radius 밖으로 나가는 것 방지 */
 
@@ -35,12 +37,12 @@
 }
 
 #group-buying-main-wrapper .body .select-bar .content.active{
-  color: var(--Primary);
   font-weight: bold;
-  background-color: white;
+  background-color: #D97C38;
+  color: white;
 }
 
-#group-buying-main-wrapper .body .product-list-table .tr{
+#group-buying-main-wrapper .body .product-table .tr{
   display: flex;
   align-items: center;
   text-align: center;
@@ -48,29 +50,33 @@
   cursor: default;
 }
 
-#group-buying-main-wrapper .body .product-list-table .tr:first-child{
+#group-buying-main-wrapper .body .product-table .tr:first-child{
   background-color: antiquewhite;
-  padding: 15px 30px;
+  padding: 15px 0px;
   font-size: 20px;
   font-weight: bold;
 }
 
-#group-buying-main-wrapper .body .product-list-table .tr:first-child *{
+#group-buying-main-wrapper .body .product-table .tr:first-child *{
   border-right: 2px solid antiquewhite;
 }
 
-#group-buying-main-wrapper .body .product-list-table .tr .date{
+#group-buying-main-wrapper .body .product-table .tr {
+  padding: 10px 0px;
+}
+
+#group-buying-main-wrapper .body .product-table .tr .date{
   flex:1.8;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#group-buying-main-wrapper .body .product-list-table .tr .detail-box{
+#group-buying-main-wrapper .body .product-table .tr .detail-box{
   flex:6;
 }
 
-#group-buying-main-wrapper .body .product-list-table .tr .quantity{
+#group-buying-main-wrapper .body .product-table .tr .quantity{
   flex:0.6;
   display: flex;
   align-items: center;
@@ -78,14 +84,14 @@
 }
 
 
-#group-buying-main-wrapper .body .product-list-table .tr .amount{
+#group-buying-main-wrapper .body .product-table .tr .amount{
   flex:1.6;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#group-buying-main-wrapper .body .product-list-table .tr .order-number{
+#group-buying-main-wrapper .body .product-table .tr .order-number{
   flex:1.8;
   display: flex;
   align-items: center;
@@ -93,12 +99,12 @@
   border: none;
 }
 
-#group-buying-main-wrapper .body .product-list-table .td.detail-box{
+#group-buying-main-wrapper .body .product-table .td.detail-box{
   display: flex;
   gap: 20px;
 } 
 
-#group-buying-main-wrapper .body .product-list-table .td{
+#group-buying-main-wrapper .body .product-table .td{
   height: 130px;
   border-right: 2px solid rgb(197, 193, 193);
 } 

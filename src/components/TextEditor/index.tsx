@@ -105,7 +105,7 @@ export default function TextEditor({ content, setContent }: Props) {
     extensions,
     content,
     onUpdate: ({ editor }) => {
-      setContent(editor.getHTML())
+      setContent(editor.getText())
     }
   })
 

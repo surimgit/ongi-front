@@ -64,7 +64,6 @@ import PostWrite from './views/Community/Write';
 import SuccessPage from './views/TossPayment/SuccessPage';
 import FailPage from './views/TossPayment/FailPage';
 import CheckoutPage from './views/TossPayment/CheckoutPage';
-import ShoppingCart from './views/ShoppingCart';
 import CommunityMain from './views/Community';
 import PostDetail from './views/Community/Detail';
 import Question from './views/MyPage/Question';
@@ -86,9 +85,13 @@ import FindId from './views/Auth/FindId';
 import FindPassword from './views/Auth/FindPassword';
 import FindResult from './views/Auth/FindResult';
 import PolicyViewPage from './views/Policy/PolicyView';
-import CommunitySearch from './views/Community/Search';
 import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
+
+import CommunitySearch from './views/Community/Search';
+import MySell from './views/MyPage/GroupBuying/MySell';
+import ShoppingCartMain from './views/ShoppingCart';
+
 import AccountUpdate from './views/MyPage/Account/Update';
 import HelperWrite from './views/NeedHelper/Write';
 import OtherUserReview from './views/MyPage/Others/Review';
@@ -96,6 +99,7 @@ import OtherUserCommunity from './views/MyPage/Others/Community';
 import OtherUserGroupBuying from './views/MyPage/Others/GroupBuying';
 import NeedHelperPost from './views/NeedHelper/Detail';
 import HelperEdit from './views/NeedHelper/Edit';
+
 
 function App() {
   return (
@@ -134,7 +138,7 @@ function App() {
         </Route>
 
         <Route path={SHOPPING_CART_PATH}>
-          <Route index element={<ShoppingCart/>}></Route>
+          <Route index element={<ShoppingCartMain/>}></Route>
           <Route path={ADDRESS_PATH} element={<ShoppingCartAddress/>}/>
         </Route>
 
@@ -155,7 +159,7 @@ function App() {
             <Route index element={<Account/>}/>
           </Route>
           <Route path={MY_GROUPBUYING_PATH}>
-            <Route path={MY_GROUPBUYING_SELL_PATH} element={<GroupBuying/>} />
+            <Route path={MY_GROUPBUYING_SELL_PATH} element={<MySell/>} />
             <Route path={MY_GROUPBUYING_BUY_PATH} element={<GroupBuying/>} />
             <Route path={MY_GROUPBUYING_WISH_LIST_PATH} element={<WishList/>} />
           </Route>

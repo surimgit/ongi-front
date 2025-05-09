@@ -12,16 +12,17 @@
   width: 100%;
   padding-right: 70px;
 
-  gap: 20px;
+  gap: 50px;
 }
 
 #wish-list-main-wrapper .body .select-bar{
   display: flex;
   justify-content: space-around;
   height: 60px;
-  background-color: grey;
+
+  background-color: #F0F0F0;
+  color: #666;
   border-radius: 12px;
-  margin-bottom: 50px;
   overflow: hidden;
 
   cursor: pointer;
@@ -37,9 +38,9 @@
 }
 
 #wish-list-main-wrapper .body .select-bar .content.active{
-  color: var(--Primary);
+  background-color: #D97C38;
+  color: white;
   font-weight: bold;
-  background-color: white;
 }
 
 #wish-list-main-wrapper .body .product-list-table{

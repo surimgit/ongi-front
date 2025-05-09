@@ -6,6 +6,14 @@
 
     width: 1134px;
     margin: 100px auto 0;
+    
+    gap: 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+#container {
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
 }
 
 .gb-container-title {
@@ -13,9 +21,11 @@
     align-items: start;
     justify-content: start;
     width: 100%;
-    margin-bottom: 10px;
+    padding-bottom: 10px;
 
     font-size: 30px;
     font-weight: 700;
     cursor: pointer;
+
+    border-bottom: 2px solid #ddd;
 }

@@ -18,6 +18,7 @@ export function responseMessage(responseBody: ResponseDto | null) {
     responseBody.code === 'EU' ? '인증에 실패했습니다.' :
     responseBody.code === 'ND' ? '존재하지 않는 일기입니다.' :
     responseBody.code === 'NEP' ? '존재하지 않는 상품입니다.' :
+    responseBody.code === 'OOS' ? '구매 가능 수량을 초과했습니다.':
     responseBody.code === 'NP' ? '권한이 없습니다.' : '';
 
   const isSuccess = responseBody !== null && responseBody.code === 'SU';

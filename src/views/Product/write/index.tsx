@@ -74,6 +74,7 @@ export default function ProductWrite() {
   // event handler: 내용 변경 이벤트 처리 //
   const onContentChangeHandler = (content: string) => {
     setContent(content);
+    console.log(content);
   };
 
   // event handler: 카테고리 변경 이벤트 처리 //
@@ -182,10 +183,12 @@ export default function ProductWrite() {
               <div className='title'>카테고리</div>
               <select value={category} onChange={onCategoryChangeHandler}>
                 <option value="">카테고리를 선택하세요</option>
-                <option value="식품">식품</option>
-                <option value="패션의류">의류</option>
-                <option value="생필품">생필품</option>
+                <option value="식품">건강식품</option>
+                <option value="패션의류">패션의류</option>
+                <option value="생필품">스포츠</option>
                 <option value="가전제품">가전제품</option>
+                <option value="뷰티">뷰티</option>
+                <option value="식품">식품</option>
                 <option value="기타">기타</option>
               </select>
             </div>
@@ -193,7 +196,7 @@ export default function ProductWrite() {
               <div className='due-date-box'>
                 <div className='title'>모집 마감일자</div>
                 <input
-                  type='date'
+                  type='datetime-local'
                   id='start'
                   name='trip-start'
                   value={deadline}
@@ -204,7 +207,7 @@ export default function ProductWrite() {
               <div className='due-date-box'>
                 <div className='title'>오픈예정 일자</div>
                 <input
-                  type='date'
+                  type='datetime-local'
                   id='start'
                   name='trip-end'
                   value={openDate}

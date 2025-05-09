@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import './style.css'
 import MypageSidebar from 'src/layouts/MypageSidebar';
-import { fileUploadsRequest, getMyBuyingRequest, postPaymentCancelRequest, postProductReviewRequest } from 'src/apis';
+import { fileUploadsRequest, getMyBuyingRequest, postAlertRequest, postPaymentCancelRequest, postProductReviewRequest } from 'src/apis';
 import { useCookies } from 'react-cookie';
 import { ACCESS_TOKEN, MY_GROUPBUYING_BUY_ABSOLUTE_PATH, MY_GROUPBUYING_SELL_ABSOLUTE_PATH, MY_GROUPBUYING_WISH_LIST_ABSOLUTE_PATH } from 'src/constants';
 import { GetMyBuyingResponseDto } from 'src/apis/dto/response/user';
@@ -14,6 +14,7 @@ import Modal from 'src/components/Modal';
 import { PostProductReviewRequestDto } from 'src/apis/dto/request/user';
 import { PostPaymentCancelRequestDto } from 'src/apis/dto/request/payment';
 import { useNavigate } from 'react-router';
+import PostAlertRequestDto from 'src/apis/dto/request/alert/post-alert.request.dto';
 
 interface ProductItemProps {
   buyingContent: MyBuying
@@ -204,7 +205,7 @@ function ProductReview({buyingContent, onClose}: {buyingContent:ProductItemProps
 // component: 구매 취소 모달 컴포넌트 //
 function PaymentCancel({buyingContent, onClose}: {buyingContent:ProductItemProps['buyingContent'], onClose:()=>void}){
 
-  const {paymentKey, productSequence, orderItemSequence, price, name, image, quantity} = buyingContent;
+  const {paymentKey, productSequence, orderItemSequence, price, name, image, quantity, userId} = buyingContent;
 
   // state: 쿠키 상태 //
   const [cookies] = useCookies();
@@ -216,6 +217,17 @@ function PaymentCancel({buyingContent, onClose}: {buyingContent:ProductItemProps
   // variable: 총 환불금액 //
   const totalPrice = price * quantity;
 
+  // function: post alert response 처리 함수 //
+  const postAlertResponse = (responseBody: ResponseDto | null) => {
+    const {isSuccess, message} = responseMessage(responseBody);
+
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+  }
+
   // function: post payment cancel 처리 함수 //
   const postPaymentCancelResponse = (responseBody: ResponseDto | null) => {
     const { isSuccess, message  } = responseMessage(responseBody);
@@ -225,7 +237,11 @@ function PaymentCancel({buyingContent, onClose}: {buyingContent:ProductItemProps
       return;
     }
 
-    alert('결제가 취소되었습니다!');
+    const alertBody: PostAlertRequestDto = {
+      alertType: 'payment_cancel', receiverId: userId, alertEntitySequence: 3, reason: null
+    }
+
+    postAlertRequest(alertBody, accessToken).then(postAlertResponse);
   }
 
   // event handler: 취소사유 변경 이벤트 핸들러 //
@@ -281,7 +297,7 @@ function PaymentCancel({buyingContent, onClose}: {buyingContent:ProductItemProps
 
 
 // component: 구매목록 상품 컴포넌트 //
-function ProductItem({
+export function ProductItem({
   buyingContent
 }: ProductItemProps) {
 
@@ -290,7 +306,7 @@ function ProductItem({
   // state: 결제 취소 버튼 클릭 상태 //
   const [isCancelClick, setIsCancelClick] = useState<boolean>(false);
 
-  const { paymentKey, orderItemSequence, name, image, quantity, price, approvedTime } = buyingContent;
+  const { paymentKey, orderItemSequence, name, image, quantity, price, approvedTime, waybillNumber, deliveryAddressSnapshot } = buyingContent;
 
   // variable: 구매일자 변수 //
   const buyingDay = approvedTime.slice(0,10);
@@ -304,7 +320,7 @@ function ProductItem({
 
   // event handler: 결제취소 버튼 클릭 이벤트 핸들러 //
   const onCancelClickHandler = () => {
-    setIsCancelClick(!isCancelClick);
+    if(window.confirm("구매를 취소하시겠습니까?")) setIsCancelClick(!isCancelClick);
   }
 
   // event handler: 모달 닫기 핸들러 //
@@ -322,12 +338,18 @@ function ProductItem({
         <div className='text-box'>
           <div className='title'>{name}</div>
           <div className='review-button' onClick={onReviewClickHandler}>리뷰 작성</div>
+          {!waybillNumber &&
           <div className='cancel-button' onClick={onCancelClickHandler}>구매 취소</div>
+          }
+          
         </div>
       </div>
       <div className='td quantity'>{quantity}</div>
       <div className='td amount'>{totalPrice.toLocaleString()}원</div>
-      <div className='td order-number'>F45242Sx</div>
+      <div className='td order-number'>
+        {waybillNumber && <div>{waybillNumber}</div>}
+        {!waybillNumber && <div>아직 배송을 시작하지 않았습니다.</div>}
+      </div>
       {isReviewClick &&
         <Modal title='리뷰 작성' onClose={closeModal}>
           <ProductReview buyingContent={buyingContent} onClose={onReviewClickHandler}/>
@@ -406,7 +428,7 @@ export default function GroupBuying() {
             <div className='content active' onClick={onMyBuyClickHandler}>구매목록</div>
             <div className='content' onClick={onMySellClickHandler}>판매목록</div>
           </div>
-          <div className='product-list-table'>
+          <div className='product-table'>
             <div className='tr'>
               <div className='th date'>주문일자</div>
               <div className='th detail-box'>상품명</div>

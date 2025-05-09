@@ -206,8 +206,13 @@ export default function ShoppingCartMain() {
   // event handler: 결제하기 버튼 클릭 이벤트 핸들러 //
   const onPaymentClickHandler = () => {
     const storedData = localStorage.getItem("storedShoppingCart");
-
-    if (storedData) {
+    
+    if(!storedData || JSON.parse(storedData).length === 0) {
+      alert("결제하기 버튼 클릭 전에 결제하실 상품을 먼저 선택해주세요!");
+      return;
+    }
+    
+    
       const cartList = JSON.parse(storedData);
     
       const reserves: StockReservation[] = cartList.map((item: { productSequence: number; quantity: number }) => ({
@@ -219,10 +224,8 @@ export default function ShoppingCartMain() {
         list: reserves
       };
     
-      console.log(JSON.stringify(dto, null, 2));
       postReserveRequest(dto, accessToken).then(postReserveResponse);
-      console.log(reserves.toString());
-    }
+    
     
   }
 
@@ -233,7 +236,7 @@ export default function ShoppingCartMain() {
 
   // effect: 상품 선택시 실행할 함수 //
   useEffect(() => {
-    const total = shoppingCart.reduce((acc, cart) => {
+    const totalPrice = shoppingCart.reduce((acc, cart) => {
       const quantity = productQuantities.get(cart.shoppingCartSequence) ?? cart.quantity;
       if (selectedIds.includes(cart.shoppingCartSequence)) {
         return acc + cart.price * quantity;
@@ -252,7 +255,12 @@ export default function ShoppingCartMain() {
     });
 
     localStorage.setItem('storedShoppingCart', JSON.stringify(newShoppingCart));
-    setTotalProductPrice(total);
+
+    setTotalProductPrice(totalPrice);
+
+    if(selectedIds.length === shoppingCart.length) setIsSelectAll(true);
+    else setIsSelectAll(false);
+
   }, [selectedIds, productQuantities]);
   
   const cartContent = (

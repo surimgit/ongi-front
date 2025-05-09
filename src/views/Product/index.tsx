@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import "./style.css"
-import { getProductCategoryRequest } from 'src/apis';
+import { getProductCategoryRequest, getProductReviewsRequest } from 'src/apis';
 import { GetProductResponseDto, ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import { Product } from 'src/types/interfaces';
@@ -46,7 +46,8 @@ const getToday = () => {
 
 // component: 상품 테이블 레코드 컴포넌트 //
 function TableItem({product, index}: TableItemProps & {index: number}){
-  const { sequence, image, name, price, rating, productQuantity, boughtAmount, deadline, openDate } = product;
+  const { sequence, image, name, price, rating, productQuantity, 
+          boughtAmount, deadline, openDate, status, reviewCount } = product;
 
   // state: 모집 완료 여부 상태 //
   const [isFinish, setIsFinish] = useState<boolean>(false);
@@ -56,11 +57,11 @@ function TableItem({product, index}: TableItemProps & {index: number}){
   const [achievementRate, setAchievementRate] = useState<number>(Math.floor((boughtAmount / productQuantity) * 100));
   // state: 마감기한 상태 //
   const [remainingTime, setRemainingTime] = useState<number>(getTimeUntilDeadLine(deadline));
-  
+  // state: 상품 마감 상태 //
+  const [productStatus, setProductStatus] = useState<string>('');
+
   // variable: 상품 이미지 클래스 //
-  const imageClass = remainingTime === 0 ? 'td image expired' : 'td image';
-  // variable: 오픈 예정 여부 클래스 //
-  const isOpen = openDate === null ? true : openDate <= getToday() ? true : false;
+  const imageClass = status === "CLOSE" ? 'product-thumbnail expired' : 'product-thumbnail';
 
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
@@ -76,15 +77,12 @@ function TableItem({product, index}: TableItemProps & {index: number}){
 
   // event handler: 테이블 클릭 이벤트 핸들러 //
   const onClick = () => {
-    if(isFinish) {
-      alert('마감된 상품입니다!');
-      return;
-    }
     navigator(PRODUCT_VIEW_ABSOLUTE_PATH(sequence));
   }
 
   useEffect(() => {
-    setRemainingProducts(remainingProducts - boughtAmount);
+  
+    setRemainingProducts(productQuantity - boughtAmount);
     setAchievementRate(Math.floor((boughtAmount / productQuantity) * 100));
   },[boughtAmount, productQuantity])
 
@@ -97,46 +95,54 @@ function TableItem({product, index}: TableItemProps & {index: number}){
   },[deadline]);
 
   useEffect(() => {
-    if(remainingProducts === 0 || remainingTime === 0) setIsFinish(true);
+    if(remainingProducts === 0 || remainingTime === 0) setProductStatus('CLOSE');
   },[])
 
   return (
-    <div className='tr' onClick={onClick}>
-      <div className={imageClass}>
-        <img src={image} alt='업로드된 이미지'/>
-        {isFinish && 
-          <div className='img-text'>
-            <p>마감</p>
+    <li className='product-card'>
+      <div className='product-card-inner'>
+        <div className='product-card-area' onClick={onClick}>
+          <div className={imageClass}>
+            <img src={image} alt='업로드된 이미지'/>
+            {status === "CLOSE" && 
+              <div className='img-text'>
+                <p>마감</p>
+              </div>
+            }
+
           </div>
-        }
-      </div>
-      <div className='td content-box' >
-        <div className='content-title'>{name}</div>
-        <div className='content-price'>{price.toLocaleString()}원</div>
-        <div className='content-state'>
-          <div className='rating-box'>
-            <div className='star'></div>
-            <div className='rating'>{rating.toFixed(1)}점</div>
+          <div className='information'>
+            <div className='publisher'>{name}</div>
+            <div className='title'>{name}</div>
+            <div className='price'>개당 {price.toLocaleString()}원</div>
+            <div className='quantity'>
+            <div className='buy-quantity'>잔여 수량: {remainingProducts.toLocaleString()}개</div>
+              <div className='total-quantity'>/ &nbsp; 총 {productQuantity.toLocaleString()}개</div>
+            </div>
+            <div className='achievement-rate'>{achievementRate}% 달성</div>
+            {status === "OPEN" && 
+              <div className='deadline-box'>
+                <div className='deadline-title color-title'>마감까지</div>
+                <div className='deadline-title normal'>{changeDateFormat(remainingTime)}</div>
+              </div>
+            }
+            {status === "WAIT" &&
+              <div className='deadline-box'>
+                <div className='deadline-title color-title'>오픈예정일</div>
+                <div className='deadline-title normal'>{openDate}</div>
+              </div>
+            } 
+            <ul className='review-area'>
+              <li className='review-rating'>
+                <div className='rating-icon'></div>
+                <div className='rating'>{rating}점</div>
+              </li>
+              <div className='review-count'>리뷰 ({reviewCount})</div>
+            </ul>
           </div>
-          
-          <div className='engagement-rate'>잔여 {remainingProducts}개</div>
-          <div className='achievement-rate'>{achievementRate}% 달성</div>
         </div>
       </div>
-      {isOpen && 
-        <div className='td deadline-box'>
-          <div className='deadline-title color-title'>마감까지</div>
-          <div className='deadline-title normal'>{changeDateFormat(remainingTime)}</div>
-        </div>
-      }
-      {!isOpen &&
-        <div className='td deadline-box'>
-          <div className='deadline-title color-title'>오픈예정</div>
-          <div className='deadline-title normal'>{openDate}</div>
-        </div>
-      }
-      
-    </div>
+    </li>
   )
 }
 
@@ -172,6 +178,8 @@ export default function ProductMain() {
   const sortHotClass = 
     sort === '인기' ? 'sort-content active' : 'sort-content';
 
+  const isClosed = (status: string) => status === 'CLOSE';
+
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
 
@@ -191,8 +199,19 @@ export default function ProductMain() {
       else setFilterMessage(`등록된 상품이 없습니다!!`);
     }else setFilterMessage('');
     
+    products.sort(
+      (a,b) => {
+        const aIsClosed = isClosed(a.status);
+        const bIsClosed = isClosed(b.status);
 
+        // 마감된 상품은 항상 뒤로
+        if (aIsClosed && !bIsClosed) return 1;
+        if (!aIsClosed && bIsClosed) return -1;
+        return 0;
+      }
+    )
     setTotalList(products);
+    
   }
 
   // function: filter type 처리 함수 //
@@ -232,23 +251,33 @@ export default function ProductMain() {
   // effect: 정렬 방식 변경 시 실행할 함수 //
   useEffect(() => {
     const sortedProducts = [...totalList];
+    
     if(sort === '마감임박'){
       sortedProducts.sort((a, b) => {
+        const aIsClosed = isClosed(a.status);
+        const bIsClosed = isClosed(b.status);
+
+        // 마감된 상품은 항상 뒤로
+        if (aIsClosed && !bIsClosed) return 1;
+        if (!aIsClosed && bIsClosed) return -1;
+
         const timeA = getTimeUntilDeadLine(a.deadline);
         const timeB = getTimeUntilDeadLine(b.deadline);
 
-        if(timeA === 0 && timeB !== 0) return 1;
-        if(timeA !== 0 && timeB === 0) return -1;
+        // 남은 시간 오름차순 (마감 임박 순)
         return timeA - timeB;
       })
     } else {
       sortedProducts.sort((a, b) => {
-        const timeA = getTimeUntilDeadLine(a.deadline);
-        const timeB = getTimeUntilDeadLine(b.deadline);
+        const aIsClosed = isClosed(a.status);
+        const bIsClosed = isClosed(b.status);
 
-        if(timeA === 0 && timeB !== 0) return 1;
-        if(timeA !== 0 && timeB === 0) return -1;
-        return b.boughtAmount - a.boughtAmount});
+        if (aIsClosed && !bIsClosed) return 1;  // a는 마감 → 뒤로
+        if (!aIsClosed && bIsClosed) return -1; // b는 마감 → 뒤로
+
+        // 둘 다 마감이 아니면 인기순 내림차순
+        return b.boughtAmount - a.boughtAmount;
+      });
     }
 
     setTotalList(sortedProducts);
@@ -258,7 +287,6 @@ export default function ProductMain() {
   useEffect(() => {
     getProductCategoryRequest(category, name, accessToken).then(getProductResponse);
   },[category, name]);
-
   // render: 공동구매 메인 화면 컴포넌트 렌더링 //
   return (
     <div id='product-main-wrapper'>
@@ -276,6 +304,7 @@ export default function ProductMain() {
           </div> 
           <div className='search-box'>
             <input value={searchName} onChange={onSearchNameChangeHandler} type='text'/> 
+            <div className='search-button' onClick={onSearchClickHandler}></div>
           </div>
           <div className='sort-box'>
             <div className='title'>정렬방식</div>
@@ -286,19 +315,19 @@ export default function ProductMain() {
             </div>
           </div>
           <div className='button-box'>
-          <div className='search-button' onClick={onSearchClickHandler}>검색</div>
-          <div className='write-button' onClick={onWriteClickHandler}>작성</div>
+          
+            <div className='write-button' onClick={onWriteClickHandler}>작성</div>
           </div>
         </div>
         <div className='product-list-container'>
-          <div className='product-list-table'>
+          <ul className='product-list-table'>
             {totalList.length !== 0 && 
               viewList.map((product, index) => (<TableItem key={product.sequence} product={product} index={index}/>))
             }
             {totalList.length === 0 &&
               <div className='no-category-product'>{filterMessage}</div>
             }
-          </div>
+          </ul>
         </div>
         {totalList.length !== 0 &&
 
