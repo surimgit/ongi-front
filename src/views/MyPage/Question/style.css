@@ -52,13 +52,22 @@
 }
 
 #question-main-wrapper .contents-wrapper .question-amount{
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
+  display: flex;
+  align-items: end;
 }
 
 #question-main-wrapper .contents-wrapper .write-button{
-  margin-right: 27px;
-  color: gray;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  border-radius: 13px;
+  background-color: rgb(53, 53, 53);
+  padding: 5px 30px;
+}
+
+#question-main-wrapper .contents-wrapper .write-button:hover{
+  text-decoration: underline;
 }
 
 #question-main-wrapper .contents-wrapper .question-list{
@@ -96,19 +105,22 @@
 #question-main-wrapper .contents-wrapper .question-list .tr .title{
   min-width: 630px;
   white-space: nowrap;
+  cursor: pointer;
+  text-align: left;
+}
+
+#question-main-wrapper .contents-wrapper .question-list .tr .title:hover{
+  text-decoration: underline;
 }
 
 #question-main-wrapper .contents-wrapper .question-list .tr .th.title{
   text-align: center;
+  cursor: default;
+  text-decoration: none;
 }
 
 #question-main-wrapper .contents-wrapper .question-list .tr .is-answered{
   min-width: 110px;
-}
-
-
-#question-main-wrapper .contents-wrapper .question-list .tr .title{
-  text-align: left;
 }
 
 #question-main-wrapper .contents-wrapper .pagination-box{

@@ -90,6 +90,7 @@
   font-family: 'Pretendard';
   width: 600px;
   padding-bottom: 2px;
+  cursor: pointer;
 }
 
 #setting-main-wrapper .contents-wrapper .body .category-wrapper .detail-address-content:hover{

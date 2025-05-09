@@ -1,4 +1,5 @@
 export default interface Badge{
-  userId: String;
-  badge: String;
+  userId: string;
+  badge: string;
+  isSelected: boolean;
 }

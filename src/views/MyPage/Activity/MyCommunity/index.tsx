@@ -92,7 +92,7 @@ function CommunityItem({
   )
 }
 
-// component: 커뮤니티 댓글 테이블 레코드 컴포넌트 //
+// component: 커뮤니티 게시글 테이블 레코드 컴포넌트 //
 function CommentItem({
   communityComment
 }: CommentProps){
@@ -107,14 +107,13 @@ function CommentItem({
   // state: 해당 게시글 제목 상태 //
   const [communityCategory, setCommunityCategory] = useState<string>('');
 
-
   // state: cookie 상태 //
   const [cookies] = useCookies();
 
   // variable: access Token //
   const accessToken = cookies[ACCESS_TOKEN];
 
-    // function: get community comments response 처리 함수 //
+    // function: get community post response 처리 함수 //
   const getCommunityPostResponse = (responseBody:GetCommunityPostResponseDto | ResponseDto | null) => {
     const message = 
       !responseBody ? '서버에 문제가 있습니다.' :

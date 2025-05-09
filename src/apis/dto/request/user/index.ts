@@ -4,6 +4,7 @@ import PatchUserPasswordRequestDto from "./patch-user-password.request.dto"
 import PatchUserAddressRequestDto from "./patch-user-address.request.dto"
 import PatchUserIntroductionRequestDto from "./patch-user-introduction.request.dto"
 import PostProductReviewRequestDto from "./post-product-reivew.request.dto"
+import PatchBadgeRequestDto from "./patch-badge.request.dto"
 
 export type{
   AddLikeKeywordRequestDto,
@@ -11,5 +12,6 @@ export type{
   PatchUserIntroductionRequestDto,
   PatchUserPasswordRequestDto,
   PostProductReviewRequestDto,
-  PatchUserAddressRequestDto
+  PatchUserAddressRequestDto,
+  PatchBadgeRequestDto
 }
