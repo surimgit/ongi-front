@@ -8,11 +8,14 @@ import GetHelperPostResponseDto from "src/apis/dto/response/needhelper/get-helpe
 import GetHelperLikedResponseDto from "src/apis/dto/response/needhelper/get-helper-liked.response.dto";
 import Modal from "src/components/Modal";
 import "./style.css";
-import { getHelperPostRequest, deleteHelperApplyRequest, getHelperLikedRequest, postHelperApplyRequest, putHelperLikedRequest, getHelperCommentsRequest, postHelperCommentRequest, deleteHelperPostRequest } from "src/apis";
+import { getHelperPostRequest, deleteHelperApplyRequest, getHelperLikedRequest, postHelperApplyRequest, putHelperLikedRequest, getHelperCommentsRequest, postHelperCommentRequest, deleteHelperPostRequest, postAlertRequest, getHelperApplyRequest } from "src/apis";
 import CommentItem from "../Comment";
 import Report from "../ReportModal";
 import PostHelperCommentRequestDto from "src/apis/dto/request/needhelper/post-helper-comment.request.dto";
 import { CommunityComment } from "src/types/interfaces";
+import PostAlertRequestDto from "src/apis/dto/request/alert/post-alert.request.dto";
+import useCommentCountStore from "src/stores/comment-count.store";
+import GetHelperIsApplyResponseDto from "src/apis/dto/response/needhelper/get-helper-is-apply.response.dto";
 
 // component: need helper 상세 메인 컴포넌트 //
 export default function NeedHelperPostDetail() {
@@ -52,6 +55,18 @@ export default function NeedHelperPostDetail() {
     // state: 댓글 상태 //
     const [commentInput, setCommentInput] = useState("");
     const [comments, setComments] = useState<CommunityComment[]>([]); 
+
+    // state: 댓글 갯수 상태 //
+    const { setCommentCount } = useCommentCountStore();
+    
+    // state: 신규 댓글 등록 상태 //
+    const [newCommentTriger, setNewCommentTriger] = useState<boolean>(false);
+
+    // state: 알림 구성 요소 상태 //
+    const [senderId, setSenderId] = useState<string>('');
+    const [receiverId, setReceiverId] = useState<string>('');
+    const [alertEntitySequence] = useState<number>(Number(sequence));
+    const [alertType, setAlertType] = useState<string>('');
 
 
     // function: get helper post api 처리 함수 //
@@ -138,6 +153,63 @@ export default function NeedHelperPostDetail() {
         return `${year}.${month}.${day} ${hours}:${minutes}`;
     };
 
+    // function: post helper comment response 처리 함수
+    const postHelperCommentResponse = (responseBody: ResponseDto | null) => {
+        const message =
+        !responseBody ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'AF' ? '인증에 실패했습니다.'
+        : responseBody.code === 'NPS' ? '존재하지 않는 게시물입니다.'
+        : responseBody.code === 'VF' ? '유효하지 않은 입력입니다.' : '';
+
+        const isSuccess = responseBody !== null && responseBody.code === 'SU';
+        if (!isSuccess) {
+            alert(message);
+            return;
+        }
+
+        setSenderId(userId);
+        setReceiverId(writerId);
+        setAlertType('helper_comment');
+        setNewCommentTriger(true);
+    };
+
+    // function: post helper apply response 처리 함수
+    const postHelperApplyResponse = (responseBody: ResponseDto | null) => {
+        const message =
+        !responseBody ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'AF' ? '인증에 실패했습니다.'
+        : responseBody.code === 'NPS' ? '존재하지 않는 게시물입니다.'
+        : responseBody.code === 'VF' ? '유효하지 않은 입력입니다.' : '';
+
+        const isSuccess = responseBody !== null && responseBody.code === 'SU'
+        alert('신청되었습니다.');
+
+        if (!isSuccess) {
+            alert(message);
+            return;
+        }
+
+        setSenderId(userId);
+        setReceiverId(writerId);
+        setAlertType('helper_apply');
+    };
+    
+    // function: post alert response 처리 함수 //
+    const postAlertResponse = (responseBody: ResponseDto | null) => {
+        const message = 
+        !responseBody ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+
+        const isSuccess = responseBody !== null && responseBody.code === 'SU';
+        if (!isSuccess) {
+            alert(message);
+            return;
+        }
+    };
+
     // event handler: 좋아요 클릭 이벤트 처리 //
     const onLikedClickHandler = () => {
         if (!accessToken || !sequence) return;
@@ -150,15 +222,17 @@ export default function NeedHelperPostDetail() {
     // event handler: 신청하기 클릭 이벤트 처리 //
     const onApplyClickHandler = () => {
         if (!accessToken || !sequence) return;
+
         if (isApplied) {
             deleteHelperApplyRequest(Number(sequence), accessToken).then(() => {
-            alert("신청 취소되었습니다!");
-            setApplied(false);
+                alert("신청 취소되었습니다.");
+                setApplied(false);
             });
         } else {
-            postHelperApplyRequest(Number(sequence), accessToken).then(() => {
-            alert("신청되었습니다!");
-            setApplied(true);
+            postHelperApplyRequest(Number(sequence), accessToken).then((response) => {
+                postHelperApplyResponse(response)
+                setApplied(true);
+                setNewCommentTriger(true);
             });
         }
     };
@@ -172,7 +246,8 @@ export default function NeedHelperPostDetail() {
         const requestBody: PostHelperCommentRequestDto = { comment: commentInput };
     
         postHelperCommentRequest(requestBody, sequence, accessToken)
-          .then(() => {
+          .then((response) => {
+              postHelperCommentResponse(response);
               setCommentInput("");
               getHelperComments();
           });
@@ -209,6 +284,39 @@ export default function NeedHelperPostDetail() {
         getHelperLikedRequest(Number(sequence), accessToken).then(getHelperLikedResponse);
         getHelperComments();
     }, []);
+    
+    // effect: 신규 댓글 등록 시 실행할 함수 //
+    useEffect(() => {
+        if (newCommentTriger) {
+
+            const requestBody: PostAlertRequestDto = {
+                senderId, receiverId, alertEntitySequence, alertType, reason: null
+            };
+
+            if (senderId === receiverId) return;
+            postAlertRequest(requestBody, accessToken).then(postAlertResponse);
+            setNewCommentTriger(false);
+        }
+    }, [newCommentTriger]);
+
+    // effect: 댓글 갯수가 변할 시 실행할 함수 //
+    useEffect(() => {
+        if (!sequence) return;
+        setCommentCount(sequence, comments.length);
+    }, [comments.length]);
+
+    // effect: 신청 여부 확인
+    useEffect(() => {
+        if (!sequence || !accessToken) return;
+    
+        getHelperApplyRequest(Number(sequence), accessToken)
+        .then((response: GetHelperIsApplyResponseDto | ResponseDto | null) => {
+            if (!response || response.code !== "SU") return;
+            const { isApplied } = response as GetHelperIsApplyResponseDto;
+            setApplied(isApplied);
+        });
+    }, [sequence, accessToken]);
+  
 
     // render: 도우미 상세 게시글 컴포넌트 렌더링 //
     return (
@@ -217,7 +325,7 @@ export default function NeedHelperPostDetail() {
             <div className='helper-detail-header'>
                 <div className="title">{title}</div>
                 { writerId !== userId ?  
-                    <div className="apply-button" onClick={onApplyClickHandler}>
+                    <div className={`apply-button ${isApplied ? "is-applied" : ""}`}  onClick={onApplyClickHandler}>
                         { isApplied ? "신청 취소" : "신청하기"}
                     </div> : 
                     <div className="my-helper-post">

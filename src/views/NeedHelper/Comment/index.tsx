@@ -30,13 +30,14 @@ export default function CommentItem({ communityComment, getCommunityComment }: C
     // state: 신고 모달 오픈 상태 //
     const [isReportOpen, setReportOpen] = useState<boolean>(false);
 
+
     // variable: access Token //
     const accessToken = cookies[ACCESS_TOKEN];
 
     // variable: 프로필 이미지 스타일 //
     const profileImageStyle = { backgroundImage: `url(${profileImage ? profileImage : DefaultProfile})` };
-
-    // function: delete community comment response 처리 함수 //
+    
+    // function: delete helper comment response 처리 함수 //
     const deleteHelperCommentResponse = (responseBody: ResponseDto | null) => {
         const message =
         !responseBody ? '서버에 문제가 있습니다.'

@@ -196,6 +196,7 @@ const PUT_HELPER_LIKED_URL = (postSequence: number | string) => `${HELPER_MODULE
 const GET_HELPER_LIKED_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/liked`;
 const POST_HELPER_APPLY_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/apply`;
 const DELETE_HELPER_APPLY_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/apply`;
+const GET_HELPER_APPLY_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}/apply`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
@@ -1067,18 +1068,27 @@ export const getHelperLikedRequest = async (postSequence: number | string, acces
   return responseBody;
 };
 
-// function: 신청하기
+// function: post helper apply API 요청 함수 //
 export const postHelperApplyRequest = async (postSequence: number | string, accessToken: string) => {
   const responseBody = await axios.post(POST_HELPER_APPLY_URL(postSequence), {}, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+    console.log('responseBody: ', responseBody);
+  return responseBody;
+};
+
+// function: delete helper apply API 요청 함수 //
+export const deleteHelperApplyRequest = async (postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.delete(DELETE_HELPER_APPLY_URL(postSequence), bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
   return responseBody;
 };
 
-// function: 신청 취소하기
-export const deleteHelperApplyRequest = async (postSequence: number | string, accessToken: string) => {
-  const responseBody = await axios.delete(DELETE_HELPER_APPLY_URL(postSequence), bearerAuthorization(accessToken))
-    .then(responseSuccessHandler)
-    .catch(responseErrorHandler);
+// function: get helper apply API 요청 함수 //
+export const getHelperApplyRequest = async (postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.get(GET_HELPER_APPLY_URL(postSequence), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
   return responseBody;
 };
