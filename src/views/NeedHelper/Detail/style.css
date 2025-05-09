@@ -39,6 +39,10 @@
     cursor: pointer;
 }
 
+#helper-detail-wrapper .apply-button.is-applied {
+    background-color: var(--Cancel);
+}
+
 #helper-detail-wrapper .my-helper-post {
     display: flex;
     margin-right: 8px;
