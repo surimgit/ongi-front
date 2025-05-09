@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react'
 import './style.css';
 import { useNavigate } from 'react-router';
 import MypageSidebar from 'src/layouts/MypageSidebar';
@@ -7,9 +7,9 @@ import { useCookies } from 'react-cookie';
 import { GetUserIntroductionResponseDto } from 'src/apis/dto/response/user';
 import { Badge, LikeKeyword } from 'src/types/interfaces';
 import { Gender, Mbti } from 'src/types/aliases';
-import { addBadgeRequest, addLikeKeywordRequest, deleteLikeKeywordRequest, fileUploadRequest, getBadgeListRequest, getUserIntroductionRequest, patchUserIntroductionRequest } from 'src/apis';
+import { addBadgeRequest, addLikeKeywordRequest, chooseBadgeRequest, deleteLikeKeywordRequest, fileUploadRequest, getBadgeListRequest, getUserIntroductionRequest, patchUserIntroductionRequest } from 'src/apis';
 import { ResponseDto } from 'src/apis/dto/response';
-import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchUserIntroductionRequestDto } from 'src/apis/dto/request/user';
+import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchBadgeRequestDto, PatchUserIntroductionRequestDto } from 'src/apis/dto/request/user';
 import DefaultProfile from 'src/assets/images/default-profile.png';
 import Modal from 'src/components/Modal';
 import GetBadgeListResponseDto from 'src/apis/dto/response/user/get-badge-list.responseDto';
@@ -38,7 +38,6 @@ export default function MyPage() {
   const [selfIntro, setSelfIntro] = useState<string>('');
   const [badgeList, setBadgeList] = useState<Badge[]>([]);
   const [selectedBadge, setSelectedBadge] = useState<Badge | null>(null);
-
 
   // state: 수정 가능 상태 // 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -121,7 +120,6 @@ export default function MyPage() {
     }
 
     for (const keyword of addedKeywords) {
-      // 이미 추가된 키워드가 있는지 확인
       if (likeKeywords.some(k => k.keyword === keyword)) {
         continue; 
       }
@@ -175,12 +173,8 @@ export default function MyPage() {
     const openState = !isBadgeModalOpen
     setBadgeModalOpen(openState);
     
-    
-
     if(openState){
       addBadgeRequest(accessToken).then(addBadgeResponse);
-
-      getBadgeListRequest(accessToken).then(getBadgeListResponse);
     }
   }
 
@@ -202,31 +196,64 @@ export default function MyPage() {
   // function: get badge list response 처리 함수 //
   const getBadgeListResponse = (responseBody:GetBadgeListResponseDto | ResponseDto | null) => {
     const message =
-    !responseBody ? '서버에 문제가 있습니다.' :
-    responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' : 
-    responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+      !responseBody ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' : 
+      responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
     const isSuccess = responseBody !== null && responseBody.code === 'SU';
     if (!isSuccess) {
-      console.warn('뱃지 응답 실패:', responseBody);
+      alert(message);
       return;
     }
     
     const {badges} = responseBody as GetBadgeListResponseDto
     setBadgeList(badges);
+
+      // 선택된 뱃지 따로 저장
+    const selected = badges.find((b) => b.isSelected);
+    if (selected) setSelectedBadge(selected);
   }
 
-  // function: badge 유지 처리 함수 //
-  const onBadgeSelectHandler = (badge: Badge) => {
-    setSelectedBadge(badge);
-    setBadgeModalOpen(false);
-    localStorage.setItem('selectedBadge', JSON.stringify(badge));
-  };
+  // function: choose badge response 처리 함수 //
+  const chooseBadgeResponse = (responseBody: ResponseDto | null) => {
+    const message =
+      !responseBody ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' : 
+      responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+    if (!isSuccess) {
+      alert(message);
+      return false;
+    }
+    return true;
+  }
 
+  
+  // event handler: badge 클릭 처리 함수//
+  const onBadgeClickHandler = (badge: Badge) => {
+    console.log('클릭된 뱃지:', badge); // ✅ 로그 꼭 확인
+    const requestBody: PatchBadgeRequestDto = {
+      badge: badge.badge
+    };
+    // API 호출 후 UI 상태 업데이트
+    chooseBadgeRequest(requestBody, accessToken).then((res) => {
+      const isSuccess = chooseBadgeResponse(res);
+      if (isSuccess) {
+        setSelectedBadge(badge);
+        setBadgeModalOpen(false);
+
+        // badgeList를 다시 갱신하고 isSelected 상태 반영
+        const updatedList = badgeList.map((b) => ({
+          ...b,
+          isSelected: b.badge === badge.badge,
+        }));
+        setBadgeList(updatedList);
+      }
+    });
+  };
 
 
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
-
   
   // function: get User Indroduction response 처리 함수 //
   const getUserIntroductionResponse = (responseBody: GetUserIntroductionResponseDto | ResponseDto | null) => {
@@ -377,14 +404,8 @@ export default function MyPage() {
   // effect: 컴포넌트 로드시 실행할 함수 //
   useEffect(() => {
     if(!accessToken) return;
-    
-    const savedBadge = localStorage.getItem('selectedBadge');
-    if (savedBadge) {
-      setSelectedBadge(JSON.parse(savedBadge));
-    }
-
     getUserIntroductionRequest(accessToken).then(getUserIntroductionResponse);
-    addBadgeRequest(accessToken);
+    getBadgeListRequest(accessToken).then(getBadgeListResponse);
   }, [])
  
   // render: 마이 페이지 메인 화면 컴포넌트 렌더링 //
@@ -445,11 +466,11 @@ export default function MyPage() {
                     <div className='badge-modal-list'>
                       {badgeList.map((badge, index) => (
                         <div 
-                          key={index} 
+                          key={badge.badge} 
                           className='badge-item' 
                           onClick={() => {
-                            setBadgeModalOpen(false);
-                            onBadgeSelectHandler(badge);
+                            onBadgeClickHandler(badge);
+                            setBadgeModalOpen(false); 
                           }}
                         >
                           <span className='badge'>{badge.badge}</span> 
@@ -483,6 +504,7 @@ export default function MyPage() {
 
                     {/* MBTI 드롭다운 */}
                     <select className='drop mbti' value={mbti || ''} onChange={onMbtiChangeHandler}>
+                      <option value="" disabled hidden>MBTI 선택</option>
                       <option value="ISTJ">ISTJ</option>
                       <option value="ISFJ">ISFJ</option>
                       <option value="INFJ">INFJ</option>
@@ -536,21 +558,21 @@ export default function MyPage() {
                       <div className="modal-add-button"onClick={onAddKeywordClickHandler}>추가</div>
                     </Modal>
                   }
-                  <div className='text'>#잘해요</div>
+                  <div className='text'> {isEditMode && `클릭해서 삭제!` || `#잘해요`}</div>
                 </div>
                 <div className='tag-container'>
                   {Array.isArray(likeKeywords) &&
                     likeKeywords.map((item, i) => (
                       <div key={i} className="tag-box">
                         <div className="tag-wrapper">
-                          <div className="tag">#{item.keyword}</div>
                           {isEditMode && (
-                            <div 
-                              className="minus-button" 
-                              onClick={() => onDeleteKeywordClickHandler(item.keyword)}>
-                              -
+                            <div className='delete-wrapper'>
+                              <div className="tag-delete" onClick={() => onDeleteKeywordClickHandler(item.keyword)}>#{item.keyword}</div>
+                              <div className='delete-text'>삭제</div>
                             </div>
-                          )}
+                          ) || (
+                            <div className="tag">#{item.keyword}</div>
+                          )} 
                         </div>
                       </div>
                   ))}

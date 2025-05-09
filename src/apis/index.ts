@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { GetWishListResponseDto, GetWishResponseDto, ResponseDto } from './dto/response';
 import { FindIdRequestDto, FindPasswordRequestDto, IdCheckRequestDto, ResignedCheckRequestDto, SignInRequestDto, SignUpRequestDto, VerificationRequestDto } from './dto/request/auth';
 import { SignInResponseDto } from './dto/response/auth';
-import { GetLikeKeywordListResponseDto, GetMyBuyingResponseDto, GetSignInUserResponseDto, GetUserAccountResponseDto, GetUserIntroductionResponseDto } from './dto/response/user';
+import { GetLikeKeywordListResponseDto, GetMyActivityCountResponseDto, GetMyBuyingResponseDto, GetSignInUserResponseDto, GetUserAccountResponseDto, GetUserIntroductionResponseDto } from './dto/response/user';
 import { PatchProductQuantityRequestDto, PostProductRequestDto } from './dto/request/product';
 import { Category } from 'src/types/aliases';
 import { GetProductResponseDto } from './dto/response';
@@ -21,7 +21,7 @@ import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import PatchCommunityPostRequestDto from './dto/request/community/patch-community-post.request.dto';
 import { PatchAnswerRequestDto, PatchNoticeRequestDto, PostNoticeRequestDto } from './dto/request/admin';
 import { PatchQuestionRequestDto, PostQuestionRequestDto } from './dto/request/question';
-import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchUserAddressRequestDto, PatchUserPasswordRequestDto, PatchUserIntroductionRequestDto, PostProductReviewRequestDto } from './dto/request/user';
+import { AddLikeKeywordRequestDto, DeleteLikeKeywordRequestDto, PatchUserAddressRequestDto, PatchUserPasswordRequestDto, PatchUserIntroductionRequestDto, PostProductReviewRequestDto, PatchBadgeRequestDto } from './dto/request/user';
 import { GetNoticeListResponseDto, GetNoticeResponseDto } from './dto/response/notice';
 import { GetQuestionListResponseDto, GetQuestionResponseDto } from './dto/response/question';
 import PostAlertRequestDto from './dto/request/alert/post-alert.request.dto';
@@ -127,8 +127,11 @@ const GET_COMMUNITY_LIKED_URL = (postSequence: number | string) => `${COMMUNITY_
 // 마이페이지 관련 경로
 
 const MYPAGE_MODULE_URL =  `${API_DOMAIN}/api/v1/mypage`;
+const MYPAGE_ACTIVITY_URL =  `${API_DOMAIN}/api/v1/mypage/activity`;
 const OTHER_MYPAGE_MODULE_URL =  `${API_DOMAIN}/api/v1/mypage/other`;
 const OTHER_MYPAGE_VIEW_URL = (userId: string) => `${OTHER_MYPAGE_MODULE_URL}/${userId}`;
+const OTHER_MYPAGE_BADGE_URL = (userId: string) => `${OTHER_MYPAGE_MODULE_URL}/${userId}/badge`;
+const OTHER_MYPAGE_COMMUNITY_POST_URL = (userId: string) => `${OTHER_MYPAGE_MODULE_URL}/${userId}/community/post`;
 const PATCH_MYPAGE_URL = `${MYPAGE_MODULE_URL}`;
 const MYPAGE_ACCOUNT_URL = `${API_DOMAIN}/api/v1/mypage/account`;
 const PATCH_MYPAGE_PASSWORD_URL = `${MYPAGE_ACCOUNT_URL}/patch`;
@@ -137,6 +140,7 @@ const MYPAGE_KEYWORD_URL = `${MYPAGE_MODULE_URL}/keyword`;
 const ADD_MYPAGE_KEYWORD_URL =  `${MYPAGE_KEYWORD_URL}`;
 const DELETE_MYPAGE_KEYWORD_URL =  `${MYPAGE_KEYWORD_URL}`;
 const ADD_BADGE_URL = `${MYPAGE_MODULE_URL}/badge`;
+const PATCH_BADGE_URL = `${MYPAGE_MODULE_URL}/badge`;
 const GET_BADGE_URL = `${MYPAGE_MODULE_URL}/badge`;
 
 const QUESTION_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/question`;
@@ -727,13 +731,6 @@ export const getUserIntroductionRequest = async (accessToken: string) => {
     .catch(responseErrorHandler);
   return responseBody;
 };
-// function: get other user introductrion API 요청 함수 //
-export const getOtherUserIntroductionRequest = async (userId: string) => {
-  const responseBody = await axios.get(OTHER_MYPAGE_VIEW_URL(userId))
-    .then(responseSuccessHandler<GetUserIntroductionResponseDto>)
-    .catch(responseErrorHandler);
-  return responseBody;
-};
 
 // function: patch user introduction API 요청 함수 //
 export const patchUserIntroductionRequest = async (requestBody: PatchUserIntroductionRequestDto, accessToken: string) => {
@@ -957,3 +954,43 @@ export const getBadgeListRequest = async (accessToken: string) => {
     .catch(responseErrorHandler);
   return reseponseBody;
 }
+
+// function: choose badge API 요청 함수 //
+export const chooseBadgeRequest = async (requestBody: PatchBadgeRequestDto, accessToken: string) => {
+  const reseponseBody = await axios.patch(PATCH_BADGE_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return reseponseBody;
+}
+
+// function: get other user  badge API 요청 함수 //
+export const getOtherUserBadgeRequest = async (userId:string) => {
+  const reseponseBody = await axios.get(OTHER_MYPAGE_BADGE_URL(userId))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return reseponseBody;
+}
+
+// function: get other user introductrion API 요청 함수 //
+export const getOtherUserIntroductionRequest = async (userId: string) => {
+  const responseBody = await axios.get(OTHER_MYPAGE_VIEW_URL(userId))
+    .then(responseSuccessHandler<GetUserIntroductionResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get other user community post API 요청 함수 //
+export const getOtherUserCommunityPostRequest = async (userId: string) => {
+  const responseBody = await axios.get(OTHER_MYPAGE_COMMUNITY_POST_URL(userId))
+    .then(responseSuccessHandler<GetCommunityResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get my activity count API 요청 함수 //
+export const getMyActivityCountRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(MYPAGE_ACTIVITY_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetMyActivityCountResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};

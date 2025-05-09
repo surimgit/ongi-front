@@ -90,6 +90,9 @@ import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
 import AccountUpdate from './views/MyPage/Account/Update';
 import HelperWrite from './views/NeedHelper/Write';
+import OtherUserReview from './views/MyPage/Others/Review';
+import OtherUserCommunity from './views/MyPage/Others/Community';
+import OtherUserGroupBuying from './views/MyPage/Others/GroupBuying';
 
 function App() {
   return (
@@ -132,7 +135,14 @@ function App() {
 
         <Route path={MYPAGE_PATH}>          
           <Route path={OTHER_MYPAGE_PATH}>
-            <Route path={OTHER_MYPAGE_VIEW_PATH} element={<Others/>} />
+            <Route path={OTHER_MYPAGE_VIEW_PATH}>
+              <Route index element={<Others/>}/>
+              <Route path='need-helper/review' element={<OtherUserReview/>}/>
+              <Route path='community/post' element={<OtherUserCommunity/>}/>
+              <Route path='group-buying/selling' element={<OtherUserGroupBuying/>}/>
+              <Route path='group-buying/selled' element={<OtherUserGroupBuying/>}/>
+              <Route path='group-buying/review' element={<OtherUserGroupBuying/>}/>
+            </Route>
           </Route>
           <Route index element={<MyPage/>}/>
           <Route path={MY_ACTIVITY_PATH} element={<MyActivity/>}/>

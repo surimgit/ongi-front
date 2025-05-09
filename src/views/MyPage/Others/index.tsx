@@ -6,8 +6,9 @@ import { Gender, Mbti } from 'src/types/aliases';
 import { GetUserIntroductionResponseDto } from 'src/apis/dto/response/user';
 import { ResponseDto } from 'src/apis/dto/response';
 import { LikeKeyword } from 'src/types/interfaces';
-import { getOtherUserIntroductionRequest } from 'src/apis';
+import { getOtherUserBadgeRequest, getOtherUserIntroductionRequest } from 'src/apis';
 import DefaultProfile from 'src/assets/images/default-profile.png';
+import GetBadgeResponseDto from 'src/apis/dto/response/user/get-badge.responseDto';
 
 
 export default function Others() {
@@ -24,8 +25,26 @@ export default function Others() {
   const [job, setJob] = useState<string>('');
   const [selfIntro, setSelfIntro] = useState<string>('');
   const [likeKeywords, setLikeKeywords] = useState<LikeKeyword[]>([]);
+  const [badge, setBadge] = useState<string>('');
   
-  // function: 
+  // function: get other user badge response 처리 함수 //
+  const getOtherUserBadgeResponse = (responseBody: GetBadgeResponseDto | ResponseDto | null) => {
+    const message = 
+      !responseBody ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' :
+      responseBody.code === 'AF' ? '인증에 실패했습니다.' :
+      responseBody.code === 'NU' ? '존재하지 않는 유저입니다.' : '';
+
+    const isSuccess = responseBody !== null && responseBody.code === 'SU';
+
+    if(!isSuccess) {
+      alert(message);
+      return;
+    }
+
+    const {badge} = responseBody as GetBadgeResponseDto;
+    setBadge(badge);
+  }
 
   // function: get Other User Indroduction response 처리 함수 //
   const getOtherUserIntroductionResponse = (responseBody: GetUserIntroductionResponseDto | ResponseDto | null) => {
@@ -61,7 +80,7 @@ export default function Others() {
     if(!userId) return;
     
     getOtherUserIntroductionRequest(userId).then(getOtherUserIntroductionResponse);
-
+    getOtherUserBadgeRequest(userId).then(getOtherUserBadgeResponse);
   }, [])
 
   return (
@@ -103,13 +122,13 @@ export default function Others() {
                 <div className='rating'>5.0</div>
               </div>
               <div className='badge-box'>
-                <div className='text'>뱃지</div>
+                <div className='text'>포인트</div>
                 <div className='badge-image'>O</div>
               </div>
               <div className='achievements-box'>
                 <div className='text'>업적</div>
-                <div className='button-select'>✨자기소개 작성 완료</div>
-                <div className='button-change'>+</div>
+                <div className='button-select'>{badge ? `${badge}` : '선택한 업적이 없습니다.'}</div>
+                <div className='button-change'></div>
               </div>
             </div>
             <div className='detail'>
