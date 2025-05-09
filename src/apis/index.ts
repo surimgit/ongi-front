@@ -996,6 +996,9 @@ export const getOtherUserBadgeRequest = async (userId:string) => {
 export const getOtherUserIntroductionRequest = async (userId: string) => {
   const responseBody = await axios.get(OTHER_MYPAGE_VIEW_URL(userId))
     .then(responseSuccessHandler<GetUserIntroductionResponseDto>)
+    .catch(responseErrorHandler);
+    return responseBody;
+};
 
 // function: post Helper API 요청 함수 //
 export const postHelperRequest = async (requestBody: PostHelperRequestDto, accessToken: string) => {
