@@ -52,8 +52,8 @@ function SalesItem({sale, onWaybillClick}: SaleProps) {
           <div className='product-info'>
             <div className='title'>{name}</div>
             <div className='price-box'>
-              <div className='price'>{price.toLocaleString()}원</div>
-              <div className='price'>개당 {pricePerPiece}원</div>
+              <div className='price'>총 {(price * productQuantity).toLocaleString()}원</div>
+              <div className='price'>개당 {price.toLocaleString()}원</div>
             </div>
           </div>
         </div>

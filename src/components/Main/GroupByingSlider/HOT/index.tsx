@@ -73,9 +73,9 @@ export default function HotGroupBuyingData({hotList, handlers}:HotProps) {
                                 <div className="gb-buyers">{item.boughtAmount.toLocaleString()}개/{item.productQuantity.toLocaleString()}개</div>
                                 <div className="gb-rating">
                                     <img src={iconStar} alt="rating" />
-                                    {item.rating}점
+                                    {item.rating === null ? 0 : item.rating}점
                                 </div>
-                                <div className="gb-review">({item.rating})</div>
+                                <div className="gb-review">({item.rating === null ? 0 : item.rating})</div>
                             </div>
                         </div>
                     ))}

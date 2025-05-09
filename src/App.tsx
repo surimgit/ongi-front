@@ -62,7 +62,6 @@ import PostWrite from './views/Community/Write';
 import SuccessPage from './views/TossPayment/SuccessPage';
 import FailPage from './views/TossPayment/FailPage';
 import CheckoutPage from './views/TossPayment/CheckoutPage';
-import ShoppingCart from './views/ShoppingCart';
 import CommunityMain from './views/Community';
 import PostDetail from './views/Community/Detail';
 import Question from './views/MyPage/Question';
@@ -90,6 +89,7 @@ import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
 import CommunitySearch from './views/Community/Search';
 import MySell from './views/MyPage/GroupBuying/MySell';
+import ShoppingCartMain from './views/ShoppingCart';
 
 function App() {
   return (
@@ -123,7 +123,7 @@ function App() {
         </Route>
 
         <Route path={SHOPPING_CART_PATH}>
-          <Route index element={<ShoppingCart/>}></Route>
+          <Route index element={<ShoppingCartMain/>}></Route>
           <Route path={ADDRESS_PATH} element={<ShoppingCartAddress/>}/>
         </Route>
 

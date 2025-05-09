@@ -24,19 +24,19 @@ export default function ShoppingCartLayout({ cartContent, productQuantity ,onPay
   let totalPrice = 0;
 
   if(raw){
-
     const parsed = JSON.parse(raw);
     totalPrice = parsed.state.totalPrice;
   } 
+
   return (
     <div id='shopping-cart-main-wrapper'>
       <div className='shopping-cart-container'>
         <div className='shopping-cart-banner'>
           <div className='title'>장바구니</div>
           <div className='progress-box'>
-            <div className={`sub-title ${pathname === '/shoppingCart' ? 'active' : ''}`}>장바구니 &gt; </div>
-            <div className={`sub-title ${pathname === '/shoppingCart/address' ? 'active' : ''}`}>주문/결제 &gt; </div>
-            <div className={`sub-title ${pathname === '/shoppingCart/complete' ? 'active' : ''}`}>주문완료</div>
+            <div className={`sub-title ${pathname === '/shopping-cart' ? 'active' : ''}`}>장바구니 &gt; </div>
+            <div className={`sub-title ${pathname === '/shopping-cart/address' ? 'active' : ''}`}>주문/결제 &gt; </div>
+            <div className={`sub-title ${pathname === '/shopping-cart/complete' ? 'active' : ''}`}>주문완료</div>
           </div>
         </div>
         <div className='content-container'>

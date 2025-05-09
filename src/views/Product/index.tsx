@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import "./style.css"
-import { getProductCategoryRequest } from 'src/apis';
+import { getProductCategoryRequest, getProductReviewsRequest } from 'src/apis';
 import { GetProductResponseDto, ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import { Product } from 'src/types/interfaces';
@@ -46,7 +46,8 @@ const getToday = () => {
 
 // component: 상품 테이블 레코드 컴포넌트 //
 function TableItem({product, index}: TableItemProps & {index: number}){
-  const { sequence, image, name, price, rating, productQuantity, boughtAmount, deadline, openDate, status } = product;
+  const { sequence, image, name, price, rating, productQuantity, 
+          boughtAmount, deadline, openDate, status, reviewCount } = product;
 
   // state: 모집 완료 여부 상태 //
   const [isFinish, setIsFinish] = useState<boolean>(false);
@@ -60,7 +61,7 @@ function TableItem({product, index}: TableItemProps & {index: number}){
   const [productStatus, setProductStatus] = useState<string>('');
 
   // variable: 상품 이미지 클래스 //
-  const imageClass = status === "CLOSE" ? 'td image expired' : 'td image';
+  const imageClass = status === "CLOSE" ? 'product-thumbnail expired' : 'product-thumbnail';
 
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
@@ -98,42 +99,50 @@ function TableItem({product, index}: TableItemProps & {index: number}){
   },[])
 
   return (
-    <div className='tr' onClick={onClick}>
-      <div className={imageClass}>
-        <img src={image} alt='업로드된 이미지'/>
-        {status === "CLOSE" && 
-          <div className='img-text'>
-            <p>마감</p>
+    <li className='product-card'>
+      <div className='product-card-inner'>
+        <div className='product-card-area' onClick={onClick}>
+          <div className={imageClass}>
+            <img src={image} alt='업로드된 이미지'/>
+            {status === "CLOSE" && 
+              <div className='img-text'>
+                <p>마감</p>
+              </div>
+            }
+
           </div>
-        }
-      </div>
-      <div className='td content-box' >
-        <div className='content-title'>{name}</div>
-        <div className='content-price'>총 {(price * productQuantity).toLocaleString()}원 &nbsp; 개당 {price.toLocaleString()}원</div>
-        <div className='content-state'>
-          <div className='rating-box'>
-            <div className='star'></div>
-            <div className='rating'>{rating.toFixed(1)}점</div>
+          <div className='information'>
+            <div className='publisher'>{name}</div>
+            <div className='title'>{name}</div>
+            <div className='price'>개당 {price.toLocaleString()}원</div>
+            <div className='quantity'>
+            <div className='buy-quantity'>잔여 수량: {remainingProducts.toLocaleString()}개</div>
+              <div className='total-quantity'>/ &nbsp; 총 {productQuantity.toLocaleString()}개</div>
+            </div>
+            <div className='achievement-rate'>{achievementRate}% 달성</div>
+            {status === "OPEN" && 
+              <div className='deadline-box'>
+                <div className='deadline-title color-title'>마감까지</div>
+                <div className='deadline-title normal'>{changeDateFormat(remainingTime)}</div>
+              </div>
+            }
+            {status === "WAIT" &&
+              <div className='deadline-box'>
+                <div className='deadline-title color-title'>오픈예정일</div>
+                <div className='deadline-title normal'>{openDate}</div>
+              </div>
+            } 
+            <ul className='review-area'>
+              <li className='review-rating'>
+                <div className='rating-icon'></div>
+                <div className='rating'>{rating}점</div>
+              </li>
+              <div className='review-count'>리뷰 ({reviewCount})</div>
+            </ul>
           </div>
-          
-          <div className='engagement-rate'>잔여 {remainingProducts}개</div>
-          <div className='achievement-rate'>{achievementRate}% 달성</div>
         </div>
       </div>
-      {status === "OPEN" && 
-        <div className='td deadline-box'>
-          <div className='deadline-title color-title'>마감까지</div>
-          <div className='deadline-title normal'>{changeDateFormat(remainingTime)}</div>
-        </div>
-      }
-      {status === "WAIT" &&
-        <div className='td deadline-box'>
-          <div className='deadline-title color-title'>오픈예정</div>
-          <div className='deadline-title normal'>{openDate}</div>
-        </div>
-      }
-      
-    </div>
+    </li>
   )
 }
 
@@ -278,7 +287,6 @@ export default function ProductMain() {
   useEffect(() => {
     getProductCategoryRequest(category, name, accessToken).then(getProductResponse);
   },[category, name]);
-
   // render: 공동구매 메인 화면 컴포넌트 렌더링 //
   return (
     <div id='product-main-wrapper'>
@@ -296,6 +304,7 @@ export default function ProductMain() {
           </div> 
           <div className='search-box'>
             <input value={searchName} onChange={onSearchNameChangeHandler} type='text'/> 
+            <div className='search-button' onClick={onSearchClickHandler}></div>
           </div>
           <div className='sort-box'>
             <div className='title'>정렬방식</div>
@@ -306,19 +315,19 @@ export default function ProductMain() {
             </div>
           </div>
           <div className='button-box'>
-          <div className='search-button' onClick={onSearchClickHandler}>검색</div>
-          <div className='write-button' onClick={onWriteClickHandler}>작성</div>
+          
+            <div className='write-button' onClick={onWriteClickHandler}>작성</div>
           </div>
         </div>
         <div className='product-list-container'>
-          <div className='product-list-table'>
+          <ul className='product-list-table'>
             {totalList.length !== 0 && 
               viewList.map((product, index) => (<TableItem key={product.sequence} product={product} index={index}/>))
             }
             {totalList.length === 0 &&
               <div className='no-category-product'>{filterMessage}</div>
             }
-          </div>
+          </ul>
         </div>
         {totalList.length !== 0 &&
 

@@ -428,7 +428,7 @@ export default function GroupBuying() {
             <div className='content active' onClick={onMyBuyClickHandler}>구매목록</div>
             <div className='content' onClick={onMySellClickHandler}>판매목록</div>
           </div>
-          <div className='product-list-table'>
+          <div className='product-table'>
             <div className='tr'>
               <div className='th date'>주문일자</div>
               <div className='th detail-box'>상품명</div>

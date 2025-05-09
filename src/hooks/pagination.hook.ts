@@ -8,7 +8,7 @@ import { useEffect, useState } from "react"
 // 뷰 리스트
 // 페이지 리스트
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 12;
 const PAGES_PER_SECTION = 10;
 
 const usePagination = <T>() => {

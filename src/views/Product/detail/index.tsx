@@ -31,7 +31,12 @@ interface ReviewProps {
 // function: 현재 날짜 구하기 함수 //
 const getToday = () => {
   const today = new Date();
-  return today.toISOString().split("T")[0];
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const date = String(today.getDate()).padStart(2, '0');
+  const hours = String(today.getHours()).padStart(2, '0');
+  const minutes = String(today.getMinutes()).padStart(2, '0');
+  return `${year}-${month}-${date} ${hours}:${minutes}`;
 };
 
 
@@ -71,6 +76,7 @@ function CartUpdate({onModalViewChange, name, sequence}: CartUpdateProps) {
 
   // event handler: 장바구니 담기 버튼 클릭 이벤트 //
   const onClickPutCartButtonHandler = () => {
+
     if(quantity === 0) {
       alert("수량을 선택해주세요!");
       return;
@@ -211,6 +217,9 @@ export default function DetailProduct() {
   // variable: 오픈 예정 여부 클래스 //
   const isOpen = openDate === null ? true : openDate <= getToday() ? true : false;
 
+  console.log(openDate);
+  console.log(getToday());
+  console.log(isOpen);
   // variable: 리뷰 평점 변수 //
   const ratingVariable = rating === 0 ? "리뷰 없음" : `${rating}점`;
 

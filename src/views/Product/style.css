@@ -60,8 +60,15 @@
   font-size: 16px;
   border-radius: 20px;
   border: 1px solid #a0a0a0;
-  background: url(src/assets/images/icon-magnifier.png) no-repeat right 18px center;
-  background-size: 20px;
+}
+
+.filter-container .search-box .search-button {
+  width: 40px;
+  height: 40px;
+  background: url(src/assets/images/icon-magnifier.png) no-repeat;
+  background-size: cover;
+
+  cursor: pointer;
 }
 
 .filter-container .sort-box {
@@ -112,40 +119,76 @@
 
 .product-list-table {
   display: flex;
-  flex-direction: column;
 
   width: 100%;
+  flex-wrap: wrap;
+  padding: 0;
 }
 
-.product-list-table .tr{
-  display: flex;
-  align-items: center;
+.product-list-table li {
+  list-style: none;
+}
 
-  padding: 20px 30px;
-  border-bottom: 1px solid #d8d8d8;
+.product-list-table .product-card {
+  display: flex;
+
+  width: 25%;
+  padding: 10px 8px;
+  box-sizing: border-box;
+  margin-bottom: 30px;
+}
+
+.product-list-table .product-card .product-card-inner {
+  width: 100%;
+  height: 560px;
+}
+
+.product-list-table .product-card .product-card-area{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  height: 100%;
+  gap: 10px;
+
   cursor: pointer;
 }
 
-.product-list-table .tr .td.image {
-  width: 200px;
-  height: 200px;
+
+.product-card-area .product-thumbnail {
+  width: 100%;
+  height: 299px;
+
+  border: 0.5px solid #949494;
+  border-radius: 8px;
 }
-.product-list-table .tr .td.image img{
+
+.product-card-area .information {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+  padding: 0px 4px;
+  gap: 8px;
+}
+
+.product-card-area .product-thumbnail img {
   width: 100%;
   height: 100%;
+  border-radius: 8px;
   object-fit: cover;
 }
 
-.product-list-table .tr .td.image.expired{
-  
+.product-card-area .product-thumbnail.expired {
   position: relative;
 }
 
-.product-list-table .tr .td.image.expired img {
+.product-card-area .product-thumbnail.expired img {
   opacity: 0.4;
 }
 
-.product-list-table .tr .td.image.expired .img-text {
+.product-card-area .product-thumbnail.expired .img-text {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -157,54 +200,63 @@
 }
 
 
-.product-list-table .tr .td.content-box{
-  flex: 4;
-  display: flex;
-  flex-direction: column;
-
-  gap: 15px;
-  padding-left: 15px;
-}
-
-.product-list-table .tr .td.content-box .content-title {
-  font-size: 28px;
+.product-card .product-card-area .information .publisher {
+  font-size: 15px;
   font-weight: 700;
 }
-.product-list-table .tr .td.content-box .content-price {
-  font-size: 24px;
-  font-weight: 500;
-} 
 
-.product-list-table .tr .td.content-box .content-state {
-  display: flex;
-  align-items: center;
+.product-card .product-card-area .information .title {
+  font-size: 18px;
+  text-wrap: wrap;
+}
 
-  gap: 15px;
+.information .price {
   font-size: 16px;
+  font-weight: 600;
 }
 
-.product-list-table .tr .td.content-box .rating-box {
+.information .quantity {
   display: flex;
-  align-items: center;
-  
+  gap: 8px;
+}
+
+.information .deadline-box {
+  display: flex;
+
+  gap: 10px;
+}
+
+.information .deadline-box .deadline-title.color-title {
+  color: #008CFF;
+  font-weight: 600;
+}
+
+.information .review-area {
+  display: flex;
+  gap: 5px;
+
+  padding: 0;
+}
+
+.information .review-area .review-rating {
+  display: flex;
   gap: 3px;
+  align-items: center;
 }
 
-.product-list-table .tr .td.content-box .star {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  gap: 2px;
-
-  background-image: url(src/assets/images/icon-star.png);
+.information .review-area .review-rating .rating-icon {
+  width: 19px;
+  height: 19px;
+  
+  background-image: url("src/assets/images/icon-star.png");
   background-size: cover;
-  background-repeat: no-repeat;
+
 }
 
-.product-list-table .tr .td.deadline-box {
-  flex: 2;
-  text-align: end;
+.information .review-area .review-count {
+  color: #949494;
 }
+
 
 .td.deadline-box .deadline-title.color-title{
   color: #008CFF;
