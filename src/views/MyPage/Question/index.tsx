@@ -31,10 +31,10 @@ function QuestionItem({ question }: QuestionItemProps){
 
   // render: 문의사항 테이블 레코드 컴포넌트 렌더링 //
   return(
-    <div className='tr' onClick={onClick}>
+    <div className='tr'>
       <div className='td date'>{postDate}</div>
       <div className='td category'>{category}</div>
-      <div className='td title'>{title}</div>
+      <div className='td title' onClick={onClick}>{title}</div>
       <div className='td is-answered'>{answered === true ? "답변완료" : "접수중"}</div>
     </div>
   )

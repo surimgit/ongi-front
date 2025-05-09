@@ -28,13 +28,15 @@ import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_
     NOTICE_PATCH_PATH,
     NOTICE_VIEW_PATH,
     AUTH_PATH, AUTH_FIND_ID_PATH, AUTH_FIND_PASSWORD_PATH,
-
     AUTH_FIND_USER_RESULT_PATH,
     COMMUNITY_EDIT_PATH,
     REPORT_PATH,
     COMMUNITY_SEARCH_PATH,
     CALENDAR_PATH,
-    POLICY_PATH} from './constants';
+    POLICY_PATH,
+    NEEDHELPER_WRITE_PATH,
+    NEEDHELPER_VIEW_PATH} from './constants';
+
 
 import NeedHelper from './views/NeedHelper';
 import ProductWrite from './views/Product/write';
@@ -72,7 +74,6 @@ import QuestionUpdate from './views/MyPage/Question/Update';
 import NoticeWrite from './views/MyPage/Notice/Write';
 import NoticeUpdate from './views/MyPage/Notice/Update';
 import NoticeView from './views/MyPage/Notice/Detail';
-import WishLists from './views/MyPage/GroupBuying/WishList';
 
 
 
@@ -83,13 +84,22 @@ import Calendar from './views/Calendar';
 import FindId from './views/Auth/FindId';
 import FindPassword from './views/Auth/FindPassword';
 import FindResult from './views/Auth/FindResult';
-import PolicyView from './views/Policy/PolicyView';
 import PolicyViewPage from './views/Policy/PolicyView';
 import PostEdit from './views/Community/Edit';
 import ReportBoard from './views/Report';
+
 import CommunitySearch from './views/Community/Search';
 import MySell from './views/MyPage/GroupBuying/MySell';
 import ShoppingCartMain from './views/ShoppingCart';
+
+import AccountUpdate from './views/MyPage/Account/Update';
+import HelperWrite from './views/NeedHelper/Write';
+import OtherUserReview from './views/MyPage/Others/Review';
+import OtherUserCommunity from './views/MyPage/Others/Community';
+import OtherUserGroupBuying from './views/MyPage/Others/GroupBuying';
+import NeedHelperPost from './views/NeedHelper/Detail';
+import HelperEdit from './views/NeedHelper/Edit';
+
 
 function App() {
   return (
@@ -106,12 +116,17 @@ function App() {
       <Route path='success' element={<SuccessPage/>}/>
       <Route path='fail' element={<FailPage/>}/>
 
+      <Route path="/mypage/account/patch" element={<AccountUpdate/>}/>
+
       <Route element={<Layout />}>
         <Route path={MAIN_PATH}>
             <Route index element={<Main />}/>
         </Route>
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
+          <Route path={NEEDHELPER_WRITE_PATH} element={<HelperWrite />} />
+          <Route path={NEEDHELPER_VIEW_PATH} element={<NeedHelperPost />} />
+          <Route path="/needHelper/write/:sequence" element={<HelperEdit />} />
         </Route>
         <Route path={CALENDAR_PATH} element={<Calendar/>}/>
         <Route path={POLICY_PATH} element={<PolicyViewPage />} />
@@ -129,11 +144,20 @@ function App() {
 
         <Route path={MYPAGE_PATH}>          
           <Route path={OTHER_MYPAGE_PATH}>
-            <Route path={OTHER_MYPAGE_VIEW_PATH} element={<Others/>} />
+            <Route path={OTHER_MYPAGE_VIEW_PATH}>
+              <Route index element={<Others/>}/>
+              <Route path='need-helper/review' element={<OtherUserReview/>}/>
+              <Route path='community/post' element={<OtherUserCommunity/>}/>
+              <Route path='group-buying/selling' element={<OtherUserGroupBuying/>}/>
+              <Route path='group-buying/selled' element={<OtherUserGroupBuying/>}/>
+              <Route path='group-buying/review' element={<OtherUserGroupBuying/>}/>
+            </Route>
           </Route>
           <Route index element={<MyPage/>}/>
           <Route path={MY_ACTIVITY_PATH} element={<MyActivity/>}/>
-          <Route path={MYPAGE_ACCOUNT_PATH} element={<Account/>}/>
+          <Route path={MYPAGE_ACCOUNT_PATH}>
+            <Route index element={<Account/>}/>
+          </Route>
           <Route path={MY_GROUPBUYING_PATH}>
             <Route path={MY_GROUPBUYING_SELL_PATH} element={<MySell/>} />
             <Route path={MY_GROUPBUYING_BUY_PATH} element={<GroupBuying/>} />

@@ -152,7 +152,8 @@ export default function ProductWrite() {
     const requestBody: PostProductRequestDto = {
       name, price, category, content, productQuantity, deadline, image: productImage, openDate
     }
-
+    
+    console.log('response: ', requestBody);
     postProductRequest(requestBody, accessToken).then(postProductResponse);
   }
 

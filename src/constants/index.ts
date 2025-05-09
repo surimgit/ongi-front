@@ -70,6 +70,8 @@ export const NOTICE_VIEW_PATH = ':sequence';
 export const FAQ_PATH = 'faq';
 
 export const NEEDHELPER_PATH = 'needHelper';
+export const NEEDHELPER_WRITE_PATH = 'write';
+export const NEEDHELPER_VIEW_PATH = ':sequence';
 
 export const REPORT_PATH = 'report';
 
@@ -147,6 +149,9 @@ export const MY_GROUPBUYING_BUY_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY
 export const MY_GROUPBUYING_SELL_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MY_GROUPBUYING_PATH}/${MY_GROUPBUYING_SELL_PATH}`;
 
 export const NEEDHELPER_ABSOLUTE_PATH = `${ROOT_PATH}${NEEDHELPER_PATH}`;
+export const NEEDHELPER_WRITE_ABSOLUTE_PATH = `${ROOT_PATH}${NEEDHELPER_PATH}/${NEEDHELPER_WRITE_PATH}`;
+export const NEEDHELPER_VIEW_ABSOLUTE_PATH = (postSequence: number | string) => `${ROOT_PATH}${NEEDHELPER_PATH}/${postSequence}`;
+
 export const CALENDAR_ABSOLUTE_PATH = `${ROOT_PATH}${CALENDAR_PATH}`;
 export const POLICY_ABSOLUTE_PATH = (plcyNo: string, plcyNm: string, keyword?: string, regions?: string, categories?: string, page?: string, section?: string) => {
     const queryString = buildQueryString({ plcyNo, plcyNm: plcyNm, keyword, regions, categories, page, section }); return `/${POLICY_PATH}?${queryString}`;};
