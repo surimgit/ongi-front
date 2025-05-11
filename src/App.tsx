@@ -1,126 +1,149 @@
-import { Routes, Route, useNavigate, Outlet } from 'react-router';
-import Layout from './layouts/Layout';
+import { Routes, Route, useNavigate, Outlet } from "react-router";
+import Layout from "./layouts/Layout";
 
-import './App.css';
-import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_VIEW_PATH, 
-    SHOPPING_CART_PATH, WRITE_PATH, MYPAGE_ACCOUNT_PATH, MYPAGE_PATH, OTHER_MYPAGE_PATH, OTHER_MYPAGE_VIEW_PATH, QUESTION_PATH, NEEDHELPER_PATH, 
-    MY_GROUPBUYING_PATH,
-    MY_GROUPBUYING_WISH_LIST_PATH,
-    MY_REVIEW_PATH,
-    MY_NEEDHELLPER_PATH,
-    MY_NEEDHELLPER_ASK_PATH,
-    MY_NEEDHELLPER_APPLY_PATH,
-    MY_NEEDHELLPER_LIKED_PATH,
-    MY_COMMUNITY_PATH,
-    FAQ_PATH,
-    NOTICE_PATH,
-    MAIN_PATH,
-    MY_ACTIVITY_PATH,
-    MY_GROUPBUYING_SELL_PATH,
-    MY_GROUPBUYING_BUY_PATH,
-    MY_COMMUNITY_POST_PATH,
-    MY_COMMUNITY_COMMENT_PATH,
-    MY_COMMUNITY_LIKED_PATH,
-    QUESTION_WRTIE_PATH,
-    QUESTION_VIEW_PATH,
-    QUESTION_PATCH_PATH,
-    NOTICE_WRITE_PATH,
-    NOTICE_PATCH_PATH,
-    NOTICE_VIEW_PATH,
-    AUTH_PATH, AUTH_FIND_ID_PATH, AUTH_FIND_PASSWORD_PATH,
-    AUTH_FIND_USER_RESULT_PATH,
-    COMMUNITY_EDIT_PATH,
-    REPORT_PATH,
-    COMMUNITY_SEARCH_PATH,
-    CALENDAR_PATH,
-    POLICY_PATH,
-    NEEDHELPER_WRITE_PATH,
-    NEEDHELPER_VIEW_PATH} from './constants';
+import "./App.css";
+import {
+  ADDRESS_PATH,
+  PAYMENTS_PATH,
+  MAIN_ABSOLUTE_PATH,
+  PRODUCT_PATH,
+  PRODUCT_VIEW_PATH,
+  SHOPPING_CART_PATH,
+  WRITE_PATH,
+  MYPAGE_ACCOUNT_PATH,
+  MYPAGE_PATH,
+  OTHER_MYPAGE_PATH,
+  OTHER_MYPAGE_VIEW_PATH,
+  QUESTION_PATH,
+  NEEDHELPER_PATH,
+  MY_GROUPBUYING_PATH,
+  MY_GROUPBUYING_WISH_LIST_PATH,
+  MY_REVIEW_PATH,
+  MY_NEEDHELLPER_PATH,
+  MY_NEEDHELLPER_ASK_PATH,
+  MY_NEEDHELLPER_APPLY_PATH,
+  MY_NEEDHELLPER_LIKED_PATH,
+  MY_COMMUNITY_PATH,
+  FAQ_PATH,
+  NOTICE_PATH,
+  MAIN_PATH,
+  MY_ACTIVITY_PATH,
+  MY_GROUPBUYING_SELL_PATH,
+  MY_GROUPBUYING_BUY_PATH,
+  MY_COMMUNITY_POST_PATH,
+  MY_COMMUNITY_COMMENT_PATH,
+  MY_COMMUNITY_LIKED_PATH,
+  QUESTION_WRTIE_PATH,
+  QUESTION_VIEW_PATH,
+  QUESTION_PATCH_PATH,
+  NOTICE_WRITE_PATH,
+  NOTICE_PATCH_PATH,
+  NOTICE_VIEW_PATH,
+  AUTH_PATH,
+  AUTH_FIND_ID_PATH,
+  AUTH_FIND_PASSWORD_PATH,
+  AUTH_FIND_USER_RESULT_PATH,
+  COMMUNITY_EDIT_PATH,
+  REPORT_PATH,
+  COMMUNITY_SEARCH_PATH,
+  CALENDAR_PATH,
+  POLICY_PATH,
+  NEEDHELPER_WRITE_PATH,
+  NEEDHELPER_VIEW_PATH,
+  CHAT_PATH,
+  CHAT_VIEW_PATH,
+} from "./constants";
 
-
-import NeedHelper from './views/NeedHelper';
-import ProductWrite from './views/Product/write';
-import ProductMain from './views/Product';
-import DetailProduct from './views/Product/detail';
-import MyPage from './views/MyPage';
-import Auth from './views/Auth';
-import Others from './views/MyPage/Others';
-import MyActivity from './views/MyPage/Activity';
-import GroupBuying from './views/MyPage/GroupBuying';
-import WishList from './views/MyPage/GroupBuying/WishList';
-import Faq from './views/MyPage/Faq';
-import Notice from './views/MyPage/Notice';
-import MyReview from './views/MyPage/Activity/MyReview';
+import NeedHelper from "./views/NeedHelper";
+import ProductWrite from "./views/Product/write";
+import ProductMain from "./views/Product";
+import DetailProduct from "./views/Product/detail";
+import MyPage from "./views/MyPage";
+import Auth from "./views/Auth";
+import Others from "./views/MyPage/Others";
+import MyActivity from "./views/MyPage/Activity";
+import GroupBuying from "./views/MyPage/GroupBuying";
+import WishList from "./views/MyPage/GroupBuying/WishList";
+import Faq from "./views/MyPage/Faq";
+import Notice from "./views/MyPage/Notice";
+import MyReview from "./views/MyPage/Activity/MyReview";
 // import NeedHelper from './views/MyPage/Activity/MyNeedHelper';
-import MyNeedHelper from './views/MyPage/Activity/MyNeedHelper';
-import MyCommunity from './views/MyPage/Activity/MyCommunity';
-import './App.css';
-import CommunityLayout from './layouts/Community';
-import { COMMUNITY_PATH, COMMUNITY_VIEW_PATH, COMMUNITY_WRITE_PATH } from './constants';
-import PostWrite from './views/Community/Write';
+import MyNeedHelper from "./views/MyPage/Activity/MyNeedHelper";
+import MyCommunity from "./views/MyPage/Activity/MyCommunity";
+import "./App.css";
+import CommunityLayout from "./layouts/Community";
+import {
+  COMMUNITY_PATH,
+  COMMUNITY_VIEW_PATH,
+  COMMUNITY_WRITE_PATH,
+} from "./constants";
+import PostWrite from "./views/Community/Write";
 // import HotBoard from './views/Community/HotBoard';
 // import InfoBoard from './views/Community/InfoBoard';
 // import CountyBoard from './views/Community/CountyBoard';
-import SuccessPage from './views/TossPayment/SuccessPage';
-import FailPage from './views/TossPayment/FailPage';
-import CheckoutPage from './views/TossPayment/CheckoutPage';
-import CommunityMain from './views/Community';
-import PostDetail from './views/Community/Detail';
-import Question from './views/MyPage/Question';
-import Account from './views/MyPage/Account';
-import QuestionWrite from './views/MyPage/Question/Write';
-import QuestionView from './views/MyPage/Question/Detail';
-import QuestionUpdate from './views/MyPage/Question/Update';
-import NoticeWrite from './views/MyPage/Notice/Write';
-import NoticeUpdate from './views/MyPage/Notice/Update';
-import NoticeView from './views/MyPage/Notice/Detail';
+import SuccessPage from "./views/TossPayment/SuccessPage";
+import FailPage from "./views/TossPayment/FailPage";
+import CheckoutPage from "./views/TossPayment/CheckoutPage";
+import CommunityMain from "./views/Community";
+import PostDetail from "./views/Community/Detail";
+import Question from "./views/MyPage/Question";
+import Account from "./views/MyPage/Account";
+import QuestionWrite from "./views/MyPage/Question/Write";
+import QuestionView from "./views/MyPage/Question/Detail";
+import QuestionUpdate from "./views/MyPage/Question/Update";
+import NoticeWrite from "./views/MyPage/Notice/Write";
+import NoticeUpdate from "./views/MyPage/Notice/Update";
+import NoticeView from "./views/MyPage/Notice/Detail";
 
+import { useEffect } from "react";
+import Main from "./views/Main";
+import ShoppingCartAddress from "./views/ShoppingCart/Address";
+import Calendar from "./views/Calendar";
+import FindId from "./views/Auth/FindId";
+import FindPassword from "./views/Auth/FindPassword";
+import FindResult from "./views/Auth/FindResult";
+import PolicyViewPage from "./views/Policy/PolicyView";
+import PostEdit from "./views/Community/Edit";
+import ReportBoard from "./views/Report";
 
+import CommunitySearch from "./views/Community/Search";
+import MySell from "./views/MyPage/GroupBuying/MySell";
+import ShoppingCartMain from "./views/ShoppingCart";
 
-import { useEffect } from 'react';
-import Main from './views/Main';
-import ShoppingCartAddress from './views/ShoppingCart/Address';
-import Calendar from './views/Calendar';
-import FindId from './views/Auth/FindId';
-import FindPassword from './views/Auth/FindPassword';
-import FindResult from './views/Auth/FindResult';
-import PolicyViewPage from './views/Policy/PolicyView';
-import PostEdit from './views/Community/Edit';
-import ReportBoard from './views/Report';
-
-import CommunitySearch from './views/Community/Search';
-import MySell from './views/MyPage/GroupBuying/MySell';
-import ShoppingCartMain from './views/ShoppingCart';
-
-import AccountUpdate from './views/MyPage/Account/Update';
-import HelperWrite from './views/NeedHelper/Write';
-import OtherUserReview from './views/MyPage/Others/Review';
-import OtherUserCommunity from './views/MyPage/Others/Community';
-import OtherUserGroupBuying from './views/MyPage/Others/GroupBuying';
-import NeedHelperPost from './views/NeedHelper/Detail';
-import HelperEdit from './views/NeedHelper/Edit';
-
+import AccountUpdate from "./views/MyPage/Account/Update";
+import HelperWrite from "./views/NeedHelper/Write";
+import OtherUserReview from "./views/MyPage/Others/Review";
+import OtherUserCommunity from "./views/MyPage/Others/Community";
+import OtherUserGroupBuying from "./views/MyPage/Others/GroupBuying";
+import NeedHelperPost from "./views/NeedHelper/Detail";
+import HelperEdit from "./views/NeedHelper/Edit";
+import Chat from "./views/Chat";
+import ChatDetail from "./views/Chat/Detail";
 
 function App() {
   return (
-    <Routes> 
-      <Route index element={<Index />} />     
+    <Routes>
+      <Route index element={<Index />} />
       <Route path={AUTH_PATH}>
         <Route index element={<Auth />} />
-        <Route path={AUTH_FIND_ID_PATH} element={<FindId />}/>
-        <Route path={AUTH_FIND_PASSWORD_PATH} element={<FindPassword/>}/>
-        <Route path={AUTH_FIND_USER_RESULT_PATH} element={<FindResult />}/>
+        <Route path={AUTH_FIND_ID_PATH} element={<FindId />} />
+        <Route path={AUTH_FIND_PASSWORD_PATH} element={<FindPassword />} />
+        <Route path={AUTH_FIND_USER_RESULT_PATH} element={<FindResult />} />
       </Route>
-      
-      <Route path={PAYMENTS_PATH} element={<CheckoutPage/>}/>
-      <Route path='success' element={<SuccessPage/>}/>
-      <Route path='fail' element={<FailPage/>}/>
 
-      <Route path="/mypage/account/patch" element={<AccountUpdate/>}/>
+      <Route path={PAYMENTS_PATH} element={<CheckoutPage />} />
+      <Route path="success" element={<SuccessPage />} />
+      <Route path="fail" element={<FailPage />} />
+
+      <Route path="/mypage/account/patch" element={<AccountUpdate />} />
+
+      <Route path={CHAT_PATH}>
+        <Route index element={<Chat />} />
+      </Route>
 
       <Route element={<Layout />}>
         <Route path={MAIN_PATH}>
-            <Route index element={<Main />}/>
+          <Route index element={<Main />} />
         </Route>
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
@@ -128,7 +151,7 @@ function App() {
           <Route path={NEEDHELPER_VIEW_PATH} element={<NeedHelperPost />} />
           <Route path="/needHelper/write/:sequence" element={<HelperEdit />} />
         </Route>
-        <Route path={CALENDAR_PATH} element={<Calendar/>}/>
+        <Route path={CALENDAR_PATH} element={<Calendar />} />
         <Route path={POLICY_PATH} element={<PolicyViewPage />} />
 
         <Route path={PRODUCT_PATH}>
@@ -138,62 +161,90 @@ function App() {
         </Route>
 
         <Route path={SHOPPING_CART_PATH}>
-          <Route index element={<ShoppingCartMain/>}></Route>
-          <Route path={ADDRESS_PATH} element={<ShoppingCartAddress/>}/>
+          <Route index element={<ShoppingCartMain />}></Route>
+          <Route path={ADDRESS_PATH} element={<ShoppingCartAddress />} />
         </Route>
 
-        <Route path={MYPAGE_PATH}>          
+        <Route path={MYPAGE_PATH}>
           <Route path={OTHER_MYPAGE_PATH}>
             <Route path={OTHER_MYPAGE_VIEW_PATH}>
-              <Route index element={<Others/>}/>
-              <Route path='need-helper/review' element={<OtherUserReview/>}/>
-              <Route path='community/post' element={<OtherUserCommunity/>}/>
-              <Route path='group-buying/selling' element={<OtherUserGroupBuying/>}/>
-              <Route path='group-buying/selled' element={<OtherUserGroupBuying/>}/>
-              <Route path='group-buying/review' element={<OtherUserGroupBuying/>}/>
+              <Route index element={<Others />} />
+              <Route path="need-helper/review" element={<OtherUserReview />} />
+              <Route path="community/post" element={<OtherUserCommunity />} />
+              <Route
+                path="group-buying/selling"
+                element={<OtherUserGroupBuying />}
+              />
+              <Route
+                path="group-buying/selled"
+                element={<OtherUserGroupBuying />}
+              />
+              <Route
+                path="group-buying/review"
+                element={<OtherUserGroupBuying />}
+              />
             </Route>
           </Route>
-          <Route index element={<MyPage/>}/>
-          <Route path={MY_ACTIVITY_PATH} element={<MyActivity/>}/>
+          <Route index element={<MyPage />} />
+          <Route path={MY_ACTIVITY_PATH} element={<MyActivity />} />
           <Route path={MYPAGE_ACCOUNT_PATH}>
-            <Route index element={<Account/>}/>
+            <Route index element={<Account />} />
           </Route>
           <Route path={MY_GROUPBUYING_PATH}>
-            <Route path={MY_GROUPBUYING_SELL_PATH} element={<MySell/>} />
-            <Route path={MY_GROUPBUYING_BUY_PATH} element={<GroupBuying/>} />
-            <Route path={MY_GROUPBUYING_WISH_LIST_PATH} element={<WishList/>} />
+            <Route path={MY_GROUPBUYING_SELL_PATH} element={<MySell />} />
+            <Route path={MY_GROUPBUYING_BUY_PATH} element={<GroupBuying />} />
+            <Route
+              path={MY_GROUPBUYING_WISH_LIST_PATH}
+              element={<WishList />}
+            />
           </Route>
           <Route path={MY_REVIEW_PATH}>
-            <Route index element={<MyReview/>} />
+            <Route index element={<MyReview />} />
           </Route>
           <Route path={MY_NEEDHELLPER_PATH}>
-            <Route path={MY_NEEDHELLPER_ASK_PATH} element={<MyNeedHelper/>} />
-            <Route path={MY_NEEDHELLPER_APPLY_PATH} element={<MyNeedHelper/>} />
-            <Route path={MY_NEEDHELLPER_LIKED_PATH} element={<MyNeedHelper/>} />
+            <Route path={MY_NEEDHELLPER_ASK_PATH} element={<MyNeedHelper />} />
+            <Route
+              path={MY_NEEDHELLPER_APPLY_PATH}
+              element={<MyNeedHelper />}
+            />
+            <Route
+              path={MY_NEEDHELLPER_LIKED_PATH}
+              element={<MyNeedHelper />}
+            />
           </Route>
+
           <Route path={MY_COMMUNITY_PATH}>
-            <Route path={MY_COMMUNITY_POST_PATH} element={<MyCommunity type='post'/>} />
-            <Route path={MY_COMMUNITY_COMMENT_PATH} element={<MyCommunity type='comment'/>} />
-            <Route path={MY_COMMUNITY_LIKED_PATH} element={<MyCommunity type='liked'/>} />
+            <Route
+              path={MY_COMMUNITY_POST_PATH}
+              element={<MyCommunity type="post" />}
+            />
+            <Route
+              path={MY_COMMUNITY_COMMENT_PATH}
+              element={<MyCommunity type="comment" />}
+            />
+            <Route
+              path={MY_COMMUNITY_LIKED_PATH}
+              element={<MyCommunity type="liked" />}
+            />
           </Route>
           <Route path={QUESTION_PATH}>
-            <Route index element={<Question/>}/>
-            <Route path={QUESTION_WRTIE_PATH} element={<QuestionWrite />}/>
+            <Route index element={<Question />} />
+            <Route path={QUESTION_WRTIE_PATH} element={<QuestionWrite />} />
             <Route path={QUESTION_VIEW_PATH}>
-              <Route index element={<QuestionView/>}/>
-              <Route path={QUESTION_PATCH_PATH} element={<QuestionUpdate />}/>
+              <Route index element={<QuestionView />} />
+              <Route path={QUESTION_PATCH_PATH} element={<QuestionUpdate />} />
             </Route>
           </Route>
-          <Route path={FAQ_PATH} element={<Faq/>} />
+          <Route path={FAQ_PATH} element={<Faq />} />
           <Route path={NOTICE_PATH}>
-            <Route index element={<Notice/>}/>
-            <Route path={NOTICE_WRITE_PATH} element={<NoticeWrite/>}/>
+            <Route index element={<Notice />} />
+            <Route path={NOTICE_WRITE_PATH} element={<NoticeWrite />} />
             <Route path={NOTICE_VIEW_PATH}>
-              <Route index element={<NoticeView/>}/>
-              <Route path={NOTICE_PATCH_PATH} element={<NoticeUpdate />}/>
+              <Route index element={<NoticeView />} />
+              <Route path={NOTICE_PATCH_PATH} element={<NoticeUpdate />} />
             </Route>
           </Route>
-        </Route> 
+        </Route>
         <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
           <Route index element={<CommunityMain />} />
           <Route path={COMMUNITY_SEARCH_PATH}>
@@ -221,12 +272,11 @@ export default App;
 
 // component: Root 경로 컴포넌트 //
 function Index() {
-
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
 
   // effect: 컴포넌트가 렌더링될 때 실행할 함수 //
-  useEffect(()=> {
+  useEffect(() => {
     navigator(MAIN_ABSOLUTE_PATH);
   }, []);
 
