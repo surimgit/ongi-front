@@ -111,12 +111,6 @@ export default function TextEditor({ content, setContent }: Props) {
   })
 
   // effect: content 변경시 실행할 함수 //
-  //  useEffect(() => {
-  //    if (editor && content !== editor.getText()) {
-  //      editor.commands.setContent(content);
-  //    }
-  //  }, [content, editor]);
-
   useEffect(() => {
     if (editor && content && editor?.getHTML() !== content) {
       editor.commands.setContent(content);

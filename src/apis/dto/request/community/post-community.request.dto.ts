@@ -6,5 +6,4 @@ export default interface PostCommunityRequestDto {
     category: CommunityCategory;
     title: string;
     content: string;
-    images: string[] | null;
 }
