@@ -23,6 +23,10 @@ import GetHelperPostResponseDto from 'src/apis/dto/response/needhelper/get-helpe
     const [meetingType, setMeetingType] = useState("");
     const [selectDate, setSelectDate] = useState<Date | null>(null);
     const [reward, setReward] = useState<string>('');
+    const [keywords, setKeywords] = useState<string[]>([]);
+    
+    // state: input 상태 //
+    const [inputValue, setInputValue] = useState('');
 
     // state: 지역 선택 //
     const {areaList, sido, gugun, gugunList, onSidoChange, onGugunChange, setSido, setGugun } = useLocationSelector();
@@ -69,6 +73,14 @@ import GetHelperPostResponseDto from 'src/apis/dto/response/needhelper/get-helpe
         setMeetingType((prev) => (prev === type ? "" : type));
     };
 
+    // event handler: 키워드 추가 //
+    const onAddKeyword = () => {
+        const trimmed = inputValue.trim();
+        if (!trimmed || keywords.includes(trimmed)) return;
+        setKeywords([...keywords, trimmed]);
+        setInputValue('');
+    };
+
     // event handler: 제목 변경 이벤트 처리 //
     const onTitleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -100,7 +112,8 @@ import GetHelperPostResponseDto from 'src/apis/dto/response/needhelper/get-helpe
             district: gugun,
             schedule: selectDate ? selectDate.toISOString() : '', // 날짜 없을 때는 빈값
             reward,
-            date: writeTime.toISOString()
+            date: writeTime.toISOString(),
+            keyword: JSON.stringify(keywords)
         };
     
         patchHelperPostRequest(requestBody, Number(sequence), accessToken).then((response) => {
@@ -128,6 +141,13 @@ import GetHelperPostResponseDto from 'src/apis/dto/response/needhelper/get-helpe
     
             setSido(data.city); // 바로 상태를 강제로 셋팅
             setGugun(data.district); // 바로 상태를 강제로 셋팅
+            
+            try {
+                const parsedKeywords = JSON.parse(data.keyword);
+                if (Array.isArray(parsedKeywords)) setKeywords(parsedKeywords);
+            } catch (e) {
+                setKeywords([]);
+            }
         });
     }, []);
     
@@ -206,6 +226,15 @@ import GetHelperPostResponseDto from 'src/apis/dto/response/needhelper/get-helpe
                     </div>
                     원
                 </div>
+            </div>
+        </div>
+        <div className='keyword'>
+            <input type="text" className="keyword-bar" placeholder="태그 추가" value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+            <button className='keyword-add' onClick={onAddKeyword}>추가</button>
+            <div className='keywords'>
+                {keywords.map((kw, index) => (
+                <span key={index} className="tag">#&nbsp;{kw}</span>
+                ))}
             </div>
         </div>
         <div className='input-box'>

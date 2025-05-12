@@ -44,6 +44,8 @@ export default function NeedHelperPostDetail() {
     const [isReportOpen, setReportOpen] = useState(false);
     const [isApplied, setApplied] = useState(false);
     const [writeTime, setWriteTime] = useState("");
+    const [meetingType, setMeetingType] = useState("");
+    const [keyword, setKeyword] = useState("");
 
     // state: 게시글 작성자 //
     const [writerId, setWriterId] = useState('');
@@ -76,7 +78,7 @@ export default function NeedHelperPostDetail() {
             navigator(NEEDHELPER_ABSOLUTE_PATH);
             return;
         }
-        const { title, schedule, city, district, reward, content, userId, date } = responseBody as GetHelperPostResponseDto;
+        const { title, schedule, city, district, reward, content, userId, date, meetingType, keyword } = responseBody as GetHelperPostResponseDto;
 
         setTitle(title);
         setSchedule(schedule);
@@ -86,9 +88,12 @@ export default function NeedHelperPostDetail() {
         setContent(content);
         setWriterId(userId);
         setWriteTime(date);
+        setMeetingType(meetingType);
+        setKeyword(keyword);
+
     };
 
-    // function: get helper post api 처리 함수 //
+    // function: get helper likes post api 처리 함수 //
     const getHelperLikedResponse = (responseBody: GetHelperLikedResponseDto | ResponseDto | null) => {
         if (!responseBody || responseBody.code !== "SU") {
             setLikes([]); 
@@ -345,11 +350,12 @@ export default function NeedHelperPostDetail() {
                 }
             </div>
             <div className="info">
-                <span>대면 여부: 대면</span> | 
+                <span>대면 여부: {meetingType}</span> | 
                 <span>지역: {city} {district}</span> | 
                 <span>급여: {reward.toLocaleString()}원</span> | 
                 <span>일시: {formatDate(schedule)}</span>
             </div>
+            <div className="keyword">{JSON.parse(keyword || "[]").map((tag: string) => `#${tag}`).join(" ")}</div>
             <div className="content" dangerouslySetInnerHTML={{ __html: content }}></div>
         </div>
         <div className='user-reaction-container'>

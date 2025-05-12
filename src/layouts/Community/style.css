@@ -14,9 +14,37 @@
     display: flex;
     flex-direction: column;
 
-    margin: 100px auto 0;
+    margin: 0 auto;
 
     gap: 15px;
+}
+
+#community-layout-wrapper .county-box {
+    display: flex;
+    align-items: center;
+
+    margin-top: 50px;
+    height: 35px;
+
+    gap: 6px;
+}
+
+#community-layout-wrapper .county-box .county-icon {
+    width: 35px;
+    height: 35px;
+
+    background-image: url(src/assets/images/icon-map-place-holder.png);
+    background-size: 100%;
+}
+
+#community-layout-wrapper .county-box .county {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--Cancel);
+}
+
+#community-layout-wrapper .blank {
+    height: 85px;
 }
 
 #community-layout-wrapper .community-post-button {
@@ -86,13 +114,44 @@
 #community-layout-wrapper .large-category,
 #community-layout-wrapper .category-item {
     display: flex;
-    align-items: bottom;
 
     cursor: pointer;
+
+    margin-left: 3px;
 }
 
 #community-layout-wrapper .category-item:hover {
     text-decoration: underline;
+}
+
+#community-layout-wrapper .address-register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid var(--Lightmode-Grey3);
+    border-radius: 6px;
+    box-sizing: border-box;
+
+    color: var(--Lightmode-Grey4);
+
+    height: 60px;
+
+    cursor: pointer;
+}
+
+#community-layout-wrapper .address-register:hover {
+    border: none;
+    background-color: var(--Primary);
+}
+
+#community-layout-wrapper .address-register::after {
+    content: "주소를 등록하면 볼 수 있어요!";
+}
+
+#community-layout-wrapper .address-register:hover::after {
+    content: "👉 주소 등록하러 가기 👈";
+    color: var(--White);
 }
 
 #board-format {
@@ -139,9 +198,13 @@
     background-repeat: no-repeat;
     background-position: center;
     
-    background-color: var(--Black);
+    background-color: var(--Lightmode-Grey4);
 
     width: 70px;
 
     cursor: pointer;
+}
+
+#board-format .search-container .search-button:hover {
+    background-color: var(--Black);
 }

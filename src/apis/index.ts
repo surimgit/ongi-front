@@ -119,6 +119,7 @@ import GetHelperPostResponseDto from "./dto/response/needhelper/get-helper-post.
 import PatchHelperPostRequestDto from "./dto/request/needhelper/patch-helper.request.dto";
 import PostHelperCommentRequestDto from "./dto/request/needhelper/post-helper-comment.request.dto";
 import { GetChatRoomResponseDto } from "./dto/response/chat";
+import GetMyHelperPostResponseDto from "./dto/response/needhelper/get-my-helper-post-list.responsedto";
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -183,10 +184,9 @@ const multipartFormData = {
 };
 
 const ALERT_MODULE_URL = `${API_DOMAIN}/api/v1/alert`;
-const ALERT_READ_URL = (alertSequence: number | string) =>
-  `${ALERT_MODULE_URL}/${alertSequence}`;
-const ALERT_DELETE_URL = (alertSequence: number | string | null) =>
-  `${ALERT_MODULE_URL}/${alertSequence}`;
+const ALERT_READ_URL = (alertSequence: number | string) => `${ALERT_MODULE_URL}/${alertSequence}`;
+const ALERT_READ_ALL_URL = `${ALERT_MODULE_URL}/read-all-alert`;
+const ALERT_DELETE_URL = (alertSequence: number | string | null) => `${ALERT_MODULE_URL}/${alertSequence}`;
 
 const GET_COMMUNITY_MODULE_URL = `${COMMUNITY_MODULE_URL}`;
 const GET_COMMUNITY_POST_URL = (postSequence: number | string) =>
@@ -313,15 +313,18 @@ const GET_MY_COMMUNTY_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/post`;
 const GET_MY_COMMUNTY_COMMENT_URL = `${API_DOMAIN}/api/v1/mypage/community/comment`;
 const GET_MY_COMMUNTY_LIKED_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/liked`;
 
+const GET_MY_REQUEST_HELPER_POST_URL = `${API_DOMAIN}/api/v1/mypage/need-helper/request`;
+const GET_MY_APPLY_HELPER_POST_URL = `${API_DOMAIN}/api/v1/mypage/need-helper/apply`;
+const GET_MY_LIKED_HELPER_POST_URL = `${API_DOMAIN}/api/v1/mypage/need-helper/liked`;
+
 // 도우미 관련 경로
 const HELPER_MODULE_URL = `${API_DOMAIN}/api/v1/needHelper`;
+const MAIN_HELPER_MODULE_URL = `${API_DOMAIN}/api/v1/main/need-helper`;
 const POST_HELPER_URL = `${HELPER_MODULE_URL}/write`;
-const GET_HELPER_POST_URL = (postSequence: number | string) =>
-  `${HELPER_MODULE_URL}/${postSequence}`;
-const PATCH_HELPER_POST_URL = (postSequence: number | string) =>
-  `${HELPER_MODULE_URL}/${postSequence}`;
-const DELETE_HELPER_POST_URL = (postSequence: number | string) =>
-  `${HELPER_MODULE_URL}/${postSequence}`;
+const GET_MAIN_HELPER_MODULE_URL = (userId: string) => `${MAIN_HELPER_MODULE_URL}/{userId}`;
+const GET_HELPER_POST_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}`;
+const PATCH_HELPER_POST_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}`;
+const DELETE_HELPER_POST_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}`;
 
 const POST_HELPER_COMMENT_URL = (postSequence: number | string) =>
   `${HELPER_MODULE_URL}/${postSequence}/comment`;
@@ -665,16 +668,10 @@ export const getCommunityPostRequest = async (
 };
 
 // function: get community API 요청 함수 //
-export const getCommunityRequest = async (
-  boardType: Board | string | null,
-  categoryType: CommunityCategory | string | null
-) => {
-  const responseBody = await axios
-    .get(GET_COMMUNITY_MODULE_URL, {
-      params: { board: boardType, category: categoryType },
-    })
-    .then(responseSuccessHandler)
-    .catch(responseErrorHandler);
+export const getCommunityRequest = async (boardType:Board | string | null, categoryType: CommunityCategory | string | null, region: string | null, county: string | null) => {
+  const responseBody = await axios.get(GET_COMMUNITY_MODULE_URL, { params: { board: boardType, category: categoryType, region: region, county: county}} )
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
   return responseBody;
 };
 
@@ -1263,6 +1260,33 @@ export const getMyCommunityLikedPostComment = async (accessToken: string) => {
   return responseBody;
 };
 
+// function: get my request helperPost post API 요청 함수 //
+export const getMyHelperRequestPostRequest = async (accessToken: string) => {
+  const responseBody = await axios
+    .get(GET_MY_REQUEST_HELPER_POST_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetMyHelperPostResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get my apply helper Post post API 요청 함수 //
+export const getMyHelperApplyPostRequest = async (accessToken: string) => {
+  const responseBody = await axios
+    .get(GET_MY_APPLY_HELPER_POST_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetMyHelperPostResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// // function: get my community post API 요청 함수 //
+// export const getMyCommunityPostRequest = async (accessToken: string) => {
+//   const responseBody = await axios
+//     .get(GET_MY_COMMUNTY_POST_URL, bearerAuthorization(accessToken))
+//     .then(responseSuccessHandler<GetCommunityResponseDto>)
+//     .catch(responseErrorHandler);
+//   return responseBody;
+// };
+
 // function: post alert API 요청 함수 //
 export const postAlertRequest = async (
   requestBody: PostAlertRequestDto,
@@ -1356,16 +1380,21 @@ export const deleteScheduleRequest = async (
 };
 
 // function: patch alert read API 요청 함수 //
-export const patchAlertReadRequest = async (
-  alertSequence: number | string,
-  accessToken: string
-) => {
-  const responseBody = await axios
-    .patch(ALERT_READ_URL(alertSequence), {}, bearerAuthorization(accessToken))
-    .then(responseSuccessHandler)
-    .catch(responseErrorHandler);
+export const patchAlertReadRequest = async (alertSequence: number | string, accessToken: string) => {
+  const responseBody = await axios.patch(ALERT_READ_URL(alertSequence), {}, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
   return responseBody;
 };
+
+// function: patch all alert read API 요청 함수 //
+export const patchAllAlertReadRequest = async (accessToken: string) => {
+  const responseBody = await axios.patch(ALERT_READ_ALL_URL, {}, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
 
 // function: delete alert API 요청 함수 //
 export const deleteAlertRequest = async (
@@ -1498,7 +1527,7 @@ export const getProductOrderItemsRequest = async (
     .then(responseSuccessHandler<GetOrderItemsResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
-};
+}
 
 // function: add badge API 요청 함수 //
 export const addBadgeRequest = async (accessToken: string) => {
@@ -1568,6 +1597,14 @@ export const getHelperPostListRequest = async (accessToken: string) => {
   return responseBody;
 };
 
+// function: get Helper list to main API 요청 함수 //
+export const getHelperPostMainRequest = async () => {
+  const responseBody = await axios.get(MAIN_HELPER_MODULE_URL)
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
 // function: get Helper post API 요청 함수 //
 export const getHelperPostRequest = async (
   postSequence: number | string,
@@ -1577,6 +1614,14 @@ export const getHelperPostRequest = async (
     .get(GET_HELPER_POST_URL(postSequence), bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get Helper match list to main API 요청 함수 //
+export const getMatchPostMainRequest = async (userId: string) => {
+  const responseBody = await axios.get(GET_MAIN_HELPER_MODULE_URL(userId))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
   return responseBody;
 };
 
@@ -1837,3 +1882,4 @@ export const accpetChatRequest = async (
   .catch(responseErrorHandler);
   return responseBody;
 };
+

@@ -24,11 +24,10 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 1134px
+    width: 1134px;
 }
 
 .hm-container-subtitle.s2 {
-    margin-top: 70px;
 }
 
 .hm-subtitle-hot {
@@ -48,6 +47,11 @@
 }
 
 .helper-of-main-container {
+    margin-bottom: 70px;
+}
+
+.helper-of-main-container.s2 {
+    margin-bottom: 0px;
 }
 
 .hm-tob-bar {

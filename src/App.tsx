@@ -143,7 +143,7 @@ function App() {
 
       <Route element={<Layout />}>
         <Route path={MAIN_PATH}>
-          <Route index element={<Main />} />
+            <Route index element={<Main />}/>
         </Route>
         <Route path={NEEDHELPER_PATH}>
           <Route index element={<NeedHelper />} />
@@ -151,7 +151,7 @@ function App() {
           <Route path={NEEDHELPER_VIEW_PATH} element={<NeedHelperPost />} />
           <Route path="/needHelper/write/:sequence" element={<HelperEdit />} />
         </Route>
-        <Route path={CALENDAR_PATH} element={<Calendar />} />
+        <Route path={CALENDAR_PATH} element={<Calendar/>}/>
         <Route path={POLICY_PATH} element={<PolicyViewPage />} />
 
         <Route path={PRODUCT_PATH}>
@@ -161,90 +161,62 @@ function App() {
         </Route>
 
         <Route path={SHOPPING_CART_PATH}>
-          <Route index element={<ShoppingCartMain />}></Route>
-          <Route path={ADDRESS_PATH} element={<ShoppingCartAddress />} />
+          <Route index element={<ShoppingCartMain/>}></Route>
+          <Route path={ADDRESS_PATH} element={<ShoppingCartAddress/>}/>
         </Route>
 
-        <Route path={MYPAGE_PATH}>
+        <Route path={MYPAGE_PATH}>          
           <Route path={OTHER_MYPAGE_PATH}>
             <Route path={OTHER_MYPAGE_VIEW_PATH}>
-              <Route index element={<Others />} />
-              <Route path="need-helper/review" element={<OtherUserReview />} />
-              <Route path="community/post" element={<OtherUserCommunity />} />
-              <Route
-                path="group-buying/selling"
-                element={<OtherUserGroupBuying />}
-              />
-              <Route
-                path="group-buying/selled"
-                element={<OtherUserGroupBuying />}
-              />
-              <Route
-                path="group-buying/review"
-                element={<OtherUserGroupBuying />}
-              />
+              <Route index element={<Others/>}/>
+              <Route path='need-helper/review' element={<OtherUserReview/>}/>
+              <Route path='community/post' element={<OtherUserCommunity/>}/>
+              <Route path='group-buying/selling' element={<OtherUserGroupBuying/>}/>
+              <Route path='group-buying/selled' element={<OtherUserGroupBuying/>}/>
+              <Route path='group-buying/review' element={<OtherUserGroupBuying/>}/>
             </Route>
           </Route>
-          <Route index element={<MyPage />} />
-          <Route path={MY_ACTIVITY_PATH} element={<MyActivity />} />
+          <Route index element={<MyPage/>}/>
+          <Route path={MY_ACTIVITY_PATH} element={<MyActivity/>}/>
           <Route path={MYPAGE_ACCOUNT_PATH}>
-            <Route index element={<Account />} />
+            <Route index element={<Account/>}/>
           </Route>
           <Route path={MY_GROUPBUYING_PATH}>
-            <Route path={MY_GROUPBUYING_SELL_PATH} element={<MySell />} />
-            <Route path={MY_GROUPBUYING_BUY_PATH} element={<GroupBuying />} />
-            <Route
-              path={MY_GROUPBUYING_WISH_LIST_PATH}
-              element={<WishList />}
-            />
+            <Route path={MY_GROUPBUYING_SELL_PATH} element={<MySell/>} />
+            <Route path={MY_GROUPBUYING_BUY_PATH} element={<GroupBuying/>} />
+            <Route path={MY_GROUPBUYING_WISH_LIST_PATH} element={<WishList/>} />
           </Route>
           <Route path={MY_REVIEW_PATH}>
-            <Route index element={<MyReview />} />
+            <Route index element={<MyReview/>} />
           </Route>
           <Route path={MY_NEEDHELLPER_PATH}>
-            <Route path={MY_NEEDHELLPER_ASK_PATH} element={<MyNeedHelper />} />
-            <Route
-              path={MY_NEEDHELLPER_APPLY_PATH}
-              element={<MyNeedHelper />}
-            />
-            <Route
-              path={MY_NEEDHELLPER_LIKED_PATH}
-              element={<MyNeedHelper />}
-            />
+            <Route path={MY_NEEDHELLPER_ASK_PATH} element={<MyNeedHelper/>} />
+            <Route path={MY_NEEDHELLPER_APPLY_PATH} element={<MyNeedHelper/>} />
+            <Route path={MY_NEEDHELLPER_LIKED_PATH} element={<MyNeedHelper/>} />
           </Route>
-
           <Route path={MY_COMMUNITY_PATH}>
-            <Route
-              path={MY_COMMUNITY_POST_PATH}
-              element={<MyCommunity type="post" />}
-            />
-            <Route
-              path={MY_COMMUNITY_COMMENT_PATH}
-              element={<MyCommunity type="comment" />}
-            />
-            <Route
-              path={MY_COMMUNITY_LIKED_PATH}
-              element={<MyCommunity type="liked" />}
-            />
+            <Route path={MY_COMMUNITY_POST_PATH} element={<MyCommunity type='post'/>} />
+            <Route path={MY_COMMUNITY_COMMENT_PATH} element={<MyCommunity type='comment'/>} />
+            <Route path={MY_COMMUNITY_LIKED_PATH} element={<MyCommunity type='liked'/>} />
           </Route>
           <Route path={QUESTION_PATH}>
-            <Route index element={<Question />} />
-            <Route path={QUESTION_WRTIE_PATH} element={<QuestionWrite />} />
+            <Route index element={<Question/>}/>
+            <Route path={QUESTION_WRTIE_PATH} element={<QuestionWrite />}/>
             <Route path={QUESTION_VIEW_PATH}>
-              <Route index element={<QuestionView />} />
-              <Route path={QUESTION_PATCH_PATH} element={<QuestionUpdate />} />
+              <Route index element={<QuestionView/>}/>
+              <Route path={QUESTION_PATCH_PATH} element={<QuestionUpdate />}/>
             </Route>
           </Route>
-          <Route path={FAQ_PATH} element={<Faq />} />
+          <Route path={FAQ_PATH} element={<Faq/>} />
           <Route path={NOTICE_PATH}>
-            <Route index element={<Notice />} />
-            <Route path={NOTICE_WRITE_PATH} element={<NoticeWrite />} />
+            <Route index element={<Notice/>}/>
+            <Route path={NOTICE_WRITE_PATH} element={<NoticeWrite/>}/>
             <Route path={NOTICE_VIEW_PATH}>
-              <Route index element={<NoticeView />} />
-              <Route path={NOTICE_PATCH_PATH} element={<NoticeUpdate />} />
+              <Route index element={<NoticeView/>}/>
+              <Route path={NOTICE_PATCH_PATH} element={<NoticeUpdate />}/>
             </Route>
           </Route>
-        </Route>
+        </Route> 
         <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
           <Route index element={<CommunityMain />} />
           <Route path={COMMUNITY_SEARCH_PATH}>

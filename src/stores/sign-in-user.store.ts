@@ -1,15 +1,19 @@
 import { stat } from "fs";
+import County from "src/types/aliases/community-county.alias";
 import { create } from "zustand";
 
 // interface: 로그인 유저 정보 상태 구조 //
 interface SignInUserStore {
     userId: string;
     nickname: string;
+    county: County | null;
     profileImage: string | null;
     isAdmin: boolean;
 
     setUserId: (userId: string) => void;
     setNickname: (nickname: string) => void;
+    setCounty: (county: County | null) => void;
+    setCountyFromAddress: (address: string | null) => void;
     setProfileImage: (profileImage: string | null) => void;
     setIsAdmin: (isAdmin: boolean) => void;
 
@@ -20,12 +24,19 @@ interface SignInUserStore {
 const useStore = create<SignInUserStore>(set => ({
     userId: '',
     nickname: '',
-    admin: false,
+    county: null,
     profileImage: null,
     isAdmin: false,
 
     setUserId: (userId: string) => set(state => ({ ...state, userId })),
     setNickname: (nickname: string) => set(state => ({ ... state, nickname })),
+    setCounty: (county: County | null) => set((state) => ({ ...state, county })), 
+    setCountyFromAddress: (address: string | null) => {
+        if (!address) return;
+        const match = address.match(/^([가-힣]+시|[가-힣]+도)\s([가-힣]+구|[가-힣]+시|[가-힣]+군)/);
+        const county: County | null = match ? [match[1], match[2]] : null;
+        set((state) => ({ ...state, county}));
+    },
     setProfileImage: (profileImage: string | null) => set(state => ({ ...state, profileImage })),
     setIsAdmin: (isAdmin: boolean) => set(state => ({...state, isAdmin})),
 
@@ -33,7 +44,7 @@ const useStore = create<SignInUserStore>(set => ({
         ...state, 
         userId: '',
         nickname: '',
-        admin: false,
+        county: null,
         profileImage: null,
         isAdmin: false
     }))
