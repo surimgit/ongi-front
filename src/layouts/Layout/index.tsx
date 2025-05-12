@@ -292,15 +292,14 @@ export default function Layout() {
               <div className='login-content logout' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
             )}
           </div>
-          { accessToken &&
-              <div className='logout-btn' onClick={onLogoutClickHandler}>로그아웃</div>
-          }
         </div>
       </div>
       <div id='main'>
         <Outlet />
       </div>
-      <div className='footer' onClick={onLogoutClickHandler}>로그아웃</div>
+      {accessToken &&
+        <div className='footer' onClick={onLogoutClickHandler}>로그아웃</div>
+      }
     </div>
   )
 }
