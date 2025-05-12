@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import './style.css';
-import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, CALENDAR_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH, MY_GROUPBUYING_BUY_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, PRODUCT_ABSOLUTE_PATH, ROOT_PATH } from 'src/constants';
+import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, CALENDAR_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH, MY_GROUPBUYING_BUY_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, PRODUCT_ABSOLUTE_PATH, ROOT_PATH, SHOPPING_CART_ABSOLUTE_PATH } from 'src/constants';
 import { Board } from 'src/types/aliases';
 import useSignInUser from 'src/hooks/sign-in-user.hook';
 import { useEffect, useRef, useState } from 'react';
@@ -200,6 +200,11 @@ export default function Layout() {
     deleteAlertRequest('', accessToken).then(deleteAlertResponse);
   };
 
+  // event handler: 장바구니 아이콘 클릭 이벤트 처리 //
+  const onShoppingCartClickHandler = () => {
+    navigator(SHOPPING_CART_ABSOLUTE_PATH);
+  } 
+
   // event handler: 로고 이미지 클릭 이벤트 처리 //
   const onLogoClickHandler = () => {
     navigator(MAIN_ABSOLUTE_PATH);
@@ -263,7 +268,7 @@ export default function Layout() {
               </div>
             }
           </div>
-          <div className='my-content-shopping-cart'></div>
+          <div className='my-content-shopping-cart' onClick={onShoppingCartClickHandler}></div>
           <div className='login-container'>
             <div className='login-icon'></div>
             {accessToken ? (

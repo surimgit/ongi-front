@@ -6,4 +6,5 @@ export default interface OrderItems {
   deliveryAddressSnapshot: string;
   approvedTime: string;
   buyerId: string;
+  addressId: number;
 }

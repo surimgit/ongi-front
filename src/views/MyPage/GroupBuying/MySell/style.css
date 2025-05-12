@@ -200,7 +200,18 @@
 
 .order-list-table .tr .delivery{
   flex: 1.6;
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  gap: 10px;
+
   border-right: 2px solid rgb(197, 193, 193);
+  
+}
+
+.order-list-table .tr .delivery .sell-address {
+
 }
 
 .order-list-table .tr .waybill-number{

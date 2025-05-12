@@ -7,12 +7,12 @@ import { PatchProductQuantityRequestDto, PostProductRequestDto } from './dto/req
 import { Category } from 'src/types/aliases';
 import { GetProductResponseDto } from './dto/response';
 import GetProductDetailResponseDto from './dto/response/product/get-product-detail.response.dto';
-import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH, MY_COMMUNITY_COMMENT_ABSOLUTE_PATH, MY_COMMUNITY_COMMENT_PATH, MY_COMMUNITY_LIKED_PATH, MY_COMMUNITY_POST_PATH } from 'src/constants';
+import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH, MY_COMMUNITY_COMMENT_ABSOLUTE_PATH, MY_COMMUNITY_COMMENT_PATH, MY_COMMUNITY_LIKED_PATH, MY_COMMUNITY_POST_PATH, SHOPPING_CART_PATH } from 'src/constants';
 import { GetCommunityPostResponseDto, GetCommunityResponseDto } from './dto/response/community';
-import { PostShoppingCartRequestDto, PostStockReservationRequestDto } from './dto/request/shopping-cart';
+import { PostShoppingCartRequestDto, PostStockReservationRequestDto, PostUserAddressRequestDto } from './dto/request/shopping-cart';
 import PostPaymentConfirmRequestDto from './dto/request/payment/post-payment-confirm.request.dto';
 import PostOrderRequestDto from './dto/request/payment/post-order.request.dto';
-import { GetShoppingCartResponseDto } from './dto/response/shoppingCart';
+import { GetShoppingCartResponseDto, GetUserAddressDetailResponseDto, GetUserAddressResponseDto } from './dto/response/shoppingCart';
 import { GetOrderResponseDto } from './dto/response/payment';
 import PostCommunityRequestDto from './dto/request/community/post-community.request.dto';
 import GetCommunityCommentResponse from './dto/response/community/get-community-comments.response.dto';
@@ -111,6 +111,9 @@ const POST_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
 const GET_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`;
 const DELETE_SHOPPING_CART_URL = `${SHOPPING_CART_MODULE_URL}/product`
 const GET_COUNT_SHOPPINGCART_URL =`${SHOPPING_CART_MODULE_URL}/count`;
+const POST_USER_ADDRESS_URL = `${SHOPPING_CART_MODULE_URL}/address`;
+const GET_USER_ADDRESS_URL = `${SHOPPING_CART_MODULE_URL}/address`;
+const GET_USER_ADDRESS_DETAIL_URL = (addressId: number | string) => `${SHOPPING_CART_MODULE_URL}/address-detail?addressId=${addressId}`;
 
 // 결제 API 경로
 const POST_ORDER_URL = `${PAYMENT_URL}/`;
@@ -460,6 +463,30 @@ export const deleteCommunityPostRequest = async (postSequence: number | string, 
 export const postShoppingCartRequest = async (requestBody: PostShoppingCartRequestDto, accessToken: string) => {
   const responseBody = await axios.post(POST_SHOPPING_CART_URL, requestBody, bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: post user address API 요청 함수 //
+export const postUserAddress = async (requestBody: PostUserAddressRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_USER_ADDRESS_URL, requestBody, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get user address API 요청 함수 //
+export const getUserAddressRequest = async (accessToken: string) => {
+  const responseBody = await axios.get(GET_USER_ADDRESS_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetUserAddressResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+}
+
+// function: get user address detail API 요청 함수 //
+export const getUserAddressDetailRequest = async (addressId: number | string, accessToken: string) => {
+  const responseBody = await axios.get(GET_USER_ADDRESS_DETAIL_URL(addressId), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetUserAddressDetailResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 }

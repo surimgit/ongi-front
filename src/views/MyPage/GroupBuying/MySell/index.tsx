@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router';
 import MypageSidebar from 'src/layouts/MypageSidebar';
 import Pagination from 'src/components/Pagination';
 import MySale from 'src/types/interfaces/my-sale-interface';
-import { getMySalesRequest, getProductOrderItemsRequest, postAlertRequest, postWaybillNumberRequest } from 'src/apis';
+import { getMySalesRequest, getProductOrderItemsRequest, getUserAddressDetailRequest, postAlertRequest, postWaybillNumberRequest } from 'src/apis';
 import GetMySalesResponseDto from 'src/apis/dto/response/user/get-my-sales.response.dto';
 import { ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
@@ -15,6 +15,7 @@ import GetOrderItemsResponseDto from 'src/apis/dto/response/user/get-order-items
 import { OrderItems } from 'src/types/interfaces';
 import { PostWaybillNumberRequestDto } from 'src/apis/dto/request/user';
 import PostAlertRequestDto from 'src/apis/dto/request/alert/post-alert.request.dto';
+import { GetUserAddressDetailResponseDto } from 'src/apis/dto/response/shoppingCart';
 
 interface SaleProps{
   sale: MySale;
@@ -84,12 +85,16 @@ interface OrderItemProps{
 // component: 상품 배송지 입력 컴포넌트 //
 function OrderItem({order, image, name}:OrderItemProps){
 
-  const {orderItemSequence, productSequence, quantity, waybillNumber, deliveryAddressSnapshot, approvedTime, buyerId} = order;
+  const {orderItemSequence, productSequence, quantity, waybillNumber, deliveryAddressSnapshot, approvedTime, buyerId, addressId} = order;
 
   // state: 송장번호 상태 //
   const [waybillNumberInput, setWaybillNumberInput] = useState<string>('');
+  
   const [localWaybillNumber, setLocalWaybillNumber] = useState<string | null>(waybillNumber);
-
+  // state: 우편번호 상태 //
+  const [zipcode, setZipcode] = useState<string>('');
+  // state: 사용자 주소 상태 //
+  const [address, setAddress] = useState<string>('');
 
   // state: cookie 상태 //
   const [cookies] = useCookies();
@@ -120,6 +125,20 @@ function OrderItem({order, image, name}:OrderItemProps){
 
   }
 
+  // function: get user address detail response 처리 함수 //
+  const getUserAddressDetailResponse= (responseBody: GetUserAddressDetailResponseDto | ResponseDto | null) => {
+    const {isSuccess, message} = responseMessage(responseBody);
+
+    if(!isSuccess){
+      alert(message);
+      return;
+    }
+
+    const {address, detailAddress, zipcode} = responseBody as GetUserAddressDetailResponseDto;
+    setAddress(address + detailAddress);
+    setZipcode(zipcode);
+  }
+
   // event handler: 송장번호 입력 핸들러 //
   const onWaybillNumberChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
     const {value} = e.currentTarget;
@@ -143,6 +162,10 @@ function OrderItem({order, image, name}:OrderItemProps){
     postAlertRequest(alertBody, accessToken).then(postAlertResponse);
   }
 
+  useEffect(() => {
+    getUserAddressDetailRequest(addressId, accessToken).then(getUserAddressDetailResponse);
+  },[])
+
   // render: 상품 배송지 입력 컴포넌트 렌더링 //
   return(
     <div className='tr'>
@@ -156,7 +179,10 @@ function OrderItem({order, image, name}:OrderItemProps){
         </div>
       </div>
       <div className='td quantity'>{quantity}개</div>
-      <div className='td delivery'>{deliveryAddressSnapshot}</div>
+      <div className='td delivery'>
+        <div className='zipcode'>({zipcode})</div>
+        <div className='sell-address'>{address}</div>   
+        </div>
       <div className='td waybill-number'>
         {localWaybillNumber ? (
           <div>{localWaybillNumber}</div>
@@ -237,8 +263,6 @@ export default function MySell() {
   const onMySellClickHandler = () => {
     navigator(MY_GROUPBUYING_SELL_ABSOLUTE_PATH);
   }
-
-  
 
   // event handler: 배송지 입력 버튼 클릭 시 //
   const onWaybillClickHandler = (sale: MySale) => {
