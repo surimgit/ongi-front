@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import './style.css';
 import { Link, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router';
-import { ACCESS_TOKEN, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_CATEGORY_ABSOLUTE_PATH, COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH, COMMUNITY_HOTBOARD_ABSOLUTE_PATH, COMMUNITY_INFOBOARD_ABSOLUTE_PATH, COMMUNITY_POST_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_WRITE_ABSOLUTE_PATH, COUNTY_ABSOLUTE_PATH, COUNTY_CATEGORY_ABSOLUTE_PATH, COUNTY_MAIN_ABSOLUTE_PATH, REPORT_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_CATEGORY_ABSOLUTE_PATH, COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH, COMMUNITY_HOTBOARD_ABSOLUTE_PATH, COMMUNITY_INFOBOARD_ABSOLUTE_PATH, COMMUNITY_POST_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_WRITE_ABSOLUTE_PATH, COUNTY_ABSOLUTE_PATH, COUNTY_CATEGORY_ABSOLUTE_PATH, COUNTY_MAIN_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, REPORT_ABSOLUTE_PATH } from 'src/constants';
 import { useCookies } from 'react-cookie';
 import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import { useSignInUserStore } from 'src/stores';
@@ -127,6 +127,11 @@ export default function CommunityLayout() {
         setKeyword('');
     }, [searchParams]);
 
+    // event handler: 주소 등록 클릭 이벤트 처리 //
+    const onAddressRegisterClickHandler = () => {
+        navigator(MYPAGE_ABSOLUTE_PATH);
+    };
+
     // render: 우리 동네 게시판 메인 화면 컴포넌트 렌더링 //
     if (boardType === '우리 동네 게시판' && !region) {
         return <CountyMain />;
@@ -225,6 +230,9 @@ export default function CommunityLayout() {
                                 <div className={etcCountyBoardClass} onClick={() => onMyCountyCategoryClickHandler(countyBoard, '우리동네기타', county)}>우리 동네 기타</div>
                             </div> 
                         </>
+                    }
+                    {!county &&
+                        <div className='address-register' onClick={onAddressRegisterClickHandler}></div>
                     }
                     
                 </div>

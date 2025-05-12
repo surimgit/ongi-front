@@ -95,8 +95,10 @@ import { ResponseDto } from 'src/apis/dto/response';
     const onWriteButtonClickHandler = () => {
     if(!isActive || !accessToken) return;
 
+    const images = null;
+
     const requestBody: PostCommunityRequestDto = {
-        board, category, title, content
+        board, category, title, content, images
     };
 
     postCommunityRequest(requestBody, accessToken).then(postCommunityResponse);

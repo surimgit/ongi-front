@@ -124,6 +124,36 @@
     text-decoration: underline;
 }
 
+#community-layout-wrapper .address-register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid var(--Lightmode-Grey3);
+    border-radius: 6px;
+    box-sizing: border-box;
+
+    color: var(--Lightmode-Grey4);
+
+    height: 60px;
+
+    cursor: pointer;
+}
+
+#community-layout-wrapper .address-register:hover {
+    border: none;
+    background-color: var(--Primary);
+}
+
+#community-layout-wrapper .address-register::after {
+    content: "주소를 등록하면 볼 수 있어요!";
+}
+
+#community-layout-wrapper .address-register:hover::after {
+    content: "👉 주소 등록하러 가기 👈";
+    color: var(--White);
+}
+
 #board-format {
     display: flex;
     flex-direction: column;
@@ -168,9 +198,13 @@
     background-repeat: no-repeat;
     background-position: center;
     
-    background-color: var(--Black);
+    background-color: var(--Lightmode-Grey4);
 
     width: 70px;
 
     cursor: pointer;
+}
+
+#board-format .search-container .search-button:hover {
+    background-color: var(--Black);
 }
