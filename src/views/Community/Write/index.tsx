@@ -80,7 +80,7 @@ export default function PostWrite() {
     if(!isActive || !accessToken) return;
 
     const requestBody: PostCommunityRequestDto = {
-      board, category, title, content, images: postImages
+      board, category, title, content
     };
 
     postCommunityRequest(requestBody, accessToken).then(postCommunityResponse);

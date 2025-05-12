@@ -98,7 +98,7 @@ import { ResponseDto } from 'src/apis/dto/response';
     const images = null;
 
     const requestBody: PostCommunityRequestDto = {
-        board, category, title, content, images
+        board, category, title, content
     };
 
     postCommunityRequest(requestBody, accessToken).then(postCommunityResponse);
