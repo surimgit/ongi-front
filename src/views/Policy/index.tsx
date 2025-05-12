@@ -93,6 +93,9 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
         setOpenCategory((prev) => (prev === key ? null : key));
     };
 
+    // state: 로딩 상태 //
+    const [isLoading, setIsLoading] = useState(false);
+
     // variable: access token //
     const accessToken = cookies[ACCESS_TOKEN];
     
@@ -133,6 +136,45 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
     };
 
     const arraysAreEqual = (a: string[], b: string[]) => a.length === b.length && a.every((val, idx) => val === b[idx]);
+
+    // function: 검색 결과 //
+    const fetchSearchResults = async (keyword: string, regions: string[], categories: string[]) => {
+        setIsLoading(true);
+        try {
+          const response = await axios.get<GetPolicyListResponseDto>('http://localhost:4000/api/v1/policy-list', {
+            params: {
+              keyword,
+              regions: regions.join(","),
+              categories: categories.join(",")
+            },
+            headers: { Authorization: `Bearer ${accessToken}` }
+          });
+      
+          const resultList = response.data || [];
+      
+          const mappedResults = resultList.map((item: PolicyList, index: number): PolicyResult => {
+            const { startDate, endDate } = formatPeriod(item.aplyYmd);
+            return {
+              id: index,
+              plcyNo: item.plcyNo,
+              title: item.plcyNm || '',
+              content: item.plcyExplnCn || '',
+              category: item.lclsfNm || '-',
+              region: item.zipCd || '',
+              period: item.aplyYmd || '상시',
+              aplyPrdSeCd: item.aplyPrdSeCd,
+              startDate,
+              endDate
+            };
+          });
+      
+          setSearchResults(mappedResults);
+        } catch (err) {
+          console.error('검색 오류:', err);
+        }
+        setIsLoading(false);
+    };
+      
 
     // event handler: 옵션 선택 이벤트 처리 //
     const handleCheckboxChange = (
@@ -184,67 +226,18 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
     };
 
     // event handler: 검색버튼 클릭 이벤트 처리 //
-    const onSearchClickHandler = async (inputKeyword: string) => {
-        try {
-            const response = await axios.get<GetPolicyListResponseDto>('http://localhost:4000/api/v1/policy-list', {
-            params: { keyword: inputKeyword, regions: selectedRegions.filter(Boolean).join(","), categories: selectedCategories.filter(Boolean).join(",") },
-            headers: { Authorization: `Bearer ${accessToken}` }
-            });
-
-            const resultList = response.data || [];
-
-            const mappedResults: PolicyResult[] = resultList.map((item: PolicyList, index: number) => {
-            const { startDate, endDate } = formatPeriod(item.aplyYmd);
-            return {
-                id: index,
-                plcyNo: item.plcyNo,
-                title: item.plcyNm || '',
-                content: item.plcyExplnCn || '',
-                category: item.lclsfNm || '-',
-                region: item.zipCd || '',
-                period: item.aplyYmd || '상시',
-                aplyPrdSeCd: item.aplyPrdSeCd,
-                startDate,
-                endDate
-            };
-            });
-            
-            const filteredResults = mappedResults.filter(item =>
-                (selectedRegions.length === 0 || selectedRegions.includes(item.region)) &&
-                (selectedCategories.length === 0 || selectedCategories.includes(item.category))
-            );
-
-            setSearchResults(filteredResults);
-
-            const currentParams = new URLSearchParams(location.search);
-            const isKeywordChanged = prevKeywordRef.current !== inputKeyword;
-            const isRegionChanged = !arraysAreEqual(prevRegionRef.current, selectedRegions);
-            const isCategoryChanged = !arraysAreEqual(prevCategoryRef.current, selectedCategories);
-
-            if (isKeywordChanged || isRegionChanged || isCategoryChanged) {
-                setCurrentPage(1);
-                setCurrentSection(1);
-                currentParams.set("page", "1");
-                currentParams.set("section", "1");
-            } else {
-                currentParams.set("page", currentPage.toString());
-                currentParams.set("section", currentSection.toString());
-            }
-
-            currentParams.set("keyword", inputKeyword);
-            currentParams.set("regions", selectedRegions.join(","));
-            currentParams.set("categories", selectedCategories.join(","));
-
-            prevKeywordRef.current = inputKeyword;
-            prevRegionRef.current = [...selectedRegions];
-            prevCategoryRef.current = [...selectedCategories];
-
-            navigator(`?${currentParams.toString()}`);
-
-        } catch (error) {
-            console.error("검색 오류:", error);
-        }
-    };
+    const onSearchClickHandler = () => {
+        const query = new URLSearchParams();
+        query.set("keyword", keyword);
+        query.set("regions", selectedRegions.join(","));
+        query.set("categories", selectedCategories.join(","));
+        query.set("page", "1");
+        query.set("section", "1");
+      
+        setOpenCategory(null);
+        navigator(`?${query.toString()}`);
+      };
+      
  
 
     // effect: 렌더 시 실행 함수 //
@@ -252,34 +245,30 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
         const query = new URLSearchParams(location.search);
       
         const newKeyword = query.get("keyword") || '';
-        const newPage = Number(query.get("page") || '1');
-        const newSection = Number(query.get("section") || '1');
-      
-        const regionsRaw = query.get("regions") || query.get("regions") || "";
-        const categoriesRaw = query.get("categories") || query.get("categories") || "";
-      
-        const newRegions = regionsRaw.split(",").filter(Boolean);
-        const newCategories = categoriesRaw.split(",").filter(Boolean);
+        const newRegions = (query.get("regions") || "").split(",").filter(Boolean);
+        const newCategories = (query.get("categories") || "").split(",").filter(Boolean);
       
         setKeyword(newKeyword);
-        setCurrentPage(newPage);
-        setCurrentSection(newSection);
         setSelectedRegions(newRegions);
         setSelectedCategories(newCategories);
-
+        setCurrentPage(Number(query.get("page") || "1"));
+        setCurrentSection(Number(query.get("section") || "1"));
+      
         prevKeywordRef.current = newKeyword;
         prevRegionRef.current = [...newRegions];
         prevCategoryRef.current = [...newCategories];
-    }, [location.search]);      
+      
+        fetchSearchResults(newKeyword, newRegions, newCategories);
+    }, [location.search]);
 
     return (
         <div id="policy-wrapper">
             <div className="search-container">
                 <input type="text" className="search-bar" placeholder="검색어 입력" value={keyword} 
-                onChange={onKeywordChangeHandler} onKeyDown={(e) => e.key === 'Enter' && onSearchClickHandler(keyword)} />
+                onChange={onKeywordChangeHandler} onKeyDown={(e) => e.key === 'Enter' && onSearchClickHandler()} />
                 <div className="category-container">
-                    <details className="filter-panel">
-                        <summary onClick={() => toggleCategory("region")} className={`filter ${openCategory === "region" ? "selected" : ""}`}>
+                    <details className="filter-panel" open={openCategory === "region"}>
+                        <summary onClick={(e) => {e.preventDefault(); toggleCategory("region");}} className={`filter ${openCategory === "region" ? "selected" : ""}`}>
                             지역 <img src={openCategory === "region" ? Minus : Plus} alt="plus" className="inline ml-1" />
                         </summary>
                         <div className="dropdown">
@@ -297,8 +286,8 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
                             ))}
                         </div>
                     </details>
-                    <details className="filter-panel">
-                        <summary onClick={() => toggleCategory("category")} className={`filter ${openCategory === "category" ? "selected" : ""}`}>
+                    <details className="filter-panel" open={openCategory === "category"}>
+                        <summary onClick={(e) => {e.preventDefault(); toggleCategory("category");}} className={`filter ${openCategory === "category" ? "selected" : ""}`}>
                             정책분야 <img src={openCategory === "category" ? Minus : Plus} alt="plus" className="inline ml-1" />
                         </summary>
                         <div className="dropdown">
@@ -317,10 +306,13 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
                         </div>
                     </details>
                 </div>
-                <button className='button' onClick={() => onSearchClickHandler(keyword)}>검색</button>
+                <button className='button' onClick={() => onSearchClickHandler()}>검색</button>
             </div>
             <div className="search-result">총 {searchResults.length.toLocaleString()}건의 정책정보가 있습니다.</div>
-
+            
+            {isLoading ? (
+            <div className="loading">정보를 불러오는 중&nbsp;&nbsp;<img src="https://i.gifer.com/ZKZg.gif"/></div>
+            ) : (
             <div className="grid policy-card-container">
                 {pagedItems.map((item) => (
                     <div key={item.id} className="policy-card-box">
@@ -344,7 +336,7 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
                         <button className="more" onClick={() => onPolicyCardClickHandler(item.plcyNo, item.title)}>자세히보기</button>
                     </div>
                 ))}
-            </div>
+            </div> )}
             <div className='pagination-container'>
                 <div className="pagination-box">
                     <div className='pagination-button left' onClick={onPreSectionClickHandler}></div>

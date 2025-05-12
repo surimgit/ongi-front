@@ -13,7 +13,7 @@ const useSignInUser = () => {
 
     // state: 로그인 유저 정보 상태 //
     const {
-        setUserId, setNickname, setProfileImage, setIsAdmin, resetSignInUser
+        setUserId, setNickname, setCountyFromAddress, setProfileImage, setIsAdmin, resetSignInUser
     } = useSignInUserStore();
 
     // state: 경로 상태 //
@@ -35,10 +35,11 @@ const useSignInUser = () => {
             return;
         }
       
-        const { userId, nickname, profileImage, isAdmin } = responseBody as GetSignInUserResponseDto;
+        const { userId, nickname, address, profileImage, isAdmin } = responseBody as GetSignInUserResponseDto;
 
         setUserId(userId);
         setNickname(nickname);
+        setCountyFromAddress(address);
         setProfileImage(profileImage);
         setIsAdmin(isAdmin);
     }

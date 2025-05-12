@@ -1,0 +1,226 @@
+#helper-write-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    width: 1260px;
+    gap: 7px;
+}
+
+#helper-write-wrapper .write-header {
+    display: flex;
+    gap: 20px;
+
+    margin: 40px 0 10px;
+
+    font-size: 36px;
+    font-weight: 700;
+}
+
+#helper-write-wrapper .write-container {
+    display: flex;
+    flex-direction: column;
+
+    border-top: 2px solid var(--Black);
+
+    padding: 20px 0 10px;
+
+    gap: 10px;
+}
+
+#helper-write-wrapper .input-box {
+    width: 100%;
+    padding: 0;
+}
+
+#helper-write-wrapper .input-box .title {
+    display: flex;
+
+    width: 100%;
+    height: 60px;
+    box-sizing: border-box;
+
+    padding: 10px;
+
+    border: 2px solid var(--Lightmode-Grey5);
+    border-radius: 10px;
+
+    font-size: 18px;
+}
+
+#helper-write-wrapper .button-box {
+    display: flex;
+    justify-content: right;
+
+    gap: 10px;
+}
+
+#helper-write-wrapper .button-box .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    font-size: 16px;
+    font-weight: 700;
+
+    width: 80px;
+    height: 40px;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+}
+
+#helper-write-wrapper .button-box .btn.cancel {
+    background-color: var(--Lightmode-Grey3);
+}
+
+#helper-write-wrapper .button-box .btn.cancel:hover {
+    background-color: var(--Lightmode-Grey5);
+
+    color: var(--White);
+}
+
+#helper-write-wrapper .button-box .btn.write {
+    background-color: var(--Black);
+
+    color: var(--White);
+}
+
+#helper-write-wrapper .button-box .btn.write:hover {
+    background-color: var(--Lightmode-Grey5);
+
+    color: var(--Black);
+}
+  
+#helper-write-wrapper .option-container {
+  display: flex;
+  align-items: center;
+
+  height: 70px;
+  padding: 0px 10px;
+
+  gap: 25px;
+}
+
+#helper-write-wrapper .sub-title {
+  padding-bottom: 7px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--Primary);
+}
+
+#helper-write-wrapper .option-check-box {
+    display: flex;
+    gap: 6px;
+    
+    font-size: 16px;
+    font-weight: 700;
+    color: '#505050';
+  }
+  
+  .option-check-box [type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  
+    cursor: pointer;
+  }
+  
+  .face-to-face, .non-face-to-face {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  
+  #helper-write-wrapper .option-location-box {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .option-location-box .select-box {
+    font-family: 'Pretendard';
+    font-size: 16px;
+    font-weight: 500;
+    color: '#505050';
+    padding: 3px 8px;
+    border-radius: 5px;
+  
+    cursor: pointer;
+  }
+
+  .date-wrapper {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    padding: 3px 8px;
+    border: 1px solid var(--Black);
+    border-radius: 5px;
+  }
+
+  .date-wrapper .date-input {
+    font-family: 'Pretendard';
+    border: none; 
+    outline: none;
+    width: 135px;
+    cursor: pointer;
+  }
+
+  .date-wrapper img {
+      width: 17px;
+      margin-left: 5px;
+  }
+  
+  #helper-write-wrapper .option-salary-box {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  
+    font-size: 16px;
+    font-weight: 700;
+  }
+  
+  #helper-write-wrapper .vertical-bar {
+    font-size: 45px;
+    font-weight: 200;
+    color: #D9D9D9;
+  }
+  
+  #helper-write-wrapper .option-button-box {
+    margin-left: auto;
+    padding-right: 5px;
+  }
+
+  #helper-write-wrapper .keyword {
+    display: flex;
+  }
+
+  .keyword .keyword-bar {
+    font-family: 'Pretendard';
+    font-size: 16px;
+    width: 140px;
+    height: 20px;
+    border-radius: 10px;
+    margin-right: 5px;
+    padding: 3px;
+    text-indent: 5px;
+  }
+
+  .keyword .keyword-add {
+    padding: 3px 10px;
+    margin-right: 20px;
+
+    font-family: 'Pretendard';
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+  }
+
+  .keyword .keywords {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    gap: 13px;
+    color: var(--Lightmode-Grey);
+  }

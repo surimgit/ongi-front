@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import './style.css';
 
 interface SidebarItem {
@@ -37,9 +37,15 @@ const sidebarItems: SidebarItem[] = [
 // component: 다른 사용자 사이드바 컴포넌트 //
 export default function OtherSidebar() {
   const navigator = useNavigate();
+  const { userId } = useParams();  
+  const location = useLocation();
+
+
+  const isActive = (path: string) => location.pathname.endsWith(`/${path}`);
+
 
   const onNavigate = (subPath: string) => {
-    navigator(`${subPath}`);
+    navigator(`/mypage/other/${userId}/${subPath}`);  
   };
   
   return (
@@ -56,15 +62,15 @@ export default function OtherSidebar() {
             {item.children && (
               <div className='sub-title-group'>
                 {item.children.map((child, subIdx) => (
-                  <div
-                    key={subIdx}
-                    className='sub-title'
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => onNavigate(`${item.path}/${child.subPath}`)}
-                  >
-                    {child.name}
-                  </div>
-                ))}
+                <div
+                  key={subIdx}
+                  className={`sub-title ${isActive(`${item.path}/${child.subPath}`) ? 'active' : ''}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => onNavigate(`${item.path}/${child.subPath}`)}
+                >
+                  {child.name}
+                </div>
+              ))} 
               </div>
             )}
           </div>

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Color } from '@tiptap/extension-color';
+import { Image } from '@tiptap/extension-image';
 import ListItem from '@tiptap/extension-list-item';
 import TextStyle from '@tiptap/extension-text-style';
 import P, { Placeholder } from '@tiptap/extension-placeholder';
@@ -102,7 +103,7 @@ export default function TextEditor({ content, setContent }: Props) {
 
   // state: editor 상태 //
   const editor = useEditor({
-    extensions,
+    extensions: [StarterKit, Image,],
     content,
     onUpdate: ({ editor }) => {
       setContent(editor.getText())
@@ -110,12 +111,6 @@ export default function TextEditor({ content, setContent }: Props) {
   })
 
   // effect: content 변경시 실행할 함수 //
-  //  useEffect(() => {
-  //    if (editor && content !== editor.getText()) {
-  //      editor.commands.setContent(content);
-  //    }
-  //  }, [content, editor]);
-
   useEffect(() => {
     if (editor && content && editor?.getHTML() !== content) {
       editor.commands.setContent(content);

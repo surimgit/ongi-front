@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import './style.css';
 import { useNavigate, useParams } from 'react-router';
 import { useCookies } from 'react-cookie';
@@ -7,7 +7,7 @@ import { Board, CommunityCategory } from 'src/types/aliases';
 import { ACCESS_TOKEN, COMMUNITY_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
 import TextEditor from 'src/components/TextEditor';
 import PatchCommunityPostRequestDto from 'src/apis/dto/request/community/patch-community-post.request.dto';
-import { getCommunityPostRequest, patchCommunityPostRequest } from 'src/apis';
+import { fileUploadsRequest, getCommunityPostRequest, patchCommunityPostRequest } from 'src/apis';
 import { ResponseDto } from 'src/apis/dto/response';
 import { GetCommunityPostResponseDto } from 'src/apis/dto/response/community';
 import StarterKit from '@tiptap/starter-kit';
@@ -32,6 +32,10 @@ export default function PostEdit() {
   const [category, setCategory] = useState<CommunityCategory>('');
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const [postImages, setPostImages] = useState<string[]>([]);
+
+  // state: 파일 인풋 참조 상태 //
+  const fileRefs = useRef<HTMLInputElement>(null);
 
   // variable: access token //
   const accessToken = cookies[ACCESS_TOKEN];
@@ -112,6 +116,36 @@ export default function PostEdit() {
     patchCommunityPostRequest(postSequence, requestBody, accessToken).then(patchCommunityPostResponse);
   }
 
+  // event handler: 이미지 첨부 버튼 클릭 이벤트 처리 //
+    const onImageUploadClickHandler = () => {
+      fileRefs.current?.click();
+    };
+  
+    // event handler: 이미지 첨부 이벤트 처리 //
+    const onHandleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (!files) return;
+  
+      const formData = new FormData();
+  
+      Array.from(files).forEach((file) => {
+        formData.append('files', file);
+      });
+      
+      const postImages = await fileUploadsRequest(formData);
+      if (!postImages) return;
+      setPostImages(postImages);
+  
+      const newImageTags = postImages.map(url => `<img src="${url}" alt="이미지" />`).join('\n');
+      
+      setContent(prev => {
+        const updated = prev + '\n' + newImageTags;
+        return updated;
+      });
+      
+      e.target.value = '';
+    };
+
   // effect: 게시글 번호가 변경될 시 실행할 함수 //
   // useEffect(()=> {
   //   if (!accessToken || !postSequence) return;
@@ -177,6 +211,15 @@ export default function PostEdit() {
         </div>
       </div>
       <div className='button-box'>
+        <div className='image-upload' onClick={onImageUploadClickHandler}>이미지 첨부</div>
+        <input 
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          multiple
+          ref={fileRefs}
+          onChange={onHandleImageFileChange}
+        />
         <div className='btn cancel'>취소</div>
         <div className={editButtonClass} onClick={onWriteButtonClickHandler}>작성</div>
       </div>

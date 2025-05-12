@@ -40,9 +40,9 @@ function NoticeItem({ notice, index, total, currentPage, itemCountPerPage }: Not
 
   // render: 문의사항 테이블 레코드 컴포넌트 렌더링 //
   return(
-    <div className='tr' onClick={onClick}>
+    <div className='tr'>
       <div className='td sequence'>{displayNumber}</div>
-      <div className='td title'>{title}</div>
+      <div className='td title' onClick={onClick}>{title}</div>
       <div className='td postdate'>{postDate}</div>
     </div>
   )

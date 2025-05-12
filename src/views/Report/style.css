@@ -99,9 +99,13 @@
     color: var(--Lightmode-Grey);
 }
 
-#report-page-wrapper .rpt-ti.category,
-#report-page-wrapper .rpt-tc.category {
+#report-page-wrapper .category {
     width: 25%;
+}
+
+#report-page-wrapper .rpt-tc.category {
+    font-weight: 700;
+    color: var(--Cancel);
 }
 
 #report-page-wrapper .rpt-tc.content {
@@ -143,6 +147,8 @@
 #report-page-wrapper .report-container {
     display: flex;
     flex-direction: column;
+
+    padding: 24px;
 
     gap: 10px;
 }
@@ -279,4 +285,8 @@
 
 #report-page-wrapper .process-btn.active {
     background-color: var(--Cancel);
+}
+
+#report-page-wrapper .pagination-container {
+    margin-top: 17px;
 }

@@ -92,7 +92,7 @@ function CommunityItem({
   )
 }
 
-// component: 커뮤니티 댓글 테이블 레코드 컴포넌트 //
+// component: 커뮤니티 게시글 테이블 레코드 컴포넌트 //
 function CommentItem({
   communityComment
 }: CommentProps){
@@ -104,13 +104,16 @@ function CommentItem({
   // state: 해당 게시글 제목 상태 //
   const [communityTitle, setCommunityTitle] = useState<string>('');
 
+  // state: 해당 게시글 제목 상태 //
+  const [communityCategory, setCommunityCategory] = useState<string>('');
+
   // state: cookie 상태 //
   const [cookies] = useCookies();
 
   // variable: access Token //
   const accessToken = cookies[ACCESS_TOKEN];
 
-    // function: get community comments response 처리 함수 //
+    // function: get community post response 처리 함수 //
   const getCommunityPostResponse = (responseBody:GetCommunityPostResponseDto | ResponseDto | null) => {
     const message = 
       !responseBody ? '서버에 문제가 있습니다.' :
@@ -123,8 +126,9 @@ function CommentItem({
       return;
     }
 
-    const {title} = responseBody as GetCommunityPostResponseDto;
+    const {title, category} = responseBody as GetCommunityPostResponseDto;
     setCommunityTitle(title);
+    setCommunityCategory(category);
   }
 
   // effect: 컴포넌트 로드시 실행할 함수 //
@@ -141,7 +145,7 @@ function CommentItem({
 
   return(
     <div className='tr comment'>
-      <div className='td category'>{postSequence}</div> 
+      <div className='td category'>{communityCategory}</div> 
       <div className='td comment-title-box' onClick={onClick}>
         <span className='td content' >{comment}</span>
         <span className='td title' >{communityTitle}</span>

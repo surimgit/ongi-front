@@ -152,3 +152,31 @@
 #top-bar .login-container .login-content {
   padding-left: 7px;
 }
+
+#layout-wrapper .footer {
+  margin-top: 200px;
+  margin-bottom: 100px;
+  padding-top: 30px;
+  padding-right: 20px;
+  width: 1240px;
+  display: flex;
+  justify-self: center;
+  justify-content: right;
+  border-top: 1px solid var(--Lightmode-Grey3);
+  color: var(--Lightmode-Grey5);
+  cursor: pointer;
+}
+
+#top-bar .logout-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: auto;
+  height: 25px;
+
+  padding: 7px;
+
+  border: solid 1px var(--Lightmode-Grey2);
+  border-radius: 5px;
+}

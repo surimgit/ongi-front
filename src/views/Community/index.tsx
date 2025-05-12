@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { CommunityPost } from 'src/types/interfaces';
 import usePagination from 'src/hooks/pagination.hook';
 import Pagination from 'src/components/Pagination';
-import { getCommunityRequest, getCommunitySearchRequest } from 'src/apis';
+import { getCommunityRequest } from 'src/apis';
 import { GetCommunityResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
 import { useCookies } from 'react-cookie';
@@ -99,6 +99,13 @@ export default function CommunityMain() {
 
   // state: 게시판 카테고리 상태 //
   const categoryType = searchParams.get('category') as CommunityCategory;
+  
+  // state: 게시판 키워드 상태 //
+  const keyword = searchParams.get('keyword') as string;
+
+  // state: 지역 상태 //
+  const region = searchParams.get('region');
+  const county = searchParams.get('county');
 
   // function: 내비게이터 //
   const navigator = useNavigate();
@@ -121,30 +128,17 @@ export default function CommunityMain() {
     
   };
 
-  // function: get community search response 처리 함수 //
-  const getCommunitySearchResponse = (responseBody: GetCommunityResponseDto | ResponseDto | null) => {
-    const message = !responseBody ? '서버에 문제가 있습니다.'
-    : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
-    : responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
-
-    const isSuccess = responseBody !== null && responseBody.code === 'SU';
-    if(!isSuccess) {
-      alert(message);
-      
-      return;
-    }
-
-    const { posts } = responseBody as GetCommunityResponseDto;
-    setTotalList(posts);
-  };
-
   // effect: 컴포넌트 로드 시 실행할 함수 //
   useEffect(() => {
     if(!boardType) navigator(COMMUNITY_OVERALL_ABSOLUTE_PATH);
-    else{
-      getCommunityRequest(boardType, categoryType).then(getCommunityResponse);
+    else if (region) {
+      if (county === 'undefined') getCommunityRequest(boardType, categoryType, region, null).then(getCommunityResponse);
+      else getCommunityRequest(boardType, categoryType, region, county).then(getCommunityResponse);
     }
-  }, [boardType, categoryType]);
+    else {
+      getCommunityRequest(boardType, categoryType, region, county).then(getCommunityResponse);
+    }
+  }, [boardType, categoryType, keyword, region, county]);
 
   // render: 커뮤니티 메인 화면 컴포넌트 렌더링 //
   return (
