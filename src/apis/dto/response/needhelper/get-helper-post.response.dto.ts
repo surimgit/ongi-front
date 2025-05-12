@@ -18,4 +18,5 @@ export default interface GetHelperPostResponseDto extends ResponseDto {
     isRequestSolved: boolean;
     liked: number;
     viewCount: number;
+    keyword: string;
 }

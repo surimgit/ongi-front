@@ -202,7 +202,9 @@ const GET_MY_COMMUNTY_LIKED_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/li
 
 // 도우미 관련 경로 
 const HELPER_MODULE_URL = `${API_DOMAIN}/api/v1/needHelper`;
+const MAIN_HELPER_MODULE_URL = `${API_DOMAIN}/api/v1/main/need-helper`;
 const POST_HELPER_URL = `${HELPER_MODULE_URL}/write`;
+const GET_MAIN_HELPER_MODULE_URL = (userId: string) => `${MAIN_HELPER_MODULE_URL}/{userId}`;
 const GET_HELPER_POST_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}`;
 const PATCH_HELPER_POST_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}`;
 const DELETE_HELPER_POST_URL = (postSequence: number | string) => `${HELPER_MODULE_URL}/${postSequence}`;
@@ -1068,6 +1070,22 @@ export const postHelperRequest = async (requestBody: PostHelperRequestDto, acces
 // function: get Helper list API 요청 함수 //
 export const getHelperPostListRequest = async (accessToken: string) => {
   const responseBody = await axios.get(HELPER_MODULE_URL, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get Helper list to main API 요청 함수 //
+export const getHelperPostMainRequest = async () => {
+  const responseBody = await axios.get(MAIN_HELPER_MODULE_URL)
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get Helper match list to main API 요청 함수 //
+export const getMatchPostMainRequest = async (userId: string) => {
+  const responseBody = await axios.get(GET_MAIN_HELPER_MODULE_URL(userId))
   .then(responseSuccessHandler)
   .catch(responseErrorHandler);
   return responseBody;

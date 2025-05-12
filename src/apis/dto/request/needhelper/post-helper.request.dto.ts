@@ -8,4 +8,5 @@ export default interface PostHelperRequestDto {
     schedule: string;
     reward: string;
     date: string;
+    keyword: string;
 }

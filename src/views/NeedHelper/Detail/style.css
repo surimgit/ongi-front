@@ -110,6 +110,14 @@
     color: black;
 }
 
+#helper-detail-wrapper .keyword {
+    width: 100%;
+    color: var(--Primary);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--Lightmode-Grey3);
+
+}
+
 #helper-detail-wrapper .interaction-box {
     display: flex;
     align-items: center;

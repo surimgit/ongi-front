@@ -188,3 +188,39 @@
     margin-left: auto;
     padding-right: 5px;
   }
+
+  #helper-write-wrapper .keyword {
+    display: flex;
+  }
+
+  .keyword .keyword-bar {
+    font-family: 'Pretendard';
+    font-size: 16px;
+    width: 140px;
+    height: 20px;
+    border-radius: 10px;
+    margin-right: 5px;
+    padding: 3px;
+    text-indent: 5px;
+  }
+
+  .keyword .keyword-add {
+    padding: 3px 10px;
+    margin-right: 20px;
+
+    font-family: 'Pretendard';
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+  }
+
+  .keyword .keywords {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    gap: 13px;
+    color: var(--Lightmode-Grey);
+  }
