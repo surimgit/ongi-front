@@ -222,7 +222,7 @@ export default function NeedHelperPostDetail() {
         putHelperLikedRequest(Number(sequence), !isLiked, accessToken)
             .then(() => getHelperLikedRequest(Number(sequence), accessToken))
             .then(getHelperLikedResponse);
-    };    
+    };
 
     // event handler: 신청하기 클릭 이벤트 처리 //
     const onApplyClickHandler = () => {
