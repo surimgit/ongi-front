@@ -2,7 +2,7 @@ import React from "react";
 import "./style.css";
 
 interface Props {
-  onSelectChat: (chatName: string) => void;
+  onSelectChat: (chatTitle: string, chatSequence: number) => void;
 }
 
 export default function ChatList({ onSelectChat }: Props) {
@@ -10,7 +10,7 @@ export default function ChatList({ onSelectChat }: Props) {
     <div className="chat-list-wrapper">
       <div className="chat-list-header">채팅</div>
       <div className="chat-list-body">
-        <div className="chat-item" onClick={() => onSelectChat("nickname")}>
+        <div className="chat-item" onClick={() => onSelectChat("nickname", 1)}>
           <div className="chat-item-avatar" />
           <div className="chat-item-info">
             <div className="chat-item-name">nickname</div>

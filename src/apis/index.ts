@@ -118,6 +118,7 @@ import PostHelperRequestDto from "./dto/request/needhelper/post-helper.request.d
 import GetHelperPostResponseDto from "./dto/response/needhelper/get-helper-post.response.dto";
 import PatchHelperPostRequestDto from "./dto/request/needhelper/patch-helper.request.dto";
 import PostHelperCommentRequestDto from "./dto/request/needhelper/post-helper-comment.request.dto";
+import { GetChatRoomResponseDto } from "./dto/response/chat";
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -345,6 +346,14 @@ const DELETE_HELPER_APPLY_URL = (postSequence: number | string) =>
   `${HELPER_MODULE_URL}/${postSequence}/apply`;
 const GET_HELPER_APPLY_URL = (postSequence: number | string) =>
   `${HELPER_MODULE_URL}/${postSequence}/apply`;
+const ACCEPT_HELPER_APPLY_URL = (postSequence: number | string) =>
+  `${HELPER_MODULE_URL}/${postSequence}/apply`;
+
+const CHAT_MODULE_URL = `${API_DOMAIN}/api/v1/chat`;
+const GET_CHAT_ROOM_URL = (chatSequence: number | string) =>
+  `${HELPER_MODULE_URL}/${chatSequence}`;
+const ACCEPT_CHAT_URL = (chatSequence: number | string) =>
+  `${HELPER_MODULE_URL}/${chatSequence}`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({
@@ -1772,5 +1781,59 @@ export const getHelperApplyRequest = async (
     .get(GET_HELPER_APPLY_URL(postSequence), bearerAuthorization(accessToken))
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: 요청용 config를 만드는 함수 //
+export const authorizedParams = (accessToken: string, params: any = {}) => ({
+  headers: {
+    Authorization: `Bearer ${accessToken}`,
+  },
+  params: params,
+});
+
+// function: accept apply API 요청 함수 //
+export const accpetHelperApplyRequest = async (
+  postSequence: number | string,
+  applicantId: string,
+  accessToken: string
+) => {
+  const responseBody = await axios
+  .patch(
+    ACCEPT_HELPER_APPLY_URL(postSequence),
+    null,
+    authorizedParams(accessToken, { applicantId })
+  )
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get chat room API 요청 함수 //
+export const getChatRoomRequest = async (
+  chatSequence: number | string,
+  accessToken: string
+) => {
+  const responseBody = await axios
+    .get(GET_CHAT_ROOM_URL(chatSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetChatRoomResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: accept chat API 요청 함수 //
+export const accpetChatRequest = async (
+  chatSequence: number | string,
+  applicantId: string,
+  accessToken: string
+) => {
+  const responseBody = await axios
+  .patch(
+    ACCEPT_CHAT_URL(chatSequence),
+    null,
+    authorizedParams(accessToken, { applicantId })
+  )
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
   return responseBody;
 };
