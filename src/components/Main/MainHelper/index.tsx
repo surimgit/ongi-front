@@ -34,7 +34,6 @@ export default function MainHelper() {
         }
         const posts = (responseBody as GetHelperPostListResponseDto).posts;
         const valid = posts.filter(post => new Date(post.schedule).getTime() > Date.now());
-        console.log('추천게시글: ', posts);
         setRecommendedList(valid.slice(0, 5));
       };
       

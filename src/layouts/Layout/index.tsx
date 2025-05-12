@@ -300,7 +300,6 @@ export default function Layout() {
       <div id='main'>
         <Outlet />
       </div>
-      <div className='footer' onClick={onLogoutClickHandler}>로그아웃</div>
     </div>
   )
 }
