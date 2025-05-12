@@ -33,6 +33,9 @@ export default function NeedHelper() {
   // state: 선택된 만남 방식
   const [meetingType, setMeetingType] = useState("");
 
+  // state: 급여 최소값 //
+  const [minSalary, setMinSalary] = useState("");
+
   // state: 페이지네이션 상태 //
   const { 
     currentPage, setCurrentPage, currentSection, setCurrentSection,
@@ -44,6 +47,7 @@ export default function NeedHelper() {
 
   // function: get helper post list 함수 // 
   const getHelerPostListResponse = (responseBody: GetHelperPostListResponseDto | ResponseDto | null) => {
+
     const message = !responseBody ? '서버에 문제가 있습니다.'
     : responseBody.code === 'DBE' ? '서버에 문제가 있습니다.'
     : responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
@@ -57,7 +61,7 @@ export default function NeedHelper() {
 
     const { posts } = responseBody as GetHelperPostListResponseDto;
     const validPosts = posts.filter(post => new Date(post.schedule).getTime() > Date.now());
-
+    
     setTotalList(validPosts);
   };
 
@@ -96,6 +100,38 @@ export default function NeedHelper() {
     navigator(`/needHelper/${sequence}`);
   };  
 
+  // event handler: 게시글 검색 클릭 이벤트 처리 //
+  const onSearchClickHandler = () => {
+    getHelperPostListRequest(accessToken).then(response => {
+      if (!response || response.code !== 'SU') return;
+  
+      const { posts } = response as GetHelperPostListResponseDto;
+  
+      const filteredPosts = posts.filter(post => {
+        const isMeetingMatch = meetingType ? post.meetingType === meetingType : true;
+        
+        const isSidoSelected = sido && sido !== '시/도 선택';
+        const isGugunSelected = gugun && gugun !== '구/군 선택';
+  
+        const isLocationMatch = isSidoSelected
+          ? isGugunSelected
+            ? post.city === sido && post.district === gugun
+            : post.city === sido
+          : true;
+  
+        const isSalaryMatch = minSalary ? Number(post.reward) >= Number(minSalary) : true;
+        const isScheduleValid = new Date(post.schedule).getTime() > Date.now();
+  
+        return isMeetingMatch && isLocationMatch && isSalaryMatch && isScheduleValid;
+        
+      });
+      
+      setTotalList(filteredPosts);
+    });
+  };
+  
+  
+
   // effect: 서버 데이터 불러오기 //
   useEffect(() => {
     getHelperPostListRequest(accessToken).then(getHelerPostListResponse);
@@ -115,16 +151,16 @@ export default function NeedHelper() {
               <div className="face-to-face">
                 <input
                   type="checkbox"
-                  checked={meetingType === "face"}
-                  onChange={() => onMettingTypeChangeHandler("face")}
+                  checked={meetingType === "대면"}
+                  onChange={() => onMettingTypeChangeHandler("대면")}
                 />
                 대면
               </div>
               <div className="non-face-to-face">
                 <input
                   type="checkbox"
-                  checked={meetingType === "non-face"}
-                  onChange={() => onMettingTypeChangeHandler("non-face")}
+                  checked={meetingType === "비대면"}
+                  onChange={() => onMettingTypeChangeHandler("비대면")}
                 />
                 비대면
               </div>
@@ -151,13 +187,14 @@ export default function NeedHelper() {
             <div className="sub-title">급여</div>
             <div className="option-salary-box">
               <div className="min">
-                <input type="text" placeholder="금액을 입력하세요." />
+                <input type="text" placeholder="금액을 입력하세요." 
+                value={minSalary} onChange={(e) => setMinSalary(e.target.value.replace(/\D/, ''))}/>
               </div>
               원 이상
             </div>
           </div>
           <div className="option-button-box">
-            <button className="search-button">검색</button>
+            <button className="search-button" onClick={onSearchClickHandler}>검색</button>
           </div>
         </div>
       </div>
