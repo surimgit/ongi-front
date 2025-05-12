@@ -3,17 +3,14 @@ import './style.css'
 import MypageSidebar from 'src/layouts/MypageSidebar'
 import { useNavigate } from 'react-router'
 
-import { MYPAGE_ABSOLUTE_PATH } from 'src/constants';
 import { getCountShoppingCartRequest, getCountWishRequest, getShoppingCartRequest, getWishListRequest } from 'src/apis';
 import { useCookies } from 'react-cookie';
 import { GetShoppingCartResponseDto } from 'src/apis/dto/response/shoppingCart';
 import { GetWishListResponseDto, ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import { ACCESS_TOKEN, MY_COMMUNITY_COMMENT_ABSOLUTE_PATH, MY_COMMUNITY_POST_ABSOLUTE_PATH, MY_GROUPBUYING_WISH_LIST_ABSOLUTE_PATH, MY_NEEDHELLPER_APPLY_ABSOLUTE_PATH, MY_NEEDHELLPER_ASK_ABSOLUTE_PATH, MY_REVIEW_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, SHOPPING_CART_ABSOLUTE_PATH } from 'src/constants';
-import { useCookies } from 'react-cookie';
 import { getMyActivityCountRequest } from 'src/apis';
 import { GetMyActivityCountResponseDto } from 'src/apis/dto/response/user';
-import { ResponseDto } from 'src/apis/dto/response';
 
 
 export default function Activity() {
@@ -49,6 +46,7 @@ export default function Activity() {
       alert(message);
       return;
     }
+  }
 
   // event handler: 내 정보 버튼 클릭 이벤트 처리 //
   const onMyInfoButtonClickHandler = () => {
@@ -113,14 +111,6 @@ export default function Activity() {
     navigator(MY_COMMUNITY_COMMENT_ABSOLUTE_PATH);
   }
 
-
-
-
-
-    
-
-  }
-
   // function: get response 처리 함수 //
   const getWishListResponse = (responseBody: GetWishListResponseDto | ResponseDto | null) => {
     const {isSuccess, message} = responseMessage(responseBody);
@@ -130,11 +120,6 @@ export default function Activity() {
       return;
     }
 
-  }
-
-  // event handler: 내 정보 버튼 클릭 이벤트 처리 //
-  const onMyInfoButtonClickHandler = () => {
-    navigator(MYPAGE_ABSOLUTE_PATH);
   }
 
   useEffect(() => {

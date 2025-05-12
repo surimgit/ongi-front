@@ -108,6 +108,7 @@ const multipartFormData = { headers: { 'Content-Type': 'multipart/form-data' } }
 
 const ALERT_MODULE_URL = `${API_DOMAIN}/api/v1/alert`;
 const ALERT_READ_URL = (alertSequence: number | string) => `${ALERT_MODULE_URL}/${alertSequence}`;
+const ALERT_READ_ALL_URL = `${ALERT_MODULE_URL}/read-all-alert`;
 const ALERT_DELETE_URL = (alertSequence: number | string | null) => `${ALERT_MODULE_URL}/${alertSequence}`;
 
 const GET_COMMUNITY_MODULE_URL = `${COMMUNITY_MODULE_URL}`;
@@ -452,8 +453,8 @@ export const getCommunityPostRequest = async (postSequence:number | string) => {
 };
 
 // function: get community API 요청 함수 //
-export const getCommunityRequest = async (boardType:Board | string | null, categoryType: CommunityCategory | string | null) => {
-  const responseBody = await axios.get(GET_COMMUNITY_MODULE_URL, { params: { board: boardType, category: categoryType}} )
+export const getCommunityRequest = async (boardType:Board | string | null, categoryType: CommunityCategory | string | null, region: string | null, county: string | null) => {
+  const responseBody = await axios.get(GET_COMMUNITY_MODULE_URL, { params: { board: boardType, category: categoryType, region: region, county: county}} )
   .then(responseSuccessHandler)
   .catch(responseErrorHandler);
   return responseBody;
@@ -911,6 +912,14 @@ export const patchAlertReadRequest = async (alertSequence: number | string, acce
   return responseBody;
 };
 
+// function: patch all alert read API 요청 함수 //
+export const patchAllAlertReadRequest = async (accessToken: string) => {
+  const responseBody = await axios.patch(ALERT_READ_ALL_URL, {}, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
 // function: delete alert API 요청 함수 //
 export const deleteAlertRequest = async (alertSequence: number | string | null, accessToken: string) => {
   const responseBody = await axios.delete(ALERT_DELETE_URL(alertSequence), bearerAuthorization(accessToken))
@@ -1005,7 +1014,7 @@ export const getProductOrderItemsRequest = async (sequence: number | string) => 
   const responseBody = await axios.get(GET_PRODUCT_ORDER_ITEMS_URL(sequence))
     .then(responseSuccessHandler<GetOrderItemsResponseDto>)
     .catch(responseErrorHandler);
-  return reseponseBody;
+  return responseBody;
 }
 
 // function: add badge API 요청 함수 //
@@ -1044,6 +1053,9 @@ export const getOtherUserBadgeRequest = async (userId:string) => {
 export const getOtherUserIntroductionRequest = async (userId: string) => {
   const responseBody = await axios.get(OTHER_MYPAGE_VIEW_URL(userId))
     .then(responseSuccessHandler<GetUserIntroductionResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
 
 // function: post Helper API 요청 함수 //
 export const postHelperRequest = async (requestBody: PostHelperRequestDto, accessToken: string) => {
@@ -1184,4 +1196,3 @@ export const getHelperApplyRequest = async (postSequence: number | string, acces
   .catch(responseErrorHandler);
   return responseBody;
 };
-

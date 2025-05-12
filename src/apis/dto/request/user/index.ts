@@ -14,11 +14,7 @@ export type{
   AddLikeKeywordRequestDto,
   DeleteLikeKeywordRequestDto,
   PatchUserIntroductionRequestDto,
-
-  PatchUserAccountRequestDto,
-  PostProductReviewRequestDto,
-  PostWaybillNumberRequestDto
-
+  PostWaybillNumberRequestDto,
   PatchUserPasswordRequestDto,
   PostProductReviewRequestDto,
   PatchUserAddressRequestDto,

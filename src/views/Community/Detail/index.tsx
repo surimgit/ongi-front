@@ -374,7 +374,7 @@ export default function PostDetail() {
     const [viewCount, setViewCount] = useState<number>(0);
 
     // state: 로그인 사용자 아이디 상태 //
-    const { userId } = useSignInUserStore();
+    const { userId, isAdmin } = useSignInUserStore();
 
     // state: 댓글 상태 //
     const [comment, setComment] = useState<string>('');
@@ -663,7 +663,7 @@ export default function PostDetail() {
                                 </Report>
                             </Modal>
                             }
-                            { writerId === userId &&
+                            { (writerId === userId || isAdmin ) &&
                                 <>
                                 <div className='bt edit' onClick={onEditClickHandler}>수정</div>
                                 <div className='bt delete' onClick={onDeleteClickHandler}>삭제</div>

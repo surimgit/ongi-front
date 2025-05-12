@@ -1,0 +1,120 @@
+#county-main-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    margin: 50px;
+    padding: 0 250px;
+    gap: 36px;
+}
+
+#county-main-wrapper .board-title-container {
+    display: flex;
+    justify-content: left;
+
+    width: 100%;
+
+    font-size: 40px;
+    font-weight: 700;
+}
+
+#county-main-wrapper .county-container-box {
+    display: flex;
+    gap: 10px;
+}
+
+#county-main-wrapper .left-box,
+#county-main-wrapper .right-box {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+#county-main-wrapper .region-container {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+    align-items: center;
+
+    border: 3px solid var(--Lightmode-Grey5);
+    border-radius: 10px;
+
+    width: 400px;
+    height: auto;
+
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--Lightmode-Grey5);
+}
+
+#county-main-wrapper .region-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-sizing: border-box;
+    padding: 20px 40px;
+
+    width: 100%;
+}
+
+#county-main-wrapper .region-container:hover {
+    background-color: var(--Lightmode-Grey3);
+}
+
+#county-main-wrapper .slide-btn {
+    width: 35px;
+    height: 35px;
+
+    background-image: url(src/assets/images/icon-slide-side.png);
+    background-size: cover;
+
+    cursor: pointer;
+}
+
+#county-main-wrapper .slide-btn.down {
+    background-image: url(src/assets/images/icon-slide-down.png);
+    background-size: cover;
+}
+
+#county-main-wrapper .county-wrapper {
+    display: flex;
+    justify-content: center;
+    
+    gap: 20px;
+
+    width: 100%;
+    padding: 20px 40px;
+    box-sizing: border-box;
+    
+    border-radius: 0 0 10px 10px;
+    border-top: 3px solid var(--Lightmode-Grey5);
+
+    background-color: var(--Lightmode-Grey3);
+}
+
+#county-main-wrapper .county-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: max-content;
+}
+
+#county-main-wrapper .county {
+    font-size: 20px;
+    font-weight: 500;
+
+    width: 135px;
+
+    border-bottom: 1px solid var(--Lightmode-Grey4_1);
+
+    cursor: pointer;
+}
+
+#county-main-wrapper .county:hover {
+    color: var(--Primary);
+    border-bottom: 1px solid var(--Primary);
+}

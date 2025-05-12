@@ -166,3 +166,17 @@
   color: var(--Lightmode-Grey5);
   cursor: pointer;
 }
+
+#top-bar .logout-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: auto;
+  height: 25px;
+
+  padding: 7px;
+
+  border: solid 1px var(--Lightmode-Grey2);
+  border-radius: 5px;
+}

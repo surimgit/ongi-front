@@ -86,7 +86,7 @@
     font-size: 13px;
 }
 
-.info-container {
+#policy-main-wrapper .info-container {
     display: block;
     margin-top: 50px;
   }

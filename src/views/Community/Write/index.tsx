@@ -1,13 +1,14 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import './style.css';
 import { Board, CommunityCategory } from 'src/types/aliases';
 import { useCookies } from 'react-cookie';
-import { ACCESS_TOKEN, COMMUNITY_CATEGORY_ABSOLUTE_PATH } from 'src/constants';
+import { ACCESS_TOKEN, COMMUNITY_CATEGORY_ABSOLUTE_PATH, COUNTY_CATEGORY_ABSOLUTE_PATH } from 'src/constants';
 import { useNavigate } from 'react-router';
 import TextEditor from 'src/components/TextEditor';
 import PostCommunityRequestDto from 'src/apis/dto/request/community/post-community.request.dto';
-import { postCommunityRequest } from 'src/apis';
+import { fileUploadsRequest, postCommunityRequest } from 'src/apis';
 import { ResponseDto } from 'src/apis/dto/response';
+import { useSignInUserStore } from 'src/stores';
 
 // component: 게시글 작성 화면 컴포넌트 //
 export default function PostWrite() {
@@ -15,11 +16,18 @@ export default function PostWrite() {
   // state: cookie 상태 //
   const [cookies] = useCookies();
 
+  // state: 로그인 사용자 정보 //
+  const { county } = useSignInUserStore();
+
   // state: 게시글 내용 상태 //
   const [board, setBoard] = useState<Board | ''>('');
   const [category, setCategory] = useState<CommunityCategory | ''>('');
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const [postImages, setPostImages] = useState<string[]>([]);
+
+  // state: 파일 인풋 참조 상태 //
+  const fileRefs = useRef<HTMLInputElement>(null);
 
   // variable: access Token //
   const accessToken = cookies[ACCESS_TOKEN];
@@ -44,7 +52,16 @@ export default function PostWrite() {
     }
 
     if (!category) return;
-    navigator(COMMUNITY_CATEGORY_ABSOLUTE_PATH(board, category));
+
+    if (!county) {
+      alert('주소를 등록해주세요.');
+      return;
+    }
+    const [region, district] = county;
+    console.log(region, district);
+    if (!region && !district) return;
+    if (board === '우리 동네 게시판') navigator(COUNTY_CATEGORY_ABSOLUTE_PATH(board, category, region, district));
+    else navigator(COMMUNITY_CATEGORY_ABSOLUTE_PATH(board, category));
   };
 
   // event handler: 제목 변경 이벤트 처리 //
@@ -59,15 +76,49 @@ export default function PostWrite() {
   };
 
   // event handler: 게시글 작성 버튼 클릭 이벤트 처리 //
-  const onWriteButtonClickHandler = () => {
+  const onWriteButtonClickHandler = async () => {
     if(!isActive || !accessToken) return;
-    
+
     const requestBody: PostCommunityRequestDto = {
-      board, category, title, content
+      board, category, title, content, images: postImages
     };
 
     postCommunityRequest(requestBody, accessToken).then(postCommunityResponse);
   }
+
+  // event handler: 이미지 첨부 버튼 클릭 이벤트 처리 //
+  const onImageUploadClickHandler = () => {
+    fileRefs.current?.click();
+  };
+
+  // event handler: 이미지 첨부 이벤트 처리 //
+  const onHandleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const formData = new FormData();
+
+    Array.from(files).forEach((file) => {
+      formData.append('files', file);
+    });
+    
+    const postImages = await fileUploadsRequest(formData);
+    if (!postImages) return;
+    setPostImages(postImages);
+
+    const newImageTags = postImages.map(url => `<img src="${url}" alt="이미지" />`).join('\n');
+    
+    setContent(prev => {
+      const updated = prev + '\n' + newImageTags;
+      return updated;
+    });
+    
+    e.target.value = '';
+  };
+
+  useEffect((
+    
+  ) => {}, [postImages]);
 
   // render: 게시글 작성 화면 컴포넌트 렌더링 //
   return (
@@ -83,7 +134,9 @@ export default function PostWrite() {
           <select className='select board' value={board} onChange={(event) => setBoard(event.target.value as Board)}>
             <option value="">게시판 선택</option>
             <option value="정보 게시판">정보 게시판</option>
-            <option value="우리 동네 게시판">우리 동네 게시판</option>
+            { county &&
+              <option value="우리 동네 게시판">우리 동네 게시판</option>
+            }
           </select>
           <select className='select category' value={category} onChange={(event) => setCategory(event.target.value as CommunityCategory)}>
             <option value="">카테고리 선택</option>
@@ -115,8 +168,19 @@ export default function PostWrite() {
         </div>
       </div>
       <div className='button-box'>
-        <div className='btn cancel'>취소</div>
-        <div className='btn write' onClick={onWriteButtonClickHandler}>작성</div>
+        <div className='image-upload' onClick={onImageUploadClickHandler}>이미지 첨부</div>
+        <input 
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          multiple
+          ref={fileRefs}
+          onChange={onHandleImageFileChange}
+        />
+        <div className='post-btn'>
+          <div className='btn cancel'>취소</div>
+          <div className='btn write' onClick={onWriteButtonClickHandler}>작성</div>
+        </div>
       </div>
     </div>
   )
