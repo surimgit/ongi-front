@@ -16,4 +16,5 @@ export default interface GetProductDetailResponseDto extends ResponseDto {
   isSoldOut: boolean;
   content: string;
   openDate: string;
+  status: string;
 }

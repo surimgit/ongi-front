@@ -5,11 +5,19 @@ import PatchUserAddressRequestDto from "./patch-user-address.request.dto"
 import PatchUserIntroductionRequestDto from "./patch-user-introduction.request.dto"
 import PostProductReviewRequestDto from "./post-product-reivew.request.dto"
 
+import PostWaybillNumberRequestDto from "./post-waybill.request.dto"
+
+import PatchBadgeRequestDto from "./patch-badge.request.dto"
+
+
 export type{
   AddLikeKeywordRequestDto,
   DeleteLikeKeywordRequestDto,
   PatchUserIntroductionRequestDto,
+  PostWaybillNumberRequestDto,
   PatchUserPasswordRequestDto,
   PostProductReviewRequestDto,
-  PatchUserAddressRequestDto
+  PatchUserAddressRequestDto,
+  PatchBadgeRequestDto
+
 }

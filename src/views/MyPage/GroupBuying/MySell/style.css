@@ -1,0 +1,225 @@
+#group-buying-main-wrapper .body .sale-list-table .tr:not(:first-child){
+  display: flex;
+  align-items: stretch;
+  
+  height: 180px;
+
+  border-bottom: 2px solid rgb(197, 193, 193);
+  cursor: default;
+}
+
+#group-buying-main-wrapper .body .sale-list-table .td {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+  box-sizing: border-box;
+
+  cursor: pointer;
+}
+
+#group-buying-main-wrapper .body .sale-list-table .tr:first-child{
+  background-color: antiquewhite;
+  padding: 15px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#group-buying-main-wrapper .body .sale-list-table .tr:first-child *{
+  border-right: 2px solid antiquewhite;
+}
+
+#group-buying-main-wrapper .body .sale-list-table .th.detail-box,
+#group-buying-main-wrapper .body .sale-list-table .td.detail-box{
+  flex: 4;
+  border-right: 2px solid rgb(197, 193, 193);
+}
+
+#group-buying-main-wrapper .body .sale-list-table .th.quantity,
+#group-buying-main-wrapper .body .sale-list-table .td.quantity{
+  flex: 1;
+  border-right: 2px solid rgb(197, 193, 193);
+}
+
+#group-buying-main-wrapper .body .sale-list-table .th.amount,
+#group-buying-main-wrapper .body .sale-list-table .td.amount {
+  flex: 1;
+  border-right: 2px solid rgb(197, 193, 193);
+}
+
+#group-buying-main-wrapper .body .sale-list-table .th.open-date,
+#group-buying-main-wrapper .body .sale-list-table .td.open-date{
+  flex: 1;
+  border-right: 2px solid rgb(197, 193, 193);
+  text-align: center;
+}
+
+#group-buying-main-wrapper .body .sale-list-table .th.deadline,
+#group-buying-main-wrapper .body .sale-list-table .td.deadline {
+  flex: 1;
+  text-align: center;
+}
+
+#group-buying-main-wrapper .body .sale-list-table .tr {
+  display: flex;
+  align-items: center;
+  
+  padding: 15px 30px;
+}
+
+.td.detail-box .product-box {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.tr .td.detail-box .product-box img{
+  width: 80px;
+  height: 80px;
+}
+
+.tr .td.detail-box .product-box .product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-around;
+
+}
+
+.tr .td.detail-box .product-box .product-info .title {
+  font-size: 18px;
+  font-weight: 600;
+
+  width: 100%;
+  
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.td.detail-box .product-box .product-info .price-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.td.detail-box .product-box .product-info .price-box .price {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.tr .td.quantity {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.tr .td.amount{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tr .td.amount .amount-box {
+  display: flex;
+  flex-direction: column;
+  
+  gap: 5px;
+  text-align: center;
+}
+
+.tr .td.amount .waybill-button {
+  padding: 5px;
+
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  
+}
+
+#group-buying-main-wrapper .body .order-list-table .tr:not(:first-child){
+  display: flex;
+  align-items: stretch;
+  
+  height: 180px;
+
+  border-bottom: 2px solid rgb(197, 193, 193);
+  cursor: default;
+}
+
+#group-buying-main-wrapper .body .order-list-table .td {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+  box-sizing: border-box;
+
+  cursor: default;
+}
+
+#group-buying-main-wrapper .body .order-list-table .tr:first-child{
+  background-color: antiquewhite;
+  padding: 15px 30px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+
+#group-buying-main-wrapper .body .order-list-table .tr {
+  display: flex;
+  align-items: center;
+  
+  padding: 15px 30px;
+  text-align: center;
+}
+
+.order-list-table .tr .date {
+  flex: 1;
+  border-right: 2px solid rgb(197, 193, 193);
+  padding: 0px 8px;
+}
+
+.order-list-table .tr .detail-box {
+  flex: 4;
+  border-right: 2px solid rgb(197, 193, 193);
+}
+
+.order-list-table .tr .detail-box .product-box {
+  display: flex;
+  align-items: center;
+
+  height: 100%;
+
+  padding: 12px;
+}
+.order-list-table .tr .quantity{
+  flex: 1;
+  border-right: 2px solid rgb(197, 193, 193);
+}
+
+.order-list-table .tr .delivery{
+  flex: 1.6;
+  border-right: 2px solid rgb(197, 193, 193);
+}
+
+.order-list-table .tr .waybill-number{
+  flex: 1.6;
+}
+
+.order-list-table .tr .td.waybill-number{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+.td.waybill-number .waybill-button {
+  border: 2px solid var(--Primary);
+  border-radius: 5px;
+
+  padding: 8px;
+  cursor: pointer;
+}

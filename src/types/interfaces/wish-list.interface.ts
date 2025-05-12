@@ -6,5 +6,5 @@ export default interface WishList {
   deadline: string;
   openDate: string;
   image: string;
-  soldOut: boolean;
+  status: string;
 }

@@ -51,13 +51,22 @@
 }
 
 #notice-main-wrapper .contents-wrapper .notice-amount{
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
+  display: flex;
+  align-items: end;
 }
 
 #notice-main-wrapper .contents-wrapper .write-button{
-  margin-right: 27px;
-  color: gray;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  border-radius: 13px;
+  background-color: rgb(53, 53, 53);
+  padding: 5px 30px;
+}
+
+#notice-main-wrapper .contents-wrapper .write-button:hover{
+  text-decoration: underline;
 }
 
 #notice-main-wrapper .contents-wrapper .notice-list{
@@ -90,7 +99,15 @@
 
 #notice-main-wrapper .contents-wrapper .notice-list .tr .title{
   min-width: 630px;
+  text-align: left;
+  cursor: pointer;
 }
+
+#notice-main-wrapper .contents-wrapper .notice-list .tr .title:hover{
+  text-decoration: underline;
+}
+
+
 
 #notice-main-wrapper .contents-wrapper .notice-list .tr .postdate{
   min-width: 240px;
@@ -98,11 +115,8 @@
 
 #notice-main-wrapper .contents-wrapper .notice-list .tr .th.title{
   text-align: center;
-}
-
-
-#notice-main-wrapper .contents-wrapper .notice-list .tr .title{
-  text-align: left;
+  text-decoration: none;
+  cursor: default;
 }
 
 #notice-main-wrapper .contents-wrapper .pagination-box{

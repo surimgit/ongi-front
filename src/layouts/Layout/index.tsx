@@ -1,6 +1,10 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import './style.css';
-import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, CALENDAR_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, NEEDHELPER_ABSOLUTE_PATH, PRODUCT_ABSOLUTE_PATH, ROOT_PATH } from 'src/constants';
+
+import { MY_GROUPBUYING_BUY_ABSOLUTE_PATH} from 'src/constants';
+
+import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, CALENDAR_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, NEEDHELPER_ABSOLUTE_PATH, NEEDHELPER_VIEW_ABSOLUTE_PATH, PRODUCT_ABSOLUTE_PATH, ROOT_PATH } from 'src/constants';
+
 import { Board } from 'src/types/aliases';
 import useSignInUser from 'src/hooks/sign-in-user.hook';
 import { useEffect, useRef, useState } from 'react';
@@ -21,7 +25,7 @@ function AlertItem({ alertItem }: AlertItemProps) {
   const { alertSequence, alertContent, alertEntitySequence, alertType, readPara } = alertItem;
 
   // state: cookie 상태 //
-  const [cookies] = useCookies();
+  const [cookies, setCookie, removeCookie] = useCookies();
 
   // variable: access token //
   const accessToken = cookies[ACCESS_TOKEN];
@@ -63,8 +67,22 @@ function AlertItem({ alertItem }: AlertItemProps) {
 
     patchAlertReadRequest(alertSequence, accessToken).then(patchAlertReadResponse);
 
-    if (alertType === 'community_comment' || alertType === 'report_alerted'){
-      navigator(COMMUNITY_VIEW_ABSOLUTE_PATH(alertEntitySequence));
+    switch (alertType) {
+      case 'community_comment':
+      case 'report_alerted':
+        navigator(COMMUNITY_VIEW_ABSOLUTE_PATH(alertEntitySequence));
+        break;
+      case 'helper_comment':
+        navigator(NEEDHELPER_VIEW_ABSOLUTE_PATH(alertEntitySequence));
+        break;
+      case 'helper_apply':
+        navigator(NEEDHELPER_VIEW_ABSOLUTE_PATH(alertEntitySequence));
+        break;
+      case 'waybill':
+        navigator(MY_GROUPBUYING_BUY_ABSOLUTE_PATH);
+        break;
+      default:
+        break;
     }
   };
 
@@ -282,6 +300,7 @@ export default function Layout() {
       <div id='main'>
         <Outlet />
       </div>
+      <div className='footer' onClick={onLogoutClickHandler}>로그아웃</div>
     </div>
   )
 }
