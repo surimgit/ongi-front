@@ -6,7 +6,7 @@ export const ROOT_PATH = '/';
 export const AUTH_PATH = 'auth';
 export const MAIN_PATH = 'main';
 export const PRODUCT_PATH = 'product';
-export const SHOPPING_CART_PATH = 'shoppingCart';
+export const SHOPPING_CART_PATH = 'shopping-cart';
 export const PAYMENTS_PATH = 'payments'
 export const ADDRESS_PATH = 'address';
 export const WRITE_PATH = 'write';
@@ -72,6 +72,7 @@ export const FAQ_PATH = 'faq';
 
 export const NEEDHELPER_PATH = 'needHelper';
 export const NEEDHELPER_WRITE_PATH = 'write';
+export const NEEDHELPER_VIEW_PATH = ':sequence';
 
 export const REPORT_PATH = 'report';
 
@@ -154,6 +155,7 @@ export const MY_GROUPBUYING_SELL_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${M
 
 export const NEEDHELPER_ABSOLUTE_PATH = `${ROOT_PATH}${NEEDHELPER_PATH}`;
 export const NEEDHELPER_WRITE_ABSOLUTE_PATH = `${ROOT_PATH}${NEEDHELPER_PATH}/${NEEDHELPER_WRITE_PATH}`;
+export const NEEDHELPER_VIEW_ABSOLUTE_PATH = (postSequence: number | string) => `${ROOT_PATH}${NEEDHELPER_PATH}/${postSequence}`;
 
 export const CALENDAR_ABSOLUTE_PATH = `${ROOT_PATH}${CALENDAR_PATH}`;
 export const POLICY_ABSOLUTE_PATH = (plcyNo: string, plcyNm: string, keyword?: string, regions?: string, categories?: string, page?: string, section?: string) => {

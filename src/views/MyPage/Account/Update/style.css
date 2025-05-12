@@ -69,9 +69,15 @@
   box-sizing: border-box;
 }
 
+#account-update-main-wrapper .content-wrapper .input-box .message{
+  color: red;
+  font-size: 12px;
+  margin: 2px 0px;
+  min-height: 16px;
+}
 
 #account-update-main-wrapper .content-wrapper .input-box .input.first{
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 #account-update-main-wrapper .content-wrapper .input-box input::placeholder {
@@ -91,6 +97,30 @@
   align-items: center;
   gap: 10px;
 }
+
+#account-update-main-wrapper .content-wrapper .button-wrapper .button-check.success{
+  background-color: orange;
+  padding: 16px 0px 15px;
+  width: 100%;
+  font-weight: 700;
+  color: var(--White);
+  text-align: center;
+  cursor: pointer;
+}
+
+#account-update-main-wrapper .content-wrapper .button-wrapper .button-check.success:hover{
+  opacity: 70%;
+}
+
+#account-update-main-wrapper .content-wrapper .button-wrapper .button-check.error{
+  background-color: rgb(0, 0, 0);
+  padding: 16px 0px 15px;
+  width: 100%;
+  font-weight: 700;
+  color: var(--White);
+  text-align: center;
+}
+
 
 #account-update-main-wrapper .content-wrapper .button-wrapper .button-check{
   background-color: orange;

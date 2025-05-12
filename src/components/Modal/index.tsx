@@ -14,8 +14,10 @@ export default function Modal({title, onClose, children}: Props) {
   // effect: 컴포넌트 로드시 실행할 함수 //
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = '15px';
     return () => {
       document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
     };
   }, []);
 

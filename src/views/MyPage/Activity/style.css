@@ -74,6 +74,10 @@
 #my-activity-main-wrapper .contents-wrapper .body .my-container .category-container .category-number{
   color: var(--Primary);
   font-weight: bold;
+  cursor: pointer;
 }
 
+#my-activity-main-wrapper .contents-wrapper .body .my-container .category-container .category-number:hover{
+  text-decoration: underline;
+}
 

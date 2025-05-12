@@ -19,10 +19,12 @@ interface ProductItemProps {
 function ProductItem({
   wish 
 }: ProductItemProps) {
-  const { name, price, sequence, remainingProducts, deadline, openDate, soldOut, image } = wish;
+  const { name, price, sequence, remainingProducts, deadline, openDate, status, image } = wish;
 
   // variable: 이미지 클래스 //
-  const imageClass = !soldOut ? 'td name-box expired' : 'td name-box'
+  const isFinish = new Date(deadline) < new Date();
+  const imageClass = status === "CLOSE" ? 'td name-box expired' : 'td name-box'
+  
 
   // function: navigator 함수 //
   const navigator = useNavigate();
@@ -36,7 +38,7 @@ function ProductItem({
     <div className='tr' onClick={onProductClickHandler}>
       <div className={imageClass}>
         <img src={image} alt='상품 사진'/>
-        {!soldOut && 
+        {status === "CLOSE" && 
           <div className='img-text'>
             <p>마감</p>
           </div>
@@ -106,6 +108,10 @@ export default function WishLists() {
   useEffect(() => {
     getWishListRequest(accessToken).then(getWishListResponse);
   },[])
+
+  useEffect(() => {
+    
+  })
 
   // render: 찜한 목록 컴포넌트 렌더링 //
   return (

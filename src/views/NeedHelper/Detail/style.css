@@ -1,0 +1,393 @@
+#helper-detail-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    width: 1260px;
+    box-sizing: border-box;
+    margin: 40px 0;
+    gap: 7px;
+}
+
+#helper-detail-wrapper .detail-container {
+    border: 2px solid var(--Lightmode-Grey5);
+    border-radius: 5px;
+    padding: 15px 30px;
+}
+
+#helper-detail-wrapper .helper-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#helper-detail-wrapper .title {
+    padding: 15px 0;
+    gap: 20px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+#helper-detail-wrapper .apply-button {
+    margin-bottom: 5px;
+    padding: 10px 12px;
+    background-color: var(--Primary);
+    border-radius: 5px;
+    color: var(--White);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+}
+
+#helper-detail-wrapper .apply-button.is-applied {
+    background-color: var(--Cancel);
+}
+
+#helper-detail-wrapper .my-helper-post {
+    display: flex;
+    margin-right: 8px;
+}
+
+#helper-detail-wrapper .my-helper-post .edit-button {
+    background-color: var(--Primary);
+    color: var(--White);
+    padding: 6px 12px;
+    border-radius: 7px 0 0 7px;
+    cursor: pointer;
+}
+
+#helper-detail-wrapper .my-helper-post .delete-button {
+    background-color: var(--Black);
+    color: var(--White);
+    padding: 6px 12px;
+    border-radius: 0 7px 7px 0 ;
+    cursor: pointer;
+}
+
+#helper-detail-wrapper .writer {
+    margin-bottom: 5px;
+}
+
+#helper-detail-wrapper .date-report {
+    display: flex;
+    justify-content: space-between;
+}
+
+#helper-detail-wrapper .date-report .report {
+    width: 24px;
+    height: 24px;
+    background-image: url(src/assets/images/report-icon.png);
+    background-size: contain;
+    background-repeat: no-repeat; 
+    background-position: center; 
+    transform: translate(0px, -7.5px);
+    cursor: pointer;
+}
+
+#helper-detail-wrapper .date-report .write-date {
+    display: flex;
+    margin-top: 5px 0;
+    font-size: 14px;
+    color: var(--Lightmode-Grey2);
+}
+
+#helper-detail-wrapper .info {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    padding: 17px;
+    gap: 20px;
+    border: 2px solid black;
+    background-color: aliceblue;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--Lightmode-Grey2);
+}
+
+#helper-detail-wrapper .info span {
+    font-weight: 500;
+    color: black;
+}
+
+#helper-detail-wrapper .keyword {
+    width: 100%;
+    color: var(--Primary);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--Lightmode-Grey3);
+
+}
+
+#helper-detail-wrapper .interaction-box {
+    display: flex;
+    align-items: center;
+}
+
+.interaction-box .report {
+    width: 33px;
+    height: 33px;
+    background-image: url(src/assets/images/report-icon.png);
+    background-size: cover;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+#helper-detail-wrapper .detail-container .content {
+    margin-bottom: 15px;
+}
+
+#helper-detail-wrapper .user-reaction-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-reaction-container .user-reaction-box {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 10px 0 15px 10px;
+}
+
+#helper-detail-wrapper .comment-count {
+    transform: translate(0px, 7px);
+}
+
+.user-reaction-container .liked-box {
+    display: flex;
+    gap: 10px;
+}
+
+#helper-detail-wrapper .liked-amount {
+    font-size: 25px;
+}
+
+#helper-detail-wrapper .user-reaction-container .icon {
+    width: 30px;
+    height: 30px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.user-reaction-container .icon.liked {
+    background-image: url(src/assets/images/liked.png);
+}
+
+.user-reaction-container .icon.not-liked {
+    background-image: url(src/assets/images/not-liked.png);
+}
+
+#helper-detail-wrapper .user-reaction-container .comment-input-box {
+    display: flex;
+    gap: 10px;
+    width: 1260px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+#helper-detail-wrapper .user-reaction-container .comment-input {
+    border: 2px solid var(--Lightmode-Grey5);
+    border-radius: 3px;
+    padding: 10px;
+    width: 92%;
+    height: 100%;
+    font-size: 18px;
+    resize: none;
+}
+
+.user-reaction-container .comment-post {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8%;
+    border-radius: 3px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--White);
+    background-color: var(--Primary);
+    cursor: pointer;
+}
+
+.user-reaction-container .comment-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 2px solid var(--Lightmode-Grey5);
+    border-radius: 3px;
+    padding: 20px;
+}
+
+#helper-detail-wrapper .comment-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    position: relative;
+}
+
+#helper-detail-wrapper .comment-box .profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: var(--Lightmode-Grey3);
+    background-size: cover;
+}
+
+#helper-detail-wrapper .comment-box .content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+#helper-detail-wrapper .comment-box .nickname {
+    font-weight: 600;
+}
+
+#helper-detail-wrapper .comment-box .post-date {
+    font-size: 14px;
+    color: var(--Lightmode-Grey6);
+}
+
+#helper-detail-wrapper .comment-box .interaction-container {
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    font-size: 14px;
+    color: var(--Lightmode-Grey6);
+    cursor: pointer;
+}
+
+#helper-detail-wrapper .comment-box .edit,
+#helper-detail-wrapper .comment-box .delete {
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+#helper-detail-wrapper .comment-box .edit {
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+#helper-detail-wrapper .comment-box .editting-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+}
+
+.editting-container .edit-input {
+    border: 2px solid var(--Lightmode-Grey5);
+    border-radius: 3px;
+    padding: 5px;
+    width: 100%;
+    height: 80px;
+    resize: none;
+}
+
+.editting-container .btn.editting {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    background-color: var(--Primary);
+    color: var(--White);
+    border-radius: 3px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#helper-detail-wrapper .report-container {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    gap: 10px;
+}
+
+#helper-detail-wrapper .report-body {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid var(--Lightmode-Grey);
+    border-radius: 5px;
+}
+
+#helper-detail-wrapper .report-body .info-row {
+    display: flex;
+    align-items: center;
+    gap: 0px;
+    color: var(--Lightmode-Grey);
+    padding-left: 10px;
+    border: none;
+}
+
+#helper-detail-wrapper .report-body .info-type {
+    min-width: 70px;
+    color: var(--Lightmode-Grey2);
+}
+
+#helper-detail-wrapper .report-body .info-content {
+    border-left: 1px solid var(--Lightmode-Grey2);
+    color: var(--Lightmode-Grey);
+    padding-left: 10px;
+}
+
+#helper-detail-wrapper .report-category-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 16px;
+}
+
+#helper-detail-wrapper .report-category-box label {
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    border: 1px solid var(--Lightmode-Grey);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#helper-detail-wrapper .report-category-box label:hover {
+    background-color: var(--Lightmode-Grey3);
+}
+
+#helper-detail-wrapper [type="radio"] {
+    appearance: none;
+    border: 1px solid var(--Lightmode-Grey2);
+    border-radius: 50%;
+    width: 1.25em;
+    height: 1.25em;
+}
+
+#helper-detail-wrapper [type="radio"]:checked {
+    border: 0.4em solid var(--Lightmode-Green);
+}
+
+#helper-detail-wrapper .report-detail {
+    border: 1px solid var(--Lightmode-Grey);
+    border-radius: 3px;
+    padding: 5px;
+    width: 500px;
+    height: 80px;
+    resize: none;
+}
+
+#helper-detail-wrapper .report-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--Cancel);
+    color: var(--White);
+    font-weight: 700;
+    border-radius: 5px;
+    height: 40px;
+    cursor: pointer;
+}

@@ -130,15 +130,16 @@
 }
 
 #need-helper-wrapper .write-button {
-  padding: 3px 15px;
+  padding: 8px 15px;
 
   background-color: #008cff;
   border: none;
   border-radius: 5px;
 
   color: white;
+  font-family: 'Pretendard';
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
 
   cursor: pointer;
 }

@@ -1,0 +1,147 @@
+#other-community-main-wrapper {
+  padding-top: 50px;
+  display: flex;
+  gap:60px;
+  width: 1260px;
+  margin: 0 auto;
+}
+
+#other-community-main-wrapper .contents-wrapper{
+  display: flex;
+  width: 1020px;
+  flex-direction: column;
+}
+
+#other-community-main-wrapper .contents-wrapper .title-area{
+  display: flex;
+  align-items: center;
+  gap:24px;
+}
+
+#other-community-main-wrapper .contents-wrapper .title-area .title{
+  font-size: 35px;
+  font-weight: bold;
+  display: flex;
+  gap: 15px;
+}
+
+#other-community-main-wrapper .contents-wrapper .title-area .title-number{
+  font-size: 25px;
+  font-weight: bold;
+  color: var(--Primary);
+  display: flex;
+  align-items: end;
+} 
+
+.my-community-hr {
+  height: 2px;           
+  width: 100%;            
+  background-color: #333; 
+  border: none;         
+  margin: 13px auto;    
+  border-radius: 2px;  
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list{
+  display: flex;
+  flex-direction: column;
+}
+
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .tr{
+  display: flex;
+  height: 50px;
+  align-items: center;
+  text-align: center;
+  border-bottom: 0.5px solid gray;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .tr.comment{
+  display: flex;
+  height: 60px;
+  align-items: center;
+  text-align: center;
+  border-bottom: 0.5px solid gray;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .tr:first-child{
+  background-color: var(--Lightmode-Grey4);
+  height: 35px;
+  border-top: 2px solid gray;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .tr:last-child{
+  border-bottom: 2px solid gray;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .category{
+  flex: 1.2;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .title{
+  flex: 5.2;
+  text-align: start;
+  display: flex;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .comment-title-box{
+  flex: 5.2;
+  text-align: start;
+  flex-direction: column;
+  display: inline-flex;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list th.comment-title-box{
+  flex: 5.2;
+  text-align: start;
+  flex-direction: column;
+  display: inline-flex;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .comment-title-box .title{
+  opacity: 0.6;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .comment-title-box .content{
+  font-size: 18px;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .td.comment-title-box:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .td.title span{
+  cursor: pointer;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .td.title span:hover{
+  text-decoration: underline;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .liked{
+  flex: 0.6;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .views{
+  flex: 0.6;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list .date{
+  flex: 1.6;
+}
+
+#other-community-main-wrapper .contents-wrapper .my-community-list {
+  text-align: left;
+}
+
+#other-community-main-wrapper .contents-wrapper .pagination-box{
+  display: flex;
+  margin: 20px 0px;
+  text-align: center;
+  align-items: center;
+}
+
+
+

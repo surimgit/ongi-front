@@ -58,6 +58,9 @@
 
 .gb-image img{
     width: 180px;
+    height: 184px;
+    object-fit: cover;
+
     border: 2px solid var(--Lightmode-Grey3);
 }
 

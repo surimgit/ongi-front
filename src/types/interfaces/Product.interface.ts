@@ -11,4 +11,6 @@ export default interface Product {
   productQuantity: number;
   image: string;
   openDate: string;
+  status: string;
+  reviewCount: number;
 }
