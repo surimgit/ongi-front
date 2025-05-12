@@ -122,7 +122,7 @@ export default function MainHelper() {
                 <div className="hm-subtitle-hot">ALL</div>
                 <div className="hm-more" onClick={onMoreAllClickHandler}>더보기{'>'}</div>
             </div>
-            <div className="helper-of-main-container">
+            <div className="helper-of-main-container s2">
                 <div className="hm-tob-bar">
                     <div className="title">제목</div>
                     <div className="when">시간</div>

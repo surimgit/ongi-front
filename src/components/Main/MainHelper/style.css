@@ -50,6 +50,10 @@
     margin-bottom: 70px;
 }
 
+.helper-of-main-container.s2 {
+    margin-bottom: 0px;
+}
+
 .hm-tob-bar {
     display: flex;
     flex-direction: row;
