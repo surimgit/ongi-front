@@ -41,10 +41,10 @@ type Props = {
           content: string;
           period: string;
         }) => void;
-    calenderRef: React.RefObject<FullCalendar | null>;
+    calendarRef: React.RefObject<FullCalendar | null>;
 };
 
-export default function Policy({ searchKeyword, page, section, autoSearch, items, onScrap, calenderRef} : Props) {
+export default function Policy({ searchKeyword, page, section, autoSearch, items, onScrap, calendarRef} : Props) {
 
     // state: cookie 상태 //
     const [cookies] = useCookies();
@@ -57,7 +57,7 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
     const query = new URLSearchParams(location.search);
     
     // state: calendar 연결 //
-    const [scrapStates, setScrapStates] = useState<{ [plcyNo: number]: boolean }>({});
+    const [scrapStates, setScrapStates] = useState<{ [plcyNo: string]: boolean }>({});
     
     // state: 키워드 상태 //
     const [keyword, setKeyword] = useState(query.get("keyword") || '');
@@ -217,6 +217,7 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
     const onScrapClickHandler = async (item: PolicyResult) => {
         const wasScrapped = scrapStates[item.plcyNo];
         const newState = !wasScrapped;
+        
     
         setScrapStates(prev => {
             const updated = {
@@ -262,6 +263,7 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
             }
         }
     };
+    
 
     // event handler: 검색어 변경 이벤트 처리 //
     const onKeywordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -16,6 +16,7 @@ import { usePagination } from 'src/hooks';
 import activeStar from 'src/assets/images/icon-star-active.png';
 import emptyStar from 'src/assets/images/icon-star-none.png';
 import { useSignInUserStore } from 'src/stores';
+import { Report } from 'src/views/Community/Detail';
 
 interface CartUpdateProps {
   onModalViewChange: () => void;
@@ -196,7 +197,8 @@ export default function DetailProduct() {
   const [quantity, setQuantity] = useState<number>(0);
   // state: review 이미지 상태 //
   const [reviewImages, setReviewImages] = useState<ProductReviewImages[]>([]);
-
+  // state: 신고하기 모달 오픈 상태 //
+  const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
   // state: 장바구니 모달 오픈 상태 //
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
@@ -263,7 +265,7 @@ export default function DetailProduct() {
       return;
     }
 
-    const { image, name, userId, price, category, productQuantity,
+    const { sequence, image, name, userId, price, category, productQuantity,
             boughtAmount, purchasedPeople, deadline, isSoldOut, content, openDate, status
     } = responseBody as GetProductDetailResponseDto;
 
@@ -392,6 +394,11 @@ export default function DetailProduct() {
       alert('복사 실패');
     }
   };
+
+  // event handler: 신고하기 클릭 이벤트 핸들러 //
+  const onReportClickHandler = () => {
+    setIsReportOpen(!isReportOpen);
+  }
   
 
   // event handler: 공동구매 참여 버튼 클릭 이벤트 핸들러 //
@@ -416,8 +423,14 @@ export default function DetailProduct() {
 
   // event handler: 공동구매 삭제 버튼 클릭 이벤트 핸들러 //
   const onRemoveProductClickHandler = () => {
-    deleteProductRequest(productNumber, accessToken).then(deleteProductResponse);
+
+    if(window.confirm("상품을 삭제하시겠습니까?")) deleteProductRequest(productNumber, accessToken).then(deleteProductResponse);
   }
+
+  // event handler: 신고 모달 화면 닫기 클릭 이벤트 처리 //
+  const onCloseReportClickHandler = () => {
+      setIsReportOpen(false);
+  };
 
   const unitPrice = useMemo(() => {
     if (productQuantity === 0) return 0;
@@ -507,7 +520,21 @@ export default function DetailProduct() {
               <div className={liked} onClick={onChangeLikedHandler}></div>
               <div className='product-tool shopping-cart' onClick={onUpdateShoppingCartClickHandler}></div>
               <div className='product-tool share' onClick={() => copyToClipboard(url)}></div>
-              <div className='product-tool report'></div>
+              <div className='product-tool report' onClick={onReportClickHandler}>
+                {isReportOpen &&
+                  <Modal
+                      title='신고'
+                      onClose={onCloseReportClickHandler}
+                  >
+                      <Report
+                          onClose={onCloseReportClickHandler}
+                          entityType='product_post'
+                          entitySequence={productNumber}
+                      >
+                      </Report>
+                  </Modal>
+                }
+              </div>
               <div className='button ask'>문의하기</div>
             </div>
           </div>

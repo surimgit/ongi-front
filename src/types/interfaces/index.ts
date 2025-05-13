@@ -14,7 +14,7 @@ import Schedule from "./Schedule.interface"
 import ProductReviewImages from "./product-review-images.interface"
 import MySale from "./my-sale-interface"
 import OrderItems from "./order-items.interface"
-
+import MyNeedHelperPost from "./my-need-helper-post.interface"
 import Badge from "./badge.interface"
 
 import PolicyList from "./policy-list.interface"
@@ -42,5 +42,6 @@ export type {
   ProductReviewImages,
   UserAddress,
   Badge,
-  NeedHelperPost
+  NeedHelperPost,
+  MyNeedHelperPost
 }

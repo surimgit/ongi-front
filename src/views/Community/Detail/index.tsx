@@ -2,8 +2,8 @@ import React, { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import './style.css';
 import { useNavigate, useParams } from 'react-router';
 import { useCookies } from 'react-cookie';
-import { ACCESS_TOKEN, COMMUNITY_EDIT_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH } from 'src/constants';
-import { deleteCommunityCommentRequest, deleteCommunityPostRequest, getCommunityCommentRequest, getCommunityCommentsRequest, getCommunityLikedRequest, getCommunityPostRequest, patchCommunityCommentRequest, patchCommunityViewCountRequest, postAlertRequest, postCommunityCommentRequest, postReportRequest, putCommunityLikedRequest } from 'src/apis';
+import { ACCESS_TOKEN, COMMUNITY_EDIT_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH, PRODUCT_VIEW_ABSOLUTE_PATH } from 'src/constants';
+import { deleteCommunityCommentRequest, deleteCommunityPostRequest, getCommunityCommentRequest, getCommunityCommentsRequest, getCommunityLikedRequest, getCommunityPostRequest, getProductDetailRequest, patchCommunityCommentRequest, patchCommunityViewCountRequest, postAlertRequest, postCommunityCommentRequest, postReportRequest, putCommunityLikedRequest } from 'src/apis';
 import { GetCommunityPostResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
 import { CommunityComment } from 'src/types/interfaces';
@@ -20,6 +20,8 @@ import ReportCategory from 'src/types/aliases/report-category.alias';
 import PostReportRequestDto from 'src/apis/dto/request/report/post-report.request.dto';
 import Modal from 'src/components/Modal';
 import GetCommunityCommentResponse from 'src/apis/dto/response/community/get-community-comment.response.dto';
+import { GetProductDetailResponseDto } from 'src/apis/dto/response/product';
+import { responseMessage } from 'src/utils';
 
 // interface: 신고 모달 컴포넌트 속성 //
 interface TypeProps {
@@ -30,7 +32,7 @@ interface TypeProps {
 }
 
 // component: 신고 모달 화면 컴포넌트 //
-function Report({ onClose, entityType, entitySequence }: TypeProps) {
+export function Report({ onClose, entityType, entitySequence }: TypeProps) {
 
     // state: cookie 상태 //
     const [cookies] = useCookies();
@@ -51,6 +53,8 @@ function Report({ onClose, entityType, entitySequence }: TypeProps) {
     // variable: access Token //
     const accessToken = cookies[ACCESS_TOKEN];
 
+    console.log(entityType);
+    
     // function: 내비게이터 함수 //
     const navigator = useNavigate();
 
@@ -118,6 +122,22 @@ function Report({ onClose, entityType, entitySequence }: TypeProps) {
 
     };
 
+    const getProductDetailResponse = (responseBody: GetProductDetailResponseDto | ResponseDto | null) => {
+        const {isSuccess, message} = responseMessage(responseBody);
+
+        if(!postSequence) return;
+
+        if(!isSuccess && postSequence){
+            alert(message);
+            navigator(PRODUCT_VIEW_ABSOLUTE_PATH(postSequence));
+            return;
+        }
+
+        const { sequence, userId, name} = responseBody as GetProductDetailResponseDto;
+        setReportedId(userId);
+        setContent(name);
+    }
+
     // event handler: 카테고리 선택 이벤트 처리 //
     const onCategoryClickHandler = (reportCategory: ReportCategory) => {
         if (reportCategory === '기타') setEtc(true);
@@ -146,9 +166,13 @@ function Report({ onClose, entityType, entitySequence }: TypeProps) {
 
     // effect: 컴포넌트 로드 시 실행할 함수 //
     useEffect(() => {
+        console.log(entitySequence);
+        console.log(entityType)
         if (!entitySequence) return;
+
         if (entityType === 'community_post') getCommunityPostRequest(entitySequence).then(getCommunityPostResponse);
         else if (entityType === 'comment' && postSequence) getCommunityCommentRequest(postSequence, entitySequence).then(getCommunityCommentResponse);
+        else if(entityType === 'product_post' && postSequence) getProductDetailRequest(postSequence, accessToken).then(getProductDetailResponse);
 
         document.body.style.overflow = 'hidden';
         return () => {
@@ -159,7 +183,10 @@ function Report({ onClose, entityType, entitySequence }: TypeProps) {
     // render: 신고 모달 화면 컴포넌트 렌더링 //
     return (
         <div className='report-container'>
-            <div className='report-body'>
+            {
+               (entityType === 'comment' || entityType === 'community_post') && 
+                <>
+                <div className='report-body'>
                 <div className='info-type'>
                     <span>신고 대상</span>
                     <span>신고 내용</span>
@@ -169,35 +196,92 @@ function Report({ onClose, entityType, entitySequence }: TypeProps) {
                     <span>{content}</span>
                 </div>
             </div>
-            <div className='report-category-box'>
-                <label>
-                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('도배')}/> 
-                    <span>도배</span>
-                </label>
-                <label>
-                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('음란물')}/> 
-                    <span>음란물</span>
-                </label>
-                <label>
-                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('혐오스러운 컨텐츠')}/> 
-                    <span>혐오스러운 컨텐츠</span>
-                </label>
-                <label>
-                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('욕설')}/> 
-                    <span>욕설</span>
-                </label>
-                <label>
-                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('광고')}/> 
-                    <span>광고</span>
-                </label>
-                <label>
-                    <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('기타')}/> 
-                    <span>기타</span>
-                </label>
-            </div>
-            {isEtc &&
-                <textarea className='report-detail' placeholder='상세 신고 내용을 입력해주세요.' value={detail} onChange={onReportDetailChangeHandler}></textarea>
+            
+                <div className='report-category-box'>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('도배')}/> 
+                        <span>도배</span>
+                    </label>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('음란물')}/> 
+                        <span>음란물</span>
+                    </label>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('혐오스러운 컨텐츠')}/> 
+                        <span>혐오스러운 컨텐츠</span>
+                    </label>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('욕설')}/> 
+                        <span>욕설</span>
+                    </label>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('광고')}/> 
+                        <span>광고</span>
+                    </label>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('기타')}/> 
+                        <span>기타</span>
+                    </label>
+                    {isEtc &&
+                        <textarea className='report-detail' placeholder='상세 신고 내용을 입력해주세요.' value={detail} onChange={onReportDetailChangeHandler}></textarea>
+                    }
+                </div>
+                </>
+                
             }
+            {
+               (entityType === 'product_post') && 
+                <>
+                <div className='report-body'>
+                <div className='info-type'>
+                    <span>신고 대상</span>
+                    <span>신고 내용</span>
+                </div>
+                <div className='info-container'>
+                    <span>{reportedId}</span>
+                    <span>{content}</span>
+                </div>
+            </div>
+            
+                <div className='report-category-box'>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('도배')}/> 
+                        <span>가격이 이상함</span>
+                    </label>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('음란물')}/> 
+                        <span>음란물</span>
+                    </label>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('혐오스러운 컨텐츠')}/> 
+                        <span>혐오스러운 컨텐츠</span>
+                    </label>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('욕설')}/> 
+                        <span>욕설</span>
+                    </label>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('광고')}/> 
+                        <span>광고</span>
+                    </label>
+                    <label>
+                        <input type='radio' name='report-category' className='radio-btn' onClick={() => onCategoryClickHandler('기타')}/> 
+                        <span>기타</span>
+                    </label>
+                    {isEtc &&
+                        <textarea className='report-detail' placeholder='상세 신고 내용을 입력해주세요.' value={detail} onChange={onReportDetailChangeHandler}></textarea>
+                    }
+                </div>
+                </>
+                
+            }
+            
+    
+            
+                
+            
+            
+            
             <div className='report-btn' onClick={onReportClickHandler}>신고</div>
         </div>
     )
@@ -234,6 +318,7 @@ function CommentItem({ communityComment, getCommunityComment }: CommentItemProps
     // variable: 프로필 이미지 스타일 //
     const profileImageStyle = { backgroundImage: `url(${profileImage ? profileImage : DefaultProfile})` };
 
+    
     // function: delete community comment response 처리 함수 //
     const deleteCommunityCommentResponse = (responseBody: ResponseDto | null) => {
         const message =
@@ -604,6 +689,9 @@ export default function PostDetail() {
     const onCloseReportClickHandler = () => {
         setReportOpen(false);
     };
+
+    
+    
 
     // effect: 컴포넌트 로드 시 실행할 함수 //
     useEffect(() => {
