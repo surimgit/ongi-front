@@ -8,9 +8,10 @@ import { getCommunityRequest } from 'src/apis';
 import { GetCommunityResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
 import { useCookies } from 'react-cookie';
-import { COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
+import { COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_SEARCH_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, OTHER_MYPAGE_VIEW_ABSOULTE_PATH } from 'src/constants';
 import { Board, CommunityCategory, SearchCategory } from 'src/types/aliases';
 import useCommentCountStore from 'src/stores/comment-count.store';
+import { useSignInUserStore } from 'src/stores';
 
 const SECOND = 1000;
 const MINUTE = 60;
@@ -24,7 +25,10 @@ interface TableItemProps {
 
 // component: 게시글 테이블 레코드 컴포넌트 //
 function TableItem({ communityPost }: TableItemProps) {
-  const { postSequence, nickname, category, postDate, title, liked, viewCount } = communityPost;
+  const { postSequence, userId: writerId, nickname, category, postDate, title, liked, viewCount } = communityPost;
+
+  // state: 로그인 사용자 아이디 상태 //
+  const { userId } = useSignInUserStore();
   
   // state: 게시글 댓글 수 상태 //
   const { commentCountMap } = useCommentCountStore();
@@ -58,6 +62,12 @@ function TableItem({ communityPost }: TableItemProps) {
     navigator(COMMUNITY_VIEW_ABSOLUTE_PATH(postSequence));
   };
 
+  // event handler: 유저 클릭 시 이벤트 처리 //
+    const onUserClickHandler = () => {
+        if (userId === writerId) navigator(MYPAGE_ABSOLUTE_PATH);
+        else navigator(OTHER_MYPAGE_VIEW_ABSOULTE_PATH(writerId));
+    };
+
   // render: 게시글 테이블 레코드 컴포넌트 렌더링 //
   return (
     <div className='tr'>
@@ -70,7 +80,7 @@ function TableItem({ communityPost }: TableItemProps) {
           }
           </span>
       </div>
-      <div className='td nickname'>{nickname}</div>
+      <div className='td nickname' onClick={onUserClickHandler}>{nickname}</div>
       <div className='td liked'>
         <div className='td liked icon'></div>
         {liked}

@@ -13,4 +13,5 @@ export default interface GetCommunityPostResponseDto extends ResponseDto {
     content: string;
     liked: number;
     viewCount: number;
+    county: Board;
 }

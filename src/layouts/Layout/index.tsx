@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import './style.css';
 
-import { MY_GROUPBUYING_BUY_ABSOLUTE_PATH} from 'src/constants';
+import { EVENT_ABSOLURE_PATH, MY_GROUPBUYING_BUY_ABSOLUTE_PATH} from 'src/constants';
 
 import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, CALENDAR_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, NEEDHELPER_ABSOLUTE_PATH, NEEDHELPER_VIEW_ABSOLUTE_PATH, PRODUCT_ABSOLUTE_PATH, ROOT_PATH, SHOPPING_CART_ABSOLUTE_PATH } from 'src/constants';
 
@@ -215,6 +215,11 @@ export default function Layout() {
     navigator(MYPAGE_ABSOLUTE_PATH);
   }
 
+  // event handler: 이벤트 버튼 클릭 이벤트 처리 //
+  const onEventClickHandler = () => {
+    navigator(EVENT_ABSOLURE_PATH);
+  };
+
   // event handler: 전체 알림 읽기 버튼 클릭 이벤트 처리 //
   const onReadAllAlertClickHandler = () => {
     patchAllAlertReadRequest(accessToken).then(patchAllAlertReadResponse);
@@ -268,6 +273,7 @@ export default function Layout() {
             <div className='navigation-list-item' onClick={onHelperClickHandler}>도우미</div>
             <div className='navigation-list-item' onClick={onCalendarClickHandler}>청년달력</div>
             <div className='navigation-list-item' onClick={onMyPageClickHandler}>마이페이지</div>
+            <div className='navigation-list-item' onClick={onEventClickHandler}>이벤트</div>
           </div>
         </div>
         <div className='my-content'>
@@ -297,14 +303,14 @@ export default function Layout() {
               <div className='login-content logout' onClick={onSignInUpClickHandler}>로그인/회원가입</div>
             )}
           </div>
-          { accessToken &&
-              <div className='logout-btn' onClick={onLogoutClickHandler}>로그아웃</div>
-          }
         </div>
       </div>
       <div id='main'>
         <Outlet />
       </div>
+      {accessToken &&
+        <div className='footer' onClick={onLogoutClickHandler}>로그아웃</div>
+      }
     </div>
   )
 }

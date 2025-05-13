@@ -24,7 +24,6 @@ export default function PostWrite() {
   const [category, setCategory] = useState<CommunityCategory | ''>('');
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
-  const [postImages, setPostImages] = useState<string[]>([]);
 
   // state: 파일 인풋 참조 상태 //
   const fileRefs = useRef<HTMLInputElement>(null);
@@ -52,15 +51,15 @@ export default function PostWrite() {
     }
 
     if (!category) return;
-
-    if (!county) {
-      alert('주소를 등록해주세요.');
-      return;
+    if (board === '우리 동네 게시판') {
+      if (!county) {
+        alert('주소를 등록해주세요.');
+        return;
+      }
+      const [region, district] = county;
+      if (!region && !district) return;
+      navigator(COUNTY_CATEGORY_ABSOLUTE_PATH(board, category, region, district));
     }
-    const [region, district] = county;
-    console.log(region, district);
-    if (!region && !district) return;
-    if (board === '우리 동네 게시판') navigator(COUNTY_CATEGORY_ABSOLUTE_PATH(board, category, region, district));
     else navigator(COMMUNITY_CATEGORY_ABSOLUTE_PATH(board, category));
   };
 
@@ -85,40 +84,6 @@ export default function PostWrite() {
 
     postCommunityRequest(requestBody, accessToken).then(postCommunityResponse);
   }
-
-  // event handler: 이미지 첨부 버튼 클릭 이벤트 처리 //
-  const onImageUploadClickHandler = () => {
-    fileRefs.current?.click();
-  };
-
-  // event handler: 이미지 첨부 이벤트 처리 //
-  const onHandleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
-
-    const formData = new FormData();
-
-    Array.from(files).forEach((file) => {
-      formData.append('files', file);
-    });
-    
-    const postImages = await fileUploadsRequest(formData);
-    if (!postImages) return;
-    setPostImages(postImages);
-
-    const newImageTags = postImages.map(url => `<img src="${url}" alt="이미지" />`).join('\n');
-    
-    setContent(prev => {
-      const updated = prev + '\n' + newImageTags;
-      return updated;
-    });
-    
-    e.target.value = '';
-  };
-
-  useEffect((
-    
-  ) => {}, [postImages]);
 
   // render: 게시글 작성 화면 컴포넌트 렌더링 //
   return (
@@ -168,19 +133,8 @@ export default function PostWrite() {
         </div>
       </div>
       <div className='button-box'>
-        <div className='image-upload' onClick={onImageUploadClickHandler}>이미지 첨부</div>
-        <input 
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          multiple
-          ref={fileRefs}
-          onChange={onHandleImageFileChange}
-        />
-        <div className='post-btn'>
-          <div className='btn cancel'>취소</div>
-          <div className='btn write' onClick={onWriteButtonClickHandler}>작성</div>
-        </div>
+        <div className='btn cancel'>취소</div>
+        <div className='btn write' onClick={onWriteButtonClickHandler}>작성</div>
       </div>
     </div>
   )

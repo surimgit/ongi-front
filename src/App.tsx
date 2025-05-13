@@ -52,7 +52,9 @@ import {
   NEEDHELPER_VIEW_PATH,
   CHAT_PATH,
   CHAT_VIEW_PATH,
-} from "./constants";
+  EVENT_PATH
+} from './constants';
+
 
 import NeedHelper from "./views/NeedHelper";
 import ProductWrite from "./views/Product/write";
@@ -119,6 +121,8 @@ import NeedHelperPost from "./views/NeedHelper/Detail";
 import HelperEdit from "./views/NeedHelper/Edit";
 import Chat from "./views/Chat";
 import ChatDetail from "./views/Chat/Detail";
+import EventMain from './views/Event';
+
 
 function App() {
   return (
@@ -217,6 +221,11 @@ function App() {
             </Route>
           </Route>
         </Route> 
+
+        <Route path={EVENT_PATH}>
+          <Route index element={<EventMain />} />
+        </Route>
+
         <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
           <Route index element={<CommunityMain />} />
           <Route path={COMMUNITY_SEARCH_PATH}>
