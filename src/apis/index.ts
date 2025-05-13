@@ -1644,7 +1644,6 @@ export const deleteHelperPostRequest = async (
     )
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
-  console.log("accessToken", accessToken);
   return responseBody;
 };
 
@@ -1788,7 +1787,6 @@ export const postHelperApplyRequest = async (
     )
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
-  console.log("responseBody: ", responseBody);
   return responseBody;
 };
 

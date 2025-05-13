@@ -177,7 +177,6 @@ export default function Calendar() {
         color: 'blue'
       };
 
-      console.log(dto);
       const response = await postScheduleRequest(dto, accessToken);
       if (!response || response.code !== 'SU') {
         alert("스크랩 실패");
@@ -185,7 +184,6 @@ export default function Calendar() {
       }
 
       if ('calendarSequence' in response) {
-        console.log(response);
         setScrapedScheduleId(response.calendarSequence);
         setIsScrap(true);
       } else {

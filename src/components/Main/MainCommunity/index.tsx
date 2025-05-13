@@ -8,13 +8,13 @@ import './style.css';
 import { CommunityPost } from "src/types/interfaces";
 import { useNavigate } from "react-router";
 import { GetCommunityResponseDto } from "src/apis/dto/response/community";
-import { getCommunityRequest, getCommunityUserRankingRequest, getHelperUserRankingRequest } from "src/apis";
+import { getCommunityRequest, getCommunityUserRankingRequest, getHelperUserRankingRequest, getUserAccountRequest, getUserAddressRequest } from "src/apis";
 import useCommentCountStore from "src/stores/comment-count.store";
-import { COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, OTHER_MYPAGE_VIEW_ABSOULTE_PATH } from "src/constants";
+import { ACCESS_TOKEN, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, OTHER_MYPAGE_VIEW_ABSOULTE_PATH } from "src/constants";
 import GetUserRankDto from "src/apis/dto/response/main/get-user-rank.dto";
-import { useSignInUserStore } from "src/stores";
 import { GetUserAccountResponseDto } from "src/apis/dto/response/user";
 import { ResponseDto } from "src/apis/dto/response";
+import { useCookies } from "react-cookie";
 
 
   export default function MainCommunity() {
@@ -25,6 +25,7 @@ import { ResponseDto } from "src/apis/dto/response";
     const [imfomationPosts, setImpormationPosts] = useState<CommunityPost[]>([]); 
     const [hotPosts, setHotPosts] = useState<CommunityPost[]>([]); 
     const [allPosts, setAllposts] = useState<CommunityPost[]>([]); 
+    const [regionPosts, setRegionPosts] = useState<CommunityPost[]>([]); 
     
     // state: 게시글 댓글 수 상태 //
     const { commentCountMap } = useCommentCountStore();
@@ -37,7 +38,14 @@ import { ResponseDto } from "src/apis/dto/response";
     const navigator = useNavigate();
 
     // state: 주소 상태 //
-    const [addressState, setAddress] = useState<{ address: County }>({ address: null });
+    const [addressState, setAddress] = useState<{ address: County }>({ address: null });    
+    const county = addressState.address;
+    
+    // state: cookie 상태 //
+    const [cookies] = useCookies();
+    
+    // variable: access token //
+        const accessToken = cookies[ACCESS_TOKEN];
 
     // function: 주소 설정 //
     const setCountyFromAddress = (address: string | null) => {
@@ -45,19 +53,40 @@ import { ResponseDto } from "src/apis/dto/response";
       
         const match = address.match(/^([가-힣]+)(?:특별시|광역시|도)?\s([가-힣]+(?:구|시|군))/);
       
-        const county: County = match ? [match[1], match[2]] : null;
-        setAddress(state => ({ ...state, address: county }));
+        if (!match) return;
+      
+        const region = match[1]; 
+        const county = match[2];
+      
+        setAddress(state => ({ ...state, address: [region, county] }));
     };
-    
-    const addressCheck = (responseBody: GetUserAccountResponseDto | ResponseDto | null) => {
+
+    // function: 주소 저장 //
+    const getAddress = (responseBody: GetUserAccountResponseDto | ResponseDto | null) => {
         const address = (responseBody as GetUserAccountResponseDto)?.address ?? null;
         setCountyFromAddress(address);
+    };    
+    
+    // function: 유저 정보 불러오기 //
+    const fetchUserInfo = async () => {
+        try {
+          const response = await getUserAccountRequest(accessToken); // <- 여기는 실제 API에 맞게 수정
+          if (!response || response.code !== 'SU') return;
+          getAddress(response);
+        } catch (error) {
+          console.error('유저 정보 불러오기 실패', error);
+        }
     };
       
     // event handler: 전체 더보기 클릭 이벤트 처리 //
     const onMoreAllClickHandler = () => {
-        navigator(COMMUNITY_OVERALL_ABSOLUTE_PATH);
-        window.scrollTo({ top: 0, behavior: 'auto' });
+        if (!county) {
+            navigator(COMMUNITY_BOARD_ABSOLUTE_PATH('전체 글'));
+          } else {
+            const [region, district] = county;
+            navigator(`/community?board=우리 동네 게시판&region=${region}&district=${district}`);
+          }
+          window.scrollTo({ top: 0, behavior: 'auto' });
     }
       
     // event handler: 정보 게시판 더보기 클릭 이벤트 처리 //
@@ -108,6 +137,24 @@ import { ResponseDto } from "src/apis/dto/response";
         });
           
       }, []);
+
+      // effect: 주소 설정 시 실행 //
+      useEffect(() => {
+        
+        if (accessToken) fetchUserInfo();
+
+        if (!county) return;
+      
+        const [region, district] = county;
+      
+        getCommunityRequest('우리 동네 게시판', null, region, district)
+            .then((response) => {
+                if (!response || response.code !== 'SU') return;
+                const { posts } = response as GetCommunityResponseDto;
+                setRegionPosts(posts.slice(0, 5));
+        });
+
+      }, [addressState]);
     
     
     return (
@@ -189,10 +236,10 @@ import { ResponseDto } from "src/apis/dto/response";
 
                 <div className="grid local-post-container">                           
                     <div className="main-subtext mc">
-                        <div className="main-subtitle mc">전체글 게시판</div>
+                        <div className="main-subtitle mc">{county ? '우리 동네 게시판' : '전체글 게시판'}</div>
                         <div className="main-more" onClick={onMoreAllClickHandler}>더보기{">"}</div>
                     </div>
-                    {allPosts.map((post, index) => (
+                    {(county ? regionPosts : allPosts).map((post, index) => (
                             <div className="post-box" key={index}
                             onClick={() => {
                                 navigator(COMMUNITY_VIEW_ABSOLUTE_PATH(post.postSequence));
