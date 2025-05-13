@@ -57,8 +57,6 @@ export default function Notice() {
   // state: 관리자 아이디 상태 //
   const { isAdmin } = useSignInUserStore();
 
-  // state: 
-
   // state: pagination 상태 //
   const{
     currentPage, setCurrentPage, currentSection, setCurrentSection, 

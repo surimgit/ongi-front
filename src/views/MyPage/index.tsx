@@ -89,7 +89,6 @@ export default function MyPage() {
     setAddKeyword(value);
   };
 
-
   // event handler: 키워드 선택 버튼 클릭 이벤트 처리 //
   const onSelectKeywordClickHandler = async () => {
     const keyword = addKeyword.trim();

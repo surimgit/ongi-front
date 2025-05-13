@@ -33,7 +33,7 @@ const useStore = create<SignInUserStore>(set => ({
     setCounty: (county: County | null) => set((state) => ({ ...state, county })), 
     setCountyFromAddress: (address: string | null) => {
         if (!address) return;
-        const match = address.match(/^([가-힣]+시|[가-힣]+도)\s([가-힣]+구|[가-힣]+시|[가-힣]+군)/);
+        const match = address.match(/^([가-힣]+)(?:특별시|광역시|도)?\s([가-힣]+(?:구|시|군))/);
         const county: County | null = match ? [match[1], match[2]] : null;
         set((state) => ({ ...state, county}));
     },

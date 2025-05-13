@@ -6,10 +6,9 @@ import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
 import { CommunityComment, CommunityPost } from 'src/types/interfaces';
 import { usePagination } from 'src/hooks';
 import { useCookies } from 'react-cookie';
-import { getCommunityCommentRequest, getCommunityCommentsRequest, getCommunityPostRequest, getMyCommunityCommentRequest, getMyCommunityLikedPostComment, getMyCommunityPostRequest, getNoticeListRequest } from 'src/apis';
+import { getCommunityCommentsRequest, getCommunityPostRequest, getMyCommunityCommentRequest, getMyCommunityLikedPostComment, getMyCommunityPostRequest } from 'src/apis';
 import { GetCommunityPostResponseDto, GetCommunityResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
-import GetCommunityCommentResponse from 'src/apis/dto/response/community/get-community-comment.response.dto';
 import Pagination from 'src/components/Pagination';
 import GetCommunityCommentsResponse from 'src/apis/dto/response/community/get-community-comments.response.dto';
 
@@ -255,10 +254,6 @@ export default function MyCommunity( { type }: Props) {
     };
     changeType();
   }, [type]);
-
-
-
-
 
   return (
     <div id='my-community-main-wrapper'>
