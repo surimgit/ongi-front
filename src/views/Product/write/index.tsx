@@ -180,7 +180,7 @@ export default function ProductWrite() {
           </div>
           <div className='input-box'>
             <div className='category-box'>
-              <div className='title'>카테고리</div>
+              <div className='input-title'>카테고리</div>
               <select value={category} onChange={onCategoryChangeHandler}>
                 <option value="">카테고리를 선택하세요</option>
                 <option value="식품">건강식품</option>
@@ -194,7 +194,7 @@ export default function ProductWrite() {
             </div>
             <div className='date-box'>
               <div className='due-date-box'>
-                <div className='title'>모집 마감일자</div>
+                <div className='input-title'>모집 마감일자</div>
                 <input
                   type='datetime-local'
                   id='start'
@@ -205,7 +205,7 @@ export default function ProductWrite() {
                 />
               </div>
               <div className='due-date-box'>
-                <div className='title'>오픈예정 일자</div>
+                <div className='input-title'>오픈예정 일자</div>
                 <input
                   type='datetime-local'
                   id='start'
@@ -218,16 +218,16 @@ export default function ProductWrite() {
               </div>
             </div>
             <div className='price-box'>
-              <div className='title'>개당 판매가</div>
+              <div className='input-title'>개당 판매가</div>
               <input type='text' value={price} onChange={onPriceChangeHandler}/> 원
             </div>
             <div className='price-box'>
-              <div className='title'>판매 개수</div>
+              <div className='input-title'>판매 개수</div>
               <input type='text' value={productQuantity} onChange={onSoldQuantityChangeHandler}/> 개
             </div>
           </div>
           <div className='input-content-box'>
-            <div className='title'>내용</div>
+            <div className='input-title'>내용</div>
             <TextEditor content={content} setContent={onContentChangeHandler} />
           </div>
         </div>

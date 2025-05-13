@@ -163,11 +163,11 @@ export default function Activity() {
               <div className='category-box'>
                 <div className='category'>• 장바구니 상품</div>
 
-                <div className='category-number'>{shoppingCartLen}개</div>
+                <div className='category-number' onClick={onShoppingCartClickHandler}>{shoppingCartLen}개</div>
               </div>
               <div className='category-box'>
                 <div className='category'>• 찜한 상품 수</div>
-                <div className='category-number'>{wishLen}개</div>
+                <div className='category-number' onClick={onWishListClickHandler}>{wishLen}개</div>
               </div>
             </div>
           </div>
