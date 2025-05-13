@@ -58,15 +58,15 @@ export default function MypageSidebar() {
   const menuItems: (TitleItem | SubTitleItem)[] = [
     new TitleItem('내 정보', '/mypage'),
     new TitleItem('내 활동', '/mypage/activity'),
-    new SubTitleItem('내가 받은 후기', [
-      new SubTextItem('도우미 후기', '/mypage/review', 'helper'),
-      new SubTextItem('도움 받은 후기', '/mypage/review', 'helped'),
-    ]),
     new SubTitleItem('내 공동구매', [
       new SubTextItem('판매 내역', '/mypage/group-buying/sell'),
       new SubTextItem('구매 내역', '/mypage/group-buying/buy'),
       new SubTextItem('장바구니', '/shopping-cart'),
       new SubTextItem('찜한 목록', '/mypage/group-buying/wish-list'),
+    ]),
+    new SubTitleItem('리뷰', [
+      new SubTextItem('받은 리뷰', '/mypage/review', 'helper'),
+      new SubTextItem('작성한 리뷰', '/mypage/review', 'helped'),
     ]),
     new SubTitleItem('도우미', [
       new SubTextItem('내가 요청한 도움', '/mypage/need-helper/ask'),

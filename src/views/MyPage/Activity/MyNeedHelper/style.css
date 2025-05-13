@@ -8,7 +8,7 @@
 
 #need-helper-main-wrapper .contents-wrapper{
   display: flex;
-  width: 1040px;
+  width: 1020px;
   flex-direction: column;
 }
 
@@ -21,19 +21,16 @@
 #need-helper-main-wrapper .contents-wrapper .title-area .title{
   font-size: 35px;
   font-weight: bold;
+  display: flex;
+  gap: 15px;
 }
 
-#need-helper-main-wrapper .contents-wrapper .title-area .current{
-  border-top: 4px solid;
-  padding: 2px;
+#need-helper-main-wrapper .contents-wrapper .title-area .title-number{
   font-size: 25px;
   font-weight: bold;
-  cursor: pointer;
-}
-
-#need-helper-main-wrapper .contents-wrapper .title-area .current.active{
-  border-top: 4px solid var(--Primary);
   color: var(--Primary);
+  display: flex;
+  align-items: end;
 }
 
 .need-helper-hr {
@@ -45,44 +42,27 @@
   border-radius: 2px;  
 }
 
-#need-helper-main-wrapper .contents-wrapper .need-helper-header{
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 13px;
-}
-
-#need-helper-main-wrapper .contents-wrapper .need-helper-amount{
-  font-size: 16px;
-  font-weight: bold;
-}
-
-#need-helper-main-wrapper .contents-wrapper .write-button{
-  margin-right: 27px;
-  color: gray;
-}
-
 #need-helper-main-wrapper .contents-wrapper .need-helper-list{
   display: flex;
   flex-direction: column;
 }
 
-
 #need-helper-main-wrapper .contents-wrapper .need-helper-list .tr{
   display: flex;
-  height: 55px;
+  height: 50px;
   align-items: center;
   text-align: center;
-  border-bottom: 1px solid gray;
+  border-bottom: 0.5px solid gray;
 }
 
 #need-helper-main-wrapper .contents-wrapper .need-helper-list .tr:first-child{
   background-color: var(--Lightmode-Grey4);
-  height: 40px;
-  border-top: 2px solid rgb(71, 71, 71);
+  height: 35px;
+  border-top: 2px solid gray;
 }
 
 #need-helper-main-wrapper .contents-wrapper .need-helper-list .tr:last-child{
-  border-bottom: 2px solid rgb(71, 71, 71);
+  border-bottom: 2px solid gray;
 }
 
 #need-helper-main-wrapper .contents-wrapper .need-helper-list .date{
@@ -92,6 +72,51 @@
 #need-helper-main-wrapper .contents-wrapper .need-helper-list .title{
   flex: 4.9;
   text-align: start;
+}
+
+#need-helper-main-wrapper .contents-wrapper .need-helper-list .td.title span{
+  cursor: pointer;
+}
+
+#need-helper-main-wrapper .contents-wrapper .need-helper-list .td.title span:hover{
+  text-decoration: underline;
+}
+
+#need-helper-main-wrapper .contents-wrapper .need-helper-list .td.button-wrapper{
+  flex: 0.9;
+}
+
+#need-helper-main-wrapper .contents-wrapper .need-helper-list .td.button-wrapper .accept-button.chat{
+  background-color: #45a049;
+  padding: 5px 20px;
+  cursor: pointer;
+}
+
+#need-helper-main-wrapper .contents-wrapper .need-helper-list .td.button-wrapper .accept-button.chat:hover{
+  opacity: 80%;
+}
+
+#need-helper-main-wrapper .contents-wrapper .need-helper-list .td.button-wrapper .accept-button{
+  background-color: #3b10fd;
+  cursor: default;
+}
+
+#need-helper-main-wrapper .contents-wrapper .need-helper-list .td.applicants-box{
+  flex: 0.9;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+  font-size: 20px;
+}
+
+#need-helper-main-wrapper .contents-wrapper .need-helper-list .td.applicants-box .applicants-icon{
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  background-image: url(src/assets/images/icon-applicants.png);
+  margin-bottom: 3px;
 }
 
 #need-helper-main-wrapper .contents-wrapper .need-helper-list .time{
@@ -111,10 +136,38 @@
   text-align: left;
 }
 
-#need-helper-main-wrapper .contents-wrapper .pagination{
-  margin-top: 30px;
+.applicants-header, .applicant-row {
+  display: flex;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.applicant-id, .requested-at, .is-applied, .action {
+  flex: 1;
   text-align: center;
 }
 
+.applicants-header {
+  font-weight: bold;
+  background-color: #f5f5f5;
+}
 
+.accept-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+
+.accept-button:hover {
+  background-color: #45a049;
+}
+
+#need-helper-main-wrapper .contents-wrapper .pagination-box{
+  display: flex;
+  margin: 20px 0px;
+}
 

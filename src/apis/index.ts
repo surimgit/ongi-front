@@ -78,6 +78,7 @@ import PatchHelperPostRequestDto from "./dto/request/needhelper/patch-helper.req
 import PostHelperCommentRequestDto from "./dto/request/needhelper/post-helper-comment.request.dto";
 import { GetChatRoomResponseDto } from "./dto/response/chat";
 import GetMyHelperPostResponseDto from "./dto/response/needhelper/get-my-helper-post-list.responsedto";
+import GetHelperApplyListResponseDto from './dto/response/needhelper/get-helper-apply-list.response.dto';
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -274,9 +275,12 @@ const GET_MY_COMMUNTY_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/post`;
 const GET_MY_COMMUNTY_COMMENT_URL = `${API_DOMAIN}/api/v1/mypage/community/comment`;
 const GET_MY_COMMUNTY_LIKED_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/liked`;
 
-const GET_MY_REQUEST_HELPER_POST_URL = `${API_DOMAIN}/api/v1/mypage/need-helper/request`;
+const GET_MY_REQUEST_HELPER_POST_URL = `${API_DOMAIN}/api/v1/mypage/need-helper/ask`;
 const GET_MY_APPLY_HELPER_POST_URL = `${API_DOMAIN}/api/v1/mypage/need-helper/apply`;
+const GET_MY_APPLICANT_COUNT_URL = (postSequence: number | string) => `${API_DOMAIN}/api/v1/mypage/need-helper/${postSequence}/count`;
 const GET_MY_LIKED_HELPER_POST_URL = `${API_DOMAIN}/api/v1/mypage/need-helper/liked`;
+const GET_HELPER_APPLY_LIST_URL = (postSequence: number | string) =>
+  `${API_DOMAIN}/api/v1/mypage/need-helper/${postSequence}/apply`;
 
 // 도우미 관련 경로
 const HELPER_MODULE_URL = `${API_DOMAIN}/api/v1/needHelper`;
@@ -311,6 +315,7 @@ const GET_HELPER_APPLY_URL = (postSequence: number | string) =>
   `${HELPER_MODULE_URL}/${postSequence}/apply`;
 const ACCEPT_HELPER_APPLY_URL = (postSequence: number | string) =>
   `${HELPER_MODULE_URL}/${postSequence}/apply`;
+
 
 const CHAT_MODULE_URL = `${API_DOMAIN}/api/v1/chat`;
 const GET_CHAT_ROOM_URL = (chatSequence: number | string) =>
@@ -1268,14 +1273,23 @@ export const getMyHelperApplyPostRequest = async (accessToken: string) => {
   return responseBody;
 };
 
-// // function: get my community post API 요청 함수 //
-// export const getMyCommunityPostRequest = async (accessToken: string) => {
-//   const responseBody = await axios
-//     .get(GET_MY_COMMUNTY_POST_URL, bearerAuthorization(accessToken))
-//     .then(responseSuccessHandler<GetCommunityResponseDto>)
-//     .catch(responseErrorHandler);
-//   return responseBody;
-// };
+// function: get my liked helper Post post API 요청 함수 //
+export const getMyHelperlikedPostRequest = async (accessToken: string) => {
+  const responseBody = await axios
+    .get(GET_MY_LIKED_HELPER_POST_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetMyHelperPostResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get applicant count api 요청 함수 //
+export const getApplicantCountRequest = async(postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios
+  .get(GET_MY_APPLICANT_COUNT_URL(postSequence), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler<number>)
+  .catch(responseErrorHandler);
+return responseBody;
+};
 
 // function: post alert API 요청 함수 //
 export const postAlertRequest = async (
@@ -1842,6 +1856,18 @@ export const accpetHelperApplyRequest = async (
   return responseBody;
 };
 
+// function: get helper liked API 요청 함수 //
+export const getHelperApplyListRequest = async (
+  postSequence: number | string,
+  accessToken: string
+) => {
+  const responseBody = await axios
+    .get(GET_HELPER_APPLY_LIST_URL(postSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetHelperApplyListResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
 // function: get chat room API 요청 함수 //
 export const getChatRoomRequest = async (
   chatSequence: number | string,
@@ -1857,8 +1883,8 @@ export const getChatRoomRequest = async (
 // function: accept chat API 요청 함수 //
 export const accpetChatRequest = async (
   chatSequence: number | string,
-  applicantId: string,
-  accessToken: string
+  accessToken: string,
+  applicantId: string
 ) => {
   const responseBody = await axios
   .patch(
