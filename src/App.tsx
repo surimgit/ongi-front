@@ -190,9 +190,9 @@ function App() {
             <Route index element={<MyReview/>} />
           </Route>
           <Route path={MY_NEEDHELLPER_PATH}>
-            <Route path={MY_NEEDHELLPER_ASK_PATH} element={<MyNeedHelper/>} />
-            <Route path={MY_NEEDHELLPER_APPLY_PATH} element={<MyNeedHelper/>} />
-            <Route path={MY_NEEDHELLPER_LIKED_PATH} element={<MyNeedHelper/>} />
+            <Route path={MY_NEEDHELLPER_ASK_PATH} element={<MyNeedHelper type='ask'/>} />
+            <Route path={MY_NEEDHELLPER_APPLY_PATH} element={<MyNeedHelper type='apply'/>} />
+            <Route path={MY_NEEDHELLPER_LIKED_PATH} element={<MyNeedHelper type='liked'/>} />
           </Route>
           <Route path={MY_COMMUNITY_PATH}>
             <Route path={MY_COMMUNITY_POST_PATH} element={<MyCommunity type='post'/>} />
