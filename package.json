@@ -29,7 +29,6 @@
     "@types/node": "^16.18.126",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.2",
-    "@types/sockjs-client": "^1.5.4",
     "axios": "^1.8.4",
     "chart.js": "^4.4.8",
     "copy-to-clipboard": "^3.3.3",
@@ -81,6 +80,7 @@
     ]
   },
   "devDependencies": {
-    "@types/jquery": "^3.5.32"
+    "@types/jquery": "^3.5.32",
+    "@types/sockjs-client": "^1.5.4"
   }
 }

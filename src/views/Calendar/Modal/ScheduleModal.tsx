@@ -155,7 +155,6 @@ export default function ScheduleModal({ show, selectedSchedule, onClose, onSave,
         setRepeat('반복 없음');
         setSelectedColor('blue');
         }
-        console.log('모달이 받은 selectedSchedule:', selectedSchedule);
     }, [selectedSchedule]);
     
     if (!show) return null;

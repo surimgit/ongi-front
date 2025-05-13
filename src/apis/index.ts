@@ -314,9 +314,9 @@ const ACCEPT_HELPER_APPLY_URL = (postSequence: number | string) =>
 
 const CHAT_MODULE_URL = `${API_DOMAIN}/api/v1/chat`;
 const GET_CHAT_ROOM_URL = (chatSequence: number | string) =>
-  `${HELPER_MODULE_URL}/${chatSequence}`;
+  `${CHAT_MODULE_URL}/${chatSequence}`;
 const ACCEPT_CHAT_URL = (chatSequence: number | string) =>
-  `${HELPER_MODULE_URL}/${chatSequence}`;
+  `${CHAT_MODULE_URL}/${chatSequence}`;
 
 // 메인페이지 관련 경로
 const MAIN_MODULE_URL = `${API_DOMAIN}/api/v1/main`
@@ -1644,7 +1644,6 @@ export const deleteHelperPostRequest = async (
     )
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
-  console.log("accessToken", accessToken);
   return responseBody;
 };
 
@@ -1788,7 +1787,6 @@ export const postHelperApplyRequest = async (
     )
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
-  console.log("responseBody: ", responseBody);
   return responseBody;
 };
 
@@ -1872,7 +1870,6 @@ export const accpetChatRequest = async (
   .catch(responseErrorHandler);
   return responseBody;
 };
-
 
 
 // function: get user Ranking - community 요청 함수 //
