@@ -13,6 +13,8 @@ import { useCookies } from "react-cookie";
 import { ACCESS_TOKEN, POLICY_ABSOLUTE_PATH } from "src/constants";
 import { PolicyList } from "src/types/interfaces";
 import { GetPolicyListResponseDto } from "src/apis/dto/response/calendar/get-policy-list.response.dto";
+import { deleteScheduleRequest } from "src/apis";
+import FullCalendar from "@fullcalendar/react";
 
 type PolicyResult = {
     id: number;
@@ -39,9 +41,10 @@ type Props = {
           content: string;
           period: string;
         }) => void;
+    calendarRef: React.RefObject<FullCalendar | null>;
 };
 
-export default function Policy({ searchKeyword, page, section, autoSearch, items, onScrap} : Props) {
+export default function Policy({ searchKeyword, page, section, autoSearch, items, onScrap, calendarRef} : Props) {
 
     // state: cookie 상태 //
     const [cookies] = useCookies();
@@ -54,7 +57,7 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
     const query = new URLSearchParams(location.search);
     
     // state: calendar 연결 //
-    const [scrapStates, setScrapStates] = useState<{ [id: number]: boolean }>({});
+    const [scrapStates, setScrapStates] = useState<{ [plcyNo: string]: boolean }>({});
     
     // state: 키워드 상태 //
     const [keyword, setKeyword] = useState(query.get("keyword") || '');
@@ -209,16 +212,55 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
     }; 
 
     // event handler: 스크랩 클릭 이벤트 처리 //
-    const onScrapClickHandler = (item: PolicyResult) => {
-        let periodFormat = `${item.startDate} ~ ${item.endDate}`;
-        if(item.aplyPrdSeCd === '0057002' || item.aplyPrdSeCd === '0057003') {periodFormat = '상시';}
-        setScrapStates(prev => ({
-            ...prev,
-            [item.id]: !prev[item.id]
-        }));
-        console.log('aplyPrdSeCd: ', item.aplyPrdSeCd);
-        onScrap?.({ title: item.title, category: item.category, content: item.content, period: periodFormat  });
+    const onScrapClickHandler = async (item: PolicyResult) => {
+        const wasScrapped = scrapStates[item.plcyNo];
+        const newState = !wasScrapped;
+    
+        setScrapStates(prev => {
+            const updated = {
+                ...prev,
+                [item.plcyNo]: newState
+            };
+            localStorage.setItem('scrapStates', JSON.stringify(updated));
+            return updated;
+        });
+    
+        if (newState) {
+            let periodFormat = `${item.startDate} ~ ${item.endDate}`;
+            if (item.aplyPrdSeCd === '0057002' || item.aplyPrdSeCd === '0057003') {
+                periodFormat = '상시';
+            }
+    
+            onScrap?.({
+                title: item.title,
+                category: item.category,
+                content: item.content,
+                period: periodFormat
+            });
+        } else {
+            const scrapMap = JSON.parse(localStorage.getItem('scrapMap') || '{}');
+            const calendarSequence = scrapMap[item.title];
+
+            if (calendarSequence) {
+            try {
+                const accessToken = cookies[ACCESS_TOKEN];
+                const res = await deleteScheduleRequest(calendarSequence, accessToken);
+                if (res?.code !== 'SU') {
+                alert('일정 삭제 실패');
+                return;
+                }
+
+                delete scrapMap[item.title];
+                localStorage.setItem('scrapMap', JSON.stringify(scrapMap));
+                calendarRef.current?.getApi().refetchEvents();
+
+            } catch (err) {
+                console.error('일정 삭제 중 오류:', err);
+            }
+            }
+        }
     };
+    
 
     // event handler: 검색어 변경 이벤트 처리 //
     const onKeywordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -260,6 +302,19 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
       
         fetchSearchResults(newKeyword, newRegions, newCategories);
     }, [location.search]);
+
+    // effect: 스크랩 로딩 함수 //
+    useEffect(() => {
+        const savedScrap = localStorage.getItem('scrapStates');
+        if (savedScrap) {
+            try {
+                const parsed = JSON.parse(savedScrap);
+                setScrapStates(parsed);
+            } catch (e) {
+                console.error("스크랩 로딩 실패:", e);
+            }
+        }
+    }, []);
 
     return (
         <div id="policy-wrapper">
@@ -318,7 +373,7 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
                     <div key={item.id} className="policy-card-box">
                         <div className="remain">{calculateDDay(item.endDate)}
                             <img
-                                src={scrapStates[item.id] ? ScrapActive : Scrap}
+                                src={scrapStates[item.plcyNo] ? ScrapActive : Scrap}
                                 onClick={() => onScrapClickHandler(item)}
                                 style={{ cursor: 'pointer' }}
                                 alt="스크랩"
