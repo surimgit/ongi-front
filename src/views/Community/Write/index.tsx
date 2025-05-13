@@ -51,14 +51,15 @@ export default function PostWrite() {
     }
 
     if (!category) return;
-
-    if (!county) {
-      alert('주소를 등록해주세요.');
-      return;
+    if (board === '우리 동네 게시판') {
+      if (!county) {
+        alert('주소를 등록해주세요.');
+        return;
+      }
+      const [region, district] = county;
+      if (!region && !district) return;
+      navigator(COUNTY_CATEGORY_ABSOLUTE_PATH(board, category, region, district));
     }
-    const [region, district] = county;
-    if (!region && !district) return;
-    if (board === '우리 동네 게시판') navigator(COUNTY_CATEGORY_ABSOLUTE_PATH(board, category, region, district));
     else navigator(COMMUNITY_CATEGORY_ABSOLUTE_PATH(board, category));
   };
 

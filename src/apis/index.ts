@@ -53,6 +53,9 @@ import PostHelperRequestDto from './dto/request/needhelper/post-helper.request.d
 import GetHelperPostResponseDto from './dto/response/needhelper/get-helper-post.response.dto';
 import PatchHelperPostRequestDto from './dto/request/needhelper/patch-helper.request.dto';
 import PostHelperCommentRequestDto from './dto/request/needhelper/post-helper-comment.request.dto';
+import GetUserProfileImageResponseDto from './dto/response/user/get-user-profile-image.response.dto';
+import GetEventListResponseDto from './dto/response/event/get-event-list.response.dto';
+import PostEventApplyRequestDto from './dto/request/event/post-event-apply.request.dto';
 
 
 // variable: URL 상수 //
@@ -191,6 +194,7 @@ const GET_ALERTED_COUNT_URL = (reportedId: string) => `${REPORT_MODULE_URL}/aler
 
 const GET_NICKNAME_MODULE_URL = (userId: string) => `${USER_MODULE_URL}/?nickname=${userId}`;
 const GET_IS_ADMIN_MODULE_URL = `${USER_MODULE_URL}/is-admin`;
+const GET_USER_PROFILE_IMAGE_URL = (userId: string) => `${USER_MODULE_URL}/profile-image?comment-user=${userId}`;
 
 const BUYING_MODULE_URL = `${API_DOMAIN}/api/v1/mypage`;
 const GET_MY_BUYING_URL = `${BUYING_MODULE_URL}/buy/my`;
@@ -227,6 +231,11 @@ const MAIN_MODULE_URL = `${API_DOMAIN}/api/v1/main`
 const MAIN_HELPER_MODULE_URL = `${MAIN_MODULE_URL}/need-helper`;
 const GET_COMMUNITY_USER_RANK_URL = `${MAIN_MODULE_URL}/user-rank/community`
 const GET_HELPER_USER_RANK_URL = `${MAIN_MODULE_URL}/user-rank/helper`
+
+// 이벤트 관련 경로
+const EVENT_MODULE_URL = `${API_DOMAIN}/api/v1/event`;
+const GET_EVENT_LIST_URL = `${EVENT_MODULE_URL}`;
+const POST_EVENT_APPLY_LIST = `${EVENT_MODULE_URL}/apply`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
@@ -1262,3 +1271,30 @@ export const getHelperUserRankingRequest = async () => {
     .catch(responseErrorHandler);
   return responseBody;
 }
+
+// function: get user profile image API 요청 함수 //
+export const getUserProfileImageRequest = async (userId: string, accessToken: string) => {
+  const responseBody = await axios.get(GET_USER_PROFILE_IMAGE_URL(userId), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler<GetUserProfileImageResponseDto>)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: post event API 요청 함수 //
+
+
+// function: get event list API 요청 함수 //
+export const getEventListRequest = async () => {
+  const responseBody = await axios.get(GET_EVENT_LIST_URL)
+  .then(responseSuccessHandler<GetEventListResponseDto>)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: post event apply API 요청 함수 //
+export const postEventApplyRequest = async (requestBody: PostEventApplyRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_EVENT_APPLY_LIST, requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};

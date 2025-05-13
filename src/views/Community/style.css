@@ -104,6 +104,10 @@
     width: 140px;
 }
 
+#info-community-main-wrapper .board-list-table .td.nickname {
+    cursor: pointer;
+}
+
 #info-community-main-wrapper .board-list-table .th.liked,
 #info-community-main-wrapper .board-list-table .td.liked {
     width: 70px;

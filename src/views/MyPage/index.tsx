@@ -38,6 +38,7 @@ export default function MyPage() {
   const [selfIntro, setSelfIntro] = useState<string>('');
   const [badgeList, setBadgeList] = useState<Badge[]>([]);
   const [selectedBadge, setSelectedBadge] = useState<Badge | null>(null);
+  const [userPoint, setUserPoint] = useState<number>(0);
 
   // state: 수정 가능 상태 // 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -270,7 +271,7 @@ export default function MyPage() {
       return;
     }
 
-    const {nickname, birth, gender, profileImage, mbti, job, selfIntro, likeKeywords} = responseBody as GetUserIntroductionResponseDto;
+    const { nickname, birth, gender, profileImage, mbti, job, selfIntro, likeKeywords, userPoint } = responseBody as GetUserIntroductionResponseDto;
     setNickname(nickname);
     setBirth(birth);
     setGender(gender);
@@ -279,6 +280,7 @@ export default function MyPage() {
     setJob(job);
     setSelfIntro(selfIntro);
     setLikeKeywords(likeKeywords);
+    setUserPoint(userPoint);
   }
 
   // function: patch user introduction 처리 함수 //
@@ -453,7 +455,7 @@ export default function MyPage() {
               </div>
               <div className='badge-box'>
                 <div className='text'>포인트</div>
-                <div className='badge-image'>O</div>
+                <div className='badge-image'>{userPoint}</div>
               </div>
               <div className='achievements-box'>
                 <div className='text'>업적</div>

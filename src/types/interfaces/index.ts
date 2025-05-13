@@ -20,6 +20,7 @@ import Badge from "./badge.interface"
 import PolicyList from "./policy-list.interface"
 import UserAddress from "./userAddress.interface"
 import NeedHelperPost from "./need-helper-post.interface"
+import UserEvent from "./user-event.interface"
 
 
 export type {
@@ -42,5 +43,6 @@ export type {
   ProductReviewImages,
   UserAddress,
   Badge,
-  NeedHelperPost
+  NeedHelperPost,
+  UserEvent
 }

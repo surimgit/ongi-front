@@ -35,6 +35,8 @@ export const MYPAGE_KEYWORD_PATCH_PATH = 'patch';
 export const MYPAGE_ACCOUNT_PATH = 'account';
 export const MYPAGE_ACCOUNT_PATCH_PATH = 'patch';
 
+export const EVENT_PATH = 'event';
+
 export const MY_GROUPBUYING_PATH = 'group-buying';
 export const MY_GROUPBUYING_WISH_LIST_PATH = 'wish-list';
 export const MY_GROUPBUYING_BUY_PATH = 'buy';
@@ -96,9 +98,9 @@ export const PAYMENTS_ABSOLUTE_PATH = `${ROOT_PATH}${PAYMENTS_PATH}`;
 
 export const COMMUNITY_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}`;
 export const COMMUNITY_OVERALL_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}?board=${'전체 글'}`;
-export const COMMUNITY_PAGE_ABSOLUTE_URL = (boardType: Board, page: number) => `${COMMUNITY_BOARD_ABSOLUTE_PATH(boardType)}&page=${page}`;
+export const COMMUNITY_PAGE_ABSOLUTE_URL = (boardType: Board, page: number) => `${ROOT_PATH}${COMMUNITY_PATH}?board=${boardType}&page=${page}`;
 export const COMMUNITY_BOARD_ABSOLUTE_PATH = (boardType: Board) => `${ROOT_PATH}${COMMUNITY_PATH}?board=${boardType}`;
-export const COMMUNITY_CATEGORY_ABSOLUTE_PATH = (boardType: Board, category: CommunityCategory) => `${COMMUNITY_BOARD_ABSOLUTE_PATH(boardType)}&category=${category}`;
+export const COMMUNITY_CATEGORY_ABSOLUTE_PATH = (boardType: Board, category: CommunityCategory) => `${ROOT_PATH}${COMMUNITY_PATH}?board=${boardType}&category=${category}`;
 export const COMMUNITY_POST_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_POST_PATH}`;
 export const COMMUNITY_WRITE_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_WRITE_PATH}`;
 export const COMMUNITY_VIEW_ABSOLUTE_PATH = (postSequence: number | string) => `${ROOT_PATH}${COMMUNITY_PATH}/${postSequence}`;
@@ -109,9 +111,9 @@ export const COMMUNITY_INFOBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/
 export const COMMUNITY_HOTBOARD_ABSOLUTE_PATH = (boardType: Board) => `${ROOT_PATH}${COMMUNITY_PATH}?board=${boardType}`;
 export const COMMUNITY_COUNTYBOARD_ABSOLUTE_PATH = `${ROOT_PATH}${COMMUNITY_PATH}/${COMMUNITY_COUNTYBOARD_PATH}`;
 
-export const COUNTY_MAIN_ABSOLUTE_PATH = (boardType: Board) => `${COMMUNITY_BOARD_ABSOLUTE_PATH(boardType)}`;
-export const COUNTY_ABSOLUTE_PATH = (boardType: Board, region: string, county: string | undefined) => `${COMMUNITY_BOARD_ABSOLUTE_PATH(boardType)}&region=${region}&county=${county}`;
-export const COUNTY_CATEGORY_ABSOLUTE_PATH = (boardType: Board, categoryType: CommunityCategory, region: string, county: string | undefined) => `${COMMUNITY_CATEGORY_ABSOLUTE_PATH(boardType, categoryType)}&region=${region}&county=${county}`;
+export const COUNTY_MAIN_ABSOLUTE_PATH = (boardType: Board) => `${ROOT_PATH}${COMMUNITY_PATH}?board=${boardType}}`;
+export const COUNTY_ABSOLUTE_PATH = (boardType: Board, region: string, county: string | undefined) => `${ROOT_PATH}${COMMUNITY_PATH}?board=${boardType}&region=${region}&county=${county}`;
+export const COUNTY_CATEGORY_ABSOLUTE_PATH = (boardType: Board, categoryType: CommunityCategory, region: string, county: string | undefined) => `${ROOT_PATH}${COMMUNITY_PATH}?board=${boardType}&region=${region}&county=${county}`;
 
 export const MYPAGE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}`;
 export const MYPAGE_PATCH_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_PATCH_PATH}`;
@@ -120,8 +122,10 @@ export const MYPAGE_ACCOUNT_PATCH_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${
 export const MYPAGE_KEYWORD_ABSOULUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_KEYWORD_PATH}`;
 export const MYPAGE_KEYWORD_PATCH_ABSOULUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${MYPAGE_KEYWORD_PATH}/${MYPAGE_KEYWORD_PATCH_PATH}`;
 
-export const OTHER_MYPAGE_ABSOLUTE_PATH = `${ROOT_PATH}${OTHER_MYPAGE_PATH}`;
-export const OTHER_MYPAGE_VIEW_ABSOULTE_PATH = (userId : string) => `${ROOT_PATH}${OTHER_MYPAGE_PATH}?userId=${userId}`;
+export const OTHER_MYPAGE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${OTHER_MYPAGE_PATH}`;
+export const OTHER_MYPAGE_VIEW_ABSOULTE_PATH = (userId : string) => `${ROOT_PATH}${MYPAGE_PATH}/${OTHER_MYPAGE_PATH}/${userId}`;
+
+export const EVENT_ABSOLURE_PATH = `${ROOT_PATH}${EVENT_PATH}`;
 
 export const QUESTION_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}`;
 export const QUESTION_WRTIE_ABSOLUTE_PATH = `${ROOT_PATH}${MYPAGE_PATH}/${QUESTION_PATH}/${QUESTION_WRTIE_PATH}`;

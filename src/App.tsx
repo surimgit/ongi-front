@@ -35,7 +35,8 @@ import { ADDRESS_PATH, PAYMENTS_PATH, MAIN_ABSOLUTE_PATH, PRODUCT_PATH, PRODUCT_
     CALENDAR_PATH,
     POLICY_PATH,
     NEEDHELPER_WRITE_PATH,
-    NEEDHELPER_VIEW_PATH} from './constants';
+    NEEDHELPER_VIEW_PATH,
+    EVENT_PATH} from './constants';
 
 
 import NeedHelper from './views/NeedHelper';
@@ -99,6 +100,7 @@ import OtherUserCommunity from './views/MyPage/Others/Community';
 import OtherUserGroupBuying from './views/MyPage/Others/GroupBuying';
 import NeedHelperPost from './views/NeedHelper/Detail';
 import HelperEdit from './views/NeedHelper/Edit';
+import EventMain from './views/Event';
 
 
 function App() {
@@ -194,6 +196,11 @@ function App() {
             </Route>
           </Route>
         </Route> 
+
+        <Route path={EVENT_PATH}>
+          <Route index element={<EventMain />} />
+        </Route>
+
         <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
           <Route index element={<CommunityMain />} />
           <Route path={COMMUNITY_SEARCH_PATH}>
