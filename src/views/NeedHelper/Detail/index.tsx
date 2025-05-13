@@ -8,7 +8,7 @@ import GetHelperPostResponseDto from "src/apis/dto/response/needhelper/get-helpe
 import GetHelperLikedResponseDto from "src/apis/dto/response/needhelper/get-helper-liked.response.dto";
 import Modal from "src/components/Modal";
 import "./style.css";
-import { getHelperPostRequest, deleteHelperApplyRequest, getHelperLikedRequest, postHelperApplyRequest, putHelperLikedRequest, getHelperCommentsRequest, postHelperCommentRequest, deleteHelperPostRequest, postAlertRequest, getHelperApplyRequest } from "src/apis";
+import { getHelperPostRequest, deleteHelperApplyRequest, getHelperLikedRequest, postHelperApplyRequest, putHelperLikedRequest, getHelperCommentsRequest, postHelperCommentRequest, deleteHelperPostRequest, postAlertRequest, getHelperApplyRequest, getChatRoomRequest } from "src/apis";
 import CommentItem from "../Comment";
 import Report from "../ReportModal";
 import PostHelperCommentRequestDto from "src/apis/dto/request/needhelper/post-helper-comment.request.dto";
@@ -16,6 +16,7 @@ import { CommunityComment } from "src/types/interfaces";
 import PostAlertRequestDto from "src/apis/dto/request/alert/post-alert.request.dto";
 import useCommentCountStore from "src/stores/comment-count.store";
 import GetHelperIsApplyResponseDto from "src/apis/dto/response/needhelper/get-helper-is-apply.response.dto";
+import { GetChatRoomResponseDto } from "src/apis/dto/response/chat";
 
 // component: need helper 상세 메인 컴포넌트 //
 export default function NeedHelperPostDetail() {

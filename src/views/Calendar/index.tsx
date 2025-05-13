@@ -9,7 +9,7 @@ import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import './style.css';
 import { useLocation, useSearchParams } from "react-router";
 import { ACCESS_TOKEN, MAIN_ABSOLUTE_PATH } from "src/constants";
-import { GetAllScheduleResponseDto } from "src/apis/dto/response/calendar";
+import { GetAllScheduleResponseDto, PostScheduleResponseDto } from "src/apis/dto/response/calendar";
 import { ResponseDto } from "src/apis/dto/response";
 import { Schedule } from "src/types/interfaces";
 import { useCookies } from "react-cookie";
@@ -17,8 +17,11 @@ import { deleteScheduleRequest, getAllScheduleRequest, patchScheduleRequest, pos
 import { PatchCalendarRequestDto, PostScheduleRequestDto } from "src/apis/dto/request/calendar";
 import ScheduleViewModal from "./View/ScheduleViewModal";
 import Policy from "../Policy";
+import GetHelperPostListResponseDto from "src/apis/dto/response/needhelper/get-helper-post-list.response.dto";
 
 export default function Calendar() {
+
+  
   // state: cookie 상태 //
   const [cookies] = useCookies();
 
@@ -65,6 +68,7 @@ export default function Calendar() {
   // state: scrap 상태 //
   const [isScrap, setIsScrap] = useState<boolean>(false);
   const [scrapedScheduleId, setScrapedScheduleId] = useState<number | null>(null);
+  const [scrapMap, setScrapMap] = useState<{ [plcyNo: string]: number }>({});
 
   // variable: access Token //
   const accessToken = cookies[ACCESS_TOKEN];
@@ -151,22 +155,17 @@ export default function Calendar() {
   // function: 정책 스크랩 저장 함수 //
   const onScrapPolicy = async (policy: { title: string; category: string; content: string; period: string }) => {
     if (!accessToken) return;
-  
-    let start = '';
-    let end = '';
-  
-    const formatToLocalDateTime = (dateString: string) => {
-      return `${dateString} 00:00:00`;
-    };
+    const plcyNo = policy.title;
 
-    if (policy.period === '상시') {
-      start = '2000-01-01';
-      end = '2099-12-31';
-    } else {
-      [start, end] = policy.period.split(' ~ ').map(date => date.replace(/\./g, '-'));
-    }
-  
-    if (!isScrap) {
+    let [start, end] = policy.period === '상시'
+      ? ['2000-01-01', '2099-12-31']
+      : policy.period.split(' ~ ').map(date => date.replace(/\./g, '-'));
+
+    const formatToLocalDateTime = (date: string) => `${date} 00:00:00`;
+
+    const existingId = scrapMap[plcyNo];
+
+    if (!existingId) {
       const dto: PostScheduleRequestDto = {
         calendarTitle: policy.title,
         calendarCategory: policy.category,
@@ -177,36 +176,27 @@ export default function Calendar() {
         color: 'blue'
       };
 
-      console.log(dto);
       const response = await postScheduleRequest(dto, accessToken);
-      if (!response || response.code !== 'SU') {
-        alert("스크랩 실패");
-        return;
-      }
+      const calendarSequence = (response as PostScheduleResponseDto).calendarSequence;
 
-      if ('calendarSequence' in response) {
-        console.log(response);
-        setScrapedScheduleId(response.calendarSequence);
-        setIsScrap(true);
-      } else {
-        alert('calendarSequence가 없습니다.');
-      }
-  
+      if (!response || response.code !== 'SU') return alert("스크랩 실패");
+
+      const updated = { ...scrapMap, [plcyNo]: calendarSequence };
+      localStorage.setItem('scrapMap', JSON.stringify(updated));
+
     } else {
-      if (scrapedScheduleId === null) {
-        alert("삭제할 스크랩 ID가 없습니다.");
-        return;
-      }
-  
-      const res = await deleteScheduleRequest(scrapedScheduleId, accessToken);
-      if (!res || res.code !== 'SU') {
-        alert("스크랩 해제 실패");
-        return;
-      }
+
+      const res = await deleteScheduleRequest(existingId, accessToken);
+
+      if (!res || res.code !== 'SU') return alert("스크랩 해제 실패");
+
+      const updated = { ...scrapMap };
+      delete updated[plcyNo];
+      setScrapMap(updated);
+      localStorage.setItem('scrapMap', JSON.stringify(updated));
       
-      setScrapedScheduleId(null);
-      setIsScrap(false); 
     }
+    calendarRef.current?.getApi().refetchEvents();
   };
 
   // effect: 메뉴 바깥 클릭 시 닫히도록 처리 //
@@ -227,6 +217,21 @@ export default function Calendar() {
     }
   }, [keyword]);
 
+  // effect: 스크랩 로컬 저장 //
+  useEffect(() => {
+    const saved = localStorage.getItem('scrapMap');
+      if (saved) setScrapMap(JSON.parse(saved));
+  }, []);
+
+  // effect: local starage 정보 불러오기 //
+  useEffect(() => {
+    const storedMap = localStorage.getItem('scrapMap');
+    if (storedMap) {
+      setScrapMap(JSON.parse(storedMap));
+    }
+  }, []);
+
+  // render: 컴포넌트 렌더링 //
   return (
     <div id="fullcalendar-wrapper">
       <FullCalendar
@@ -352,7 +357,17 @@ export default function Calendar() {
         </div>
       </div>
     )}
-      {pathname === MAIN_ABSOLUTE_PATH ? undefined : <Policy searchKeyword={keyword} page={page} section={section} autoSearch={true} items={[]} onScrap={onScrapPolicy}/>}
+      {pathname === MAIN_ABSOLUTE_PATH ? undefined : 
+      <Policy 
+        searchKeyword={keyword} 
+        page={page} 
+        section={section} 
+        autoSearch={true} 
+        items={[]} 
+        onScrap={onScrapPolicy}        
+        calendarRef={calendarRef}
+      />}
     </div>
   );
+  
 }

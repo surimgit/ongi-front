@@ -1658,7 +1658,6 @@ export const deleteHelperPostRequest = async (
     )
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
-  console.log("accessToken", accessToken);
   return responseBody;
 };
 
@@ -1802,7 +1801,6 @@ export const postHelperApplyRequest = async (
     )
     .then(responseSuccessHandler)
     .catch(responseErrorHandler);
-  console.log("responseBody: ", responseBody);
   return responseBody;
 };
 
@@ -1898,6 +1896,7 @@ export const accpetChatRequest = async (
   .catch(responseErrorHandler);
   return responseBody;
 };
+
 
 // function: get user Ranking - community 요청 함수 //
 export const getCommunityUserRankingRequest = async () => {
