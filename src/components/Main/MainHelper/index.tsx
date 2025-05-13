@@ -96,7 +96,7 @@ export default function MainHelper() {
                 <div className="helper-of-main-container">
                     <div className="hm-tob-bar">
                         <div className="title">제목</div>
-                        <div className="when">시간</div>
+                        <div className="when">남은 시간</div>
                         <div className="reward">급여</div>
                     </div>
                     {recommendedList.map((post, index) => (
@@ -124,7 +124,7 @@ export default function MainHelper() {
             <div className="helper-of-main-container s2">
                 <div className="hm-tob-bar">
                     <div className="title">제목</div>
-                    <div className="when">시간</div>
+                    <div className="when">남은 시간</div>
                     <div className="reward">급여</div>
                 </div>
                 {generalList.map((post, index) => (

@@ -10,10 +10,16 @@ import { useNavigate } from "react-router";
 import { GetCommunityResponseDto } from "src/apis/dto/response/community";
 import { getCommunityRequest, getCommunityUserRankingRequest, getHelperUserRankingRequest } from "src/apis";
 import useCommentCountStore from "src/stores/comment-count.store";
-import { COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH } from "src/constants";
+import { COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, OTHER_MYPAGE_VIEW_ABSOULTE_PATH } from "src/constants";
 import GetUserRankDto from "src/apis/dto/response/main/get-user-rank.dto";
+import { useSignInUserStore } from "src/stores";
+import { GetUserAccountResponseDto } from "src/apis/dto/response/user";
+import { ResponseDto } from "src/apis/dto/response";
+
 
   export default function MainCommunity() {
+
+    type County = [string, string] | null;
 
     // state: 불러올 게시글 상태 //
     const [imfomationPosts, setImpormationPosts] = useState<CommunityPost[]>([]); 
@@ -29,6 +35,24 @@ import GetUserRankDto from "src/apis/dto/response/main/get-user-rank.dto";
 
     // state: navigator //
     const navigator = useNavigate();
+
+    // state: 주소 상태 //
+    const [addressState, setAddress] = useState<{ address: County }>({ address: null });
+
+    // function: 주소 설정 //
+    const setCountyFromAddress = (address: string | null) => {
+        if (!address) return;
+      
+        const match = address.match(/^([가-힣]+)(?:특별시|광역시|도)?\s([가-힣]+(?:구|시|군))/);
+      
+        const county: County = match ? [match[1], match[2]] : null;
+        setAddress(state => ({ ...state, address: county }));
+    };
+    
+    const addressCheck = (responseBody: GetUserAccountResponseDto | ResponseDto | null) => {
+        const address = (responseBody as GetUserAccountResponseDto)?.address ?? null;
+        setCountyFromAddress(address);
+    };
       
     // event handler: 전체 더보기 클릭 이벤트 처리 //
     const onMoreAllClickHandler = () => {
@@ -155,7 +179,7 @@ import GetUserRankDto from "src/apis/dto/response/main/get-user-rank.dto";
                         <div className="ranking-container">
                             <span className="ranking-title">도우미</span>
                             {helperRanks.slice(0, 5).map((user, index) => (
-                                <div className={`rank-box h${index + 1}`} key={index}>
+                                <div className={`rank-box h${index + 1}`} key={index} onClick={() => {navigator(OTHER_MYPAGE_VIEW_ABSOULTE_PATH(user.userId));}}>
                                 {index + 1}. {user.nickname}
                                 </div>
                             ))}
