@@ -4,4 +4,5 @@ export default interface PostOrderRequestDto {
   buyerAddress: string;
   phoneNumber:string;
   userName: string;
+  addressId: number;
 }

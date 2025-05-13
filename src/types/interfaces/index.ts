@@ -18,7 +18,9 @@ import OrderItems from "./order-items.interface"
 import Badge from "./badge.interface"
 
 import PolicyList from "./policy-list.interface"
+import UserAddress from "./userAddress.interface"
 import NeedHelperPost from "./need-helper-post.interface"
+
 
 export type {
   Product,
@@ -38,6 +40,7 @@ export type {
   Schedule,
   PolicyList,
   ProductReviewImages,
+  UserAddress,
   Badge,
   NeedHelperPost
 }

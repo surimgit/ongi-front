@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { loadTossPayments, ANONYMOUS, TossPaymentsWidgets } from "@tosspayments/tosspayments-sdk";
-import { ShoppingCart, TossPaymentAmount } from 'src/types/interfaces';
+import { ShoppingCart, TossPaymentAmount, UserAddress } from 'src/types/interfaces';
 import './style.css'
-import { getOrderRequest, postOrderRequest } from 'src/apis';
+import { getOrderRequest, getUserAddressRequest, postOrderRequest } from 'src/apis';
 import PostOrderRequestDto  from 'src/apis/dto/request/payment/post-order.request.dto';
 import { useCookies } from 'react-cookie';
 import { ACCESS_TOKEN } from 'src/constants';
 import { ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import { GetOrderResponseDto } from 'src/apis/dto/response/payment';
+import { GetUserAddressResponseDto } from 'src/apis/dto/response/shoppingCart';
 
 const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 const customerKey = '4RzTdEvffNsrGd9ta7nZI';
@@ -35,6 +36,9 @@ export default function CheckoutPage() {
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   // state: 배송지 주소 상태 //
   const [buyerAddress, setBuyerAddress] = useState<string>('');
+  // state: 배송지 id 상태 //
+  const [addressId, setAddressId] = useState<number>(0);
+  
   // state: cookie 상태 //
   const [cookies] = useCookies();
   // state: 로컬 스토리지 장바구니 상태 //
@@ -59,6 +63,8 @@ export default function CheckoutPage() {
     if(isProcessing) return;
     setIsProcessing(true);
 
+    console.log(addressId);
+
     try {
       if(widgets === null) return;
       await widgets.requestPayment({
@@ -72,7 +78,8 @@ export default function CheckoutPage() {
         metadata:{
           address: buyerAddress,
           productSequences,
-          productQuantity
+          productQuantity,
+          addressId
         }
       });
     } catch(error){
@@ -92,15 +99,14 @@ export default function CheckoutPage() {
       return;
     }
 
-    const { orderId, amount, userName, phoneNumber, buyerAddress } = responseBody as GetOrderResponseDto;
+    const { orderId, amount, userName, phoneNumber, buyerAddress, addressId } = responseBody as GetOrderResponseDto;
     setOrderId(orderId)
     setAmount({currency:'KRW', value:amount});
     setUserName(userName);
     setPhoneNumber(phoneNumber);
     setBuyerAddress(buyerAddress);
+    setAddressId(addressId);
   }
-
-  
 
   // effect: 컴포넌트 렌더링시 실행할 함수 //
   useEffect(() => {
