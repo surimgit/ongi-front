@@ -3,9 +3,11 @@ import "./style.css";
 import { ACCESS_TOKEN, CHAT_ABSOLUTE_PATH } from "src/constants";
 import { useSignInUserStore } from "src/stores";
 import { useNavigate } from "react-router";
-import { getChatRoomListRequest, getUserNicknameRequest } from "src/apis";
+import { getChatRoomListRequest, getLatestMessage, getUserNicknameRequest } from "src/apis";
 import { useCookies } from "react-cookie";
 import Chat from "src/types/interfaces/chat.interface"; 
+import GetLatestMessageResponseDto from "src/apis/dto/response/chat/get-latest-message.response.dto";
+import { response } from "express";
 
 interface Props {
   onSelectChat: (chatTitle: string, chatSequence: number) => void;
@@ -19,6 +21,26 @@ export default function ChatList({ onSelectChat }: Props) {
   const [chats, setChats] = useState<ChatWithNickname[]>([]);
   const [cookies] = useCookies();
   const accessToken = cookies[ACCESS_TOKEN];
+  const [latestMessages, setLatestMessages] = useState<{ [key: number]: string }>({});
+
+  // function: 채팅방 별 메세지 가져오기 //
+  const fetchLatestMessages = async (chatRooms: Chat[]) => {
+    const result: { [key: number]: string } = {};
+  
+    await Promise.all(
+      chatRooms.map(async (chat) => {
+        const response = await getLatestMessage(chat.chatSequence, accessToken);
+        if (response && 'content' in response && typeof response.content === 'string') {
+          result[chat.chatSequence] = response.content;
+        } else {
+          result[chat.chatSequence] = '';
+        }
+      })
+    );
+  
+    setLatestMessages(result);
+  };
+  
 
   useEffect(() => {
     if (!accessToken) return;
@@ -44,9 +66,10 @@ export default function ChatList({ onSelectChat }: Props) {
       );
   
       setChats(chatWithNicknames);
+      fetchLatestMessages(chatRooms);
     });
-  }, [accessToken]);  
-
+  }, [accessToken]);
+  
   return (
     <div className="chat-list-wrapper">
       <div className="chat-list-header">채팅</div>
@@ -60,7 +83,7 @@ export default function ChatList({ onSelectChat }: Props) {
             <div className="chat-item-avatar" />
             <div className="chat-item-info">
               <div className="chat-item-name">{chat.otherNickname}</div>
-              <div className="chat-item-subtitle">온기</div>
+              <div className="chat-item-subtitle">{latestMessages[chat.chatSequence] || '신청 대기 중'}</div>
             </div>
           </div>
         ))}

@@ -84,6 +84,7 @@ import GetUserProfileImageResponseDto from './dto/response/user/get-user-profile
 import GetEventListResponseDto from './dto/response/event/get-event-list.response.dto';
 import PostEventApplyRequestDto from './dto/request/event/post-event-apply.request.dto';
 import PostEventRequestDto from './dto/request/event/post-event.request.dto';
+import GetLatestMessageResponseDto from './dto/response/chat/get-latest-message.response.dto';
 
 
 // variable: URL 상수 //
@@ -335,6 +336,8 @@ const GET_CHAT_ROOM_URL = (chatSequence: number | string) =>
   `${CHAT_MODULE_URL}/${chatSequence}`;
 const GET_CHAT_MESSAGE_URL = (chatSequence: number | string) =>
   `${CHAT_MODULE_URL}/${chatSequence}/message`;
+const GET_LATEST_MESSAGE_URL = (chatSequence: number | string) =>
+  `${CHAT_MODULE_URL}/${chatSequence}/latest`;
 const ACCEPT_CHAT_URL = (chatSequence: number | string) =>
   `${CHAT_MODULE_URL}/${chatSequence}`;
 
@@ -1964,6 +1967,18 @@ export const getChatMessage = async (
   const responseBody = await axios
     .get(GET_CHAT_MESSAGE_URL(chatSequence), bearerAuthorization(accessToken))    
     .then(responseSuccessHandler<GetChatMessageResponseDto>)
+    .catch(responseErrorHandler);
+    return responseBody;
+}
+
+// function: get latest message API 요청 함수 //
+export const getLatestMessage = async (
+  chatSequence: number | string,
+  accessToken: string
+) => {
+  const responseBody = await axios
+    .get(GET_LATEST_MESSAGE_URL(chatSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetLatestMessageResponseDto>)
     .catch(responseErrorHandler);
     return responseBody;
 }
