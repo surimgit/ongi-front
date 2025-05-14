@@ -227,20 +227,32 @@ export default function NeedHelperPostDetail() {
     // event handler: 신청하기 클릭 이벤트 처리 //
     const onApplyClickHandler = () => {
         if (!accessToken || !sequence) return;
-
+      
+        const postSeq = Number(sequence);
+      
+        const updateAppliedStatus = () => {
+          getHelperApplyRequest(postSeq, accessToken)
+            .then((response: GetHelperIsApplyResponseDto | ResponseDto | null) => {
+              if (!response || response.code !== "SU") return;
+              const { isApplied } = response as GetHelperIsApplyResponseDto;
+              setApplied(isApplied); // ✅ 서버 기준 상태 반영
+            });
+        };
+      
         if (isApplied) {
-            deleteHelperApplyRequest(Number(sequence), accessToken).then(() => {
-                alert("신청 취소되었습니다.");
-                setApplied(false);
-            });
+          deleteHelperApplyRequest(postSeq, accessToken).then(() => {
+            alert("신청 취소되었습니다.");
+            updateAppliedStatus(); // ✅
+          });
         } else {
-            postHelperApplyRequest(Number(sequence), accessToken).then((response) => {
-                postHelperApplyResponse(response)
-                setApplied(true);
-                setNewCommentTriger(true);
-            });
+          postHelperApplyRequest(postSeq, accessToken).then((response) => {
+            postHelperApplyResponse(response);
+            updateAppliedStatus(); // ✅
+            setNewCommentTriger(true);
+          });
         }
-    };
+      };
+      
 
     // event handler: 댓글 작성 버튼 클릭 이벤트 처리 //
     const onCommentPostHandler = () => {
