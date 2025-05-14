@@ -19,10 +19,62 @@
 
 .message {
   display: flex;
+  flex-direction: column;
+  color: black;
   max-width: 60%;
   padding: 8px 12px;
   border-radius: 16px;
   word-break: break-word;
+}
+
+.my-message {
+  background-color: #cdedff;
+  align-self: flex-end; /* 오른쪽 정렬 */
+  border-top-right-radius: 0;
+}
+
+.other-message {
+  background-color: #ffffff;
+  align-self: flex-start; /* 왼쪽 정렬 */
+  border-top-left-radius: 0;
+}
+
+.chat-date {
+  margin-bottom: 30px;
+}
+
+.chat-date.my-message {
+  background-color: rgb(255, 0, 0, 0);
+  color: #b4b4b4;
+  align-self: flex-end; /* 오른쪽 정렬 */
+}
+
+.chat-date.other-message {
+  background-color: rgb(255, 0, 0, 0);
+  color: #b4b4b4;
+  align-self: flex-start; /* 왼쪽 정렬 */
+}
+
+.message .start-chat-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  margin: 0px auto; /* 좌우 중앙 정렬 */
+  margin-top: 20px;
+  height: 45px;
+  width: 200px;
+  background-color: var(--Primary);
+  border-radius: 9px;
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+  font-family: 'Pretnedard';
+  cursor: pointer;
+}
+
+.message .start-chat-button:disabled {       
+  cursor: not-allowed;  
 }
 
 .message .report {
@@ -59,6 +111,14 @@
   padding: 8px;
   border-radius: 4px 0 0 4px;
   border: none;
+}
+.input-area input:disabled {
+  background-color: #575757;         
+  cursor: not-allowed;  
+}
+.input-area input:disabled::placeholder {
+  color: #f5f5f5;
+  opacity: 1; 
 }
 
 .input-area button {

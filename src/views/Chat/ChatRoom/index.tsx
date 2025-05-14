@@ -11,6 +11,7 @@ import GetChatMessageResponseDto from 'src/apis/dto/response/chat/get-chat-messa
 import Modal from 'src/components/Modal';
 import ReportCategory from 'src/types/aliases/report-category.alias';
 import PostReportRequestDto from 'src/apis/dto/request/report/post-report.request.dto';
+import e from 'express';
 
 // component: ChatRoom 컴포넌트 //
 export default function ChatRoom({ chatSequence }: { chatSequence: number }) {
@@ -21,9 +22,12 @@ export default function ChatRoom({ chatSequence }: { chatSequence: number }) {
   const [userId, setUserId] = useState<string>("");
   const [historyMessages, setHistoryMessages] = useState<Message[]>([]);
   const [selectedMessageSequence, setSelectedMessageSequence] = useState<number | null>(null);
+  const [isAllowed, setIsAllowed] = useState(false);
 
   const allMessages = [...historyMessages, ...socketMessages];
 
+  const firstMessageSequence = allMessages[0]?.messageSequence;
+  
   const handleSend = () => {
   
     if (input.trim() === "" || !userId) return;
@@ -69,6 +73,34 @@ export default function ChatRoom({ chatSequence }: { chatSequence: number }) {
     setHistoryMessages(responseBody);
   }
 
+  // function: format date //
+  const formatDate = (date: string | Date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+  
+    return `${year}.${month}.${day} ${hours}:${minutes}`;
+  };
+
+  // event handler: onClickAllowHandler //
+  const onClickAllowHandler = () => {
+    if (isAllowed) return; // 이미 수락했으면 무시
+
+    sendMessage({
+      chatSequence,
+      senderId: userId, 
+      content: `요청을 수락하였습니다.`,
+      chatDate: new Date(),
+      fileUrl: "",
+      isHelper: true
+    });
+
+    setIsAllowed(true);
+  }
+
   // effect: 화면 로드 시 호출 함수 //
   useEffect(() => {
     if (!accessToken) return;
@@ -78,28 +110,63 @@ export default function ChatRoom({ chatSequence }: { chatSequence: number }) {
   // effect: 기존 메세지 불러오기 //
   useEffect(() => {
     if (!accessToken) return;
-  
+    
     getChatMessage(chatSequence, accessToken).then(getChatMessageResponseDto);
   }, [chatSequence, accessToken]);
   
+  // effect: 수락 여부 판단 //
+  useEffect(() => {
+    const approved = allMessages.some(
+      (msg) =>
+        msg.content.includes("요청을 수락하였습니다.") && msg.isHelper === true
+    );
+    setIsAllowed(approved);
+  }, [allMessages]);
 
   return (
     <div className="chat-room">
       <div className="messages">
         {allMessages.map((msg, idx) => (
-            <div key={idx} className="message">
+          <>
+            <div
+            key={msg.messageSequence}
+            className={`message ${
+              String(msg.senderId) === String(userId) ? 'my-message' : 'other-message'
+            }`}
+            >
               <strong>{msg.senderId}</strong>: {msg.content}
-              <div className='report'>신고</div>
-            </div>
+            
+              {/* ✅ 조건부 버튼 렌더링 */}
+              {msg.messageSequence === firstMessageSequence && (
+                <button
+                  className="start-chat-button"
+                  onClick={onClickAllowHandler} 
+                  disabled={String(msg.senderId) === String(userId) || isAllowed}
+                >
+                  요청 수락하기
+                </button>
+              )}
+            </div>            
+            <div className={`chat-date ${
+              String(msg.senderId) === String(userId) ? 'my-message' : 'other-message'
+            }`}>{formatDate(msg.chatDate)}</div>      
+            </>    
         ))}
       </div>
       <div className="input-area">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="메시지를 입력하세요"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
+          placeholder={isAllowed ? "메시지를 입력하세요" : "요청을 수락해야 채팅이 가능합니다."}
+          disabled={!isAllowed}
         />
-        <button onClick={handleSend}>전송</button>
+        <button onClick={handleSend} >전송</button>
       </div>
     </div>
   );
