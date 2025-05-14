@@ -82,6 +82,7 @@ import GetHelperApplyListResponseDto from './dto/response/needhelper/get-helper-
 import GetUserProfileImageResponseDto from './dto/response/user/get-user-profile-image.response.dto';
 import GetEventListResponseDto from './dto/response/event/get-event-list.response.dto';
 import PostEventApplyRequestDto from './dto/request/event/post-event-apply.request.dto';
+import PostEventRequestDto from './dto/request/event/post-event.request.dto';
 
 
 // variable: URL 상수 //
@@ -336,6 +337,7 @@ const GET_HELPER_USER_RANK_URL = `${MAIN_MODULE_URL}/user-rank/helper`
 
 // 이벤트 관련 경로
 const EVENT_MODULE_URL = `${API_DOMAIN}/api/v1/event`;
+const POST_EVENT_URL = `${EVENT_MODULE_URL}`;
 const GET_EVENT_LIST_URL = `${EVENT_MODULE_URL}`;
 const POST_EVENT_APPLY_LIST = `${EVENT_MODULE_URL}/apply`;
 
@@ -1933,7 +1935,12 @@ export const getUserProfileImageRequest = async (userId: string, accessToken: st
 };
 
 // function: post event API 요청 함수 //
-
+export const postEventRequest = async (requestBody: PostEventRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_EVENT_URL, requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
 
 // function: get event list API 요청 함수 //
 export const getEventListRequest = async () => {

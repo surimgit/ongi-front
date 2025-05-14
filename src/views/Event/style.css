@@ -1,41 +1,74 @@
 /* 이벤트 목록 스타일 */
 #event-list-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-
     width: 1240px;
     margin: 0 auto;
     margin-top: 60px;
+}
+
+#event-list-wrapper .event-list-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 
     gap: 20px;
 }
 
+#event-list-wrapper .btn-box {
+    display: flex;
+    justify-content: right;
 
+    margin-top: 30px;
+}
+
+#event-list-wrapper .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 14px;
+
+    border-radius: 10px;
+    background-color: var(--Primary);
+    color: var(--White);
+    font-size: 18px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+#event-list-wrapper .btn:hover {
+    background-color: rgba(20, 106, 187, 1);
+}
 
 /* 개별 이벤트 컴포넌트 스타일 */
 #event-wrapper {
-    width: 360px;
-    height: 240px;
+    width: 400px;
+    height: 300px;
+    box-sizing: border-box;
 
     border: 2px solid var(--Lightmode-Grey5);
     border-radius: 10px;
+
+    padding: 10px;
 }
 
 #event-wrapper .event-container {
     display: flex;
     flex-direction: column;
 
-    gap: 4px;
+    height: 100%;
 
-    margin: 10px;
+    gap: 4px;
 }
 
 #event-wrapper .image-box {
     width: 100%;
-    height: 110px;
+    height: 160px;
 
     border: 1px solid var(--Black);
     border-radius: 10px;
+
+    background-size: cover;
+    background-position: center;
 }
 
 #event-wrapper .divider.horizontal {
@@ -81,4 +114,137 @@
     color: var(--White);
 
     cursor: pointer;
+}
+
+#event-wrapper .content {
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+/* 이벤트 게시 모달 화면 스타일 */
+#event-upload-wrapper {
+    display: flex;
+
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+#event-upload-wrapper .event-upload-container {
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+    width: 100%;
+
+    gap: 10px;
+
+    font-size: 18px;
+}
+
+#event-upload-wrapper .tc {
+    display: flex;
+    align-items: center;
+    width: 100px;
+
+    font-weight: 700;
+    color: var(--Lightmode-Grey);
+}
+
+#event-upload-wrapper .divider {
+    border-bottom: 1px solid var(--Lightmode-Grey4_1);
+}
+
+#event-upload-wrapper .title-container,
+#event-upload-wrapper .deadline-container,
+#event-upload-wrapper .point-container,
+#event-upload-wrapper .image-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#event-upload-wrapper .input-item {
+    display: flex;
+    align-items: center;
+
+    border: 1px solid;
+    border-radius: 3px;
+
+    padding: 3px;
+}
+
+#event-upload-wrapper .input-item.title {
+    flex: 1;
+    box-sizing: border-box;
+}
+
+#event-upload-wrapper .input-item.deadline,
+#event-upload-wrapper .input-item.point {
+    width: 100px;
+}
+
+#event-upload-wrapper .image-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 3px;
+    
+    font-size: 14px;
+
+    background-color: var(--Lightmode-Grey3);
+
+    cursor: pointer;
+}
+
+#event-upload-wrapper .image-file {
+    font-size: 14px;
+}
+
+#event-upload-wrapper .content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#event-upload-wrapper .content-item {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#event-upload-wrapper .btn-container {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: 100%;
+
+    gap: 5px;
+}
+
+#event-upload-wrapper .btn.upload,
+#event-upload-wrapper .btn.cancel {
+    width: 100%;
+}
+
+#event-upload-wrapper .btn.cancel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 14px;
+
+    border-radius: 10px;
+    background-color: var(--Lightmode-Grey4);
+    color: var(--White);
+    font-size: 18px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+#event-upload-wrapper .btn.cancel:hover {
+    background-color: var(--Lightmode-Grey);
 }

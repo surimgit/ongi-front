@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import './style.css';
 import { Board, CommunityCategory } from 'src/types/aliases';
 import { useCookies } from 'react-cookie';
@@ -6,7 +6,7 @@ import { ACCESS_TOKEN, COMMUNITY_CATEGORY_ABSOLUTE_PATH, COUNTY_CATEGORY_ABSOLUT
 import { useNavigate } from 'react-router';
 import TextEditor from 'src/components/TextEditor';
 import PostCommunityRequestDto from 'src/apis/dto/request/community/post-community.request.dto';
-import { fileUploadsRequest, postCommunityRequest } from 'src/apis';
+import { postCommunityRequest } from 'src/apis';
 import { ResponseDto } from 'src/apis/dto/response';
 import { useSignInUserStore } from 'src/stores';
 
