@@ -18,10 +18,23 @@
 }
 
 .message {
+  display: flex;
   max-width: 60%;
   padding: 8px 12px;
   border-radius: 16px;
   word-break: break-word;
+}
+
+.message .report {
+  margin-left: 10px;
+  color: rgb(0, 0, 0, 0);
+
+  background-image: url(src/assets/images/icon-report-white.png);
+  background-size: contain;
+  background-size: contain;     
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.4;
 }
 
 .message.me {
@@ -56,3 +69,4 @@
   border-radius: 0 4px 4px 0;
   cursor: pointer;
 }
+

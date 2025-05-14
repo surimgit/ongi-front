@@ -76,8 +76,9 @@ import PostHelperRequestDto from "./dto/request/needhelper/post-helper.request.d
 import GetHelperPostResponseDto from "./dto/response/needhelper/get-helper-post.response.dto";
 import PatchHelperPostRequestDto from "./dto/request/needhelper/patch-helper.request.dto";
 import PostHelperCommentRequestDto from "./dto/request/needhelper/post-helper-comment.request.dto";
-import { GetChatRoomResponseDto } from "./dto/response/chat";
 import GetMyHelperPostResponseDto from "./dto/response/needhelper/get-my-helper-post-list.responsedto";
+import GetChatRoomListResponseDto from './dto/response/chat/get-chat-room-list.response.dto';
+import GetChatMessageResponseDto from './dto/response/chat/get-chat-message.reponse.dto';
 import GetHelperApplyListResponseDto from './dto/response/needhelper/get-helper-apply-list.response.dto';
 import GetUserProfileImageResponseDto from './dto/response/user/get-user-profile-image.response.dto';
 import GetEventListResponseDto from './dto/response/event/get-event-list.response.dto';
@@ -326,6 +327,8 @@ const ACCEPT_HELPER_APPLY_URL = (postSequence: number | string) =>
 const CHAT_MODULE_URL = `${API_DOMAIN}/api/v1/chat`;
 const GET_CHAT_ROOM_URL = (chatSequence: number | string) =>
   `${CHAT_MODULE_URL}/${chatSequence}`;
+const GET_CHAT_MESSAGE_URL = (chatSequence: number | string) =>
+  `${CHAT_MODULE_URL}/${chatSequence}/message`;
 const ACCEPT_CHAT_URL = (chatSequence: number | string) =>
   `${CHAT_MODULE_URL}/${chatSequence}`;
 
@@ -1881,13 +1884,12 @@ export const getHelperApplyListRequest = async (
 };
 
 // function: get chat room API 요청 함수 //
-export const getChatRoomRequest = async (
-  chatSequence: number | string,
+export const getChatRoomListRequest = async (
   accessToken: string
 ) => {
   const responseBody = await axios
-    .get(GET_CHAT_ROOM_URL(chatSequence), bearerAuthorization(accessToken))
-    .then(responseSuccessHandler<GetChatRoomResponseDto>)
+    .get(CHAT_MODULE_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetChatRoomListResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 };
@@ -1908,6 +1910,18 @@ export const accpetChatRequest = async (
   .catch(responseErrorHandler);
   return responseBody;
 };
+
+// function: get chat message API 요청 함수 //
+export const getChatMessage = async (
+  chatSequence: number | string,
+  accessToken: string
+) => {
+  const responseBody = await axios
+    .get(GET_CHAT_MESSAGE_URL(chatSequence), bearerAuthorization(accessToken))    
+    .then(responseSuccessHandler<GetChatMessageResponseDto>)
+    .catch(responseErrorHandler);
+    return responseBody;
+}
 
 
 // function: get user Ranking - community 요청 함수 //
