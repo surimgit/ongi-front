@@ -216,6 +216,14 @@ const OTHER_MYPAGE_BADGE_URL = (userId: string) =>
   `${OTHER_MYPAGE_MODULE_URL}/${userId}/badge`;
 const OTHER_MYPAGE_COMMUNITY_POST_URL = (userId: string) =>
   `${OTHER_MYPAGE_MODULE_URL}/${userId}/community/post`;
+const OTHER_MYPAGE_GROUP_BUYING_URL = (userId: string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/group-buying`;
+const OTHER_MYPAGE_HELPER__URL = (userId: string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/need-helper`;
+const OTHER_MYPAGE_HELPER_APPLICANTS_COUNT_URL = (userId: string, postSequence: number | string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/need-helper/${postSequence}/count`;
+const OTHER_MYPAGE_HELPER_COMMENTS_URL = (userId: string, postSequence: number | string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/need-helper/${postSequence}/comments`;
 const PATCH_MYPAGE_URL = `${MYPAGE_MODULE_URL}`;
 const MYPAGE_ACCOUNT_URL = `${API_DOMAIN}/api/v1/mypage/account`;
 const PATCH_MYPAGE_PASSWORD_URL = `${MYPAGE_ACCOUNT_URL}/patch`;
@@ -1761,7 +1769,46 @@ export const putHelperLikedRequest = async (
 export const getOtherUserCommunityPostRequest = async (userId: string) => {
   const responseBody = await axios
     .get(OTHER_MYPAGE_COMMUNITY_POST_URL(userId))
-    .then(responseSuccessHandler<GetCommunityResponseDto>)
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get other helper post API 요청 함수 //
+export const getOtherUserHelperPostRequest = async (userId: string) => {
+  const responseBody = await axios
+    .get(OTHER_MYPAGE_HELPER__URL(userId))
+    .then(responseSuccessHandler<GetProductResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get other helper comment list API 요청 함수
+export const getOtherUserHelperCommentsRequest = async (
+  postSequence: number | string,
+  userId: string
+) => {
+  const responseBody = await axios
+    .get(OTHER_MYPAGE_HELPER_COMMENTS_URL(userId, postSequence))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get other applicant count api 요청 함수 //
+export const getOtherApplicantCountRequest = async(postSequence: number | string, userId: string) => {
+  const responseBody = await axios
+  .get(OTHER_MYPAGE_HELPER_APPLICANTS_COUNT_URL(userId, postSequence))
+  .then(responseSuccessHandler<number>)
+  .catch(responseErrorHandler);
+return responseBody;
+};
+
+// function: get other user selling product API 요청 함수 //
+export const getOtherUserGroupProductRequest = async (userId: string) => {
+  const responseBody = await axios
+    .get(OTHER_MYPAGE_GROUP_BUYING_URL(userId))
+    .then(responseSuccessHandler<GetMySalesResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 };
