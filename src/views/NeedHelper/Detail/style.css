@@ -28,6 +28,7 @@
 }
 
 #helper-detail-wrapper .apply-button {
+    max-width: 80px;
     margin-bottom: 5px;
     padding: 10px 12px;
     background-color: var(--Primary);
