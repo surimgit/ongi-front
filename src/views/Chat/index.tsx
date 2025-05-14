@@ -13,8 +13,6 @@ export default function Chat() {
     setChatSequence(chatSequence);
   };
 
-
-
   return (
     <div className="chat-page-wrapper">
       <ChatList onSelectChat={handleSelectChat} />

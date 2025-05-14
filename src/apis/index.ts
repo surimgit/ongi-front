@@ -76,13 +76,15 @@ import PostHelperRequestDto from "./dto/request/needhelper/post-helper.request.d
 import GetHelperPostResponseDto from "./dto/response/needhelper/get-helper-post.response.dto";
 import PatchHelperPostRequestDto from "./dto/request/needhelper/patch-helper.request.dto";
 import PostHelperCommentRequestDto from "./dto/request/needhelper/post-helper-comment.request.dto";
-import { GetChatRoomResponseDto } from "./dto/response/chat";
 import GetMyHelperPostResponseDto from "./dto/response/needhelper/get-my-helper-post-list.responsedto";
+import GetChatRoomListResponseDto from './dto/response/chat/get-chat-room-list.response.dto';
+import GetChatMessageResponseDto from './dto/response/chat/get-chat-message.reponse.dto';
 import GetHelperApplyListResponseDto from './dto/response/needhelper/get-helper-apply-list.response.dto';
 import GetUserProfileImageResponseDto from './dto/response/user/get-user-profile-image.response.dto';
 import GetEventListResponseDto from './dto/response/event/get-event-list.response.dto';
 import PostEventApplyRequestDto from './dto/request/event/post-event-apply.request.dto';
 import PostEventRequestDto from './dto/request/event/post-event.request.dto';
+import GetLatestMessageResponseDto from './dto/response/chat/get-latest-message.response.dto';
 
 
 // variable: URL 상수 //
@@ -215,6 +217,14 @@ const OTHER_MYPAGE_BADGE_URL = (userId: string) =>
   `${OTHER_MYPAGE_MODULE_URL}/${userId}/badge`;
 const OTHER_MYPAGE_COMMUNITY_POST_URL = (userId: string) =>
   `${OTHER_MYPAGE_MODULE_URL}/${userId}/community/post`;
+const OTHER_MYPAGE_GROUP_BUYING_URL = (userId: string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/group-buying`;
+const OTHER_MYPAGE_HELPER__URL = (userId: string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/need-helper`;
+const OTHER_MYPAGE_HELPER_APPLICANTS_COUNT_URL = (userId: string, postSequence: number | string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/need-helper/${postSequence}/count`;
+const OTHER_MYPAGE_HELPER_COMMENTS_URL = (userId: string, postSequence: number | string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/need-helper/${postSequence}/comments`;
 const PATCH_MYPAGE_URL = `${MYPAGE_MODULE_URL}`;
 const MYPAGE_ACCOUNT_URL = `${API_DOMAIN}/api/v1/mypage/account`;
 const PATCH_MYPAGE_PASSWORD_URL = `${MYPAGE_ACCOUNT_URL}/patch`;
@@ -241,12 +251,10 @@ const DELETE_QUESTION_POST_URL = (questionSequence: number | string) =>
 const NOTICE_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/notice`;
 const GET_NOTICE_LIST_URL = `${NOTICE_MODULE_URL}`;
 const POST_NOTICE_URL = `${NOTICE_MODULE_URL}`;
-const PATCH_NOTICE_URL = (sequence: number | string) =>
-  `${NOTICE_MODULE_URL}/${sequence}`;
-const DELETE_NOTICE_URL = (sequence: number | string) =>
-  `${NOTICE_MODULE_URL}/${sequence}`;
-const GET_NOTICE_POST_URL = (sequence: number | string) =>
-  `${NOTICE_MODULE_URL}/${sequence}`;
+const PATCH_NOTICE_URL = (sequence: number | string) =>  `${NOTICE_MODULE_URL}/${sequence}`;
+const DELETE_NOTICE_URL = (sequence: number | string) =>  `${NOTICE_MODULE_URL}/${sequence}`;
+const GET_NOTICE_POST_URL = (sequence: number | string) =>  `${NOTICE_MODULE_URL}/${sequence}`;
+
 const CALENDAR_MODULE_URL = `${API_DOMAIN}/api/v1/calendar`;
 const GET_SCHEDULE_URL = `${CALENDAR_MODULE_URL}`;
 const POST_SCHEDULE_URL = `${CALENDAR_MODULE_URL}`;
@@ -326,6 +334,10 @@ const ACCEPT_HELPER_APPLY_URL = (postSequence: number | string) =>
 const CHAT_MODULE_URL = `${API_DOMAIN}/api/v1/chat`;
 const GET_CHAT_ROOM_URL = (chatSequence: number | string) =>
   `${CHAT_MODULE_URL}/${chatSequence}`;
+const GET_CHAT_MESSAGE_URL = (chatSequence: number | string) =>
+  `${CHAT_MODULE_URL}/${chatSequence}/message`;
+const GET_LATEST_MESSAGE_URL = (chatSequence: number | string) =>
+  `${CHAT_MODULE_URL}/${chatSequence}/latest`;
 const ACCEPT_CHAT_URL = (chatSequence: number | string) =>
   `${CHAT_MODULE_URL}/${chatSequence}`;
 
@@ -1758,7 +1770,46 @@ export const putHelperLikedRequest = async (
 export const getOtherUserCommunityPostRequest = async (userId: string) => {
   const responseBody = await axios
     .get(OTHER_MYPAGE_COMMUNITY_POST_URL(userId))
-    .then(responseSuccessHandler<GetCommunityResponseDto>)
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get other helper post API 요청 함수 //
+export const getOtherUserHelperPostRequest = async (userId: string) => {
+  const responseBody = await axios
+    .get(OTHER_MYPAGE_HELPER__URL(userId))
+    .then(responseSuccessHandler<GetProductResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get other helper comment list API 요청 함수
+export const getOtherUserHelperCommentsRequest = async (
+  postSequence: number | string,
+  userId: string
+) => {
+  const responseBody = await axios
+    .get(OTHER_MYPAGE_HELPER_COMMENTS_URL(userId, postSequence))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get other applicant count api 요청 함수 //
+export const getOtherApplicantCountRequest = async(postSequence: number | string, userId: string) => {
+  const responseBody = await axios
+  .get(OTHER_MYPAGE_HELPER_APPLICANTS_COUNT_URL(userId, postSequence))
+  .then(responseSuccessHandler<number>)
+  .catch(responseErrorHandler);
+return responseBody;
+};
+
+// function: get other user selling product API 요청 함수 //
+export const getOtherUserGroupProductRequest = async (userId: string) => {
+  const responseBody = await axios
+    .get(OTHER_MYPAGE_GROUP_BUYING_URL(userId))
+    .then(responseSuccessHandler<GetMySalesResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 };
@@ -1881,13 +1932,12 @@ export const getHelperApplyListRequest = async (
 };
 
 // function: get chat room API 요청 함수 //
-export const getChatRoomRequest = async (
-  chatSequence: number | string,
+export const getChatRoomListRequest = async (
   accessToken: string
 ) => {
   const responseBody = await axios
-    .get(GET_CHAT_ROOM_URL(chatSequence), bearerAuthorization(accessToken))
-    .then(responseSuccessHandler<GetChatRoomResponseDto>)
+    .get(CHAT_MODULE_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetChatRoomListResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 };
@@ -1908,6 +1958,30 @@ export const accpetChatRequest = async (
   .catch(responseErrorHandler);
   return responseBody;
 };
+
+// function: get chat message API 요청 함수 //
+export const getChatMessage = async (
+  chatSequence: number | string,
+  accessToken: string
+) => {
+  const responseBody = await axios
+    .get(GET_CHAT_MESSAGE_URL(chatSequence), bearerAuthorization(accessToken))    
+    .then(responseSuccessHandler<GetChatMessageResponseDto>)
+    .catch(responseErrorHandler);
+    return responseBody;
+}
+
+// function: get latest message API 요청 함수 //
+export const getLatestMessage = async (
+  chatSequence: number | string,
+  accessToken: string
+) => {
+  const responseBody = await axios
+    .get(GET_LATEST_MESSAGE_URL(chatSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetLatestMessageResponseDto>)
+    .catch(responseErrorHandler);
+    return responseBody;
+}
 
 
 // function: get user Ranking - community 요청 함수 //

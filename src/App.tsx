@@ -114,15 +114,14 @@ import ShoppingCartMain from "./views/ShoppingCart";
 
 import AccountUpdate from "./views/MyPage/Account/Update";
 import HelperWrite from "./views/NeedHelper/Write";
-import OtherUserReview from "./views/MyPage/Others/Review";
 import OtherUserCommunity from "./views/MyPage/Others/Community";
 import OtherUserGroupBuying from "./views/MyPage/Others/GroupBuying";
 import NeedHelperPost from "./views/NeedHelper/Detail";
 import HelperEdit from "./views/NeedHelper/Edit";
 import Chat from "./views/Chat";
 import ChatDetail from "./views/Chat/Detail";
+import OtherUserHelper from "./views/MyPage/Others/Helper";
 import EventMain from './views/Event';
-
 
 function App() {
   return (
@@ -173,11 +172,9 @@ function App() {
           <Route path={OTHER_MYPAGE_PATH}>
             <Route path={OTHER_MYPAGE_VIEW_PATH}>
               <Route index element={<Others/>}/>
-              <Route path='need-helper/review' element={<OtherUserReview/>}/>
+              <Route path='need-helper' element={<OtherUserHelper/>}/>
               <Route path='community/post' element={<OtherUserCommunity/>}/>
-              <Route path='group-buying/selling' element={<OtherUserGroupBuying/>}/>
-              <Route path='group-buying/selled' element={<OtherUserGroupBuying/>}/>
-              <Route path='group-buying/review' element={<OtherUserGroupBuying/>}/>
+              <Route path='group-buying' element={<OtherUserGroupBuying/>}/>
             </Route>
           </Route>
           <Route index element={<MyPage/>}/>

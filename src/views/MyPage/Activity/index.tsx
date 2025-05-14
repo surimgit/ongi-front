@@ -19,6 +19,7 @@ import {
   MY_COMMUNITY_POST_ABSOLUTE_PATH,
   MY_GROUPBUYING_WISH_LIST_ABSOLUTE_PATH,
   MY_NEEDHELLPER_APPLY_ABSOLUTE_PATH,
+  MY_NEEDHELLPER_APPLY_PATH,
   MY_NEEDHELLPER_ASK_ABSOLUTE_PATH,
   MY_REVIEW_ABSOLUTE_PATH,
   MYPAGE_ABSOLUTE_PATH,
@@ -42,8 +43,8 @@ export default function Activity() {
   const [communityPostCount, setcommunityPostCount] = useState<number | string>(
     "0"
   );
-  const [reviewCount, setReviewCount] = useState<number | string>("0");
-  const [reviewedCount, setReviewedCount] = useState<number | string>("0");
+  const [applyCount, setApplyCount] = useState<number | string>("0");
+  const [acceptCount, setAcceptCount] = useState<number | string>("0");
 
   // variable: access Token //
   const accessToken = cookies[ACCESS_TOKEN];
@@ -84,15 +85,15 @@ export default function Activity() {
     const {
       communityCommentCount,
       communityPostCount,
-      reviewCount,
-      reviewedCount,
+      applyCount,
+      acceptCount,
       shoppingCartCount,
       wishListCount,
     } = responseBody as GetMyActivityCountResponseDto;
     setCommunityCommentCount(communityCommentCount);
     setcommunityPostCount(communityPostCount);
-    setReviewCount(reviewCount);
-    setReviewedCount(reviewedCount);
+    setApplyCount(applyCount);
+    setAcceptCount(acceptCount);
     setShoppingCartLen(shoppingCartCount);
     setWishLen(wishListCount);
   };
@@ -105,12 +106,12 @@ export default function Activity() {
 
   // event handler: 내가 쓴 도우미 후기 클릭 이벤트 처리 //
   const onReviewClickHandler = () => {
-    navigator(MY_REVIEW_ABSOLUTE_PATH);
+    navigator(MY_NEEDHELLPER_ASK_ABSOLUTE_PATH);
   };
 
   // event handler: 받은 도우미 후기 클릭 이벤트 처리 //
   const onReviewedClickHandler = () => {
-    navigator(MY_REVIEW_ABSOLUTE_PATH);
+    navigator(MY_NEEDHELLPER_APPLY_ABSOLUTE_PATH);
   };
 
   // event handler: 장바구니 클릭 이벤트 처리 //
@@ -174,21 +175,21 @@ export default function Activity() {
         </div>
         <div className="body">
           <div className="my-container">
-            <div className="title">내가 받은 후기</div>
+            <div className="title">내 도우미</div>
             <div className="category-container">
               <div className="category-box">
-                <div className="category">• 도우미 후기</div>
+                <div className="category">• 요청한 게시글</div>
                 <div className="category-number" onClick={onReviewClickHandler}>
-                  {reviewCount}개
+                  {applyCount}개
                 </div>
               </div>
               <div className="category-box">
-                <div className="category">• 도움 받은 후기</div>
+                <div className="category">• 신청한 게시글</div>
                 <div
                   className="category-number"
                   onClick={onReviewedClickHandler}
                 >
-                  {reviewedCount}개
+                  {acceptCount}개
                 </div>
               </div>
             </div>
@@ -199,11 +200,11 @@ export default function Activity() {
               <div className="category-box">
                 <div className="category">• 장바구니 상품</div>
 
-                <div className="category-number">{shoppingCartLen}개</div>
+                <div className='category-number' onClick={onShoppingCartClickHandler}>{shoppingCartLen}개</div>
               </div>
-              <div className="category-box">
-                <div className="category">• 찜한 상품 수</div>
-                <div className="category-number">{wishLen}개</div>
+              <div className='category-box'>
+                <div className='category'>• 찜한 상품 수</div>
+                <div className='category-number' onClick={onWishListClickHandler}>{wishLen}개</div>
               </div>
             </div>
           </div>

@@ -164,6 +164,7 @@ export default function Calendar() {
     const formatToLocalDateTime = (date: string) => `${date} 00:00:00`;
 
     const existingId = scrapMap[plcyNo];
+    console.log(existingId)
 
     if (!existingId) {
       const dto: PostScheduleRequestDto = {

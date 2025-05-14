@@ -18,7 +18,7 @@ export default function Others() {
 
   // state: 해당 사용자 상태 
   const [nickname, setNickname] = useState<string>('');
-  const [birth, setBirth] = useState<string>('');
+  const [birth, setBirth] = useState<number>(0);
   const [gender, setGender] = useState<Gender | null>(null);
   const [profileImage, setProfileImage] = useState<string>('');
   const [mbti, setMbti] = useState<Mbti | null>(null);

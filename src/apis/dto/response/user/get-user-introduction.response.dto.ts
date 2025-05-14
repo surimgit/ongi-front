@@ -4,7 +4,7 @@ import { LikeKeyword } from 'src/types/interfaces';
 
 export default interface GetUserIntroductionResponseDto extends ResponseDto {
   nickname: string;
-  birth: string;
+  birth: number;
   gender: Gender;
   profileImage: string;
   mbti: Mbti;

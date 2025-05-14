@@ -8,7 +8,7 @@ import GetHelperPostResponseDto from "src/apis/dto/response/needhelper/get-helpe
 import GetHelperLikedResponseDto from "src/apis/dto/response/needhelper/get-helper-liked.response.dto";
 import Modal from "src/components/Modal";
 import "./style.css";
-import { getHelperPostRequest, deleteHelperApplyRequest, getHelperLikedRequest, postHelperApplyRequest, putHelperLikedRequest, getHelperCommentsRequest, postHelperCommentRequest, deleteHelperPostRequest, postAlertRequest, getHelperApplyRequest, getChatRoomRequest } from "src/apis";
+import { getHelperPostRequest, deleteHelperApplyRequest, getHelperLikedRequest, postHelperApplyRequest, putHelperLikedRequest, getHelperCommentsRequest, postHelperCommentRequest, deleteHelperPostRequest, postAlertRequest, getHelperApplyRequest, getChatRoomListRequest } from "src/apis";
 import CommentItem from "../Comment";
 import Report from "../ReportModal";
 import PostHelperCommentRequestDto from "src/apis/dto/request/needhelper/post-helper-comment.request.dto";
@@ -16,7 +16,6 @@ import { CommunityComment } from "src/types/interfaces";
 import PostAlertRequestDto from "src/apis/dto/request/alert/post-alert.request.dto";
 import useCommentCountStore from "src/stores/comment-count.store";
 import GetHelperIsApplyResponseDto from "src/apis/dto/response/needhelper/get-helper-is-apply.response.dto";
-import { GetChatRoomResponseDto } from "src/apis/dto/response/chat";
 
 // component: need helper 상세 메인 컴포넌트 //
 export default function NeedHelperPostDetail() {
@@ -228,20 +227,32 @@ export default function NeedHelperPostDetail() {
     // event handler: 신청하기 클릭 이벤트 처리 //
     const onApplyClickHandler = () => {
         if (!accessToken || !sequence) return;
-
+      
+        const postSeq = Number(sequence);
+      
+        const updateAppliedStatus = () => {
+          getHelperApplyRequest(postSeq, accessToken)
+            .then((response: GetHelperIsApplyResponseDto | ResponseDto | null) => {
+              if (!response || response.code !== "SU") return;
+              const { isApplied } = response as GetHelperIsApplyResponseDto;
+              setApplied(isApplied); // ✅ 서버 기준 상태 반영
+            });
+        };
+      
         if (isApplied) {
-            deleteHelperApplyRequest(Number(sequence), accessToken).then(() => {
-                alert("신청 취소되었습니다.");
-                setApplied(false);
-            });
+          deleteHelperApplyRequest(postSeq, accessToken).then(() => {
+            alert("신청 취소되었습니다.");
+            updateAppliedStatus(); // ✅
+          });
         } else {
-            postHelperApplyRequest(Number(sequence), accessToken).then((response) => {
-                postHelperApplyResponse(response)
-                setApplied(true);
-                setNewCommentTriger(true);
-            });
+          postHelperApplyRequest(postSeq, accessToken).then((response) => {
+            postHelperApplyResponse(response);
+            updateAppliedStatus(); // ✅
+            setNewCommentTriger(true);
+          });
         }
-    };
+      };
+      
 
     // event handler: 댓글 작성 버튼 클릭 이벤트 처리 //
     const onCommentPostHandler = () => {
