@@ -2,8 +2,8 @@ import React, { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import './style.css';
 import { useNavigate, useParams } from 'react-router';
 import { useCookies } from 'react-cookie';
-import { ACCESS_TOKEN, COMMUNITY_EDIT_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH, PRODUCT_VIEW_ABSOLUTE_PATH } from 'src/constants';
-import { deleteCommunityCommentRequest, deleteCommunityPostRequest, getCommunityCommentRequest, getCommunityCommentsRequest, getCommunityLikedRequest, getCommunityPostRequest, getProductDetailRequest, patchCommunityCommentRequest, patchCommunityViewCountRequest, postAlertRequest, postCommunityCommentRequest, postReportRequest, putCommunityLikedRequest } from 'src/apis';
+import { ACCESS_TOKEN, COMMUNITY_EDIT_ABSOLUTE_PATH, COMMUNITY_OVERALL_ABSOLUTE_PATH, PRODUCT_VIEW_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, OTHER_MYPAGE_VIEW_ABSOULTE_PATH } from 'src/constants';
+import { deleteCommunityCommentRequest, deleteCommunityPostRequest, getCommunityCommentRequest, getCommunityCommentsRequest, getCommunityLikedRequest, getCommunityPostRequest, getProductDetailRequest, getUserProfileImageRequest, patchCommunityCommentRequest, patchCommunityViewCountRequest, postAlertRequest, postCommunityCommentRequest, postReportRequest, putCommunityLikedRequest } from 'src/apis';
 import { GetCommunityPostResponseDto } from 'src/apis/dto/response/community';
 import { ResponseDto } from 'src/apis/dto/response';
 import { CommunityComment } from 'src/types/interfaces';
@@ -20,8 +20,12 @@ import ReportCategory from 'src/types/aliases/report-category.alias';
 import PostReportRequestDto from 'src/apis/dto/request/report/post-report.request.dto';
 import Modal from 'src/components/Modal';
 import GetCommunityCommentResponse from 'src/apis/dto/response/community/get-community-comment.response.dto';
+
 import { GetProductDetailResponseDto } from 'src/apis/dto/response/product';
 import { responseMessage } from 'src/utils';
+import GetUserProfileImageResponseDto from 'src/apis/dto/response/user/get-user-profile-image.response.dto';
+import { Board } from 'src/types/aliases';
+
 
 // interface: 신고 모달 컴포넌트 속성 //
 interface TypeProps {
@@ -288,7 +292,7 @@ interface CommentItemProps {
 
 // component: 댓글 테이블 레코드 컴포넌트 //
 function CommentItem({ communityComment, getCommunityComment }: CommentItemProps) {
-    const { commentSequence, postSequence, profileImage, commentWriterId, nickname, commentPostDate, comment } = communityComment;
+    const { commentSequence, postSequence, commentWriterId, nickname, commentPostDate, comment } = communityComment;
 
     // state: cookie 상태 //
     const [cookies] = useCookies();
@@ -305,13 +309,19 @@ function CommentItem({ communityComment, getCommunityComment }: CommentItemProps
     // state: 신고 모달 오픈 상태 //
     const [isReportOpen, setReportOpen] = useState<boolean>(false);
 
+    // state: 프로필 사진 상태 //
+    const [profileImage, setProfileImage] = useState<String>('');
+
     // variable: access Token //
     const accessToken = cookies[ACCESS_TOKEN];
 
     // variable: 프로필 이미지 스타일 //
     const profileImageStyle = { backgroundImage: `url(${profileImage ? profileImage : DefaultProfile})` };
 
-    
+
+    // function: 내비게이터 함수 //
+    const navigator = useNavigate();
+
     // function: delete community comment response 처리 함수 //
     const deleteCommunityCommentResponse = (responseBody: ResponseDto | null) => {
         const message =
@@ -343,6 +353,24 @@ function CommentItem({ communityComment, getCommunityComment }: CommentItemProps
             alert(message);
             return;
         }
+    };
+
+    // function: get user profile image response 처리 함수 //
+    const getUserProfileImageResponse = (responseBody: GetUserProfileImageResponseDto | ResponseDto | null) => {
+        const message =
+        !responseBody ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'DEB' ? '서버에 문제가 있습니다.'
+        : responseBody.code === 'AF' ? '인증에 실패했습니다.' : '';
+
+        const isSuccess = responseBody !== null && responseBody.code === 'SU';
+        if (!isSuccess) {
+            alert(message);
+            return;
+        }
+
+        const { profileImage } = responseBody as GetUserProfileImageResponseDto;
+
+        setProfileImage(profileImage);
     };
 
     // event handler: 댓글 수정 버튼 클릭 이벤트 처리 //
@@ -386,6 +414,17 @@ function CommentItem({ communityComment, getCommunityComment }: CommentItemProps
         setReportOpen(false);
     };
 
+    // event handler: 유저 클릭 시 이벤트 처리 //
+    const onUserClickHandler = () => {
+        if (userId === commentWriterId) navigator(MYPAGE_ABSOLUTE_PATH);
+        else navigator(OTHER_MYPAGE_VIEW_ABSOULTE_PATH(commentWriterId));
+    };
+
+    // effect: 컴포넌트 렌더 시 실행 함수 //
+    useEffect(() => {
+        getUserProfileImageRequest(commentWriterId, accessToken).then(getUserProfileImageResponse);
+    }, []);
+
     // render: 댓글 테이블 레코드 컴포넌트 렌더링 //
     return (
         <div className='comment-box'>
@@ -393,7 +432,7 @@ function CommentItem({ communityComment, getCommunityComment }: CommentItemProps
                 <>
                     <div className='profile-img' style={profileImageStyle}></div>
                     <div className='content-container'>
-                        <div className='nickname'>{nickname}</div>
+                        <div className='nickname' onClick={onUserClickHandler}>{nickname}</div>
                         <div className='content'>{content}</div>
                         <div className='post-date'>{commentPostDate}</div>
                     </div>
@@ -445,11 +484,12 @@ export default function PostDetail() {
     const [writerId, setWriterId] = useState<string>('');
     const [nickname, setNickname] = useState<string>('');
     const [postDate, setPostDate] = useState<string>('');
+    const [board, setBoard] = useState<Board>('');
     const [category, setCategory] = useState<string>('');
     const [title, setTitle] = useState<string>('');
     const [content, setContent] = useState<string>('');
-    const [liked, setLiked] = useState<number>(0);
     const [viewCount, setViewCount] = useState<number>(0);
+    const [county, setCounty] = useState<Board>('');
 
     // state: 로그인 사용자 아이디 상태 //
     const { userId, isAdmin } = useSignInUserStore();
@@ -505,15 +545,16 @@ export default function PostDetail() {
             return;
         }
 
-        const { userId, nickname, postDate, category, title, content, liked, viewCount } = responseBody as GetCommunityPostResponseDto;
+        const { userId, nickname, postDate, board, category, title, content, viewCount, county } = responseBody as GetCommunityPostResponseDto;
         setWriterId(userId);
         setNickname(nickname);
         setPostDate(postDate);
+        setBoard(board);
         setCategory(category);
         setTitle(title);
         setContent(content);
-        setLiked(liked);
         setViewCount(viewCount);
+        setCounty(county);
     };
 
     // function: delete community post response 처리 함수 //
@@ -683,8 +724,12 @@ export default function PostDetail() {
         setReportOpen(false);
     };
 
-    
-    
+    // event handler: 유저 클릭 시 이벤트 처리 //
+    const onUserClickHandler = () => {
+        if (userId === writerId) navigator(MYPAGE_ABSOLUTE_PATH);
+        else navigator(OTHER_MYPAGE_VIEW_ABSOULTE_PATH(writerId));
+    };
+
 
     // effect: 컴포넌트 로드 시 실행할 함수 //
     useEffect(() => {
@@ -704,7 +749,7 @@ export default function PostDetail() {
             const requestBody: PostAlertRequestDto = {
                 senderId, receiverId, alertEntitySequence, alertType, reason: null
             };
-            // if (senderId === receiverId) return;
+            if (senderId === receiverId) return;
             postAlertRequest(requestBody, accessToken).then(postAlertResponse);
             setNewCommentTriger(false);
         }
@@ -719,13 +764,31 @@ export default function PostDetail() {
     // render: 커뮤니티 글 상세 화면 컴포넌트 렌더링 //
     return (
         <div id='post-detail-wrapper'>
-            <div className='board-header-container'>{category}</div>
+            <div className='board-header-container'>
+                <div className='board-name'>
+                    <div className='board-type'>
+                        {
+                        board === 
+                        '전체 글' ? '전체 글'
+                        : board === '인기 게시판' ? '인기 '
+                        : board === '정보 게시판' ? '정보 ' : ''
+                        }
+                    </div>
+                    {board !== '우리 동네 게시판' &&
+                        <div>게시판</div>
+                    }
+                    {board === '우리 동네 게시판' &&
+                        <div className='county'>{county}</div>
+                    }
+                </div>
+                <div className='category-name'>{category}</div>
+            </div>
             <div className='detail-container'>
                 <div className='title-container'>
                     <div className='title'>{title}</div>
                     <div className='title-footer'>
                         <div className='post-info'>
-                            <div className='posted-user'>{nickname}</div>
+                            <div className='posted-user' onClick={onUserClickHandler}>{nickname}</div>
                             <div className='posted-date'>{postDate}</div>
                         </div>
                         <div className='interaction-box'>

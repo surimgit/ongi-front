@@ -1,6 +1,6 @@
-import GetChatRoomResponseDto from "./get-chat-room.response.dto"
+import GetChatRoomListResponseDto from "./get-chat-room-list.response.dto"
 
 
 export type {
-  GetChatRoomResponseDto
+  GetChatRoomListResponseDto
 }

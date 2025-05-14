@@ -1,0 +1,4 @@
+.faded {
+  opacity: 0.5; /* 흐리게 만드는 효과 */
+  pointer-events: none; /* 클릭 방지 (원하는 경우) */
+}

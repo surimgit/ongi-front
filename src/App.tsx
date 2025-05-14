@@ -52,7 +52,9 @@ import {
   NEEDHELPER_VIEW_PATH,
   CHAT_PATH,
   CHAT_VIEW_PATH,
-} from "./constants";
+  EVENT_PATH
+} from './constants';
+
 
 import NeedHelper from "./views/NeedHelper";
 import ProductWrite from "./views/Product/write";
@@ -112,13 +114,14 @@ import ShoppingCartMain from "./views/ShoppingCart";
 
 import AccountUpdate from "./views/MyPage/Account/Update";
 import HelperWrite from "./views/NeedHelper/Write";
-import OtherUserReview from "./views/MyPage/Others/Review";
 import OtherUserCommunity from "./views/MyPage/Others/Community";
 import OtherUserGroupBuying from "./views/MyPage/Others/GroupBuying";
 import NeedHelperPost from "./views/NeedHelper/Detail";
 import HelperEdit from "./views/NeedHelper/Edit";
 import Chat from "./views/Chat";
 import ChatDetail from "./views/Chat/Detail";
+import OtherUserHelper from "./views/MyPage/Others/Helper";
+import EventMain from './views/Event';
 
 function App() {
   return (
@@ -169,11 +172,9 @@ function App() {
           <Route path={OTHER_MYPAGE_PATH}>
             <Route path={OTHER_MYPAGE_VIEW_PATH}>
               <Route index element={<Others/>}/>
-              <Route path='need-helper/review' element={<OtherUserReview/>}/>
+              <Route path='need-helper' element={<OtherUserHelper/>}/>
               <Route path='community/post' element={<OtherUserCommunity/>}/>
-              <Route path='group-buying/selling' element={<OtherUserGroupBuying/>}/>
-              <Route path='group-buying/selled' element={<OtherUserGroupBuying/>}/>
-              <Route path='group-buying/review' element={<OtherUserGroupBuying/>}/>
+              <Route path='group-buying' element={<OtherUserGroupBuying/>}/>
             </Route>
           </Route>
           <Route index element={<MyPage/>}/>
@@ -190,9 +191,9 @@ function App() {
             <Route index element={<MyReview/>} />
           </Route>
           <Route path={MY_NEEDHELLPER_PATH}>
-            <Route path={MY_NEEDHELLPER_ASK_PATH} element={<MyNeedHelper/>} />
-            <Route path={MY_NEEDHELLPER_APPLY_PATH} element={<MyNeedHelper/>} />
-            <Route path={MY_NEEDHELLPER_LIKED_PATH} element={<MyNeedHelper/>} />
+            <Route path={MY_NEEDHELLPER_ASK_PATH} element={<MyNeedHelper type='ask'/>} />
+            <Route path={MY_NEEDHELLPER_APPLY_PATH} element={<MyNeedHelper type='apply'/>} />
+            <Route path={MY_NEEDHELLPER_LIKED_PATH} element={<MyNeedHelper type='liked'/>} />
           </Route>
           <Route path={MY_COMMUNITY_PATH}>
             <Route path={MY_COMMUNITY_POST_PATH} element={<MyCommunity type='post'/>} />
@@ -217,6 +218,11 @@ function App() {
             </Route>
           </Route>
         </Route> 
+
+        <Route path={EVENT_PATH}>
+          <Route index element={<EventMain />} />
+        </Route>
+
         <Route path={COMMUNITY_PATH} element={<CommunityLayout />}>
           <Route index element={<CommunityMain />} />
           <Route path={COMMUNITY_SEARCH_PATH}>

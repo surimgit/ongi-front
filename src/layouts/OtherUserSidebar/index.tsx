@@ -13,7 +13,7 @@ const sidebarItems: SidebarItem[] = [
     title: '도우미',
     path: 'need-helper',
     children:[
-      { name: '후기', subPath: 'review'}
+      { name: '요청 게시글', subPath: ''}
     ]
   },
   {
@@ -27,9 +27,7 @@ const sidebarItems: SidebarItem[] = [
     title: '공동 구매',
     path: 'group-buying',
     children: [
-      { name: '판매 대기', subPath: 'selling' },
-      { name: '판매 완료', subPath: 'selled' },
-      { name: '후기', subPath: 'review' }
+      { name: '판매 물품', subPath: '' },
     ]
   }
 ];

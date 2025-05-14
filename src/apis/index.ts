@@ -76,8 +76,15 @@ import PostHelperRequestDto from "./dto/request/needhelper/post-helper.request.d
 import GetHelperPostResponseDto from "./dto/response/needhelper/get-helper-post.response.dto";
 import PatchHelperPostRequestDto from "./dto/request/needhelper/patch-helper.request.dto";
 import PostHelperCommentRequestDto from "./dto/request/needhelper/post-helper-comment.request.dto";
-import { GetChatRoomResponseDto } from "./dto/response/chat";
 import GetMyHelperPostResponseDto from "./dto/response/needhelper/get-my-helper-post-list.responsedto";
+import GetChatRoomListResponseDto from './dto/response/chat/get-chat-room-list.response.dto';
+import GetChatMessageResponseDto from './dto/response/chat/get-chat-message.reponse.dto';
+import GetHelperApplyListResponseDto from './dto/response/needhelper/get-helper-apply-list.response.dto';
+import GetUserProfileImageResponseDto from './dto/response/user/get-user-profile-image.response.dto';
+import GetEventListResponseDto from './dto/response/event/get-event-list.response.dto';
+import PostEventApplyRequestDto from './dto/request/event/post-event-apply.request.dto';
+import PostEventRequestDto from './dto/request/event/post-event.request.dto';
+
 
 // variable: URL 상수 //
 const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
@@ -209,6 +216,14 @@ const OTHER_MYPAGE_BADGE_URL = (userId: string) =>
   `${OTHER_MYPAGE_MODULE_URL}/${userId}/badge`;
 const OTHER_MYPAGE_COMMUNITY_POST_URL = (userId: string) =>
   `${OTHER_MYPAGE_MODULE_URL}/${userId}/community/post`;
+const OTHER_MYPAGE_GROUP_BUYING_URL = (userId: string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/group-buying`;
+const OTHER_MYPAGE_HELPER__URL = (userId: string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/need-helper`;
+const OTHER_MYPAGE_HELPER_APPLICANTS_COUNT_URL = (userId: string, postSequence: number | string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/need-helper/${postSequence}/count`;
+const OTHER_MYPAGE_HELPER_COMMENTS_URL = (userId: string, postSequence: number | string) =>
+  `${OTHER_MYPAGE_MODULE_URL}/${userId}/need-helper/${postSequence}/comments`;
 const PATCH_MYPAGE_URL = `${MYPAGE_MODULE_URL}`;
 const MYPAGE_ACCOUNT_URL = `${API_DOMAIN}/api/v1/mypage/account`;
 const PATCH_MYPAGE_PASSWORD_URL = `${MYPAGE_ACCOUNT_URL}/patch`;
@@ -259,6 +274,7 @@ const GET_ALERTED_COUNT_URL = (reportedId: string) =>
 const GET_NICKNAME_MODULE_URL = (userId: string) =>
   `${USER_MODULE_URL}/?nickname=${userId}`;
 const GET_IS_ADMIN_MODULE_URL = `${USER_MODULE_URL}/is-admin`;
+const GET_USER_PROFILE_IMAGE_URL = (userId: string) => `${USER_MODULE_URL}/profile-image?comment-user=${userId}`;
 
 const BUYING_MODULE_URL = `${API_DOMAIN}/api/v1/mypage`;
 const GET_MY_BUYING_URL = `${BUYING_MODULE_URL}/buy/my`;
@@ -272,9 +288,12 @@ const GET_MY_COMMUNTY_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/post`;
 const GET_MY_COMMUNTY_COMMENT_URL = `${API_DOMAIN}/api/v1/mypage/community/comment`;
 const GET_MY_COMMUNTY_LIKED_POST_URL = `${API_DOMAIN}/api/v1/mypage/community/liked`;
 
-const GET_MY_REQUEST_HELPER_POST_URL = `${API_DOMAIN}/api/v1/mypage/need-helper/request`;
+const GET_MY_REQUEST_HELPER_POST_URL = `${API_DOMAIN}/api/v1/mypage/need-helper/ask`;
 const GET_MY_APPLY_HELPER_POST_URL = `${API_DOMAIN}/api/v1/mypage/need-helper/apply`;
+const GET_MY_APPLICANT_COUNT_URL = (postSequence: number | string) => `${API_DOMAIN}/api/v1/mypage/need-helper/${postSequence}/count`;
 const GET_MY_LIKED_HELPER_POST_URL = `${API_DOMAIN}/api/v1/mypage/need-helper/liked`;
+const GET_HELPER_APPLY_LIST_URL = (postSequence: number | string) =>
+  `${API_DOMAIN}/api/v1/mypage/need-helper/${postSequence}/apply`;
 
 // 도우미 관련 경로
 const HELPER_MODULE_URL = `${API_DOMAIN}/api/v1/needHelper`;
@@ -310,9 +329,12 @@ const GET_HELPER_APPLY_URL = (postSequence: number | string) =>
 const ACCEPT_HELPER_APPLY_URL = (postSequence: number | string) =>
   `${HELPER_MODULE_URL}/${postSequence}/apply`;
 
+
 const CHAT_MODULE_URL = `${API_DOMAIN}/api/v1/chat`;
 const GET_CHAT_ROOM_URL = (chatSequence: number | string) =>
   `${CHAT_MODULE_URL}/${chatSequence}`;
+const GET_CHAT_MESSAGE_URL = (chatSequence: number | string) =>
+  `${CHAT_MODULE_URL}/${chatSequence}/message`;
 const ACCEPT_CHAT_URL = (chatSequence: number | string) =>
   `${CHAT_MODULE_URL}/${chatSequence}`;
 
@@ -321,6 +343,12 @@ const MAIN_MODULE_URL = `${API_DOMAIN}/api/v1/main`
 const MAIN_HELPER_MODULE_URL = `${MAIN_MODULE_URL}/need-helper`;
 const GET_COMMUNITY_USER_RANK_URL = `${MAIN_MODULE_URL}/user-rank/community`
 const GET_HELPER_USER_RANK_URL = `${MAIN_MODULE_URL}/user-rank/helper`
+
+// 이벤트 관련 경로
+const EVENT_MODULE_URL = `${API_DOMAIN}/api/v1/event`;
+const POST_EVENT_URL = `${EVENT_MODULE_URL}`;
+const GET_EVENT_LIST_URL = `${EVENT_MODULE_URL}`;
+const POST_EVENT_APPLY_LIST = `${EVENT_MODULE_URL}/apply`;
 
 // function: Authorization Bearer 헤더 //
 const bearerAuthorization = (accessToken: string) => ({
@@ -1266,14 +1294,23 @@ export const getMyHelperApplyPostRequest = async (accessToken: string) => {
   return responseBody;
 };
 
-// // function: get my community post API 요청 함수 //
-// export const getMyCommunityPostRequest = async (accessToken: string) => {
-//   const responseBody = await axios
-//     .get(GET_MY_COMMUNTY_POST_URL, bearerAuthorization(accessToken))
-//     .then(responseSuccessHandler<GetCommunityResponseDto>)
-//     .catch(responseErrorHandler);
-//   return responseBody;
-// };
+// function: get my liked helper Post post API 요청 함수 //
+export const getMyHelperlikedPostRequest = async (accessToken: string) => {
+  const responseBody = await axios
+    .get(GET_MY_LIKED_HELPER_POST_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetMyHelperPostResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get applicant count api 요청 함수 //
+export const getApplicantCountRequest = async(postSequence: number | string, accessToken: string) => {
+  const responseBody = await axios
+  .get(GET_MY_APPLICANT_COUNT_URL(postSequence), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler<number>)
+  .catch(responseErrorHandler);
+return responseBody;
+};
 
 // function: post alert API 요청 함수 //
 export const postAlertRequest = async (
@@ -1730,7 +1767,46 @@ export const putHelperLikedRequest = async (
 export const getOtherUserCommunityPostRequest = async (userId: string) => {
   const responseBody = await axios
     .get(OTHER_MYPAGE_COMMUNITY_POST_URL(userId))
-    .then(responseSuccessHandler<GetCommunityResponseDto>)
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get other helper post API 요청 함수 //
+export const getOtherUserHelperPostRequest = async (userId: string) => {
+  const responseBody = await axios
+    .get(OTHER_MYPAGE_HELPER__URL(userId))
+    .then(responseSuccessHandler<GetProductResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get other helper comment list API 요청 함수
+export const getOtherUserHelperCommentsRequest = async (
+  postSequence: number | string,
+  userId: string
+) => {
+  const responseBody = await axios
+    .get(OTHER_MYPAGE_HELPER_COMMENTS_URL(userId, postSequence))
+    .then(responseSuccessHandler)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get other applicant count api 요청 함수 //
+export const getOtherApplicantCountRequest = async(postSequence: number | string, userId: string) => {
+  const responseBody = await axios
+  .get(OTHER_MYPAGE_HELPER_APPLICANTS_COUNT_URL(userId, postSequence))
+  .then(responseSuccessHandler<number>)
+  .catch(responseErrorHandler);
+return responseBody;
+};
+
+// function: get other user selling product API 요청 함수 //
+export const getOtherUserGroupProductRequest = async (userId: string) => {
+  const responseBody = await axios
+    .get(OTHER_MYPAGE_GROUP_BUYING_URL(userId))
+    .then(responseSuccessHandler<GetMySalesResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 };
@@ -1840,14 +1916,25 @@ export const accpetHelperApplyRequest = async (
   return responseBody;
 };
 
-// function: get chat room API 요청 함수 //
-export const getChatRoomRequest = async (
-  chatSequence: number | string,
+// function: get helper liked API 요청 함수 //
+export const getHelperApplyListRequest = async (
+  postSequence: number | string,
   accessToken: string
 ) => {
   const responseBody = await axios
-    .get(GET_CHAT_ROOM_URL(chatSequence), bearerAuthorization(accessToken))
-    .then(responseSuccessHandler<GetChatRoomResponseDto>)
+    .get(GET_HELPER_APPLY_LIST_URL(postSequence), bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetHelperApplyListResponseDto>)
+    .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get chat room API 요청 함수 //
+export const getChatRoomListRequest = async (
+  accessToken: string
+) => {
+  const responseBody = await axios
+    .get(CHAT_MODULE_URL, bearerAuthorization(accessToken))
+    .then(responseSuccessHandler<GetChatRoomListResponseDto>)
     .catch(responseErrorHandler);
   return responseBody;
 };
@@ -1855,8 +1942,8 @@ export const getChatRoomRequest = async (
 // function: accept chat API 요청 함수 //
 export const accpetChatRequest = async (
   chatSequence: number | string,
-  applicantId: string,
-  accessToken: string
+  accessToken: string,
+  applicantId: string
 ) => {
   const responseBody = await axios
   .patch(
@@ -1868,6 +1955,18 @@ export const accpetChatRequest = async (
   .catch(responseErrorHandler);
   return responseBody;
 };
+
+// function: get chat message API 요청 함수 //
+export const getChatMessage = async (
+  chatSequence: number | string,
+  accessToken: string
+) => {
+  const responseBody = await axios
+    .get(GET_CHAT_MESSAGE_URL(chatSequence), bearerAuthorization(accessToken))    
+    .then(responseSuccessHandler<GetChatMessageResponseDto>)
+    .catch(responseErrorHandler);
+    return responseBody;
+}
 
 
 // function: get user Ranking - community 요청 함수 //
@@ -1885,3 +1984,35 @@ export const getHelperUserRankingRequest = async () => {
     .catch(responseErrorHandler);
   return responseBody;
 }
+
+// function: get user profile image API 요청 함수 //
+export const getUserProfileImageRequest = async (userId: string, accessToken: string) => {
+  const responseBody = await axios.get(GET_USER_PROFILE_IMAGE_URL(userId), bearerAuthorization(accessToken))
+  .then(responseSuccessHandler<GetUserProfileImageResponseDto>)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: post event API 요청 함수 //
+export const postEventRequest = async (requestBody: PostEventRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_EVENT_URL, requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: get event list API 요청 함수 //
+export const getEventListRequest = async () => {
+  const responseBody = await axios.get(GET_EVENT_LIST_URL)
+  .then(responseSuccessHandler<GetEventListResponseDto>)
+  .catch(responseErrorHandler);
+  return responseBody;
+};
+
+// function: post event apply API 요청 함수 //
+export const postEventApplyRequest = async (requestBody: PostEventApplyRequestDto, accessToken: string) => {
+  const responseBody = await axios.post(POST_EVENT_APPLY_LIST, requestBody, bearerAuthorization(accessToken))
+  .then(responseSuccessHandler)
+  .catch(responseErrorHandler);
+  return responseBody;
+};

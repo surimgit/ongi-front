@@ -20,6 +20,25 @@
     font-weight: 700;
 }
 
+#post-detail-wrapper .board-header-container .board-name {
+    display: flex;
+    gap: 10px;
+}
+
+#post-detail-wrapper .board-header-container .board-type,
+#post-detail-wrapper .board-header-container .county {
+    color: var(--Cancel);
+}
+
+#post-detail-wrapper .board-header-container .category-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    padding-left: 20px;
+    border-left: 4px solid;
+}
+
 #post-detail-wrapper .detail-container {
     border: 2px solid var(--Lightmode-Grey5);
     border-radius: 5px;
@@ -55,6 +74,8 @@
 .title-footer .posted-user {
     font-size: 16px;
     font-weight: 500;
+
+    cursor: pointer;
 }
 
 .title-footer .posted-date {
@@ -117,8 +138,8 @@
     border-radius: 0 5px 5px 0;
 }
 
-#post-detail-wrapper #detail-container .content-container {
-    margin-bottom: 15px;
+#post-detail-wrapper .detail-container .content-container {
+    margin-bottom: 30px;
 
     font-weight: 500;
 }
@@ -154,10 +175,12 @@
 
 .user-reaction-container .icon.liked {
     background-image: url(src/assets/images/liked.png);
+    cursor: pointer;
 }
 
 .user-reaction-container .icon.not-liked {
     background-image: url(src/assets/images/not-liked.png);
+    cursor: pointer;
 }
 
 .user-reaction-container .comment-input-box {
@@ -249,6 +272,8 @@
 
 #post-detail-wrapper .comment-box .nickname {
     font-weight: 600;
+    
+    cursor: pointer;
 }
 
 #post-detail-wrapper .comment-box .post-date {

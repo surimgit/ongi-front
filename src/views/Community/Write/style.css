@@ -73,26 +73,9 @@
 
 #post-write-wrapper .button-box {
     display: flex;
-    justify-content: space-between;
+    justify-content: right;
 
     gap: 10px;
-}
-
-#post-write-wrapper .image-upload {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border: 1px solid;
-    border-radius: 2px;
-
-    padding: 10px;
-
-    height: 5px;
-
-    background-color: var(--Lightmode-Grey3);
-
-    cursor: pointer;
 }
 
 #post-write-wrapper .button-box .btn {
@@ -109,12 +92,6 @@
     border-radius: 5px;
 
     cursor: pointer;
-}
-
-#post-write-wrapper .post-btn {
-    display: flex;
-
-    gap: 10px;
 }
 
 #post-write-wrapper .button-box .btn.cancel {
