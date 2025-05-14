@@ -10,4 +10,4 @@ export default interface MySale{
   image: string;
   status: string;
   userId: string;
-}
+} 

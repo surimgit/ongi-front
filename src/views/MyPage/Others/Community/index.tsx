@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import './style.css';
-import { getCommunityCommentsRequest, getMyCommunityPostRequest } from 'src/apis';
+import { getCommunityCommentsRequest, getMyCommunityPostRequest, getOtherUserCommunityPostRequest } from 'src/apis';
 import { CommunityComment, CommunityPost } from 'src/types/interfaces';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { ACCESS_TOKEN, COMMUNITY_VIEW_ABSOLUTE_PATH } from 'src/constants';
 import GetCommunityCommentsResponse from 'src/apis/dto/response/community/get-community-comments.response.dto';
 import { ResponseDto } from 'src/apis/dto/response';
@@ -18,20 +18,16 @@ interface CommunityProps{
   communityPost: CommunityPost;
 }
 
-
 // component: 커뮤니티 게시글 테이블 레코드 컴포넌트 //
 function CommunityItem({
   communityPost
 }: CommunityProps) {
 
   const {category, liked, postDate, postSequence, title, viewCount} = communityPost;
-
-  // state: cookie 상태 //
-  const [cookies] = useCookies();
-
-  // variable: access Token //
-  const accessToken = cookies[ACCESS_TOKEN];
   
+  // state: 경로 변수 상태
+  const { userId } = useParams();
+
   // function: 네비게이터 함수 //
   const navigator = useNavigate();
 
@@ -43,7 +39,8 @@ function CommunityItem({
   // state: 댓글 수 상태//
   const [communityComment, setCommunityComment] = useState<number>(0);
 
-   // function: get community comments response 처리 함수 //
+
+  // function: get community comments response 처리 함수 //
   const getCommunityCommentsResponse = (responseBody:GetCommunityCommentsResponse | ResponseDto | null) => {
     const message = 
       !responseBody ? '서버에 문제가 있습니다.' :
@@ -62,7 +59,6 @@ function CommunityItem({
 
   // effect: 컴포넌트 로드시 실행할 함수 //
   useEffect(() => {
-    if(!accessToken) return;
     if(postSequence != null)
     getCommunityCommentsRequest(postSequence).then(getCommunityCommentsResponse);
   }, [])
@@ -85,12 +81,9 @@ function CommunityItem({
 
 // component: 다른 사용자 커뮤니티 메인 화면 컴포넌트 //
 export default function OtherUserCommunity() {
-    
-  // state: cookie 상태 //
-  const [cookies] = useCookies();
-
-  // variable: access Token //
-  const accessToken = cookies[ACCESS_TOKEN];
+  
+  // state: 경로 변수 상태
+  const { userId } = useParams();
 
   // state: pagination 상태 //
   const{
@@ -98,8 +91,8 @@ export default function OtherUserCommunity() {
     totalSection, setTotalList, viewList, pageList, totalList
   } = usePagination<CommunityPost>();
 
-  // function: get my commnutiy post List response 처리 함수 //
-  const getMyCommunityPostResponse = (responseBody: GetCommunityResponseDto | ResponseDto | null) => {
+  // function: get other user commnutiy post List response 처리 함수 //
+  const getOtherCommunityPostResponse = (responseBody: GetCommunityResponseDto | ResponseDto | null) => {
     const message = 
       !responseBody ? '서버에 문제가 있습니다.' :
       responseBody.code === 'DBE' ? '서버에 문제가 있습니다.' :
@@ -117,9 +110,8 @@ export default function OtherUserCommunity() {
 
   // effect: 컴포넌트 로드시 실행할 함수 //
   useEffect(() => {
-    if(!accessToken) return;
-    getMyCommunityPostRequest(accessToken).then(getMyCommunityPostResponse);
-
+    if(!userId) return;
+    getOtherUserCommunityPostRequest(userId).then(getOtherCommunityPostResponse);
   }, []);
 
   return (
@@ -144,19 +136,19 @@ export default function OtherUserCommunity() {
           {viewList.map((item, index) =>
             <CommunityItem communityPost={item as CommunityPost} />
           )}
-        </div>
-        <div className='pagination-box'>
-        {totalSection !== 0 &&
-          <Pagination 
-            currentPage={currentPage}
-            currentSection={currentSection}
-            totalSection={totalSection}
-            pageList={pageList}
-            setCurrentPage={setCurrentPage}
-            setCurrentSection={setCurrentSection}
-          />
-        }
-        </div>
+          </div>
+          <div className='pagination-box'>
+          {totalSection !== 0 &&
+            <Pagination 
+              currentPage={currentPage}
+              currentSection={currentSection}
+              totalSection={totalSection}
+              pageList={pageList}
+              setCurrentPage={setCurrentPage}
+              setCurrentSection={setCurrentSection}
+            />
+          }
+          </div>
         </div>
       </div>
   )

@@ -30,7 +30,7 @@ export default function MyPage() {
   
   // state: 로그인 사용자 상태 //
   const [nickname, setNickname] = useState<string>('');
-  const [birth, setBirth] = useState<string>('');
+  const [birth, setBirth] = useState<number>(0);
   const [gender, setGender] = useState<Gender | null>(null);
   const [profileImage, setProfileImage] = useState<string>('');
   const [mbti, setMbti] = useState<Mbti | null>(null);
@@ -41,7 +41,8 @@ export default function MyPage() {
 
   // state: 수정 가능 상태 // 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
-
+  // state: 수정 변화 상태 값 확인 //
+  const [prevIsEditMode, setPrevIsEditMode] = useState(isEditMode);
   // state: 사용자 프로필 이미지 상태 //
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
 
@@ -55,7 +56,7 @@ export default function MyPage() {
   const accessToken = cookies[ACCESS_TOKEN];
 
   // variable: 자기소개 수정 가능 여부 //
-  const isActive = nickname !== '' && birth !== '' &&  gender !== null &&  mbti !== null && 
+  const isActive = nickname !== '' && birth !== null &&  gender !== null &&  mbti !== null && 
   job !== '' && selfIntro !== '';
 
   // variable: 자기소개 수정 버튼 클래스 //
@@ -171,10 +172,6 @@ export default function MyPage() {
     }
     const openState = !isBadgeModalOpen
     setBadgeModalOpen(openState);
-    
-    if(openState){
-      addBadgeRequest(accessToken).then(addBadgeResponse);
-    }
   }
 
   // function: add badge resopnse 처리 함수 //
@@ -229,7 +226,6 @@ export default function MyPage() {
   
   // event handler: badge 클릭 처리 함수//
   const onBadgeClickHandler = (badge: Badge) => {
-    console.log('클릭된 뱃지:', badge); // ✅ 로그 꼭 확인
     const requestBody: PatchBadgeRequestDto = {
       badge: badge.badge
     };
@@ -309,7 +305,9 @@ export default function MyPage() {
   // event handler: 나이 변경 이벤트 처리 //
   const onBirthChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setBirth(value);
+    const parsedValue = value === "" ? 0 : Number(value);
+
+    setBirth(parsedValue); 
   };
 
   // event handler: 성별 변경 이벤트 처리 //
@@ -404,9 +402,21 @@ export default function MyPage() {
   useEffect(() => {
     if(!accessToken) return;
     getUserIntroductionRequest(accessToken).then(getUserIntroductionResponse);
+    addBadgeRequest(accessToken).then(addBadgeResponse);
     getBadgeListRequest(accessToken).then(getBadgeListResponse);
   }, [])
- 
+  
+  // effect: 수정 버튼 변경시 실행할 함수 //
+  useEffect(() => {
+    if (prevIsEditMode === true && isEditMode === false) {
+      console.log('Edit mode changed from true to false');
+      window.location.reload();
+    }
+
+    // 이전 상태값 업데이트
+    setPrevIsEditMode(isEditMode);
+  }, [isEditMode, prevIsEditMode]);
+
   // render: 마이 페이지 메인 화면 컴포넌트 렌더링 //
   return (
     <div id='mypage-main-wrapper'>
@@ -418,7 +428,7 @@ export default function MyPage() {
           <div className='current' onClick={onClick}>내 활동</div>
         </div>
         <div className='correction-area'>
-          <div className={updateButtonClass} onClick={onEditButtonClickHandler}>{buttonText}</div>
+          <div className={updateButtonClass} onClick={onEditButtonClickHandler} >{buttonText}</div>
           <div className='bridge'>|</div>
           <div className='correction' onClick={onAccountButtonClickHandler}>계정 설정</div>
         </div>

@@ -212,7 +212,7 @@ export default function MyNeedHelper({ type }: Props) {
     totalSection, setTotalList, viewList, pageList, totalList
   } = usePagination<MyNeedHelperPost>();
 
-  // function: 하나의 post에 대해 applicantCount와 commentCount를 가져와서 합치는 함수 //
+  // function: featch post detail 처리 함수 //
   const fetchPostDetails = async (post: MyNeedHelperPost): Promise<MyNeedHelperPost> => {
     if (!accessToken) throw new Error('No Access Token');
 
