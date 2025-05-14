@@ -53,7 +53,6 @@ export function Report({ onClose, entityType, entitySequence }: TypeProps) {
     // variable: access Token //
     const accessToken = cookies[ACCESS_TOKEN];
 
-    console.log(entityType);
     
     // function: 내비게이터 함수 //
     const navigator = useNavigate();
@@ -122,14 +121,16 @@ export function Report({ onClose, entityType, entitySequence }: TypeProps) {
 
     };
 
+
+    // function: get product detail response 함수 //
     const getProductDetailResponse = (responseBody: GetProductDetailResponseDto | ResponseDto | null) => {
         const {isSuccess, message} = responseMessage(responseBody);
 
-        if(!postSequence) return;
+        if(!entitySequence) return;
 
-        if(!isSuccess && postSequence){
+        if(!isSuccess && entitySequence){
             alert(message);
-            navigator(PRODUCT_VIEW_ABSOLUTE_PATH(postSequence));
+            navigator(PRODUCT_VIEW_ABSOLUTE_PATH(entitySequence));
             return;
         }
 
@@ -166,13 +167,11 @@ export function Report({ onClose, entityType, entitySequence }: TypeProps) {
 
     // effect: 컴포넌트 로드 시 실행할 함수 //
     useEffect(() => {
-        console.log(entitySequence);
-        console.log(entityType)
         if (!entitySequence) return;
 
         if (entityType === 'community_post') getCommunityPostRequest(entitySequence).then(getCommunityPostResponse);
         else if (entityType === 'comment' && postSequence) getCommunityCommentRequest(postSequence, entitySequence).then(getCommunityCommentResponse);
-        else if(entityType === 'product_post' && postSequence) getProductDetailRequest(postSequence, accessToken).then(getProductDetailResponse);
+        else if(entityType === 'product_post' && entitySequence) getProductDetailRequest(entitySequence, accessToken).then(getProductDetailResponse);
 
         document.body.style.overflow = 'hidden';
         return () => {
@@ -275,12 +274,6 @@ export function Report({ onClose, entityType, entitySequence }: TypeProps) {
                 </>
                 
             }
-            
-    
-            
-                
-            
-            
             
             <div className='report-btn' onClick={onReportClickHandler}>신고</div>
         </div>

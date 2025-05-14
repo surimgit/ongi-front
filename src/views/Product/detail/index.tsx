@@ -219,9 +219,7 @@ export default function DetailProduct() {
   // variable: 오픈 예정 여부 클래스 //
   const isOpen = openDate === null ? true : openDate <= getToday() ? true : false;
 
-  console.log(openDate);
-  console.log(getToday());
-  console.log(isOpen);
+
   // variable: 리뷰 평점 변수 //
   const ratingVariable = rating === 0 ? "리뷰 없음" : `${rating}점`;
 
@@ -397,7 +395,7 @@ export default function DetailProduct() {
 
   // event handler: 신고하기 클릭 이벤트 핸들러 //
   const onReportClickHandler = () => {
-    setIsReportOpen(!isReportOpen);
+    setIsReportOpen(true);
   }
   
 
@@ -429,7 +427,8 @@ export default function DetailProduct() {
 
   // event handler: 신고 모달 화면 닫기 클릭 이벤트 처리 //
   const onCloseReportClickHandler = () => {
-      setIsReportOpen(false);
+    setIsReportOpen(false);
+    console.log('닫기 버튼 클릭됨.');
   };
 
   const unitPrice = useMemo(() => {
@@ -456,6 +455,7 @@ export default function DetailProduct() {
 
   // effect: 컴포넌트 렌더링 시 실행할 함수 //
   useEffect(() => {
+
     if(!productNumber){
       navigate(PRODUCT_ABSOLUTE_PATH);
       return;
@@ -467,6 +467,10 @@ export default function DetailProduct() {
     getProductReviewsRequest(productNumber).then(getProductReviewsResponse);
     getProductReviewImagesRequest(productNumber).then(getProductReviewImagesResponse);
   },[]);
+
+  useEffect(() => {
+    console.log('isReportOpen 변경됨:', isReportOpen);
+  }, [isReportOpen]);
 
   return (
     <div id='detail-product-wrapper'>
@@ -521,19 +525,7 @@ export default function DetailProduct() {
               <div className='product-tool shopping-cart' onClick={onUpdateShoppingCartClickHandler}></div>
               <div className='product-tool share' onClick={() => copyToClipboard(url)}></div>
               <div className='product-tool report' onClick={onReportClickHandler}>
-                {isReportOpen &&
-                  <Modal
-                      title='신고'
-                      onClose={onCloseReportClickHandler}
-                  >
-                      <Report
-                          onClose={onCloseReportClickHandler}
-                          entityType='product_post'
-                          entitySequence={productNumber}
-                      >
-                      </Report>
-                  </Modal>
-                }
+                
               </div>
               <div className='button ask'>문의하기</div>
             </div>
@@ -591,6 +583,19 @@ export default function DetailProduct() {
           <div></div>
         </div>
       </div>
+      {isReportOpen &&
+        <Modal
+            title='신고'
+            onClose={onCloseReportClickHandler}
+        >
+            <Report
+                onClose={onCloseReportClickHandler}
+                entityType='product_post'
+                entitySequence={productNumber}
+            >
+            </Report>
+        </Modal>
+      }
     </div>
   )
 }

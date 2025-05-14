@@ -179,6 +179,7 @@ export default function ShoppingCartMain() {
 
     const { shoppingCarts } = responseBody as GetShoppingCartResponseDto;
     setShoppingCart(shoppingCarts); 
+    setSelectAll(shoppingCarts.map((item) => item.shoppingCartSequence));
   }
 
   // event handler: 전체 선택 버튼 클릭 이벤트 핸들러 //

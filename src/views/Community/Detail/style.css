@@ -336,7 +336,8 @@
     cursor: pointer;
 }
 
-#post-detail-wrapper .report-container {
+#post-detail-wrapper .report-container,
+#detail-product-wrapper .report-container{
     display: flex;
     flex-direction: column;
 
