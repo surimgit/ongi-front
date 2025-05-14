@@ -9,6 +9,7 @@ import GetHelperCommentResponse from "src/apis/dto/response/needhelper/get-helpe
 import GetHelperPostResponseDto from "src/apis/dto/response/needhelper/get-helper-post.response.dto";
 import { ACCESS_TOKEN, NEEDHELPER_ABSOLUTE_PATH } from "src/constants";
 import ReportCategory from "src/types/aliases/report-category.alias";
+import { Message } from "src/types/interfaces";
 
 
 // interface: 신고 모달 컴포넌트 속성 //
@@ -137,7 +138,6 @@ export default function Report({ onClose, entityType, entitySequence, postSequen
         if (!entitySequence) return;
         if (entityType === 'need_helper_post') getHelperPostRequest(entitySequence, accessToken).then(getHelperPostResponse);
         else if (entityType === 'comment' && postSequence) getHelperCommentRequest(postSequence, entitySequence, accessToken).then(getHelperCommentResponse);
-
         document.body.style.overflow = 'hidden';
         return () => {
             document.body.style.overflow = '';

@@ -79,6 +79,23 @@
     background-image: url(src/assets/images/text-hori.png);
 }
 
+.image-upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid;
+    border-radius: 10px;
+
+    padding: 10px;
+
+    height: 5px;
+
+    background-color: var(--Lightmode-Grey3);
+
+    cursor: pointer;
+}
+
 .tiptap {
     outline: none;
 

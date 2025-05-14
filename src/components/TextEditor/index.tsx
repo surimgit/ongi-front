@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Color } from '@tiptap/extension-color';
 import { Image } from '@tiptap/extension-image';
@@ -9,6 +9,7 @@ import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
 import './style.css';
+import { fileUploadsRequest } from 'src/apis';
 
 // interface: Text Editor Menu Bar 컴포넌트 속성 //
 interface MenuBarProp {
@@ -106,21 +107,65 @@ export default function TextEditor({ content, setContent }: Props) {
     extensions: [StarterKit, Image,],
     content,
     onUpdate: ({ editor }) => {
-      setContent(editor.getText())
+      setContent(editor.getHTML());
     }
   })
 
+  // state: content 최초 상태 //
+  const hasSetInitialContent = useRef(false);
+
+  // state: 파일 인풋 참조 상태 //
+  const fileRefs = useRef<HTMLInputElement>(null);
+
+  const [postImages, setPostImages] = useState<string[]>([]);
+
+  // event handler: 이미지 첨부 버튼 클릭 이벤트 처리 //
+  const onImageUploadClickHandler = () => {
+    fileRefs.current?.click();
+  };
+
+  // event handler: 이미지 첨부 이벤트 처리 //
+  const onHandleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || !editor) return;
+
+    const formData = new FormData();
+    Array.from(files).forEach((file) => {
+      formData.append('files', file);
+    });
+    
+    const uploadedImages = await fileUploadsRequest(formData);
+    if (!uploadedImages) return;
+    setPostImages(prev => [...prev, ...uploadedImages]);
+
+    uploadedImages.forEach((url) => {
+      editor.commands.insertContent(`<img src="${url}" alt="이미지" /><p></p>`);
+    });
+    
+    e.target.value = '';
+  };
+
   // effect: content 변경시 실행할 함수 //
   useEffect(() => {
-    if (editor && content && editor?.getHTML() !== content) {
+    if (editor && content && !hasSetInitialContent.current) {
       editor.commands.setContent(content);
+      hasSetInitialContent.current = true;
     }
-  }, [content, editor]);
+  }, [content, postImages, editor]);
 
   // render: tiptap Text Editor 컴포넌트 렌더링 //
   return (
     <>
     <MenuBar editor={editor} />
+    <div className='image-upload' onClick={onImageUploadClickHandler}>이미지 첨부</div>
+    <input 
+      type="file"
+      accept="image/*"
+      style={{ display: 'none' }}
+      multiple
+      ref={fileRefs}
+      onChange={onHandleImageFileChange}
+    />
     <EditorContent editor={editor}></EditorContent>
     </>
   )

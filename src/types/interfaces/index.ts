@@ -20,7 +20,10 @@ import HelperApplyList from "./helper-apply-list.interface"
 import PolicyList from "./policy-list.interface"
 import UserAddress from "./userAddress.interface"
 import NeedHelperPost from "./need-helper-post.interface"
+import UserEvent from "./user-event.interface"
 
+import Chat from "src/views/Chat"
+import Message from "./message.interface"
 
 export type {
   Product,
@@ -44,5 +47,8 @@ export type {
   Badge,
   NeedHelperPost,
   MyNeedHelperPost,
-  HelperApplyList
+  Chat,
+  Message,
+  HelperApplyList,
+  UserEvent
 }

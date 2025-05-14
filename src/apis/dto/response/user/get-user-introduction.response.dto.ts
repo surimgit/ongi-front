@@ -11,4 +11,5 @@ export default interface GetUserIntroductionResponseDto extends ResponseDto {
   job: string;
   selfIntro: string;
   likeKeywords: LikeKeyword[];
+  userPoint: number;
 }
