@@ -4,8 +4,9 @@
 
     align-items: center;
 
-    margin: 50px;
-    padding: 0 250px;
+    width: 820px;
+
+    margin: 50px auto;
     gap: 36px;
 }
 

@@ -248,6 +248,9 @@ function EventItem({ event }: EventItemProps) {
 // component: 이벤트 페이지 컴포넌트 //
 export default function EventMain() {
 
+    // state: 로그인 사용자 아이디 상태 //
+    const { isAdmin } = useSignInUserStore();
+
     // state: 이벤트 목록 상태 //
     const [eventList, setEventList] = useState<UserEvent[]>([]);
 
@@ -295,20 +298,22 @@ export default function EventMain() {
                 event={event}
                 />)}
             </div>
-            <div className='btn-box'>
-                <div className='btn' onClick={onOpenUploadClickHandler}>이벤트 게시</div>
-                {isUploadOpen &&
-                    <Modal
-                        title='이벤트 게시'
-                        onClose={onCloseUploadClickHandler}
-                    >
-                        <UploadEvent
+            {isAdmin &&
+                <div className='btn-box'>
+                    <div className='btn' onClick={onOpenUploadClickHandler}>이벤트 게시</div>
+                    {isUploadOpen &&
+                        <Modal
+                            title='이벤트 게시'
                             onClose={onCloseUploadClickHandler}
                         >
-                        </UploadEvent>
-                    </Modal>
-                }
-            </div>
+                            <UploadEvent
+                                onClose={onCloseUploadClickHandler}
+                            >
+                            </UploadEvent>
+                        </Modal>
+                    }
+                </div>
+            }
         </div>
     )
 }

@@ -2,8 +2,9 @@
     display: flex;
     gap: 4px;
 
-    border-radius: 8px;
-    border: 1px solid var(--Lightmode-Grey);
+    border-radius: 8px 8px 0 0;
+
+    border: 1px solid var(--Lightmode-Grey4);
     background: var(--Lightmode-Grey3);
 }
 
@@ -84,13 +85,13 @@
     justify-content: center;
     align-items: center;
 
-    border: 1px solid;
-    border-radius: 10px;
+    border: 1px solid var(--Lightmode-Grey4);
 
     padding: 10px;
 
     height: 5px;
 
+    color: var(--Lightmode-Grey4);
     background-color: var(--Lightmode-Grey3);
 
     cursor: pointer;
@@ -100,8 +101,8 @@
     outline: none;
 
     box-sizing: border-box;
-    border-radius: 6px;
     border: 1px solid var(--Lightmode-Grey3);
+    border-radius: 0 0 8px 8px;
     padding: 8px 16px;
     min-height: 330px;
 }
