@@ -26,6 +26,10 @@ export default function CommunityLayout() {
     // state: 검색 키워드 주소 상태 //
     const keywordKey = searchParams.get('keyword') as string;
 
+    // state: 게시판 지역 상태 //
+    const regionType = searchParams.get('region') as string;
+    const countyType = searchParams.get('county') as string;
+
     // state: 로그인 사용자 정보 //
     const { isAdmin, county, setCountyFromAddress } = useSignInUserStore();
 
@@ -118,6 +122,10 @@ export default function CommunityLayout() {
     // event handler: 검색 이벤트 처리 //
     const onSearchClickHandler = () => {
     if (!searchCategory || !keyword) return;
+    if (searchCategory === '선택') {
+        alert('검색 유형을 선택해주세요.');
+        return;
+    }
 
     navigator(COMMUNITY_SEARCH_ABSOLUTE_PATH(searchCategory, keyword));
     };
@@ -141,10 +149,10 @@ export default function CommunityLayout() {
     return (
         <div id='community-layout-wrapper'>
             <div className='category-list-container'>
-                {boardType === '우리 동네 게시판' && county &&
+                {boardType === '우리 동네 게시판' && regionType &&
                     <div className='county-box'>
                         <div className='county-icon'></div>
-                        <div className='county'>{county?.join(' ')}</div>
+                        <div className='county'>{regionType} {countyType}</div>
                     </div>
                 }
                 {(boardType !== '우리 동네 게시판' || !county) &&

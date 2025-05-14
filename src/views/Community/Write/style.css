@@ -40,7 +40,7 @@
 
     padding: 10px;
 
-    border: 2px solid var(--Lightmode-Grey5);
+    border: 2px solid var(--Lightmode-Grey4);
     border-radius: 10px;
 
     font-size: 18px;
@@ -61,9 +61,9 @@
     padding: 10px;
 
     font-size: 18px;
-    color: var(--Lightmode-Grey6);
+    color: var(--Lightmode-Grey4);
 
-    border: 2px solid var(--Lightmode-Grey5);
+    border: 2px solid var(--Lightmode-Grey4);
     border-radius: 10px;
 }
 

@@ -316,7 +316,7 @@ function ReportItem({ reportEntity, onProcessed }: ReportProps) {
 
   // event handler: 신고 내역 클릭 시 이벤트 처리 //
   const onReportClickHandler = () => {
-    if (!reportProcess) return;
+    if (reportProcess !== '미처리') return;
     setReportClicked(true);
   };
 

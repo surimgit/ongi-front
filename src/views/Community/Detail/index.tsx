@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactNode, useEffect, useState } from 'react';
+import React, { ChangeEvent, ReactNode, useEffect, useMemo, useState } from 'react';
 import './style.css';
 import { useNavigate, useParams } from 'react-router';
 import { useCookies } from 'react-cookie';
@@ -518,6 +518,9 @@ export default function PostDetail() {
     // state: 신고 모달 오픈 상태 //
     const [isReportOpen, setReportOpen] = useState<boolean>(false);
 
+    // state: content memozation 상태 //
+    const memoizedHtml = useMemo(() => ({__html: content}), [content]);
+
     // variable: access token //
     const accessToken = cookies[ACCESS_TOKEN];
 
@@ -818,7 +821,7 @@ export default function PostDetail() {
                 </div>
                 <div className='content-container'>
                     <div className='content' style={{ flex: 1, display: 'block'}}
-                    dangerouslySetInnerHTML={{__html: content}}></div>
+                    dangerouslySetInnerHTML={memoizedHtml}></div>
                 </div>
             </div>
             <div className='user-reaction-container'>
