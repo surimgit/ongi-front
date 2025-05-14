@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import './style.css';
 
-import { EVENT_ABSOLURE_PATH, MY_GROUPBUYING_BUY_ABSOLUTE_PATH} from 'src/constants';
+import { CHAT_ABSOLUTE_PATH, EVENT_ABSOLURE_PATH, MY_GROUPBUYING_BUY_ABSOLUTE_PATH} from 'src/constants';
 
 import { ACCESS_TOKEN, AUTH_ABSOLUTE_PATH, CALENDAR_ABSOLUTE_PATH, COMMUNITY_BOARD_ABSOLUTE_PATH, COMMUNITY_VIEW_ABSOLUTE_PATH, MAIN_ABSOLUTE_PATH, MYPAGE_ABSOLUTE_PATH, NEEDHELPER_ABSOLUTE_PATH, NEEDHELPER_VIEW_ABSOLUTE_PATH, PRODUCT_ABSOLUTE_PATH, ROOT_PATH, SHOPPING_CART_ABSOLUTE_PATH } from 'src/constants';
 
@@ -235,6 +235,11 @@ export default function Layout() {
     navigator(MAIN_ABSOLUTE_PATH);
   }
 
+  // event handler: 채팅 클릭 이벤트 처리 //
+  const onChatClickHandler = () => {
+    navigator(CHAT_ABSOLUTE_PATH);
+  }
+
   // effect: cookie의 accessToken이 변경될 시 실행할 함수 //
   useEffect(() => {
     if (!cookies[ACCESS_TOKEN]) return;
@@ -277,7 +282,7 @@ export default function Layout() {
           </div>
         </div>
         <div className='my-content'>
-          <div className='my-content-chat'></div>
+          <div className='my-content-chat' onClick={onChatClickHandler}></div>
           <div className='my-content-alert' onClick={onMyAlertClickHandler}>
             {showMyAlert &&
               <div ref={myAlertListRef} className='my-alert-list'>
