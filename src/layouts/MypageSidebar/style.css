@@ -1,7 +1,7 @@
 #sidebar-container {
   display: flex;
   flex-direction: column;
-  width: 180px;
+  width: 180x;
 }
 
 #sidebar-container .button {
@@ -26,7 +26,7 @@
 
 #sidebar-container .categories .title {
   display: flex;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   width: fit-content;
 }
@@ -35,8 +35,8 @@
   display: flex;
   margin-bottom: 2px;
   flex-direction: column;
-  gap: 10px;
-  font-size: 13px;
+  gap: 12px;
+  font-size: 15px;
 }
 
 #sidebar-container .categories .sub-text {
@@ -45,14 +45,27 @@
   width: fit-content;
 }
 
+#sidebar-container .mypage-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  padding: 15px 30px;
+  background-color: var(--Primary);
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--White);
+}
+
 #sidebar-container .categories .title:hover,
 #sidebar-container .categories .sub-text:hover {
-  color: #007bff; 
+  color: #007bff;
   cursor: pointer;
 }
 
 #sidebar-container .categories .active {
   color: #007bff;
-  font-weight: bold; 
-  cursor: default !important
+  font-weight: bold;
+  cursor: default !important;
 }
