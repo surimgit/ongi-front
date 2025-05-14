@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { ACCESS_TOKEN, POLICY_ABSOLUTE_PATH } from "src/constants";
-import { PolicyList } from "src/types/interfaces";
+import { PolicyList, Schedule } from "src/types/interfaces";
 import { GetPolicyListResponseDto } from "src/apis/dto/response/calendar/get-policy-list.response.dto";
 import { deleteScheduleRequest } from "src/apis";
 import FullCalendar from "@fullcalendar/react";
@@ -70,6 +70,9 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
     // state: 검색 결과 //
     const [searchResults, setSearchResults] = useState<PolicyResult[]>([]);
     
+    // state: 스크랩한 정책 리스트 상태 //
+    const [schedules, setSchedules] = useState<Schedule[]>([]);
+
     // state: page, section 상태 //
     const itemsPerPage = 9;
     const [currentPage, setCurrentPage] = useState(Number(query.get("page") || '1'));
@@ -177,7 +180,6 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
         }
         setIsLoading(false);
     };
-      
 
     // event handler: 옵션 선택 이벤트 처리 //
     const handleCheckboxChange = (
@@ -215,6 +217,7 @@ export default function Policy({ searchKeyword, page, section, autoSearch, items
     const onScrapClickHandler = async (item: PolicyResult) => {
         const wasScrapped = scrapStates[item.plcyNo];
         const newState = !wasScrapped;
+        
     
         setScrapStates(prev => {
             const updated = {

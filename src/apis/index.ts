@@ -250,12 +250,10 @@ const DELETE_QUESTION_POST_URL = (questionSequence: number | string) =>
 const NOTICE_MODULE_URL = `${API_DOMAIN}/api/v1/mypage/notice`;
 const GET_NOTICE_LIST_URL = `${NOTICE_MODULE_URL}`;
 const POST_NOTICE_URL = `${NOTICE_MODULE_URL}`;
-const PATCH_NOTICE_URL = (sequence: number | string) =>
-  `${NOTICE_MODULE_URL}/${sequence}`;
-const DELETE_NOTICE_URL = (sequence: number | string) =>
-  `${NOTICE_MODULE_URL}/${sequence}`;
-const GET_NOTICE_POST_URL = (sequence: number | string) =>
-  `${NOTICE_MODULE_URL}/${sequence}`;
+const PATCH_NOTICE_URL = (sequence: number | string) =>  `${NOTICE_MODULE_URL}/${sequence}`;
+const DELETE_NOTICE_URL = (sequence: number | string) =>  `${NOTICE_MODULE_URL}/${sequence}`;
+const GET_NOTICE_POST_URL = (sequence: number | string) =>  `${NOTICE_MODULE_URL}/${sequence}`;
+
 const CALENDAR_MODULE_URL = `${API_DOMAIN}/api/v1/calendar`;
 const GET_SCHEDULE_URL = `${CALENDAR_MODULE_URL}`;
 const POST_SCHEDULE_URL = `${CALENDAR_MODULE_URL}`;

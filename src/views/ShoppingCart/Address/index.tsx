@@ -14,6 +14,7 @@ import { ResponseDto } from 'src/apis/dto/response';
 import { responseMessage } from 'src/utils';
 import { PostUserAddressRequestDto } from 'src/apis/dto/request/shopping-cart';
 import { GetUserAddressDetailResponseDto, GetUserAddressResponseDto, PostUserAddressResponseDto } from 'src/apis/dto/response/shoppingCart';
+import { event } from 'jquery';
 
 // component: 장바구니 주문/결제 페이지 컴포넌트 //
 export default function ShoppingCartAddress() {
@@ -21,7 +22,7 @@ export default function ShoppingCartAddress() {
   const { getSelectedIds, getShoppingCarts } = useShoppingCartSelectStore();
 
   // state: 배송지 선택 상태 //
-  const [addressType, setAddressType] = useState<string>('기존');
+  const [addressType, setAddressType] = useState<string>('신규');
   // state: 배송지명 상태 //
   const [addressName, setAddressName] = useState<string>('');
   // state: 받는 사람 상태 //
@@ -44,6 +45,19 @@ export default function ShoppingCartAddress() {
   const [addressLabels, setAddressLabels] = useState<UserAddress[]>([]);
   // state: 선택된 사용자 주소 상태 //
   const [selectedId, setSelectedId] = useState<number>(0);
+
+  // // state: 배송지명 상태 //
+  // const [newAddressName, setNewAddressName] = useState<string>('');
+  // // state: 받는 사람 상태 //
+  // const [newRecipientName, setNewRecipientName] = useState<string>('');
+  // // state: 전화번호 상태 //
+  // const [newUserPhoneNumber, setNewUserPhoneNumber] = useState<string[]>(['010', '', '']);
+  // // state: 배송지 우편번호 상태 //
+  // const [newUserZipCode, setNewUserZipCode] = useState<string>('');
+  // // state: 배송지 상태 //
+  // const [newUserAddress, setNewUserAddress] = useState<string>('');
+  // // state: 상세 배송지 상태 //
+  // const [newUserDetailAddress, setNewUserDetailAddress] = useState<string>('');
 
   // state: 쿠키 상태 //
   const [cookies] = useCookies();
@@ -175,11 +189,13 @@ export default function ShoppingCartAddress() {
   const onAddressNameChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setAddressName(value);
+    // setNewAddressName(value);
   }
   // event handler: 수신자명 변경 이벤트 핸들러 //
   const onrecipientNameChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setRecipientName(value);
+    // setNewRecipientName(value);
   }
   // event handler: 전화번호 변경 이벤트 핸들러 //
   const onTelNumberChangeHandler = (index:number) => (e:ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
@@ -189,6 +205,7 @@ export default function ShoppingCartAddress() {
       const newPhoneNumber = [...userPhoneNumber];
       newPhoneNumber[index] = value;
       setUserPhoneNumber(newPhoneNumber);
+      // setNewUserPhoneNumber(newPhoneNumber);
     }
   }
 
@@ -201,6 +218,7 @@ export default function ShoppingCartAddress() {
   const onDetailAddressChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setUserDetailAddress(value);
+    // setNewUserDetailAddress(value);
   }
 
   // event handler: 결제하기 버튼 클릭 이벤트 핸들러 //
@@ -208,11 +226,13 @@ export default function ShoppingCartAddress() {
 
     const phoneNumber = userPhoneNumber.reduce((acc, val) => (acc+val));
 
+    
     const userAddressRequest: PostUserAddressRequestDto = {
       recipientName, addressLabel:addressName ,phone: phoneNumber, zipcode: userZipCode, address: userAddress, detailAddress: userDetailAddress, addressType
     }
-    
     postUserAddress(userAddressRequest, accessToken).then(postUserAddressResponse);
+    
+  
   }
 
   // event handler: 사용자 배송지 변경 이벤트 핸들러 //
@@ -224,7 +244,6 @@ export default function ShoppingCartAddress() {
     getUserAddressDetailRequest(id, accessToken).then(getUserAddressDetailResponse);
     // const 
   }
-  
 
 
   // effect: 컴포넌트 로드시 실행할 함수 //
@@ -237,6 +256,11 @@ export default function ShoppingCartAddress() {
       setTotalPrice(totalPrice);
     }
 
+  },[])
+
+
+  // effect: 배송지 타입 변경 //
+  useEffect(() => {
     const getUserAddress = async () => {
       const addressId = await getUserAddressRequest(accessToken).then(getUserAddressResponse);
       if(addressId) {
@@ -244,12 +268,16 @@ export default function ShoppingCartAddress() {
       }
     }
 
-    getUserAddress();
-
-  },[])
-
-  // effect: 배송지 타입 변경 //
-
+    if(addressType === '기존') getUserAddress();
+    else {
+      setAddressName('');
+      setRecipientName('');
+      setUserZipCode('');
+      setUserAddress('');
+      setUserDetailAddress('');
+    }
+  },[addressType])
+  
   const cartContent = (
       <div className='shopping-cart-address-container'>
         <div className='address-container'>

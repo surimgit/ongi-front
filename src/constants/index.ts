@@ -92,7 +92,7 @@ export const AUTH_FIND_USER_RESULT_ABSOLUTE_PATH = `${ROOT_PATH}${AUTH_PATH}/${A
 
 export const PRODUCT_ABSOLUTE_PATH = `${ROOT_PATH}${PRODUCT_PATH}`;
 export const PRODUCT_WRITE_PATH = `${ROOT_PATH}${PRODUCT_PATH}/${WRITE_PATH}`;
-export const PRODUCT_VIEW_ABSOLUTE_PATH = (sequence: number) =>
+export const PRODUCT_VIEW_ABSOLUTE_PATH = (sequence: number | string) =>
   `${ROOT_PATH}${PRODUCT_PATH}/${sequence}`;
 
 export const SHOPPING_CART_ABSOLUTE_PATH = `${ROOT_PATH}${SHOPPING_CART_PATH}`;
